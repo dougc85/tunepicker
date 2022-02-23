@@ -1,6 +1,7 @@
 .PickController {
   padding-top: 2rem;
-  height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
 
 .tune-wrapper {
