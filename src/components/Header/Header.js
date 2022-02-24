@@ -1,11 +1,39 @@
 import React from "react";
+import { useState, useEffect } from "react";
+import { Outlet, useNavigate } from 'react-router-dom';
 import './Header.scss';
+import MenuButton from "./MenuButton/MenuButton";
+import Nav from './Nav/Nav';
 
-function Header() {
+function Header(props) {
+
+  const [showNav, setShowNav] = useState(true);
+  const { loggedIn } = props;
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!loggedIn) {
+      navigate('/login');
+    } else {
+      navigate('/');
+    }
+
+  }, [loggedIn])
+
+  function toggleNav() {
+    setShowNav((current) => !current);
+  }
+
   return (
-    <header className="Header">
-      <h1 className="app-name">tunePicker</h1>
-    </header>
+    <div className="Header-container">
+      <header className="Header">
+        <h1 className="app-name">tunePicker</h1>
+        {showNav && <Nav />}
+        <MenuButton toggleNav={toggleNav} />
+      </header>
+      <Outlet />
+    </div>
+
   )
 }
 

@@ -1,0 +1,41 @@
+@import '../../partials/variables';
+
+.Login {
+  &-title {
+    font-family: $app-font;
+    font-size: 5rem;
+    margin-bottom: 3rem;
+  }
+
+  &-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-size: 3rem;
+    margin-bottom: 10rem;
+
+    & input {
+      width: 70%;
+      font-size: 2rem;
+    }
+
+    &-legend {
+      margin-bottom: 2rem;
+    }
+    &-email {
+      
+    }
+    &-password {
+
+    }
+  }
+
+  &-signup {
+    font-size: 2rem;
+    &:link {
+      color: black;
+      text-decoration: none;
+      border-bottom: 1px solid black;
+    }
+  }
+}
