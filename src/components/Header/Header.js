@@ -7,18 +7,18 @@ import Nav from './Nav/Nav';
 
 function Header(props) {
 
-  const [showNav, setShowNav] = useState(true);
-  const { loggedIn } = props;
+  const [showNav, setShowNav] = useState(false);
+  const { user } = props;
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!loggedIn) {
+    if (!user) {
       navigate('/login');
     } else {
       navigate('/');
     }
 
-  }, [loggedIn])
+  }, [user])
 
   function toggleNav() {
     setShowNav((current) => !current);
