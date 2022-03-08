@@ -19,7 +19,7 @@ function Nav() {
     <nav className="Nav">
       <ul className="Nav-links">
         <li className="Nav-links-link item1"><Link to='/controller'>Picker</Link></li>
-        <li className="Nav-links-link item2">Link 2</li>
+        <li className="Nav-links-link item2"><Link to='/library'>Library</Link></li>
         <li className="Nav-links-link item3">Link 3</li>
         <li className="Nav-links-link" onClick={handleLogOut}>Log Out</li>
       </ul>
