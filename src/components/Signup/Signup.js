@@ -2,9 +2,16 @@ import React from "react";
 import { useState } from 'react';
 import './Signup.scss';
 import { auth } from '../../firebaseConfig';
+import { db } from '../../firebaseConfig';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
+import {
+  doc,
+  collection,
+  addDoc,
+  setDoc,
+} from 'firebase/firestore';
 
-function Signup() {
+function Signup(props) {
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -28,6 +35,14 @@ function Signup() {
     try {
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       console.log(userCredential);
+      await setDoc(doc(db, 'users', userCredential.user.uid), { defaultSet: "Tunes I Know", songs: {} });
+      const userDoc = doc(db, 'users', userCredential.user.uid);
+      const setsRef = collection(userDoc, 'sets');
+      props.setSetsRef(setsRef);
+      const defaultSet = { setName: "Tunes I Know" };
+      props.setSets([defaultSet]);
+      const tunesIKnowSetRef = await addDoc(setsRef, defaultSet);
+
     }
     catch (error) {
       console.log(error);
