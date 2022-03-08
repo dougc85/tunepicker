@@ -6,6 +6,7 @@ import Header from './components/Header/Header';
 import Login from './components/Login/Login';
 import Signup from './components/Signup/Signup';
 import FrontPage from './components/FrontPage/FrontPage';
+import Library from './components/Library/Library';
 
 import { db, auth } from './firebaseConfig';
 import { onAuthStateChanged } from 'firebase/auth';
@@ -26,7 +27,6 @@ function App() {
         console.log(currentUser.uid);
         setUser(currentUser);
         const userRef = doc(db, 'users', currentUser.uid);
-
         navigate('/');
       }
       else {
@@ -73,6 +73,7 @@ function App() {
         <Route path="/" element={<Header user={user} />}>
           <Route index element={<FrontPage user={user.email} />} />
           <Route path="/controller" element={<PickController />} />
+          <Route path="/library" element={<Library />} />
         </Route>
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup setSetsRef={setSetsRef} setSets={setSets} />} />

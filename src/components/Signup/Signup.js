@@ -35,7 +35,14 @@ function Signup(props) {
     try {
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       console.log(userCredential);
-      await setDoc(doc(db, 'users', userCredential.user.uid), { defaultSet: "Tunes I Know", songs: {} });
+      await setDoc(
+        doc(db, 'users', userCredential.user.uid),
+        {
+          defaultSet: "Tunes I Know",
+          songs: {},
+          email: userCredential.user.email,
+        }
+      );
       const userDoc = doc(db, 'users', userCredential.user.uid);
       const setsRef = collection(userDoc, 'sets');
       props.setSetsRef(setsRef);
