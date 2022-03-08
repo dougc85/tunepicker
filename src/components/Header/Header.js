@@ -28,7 +28,7 @@ function Header(props) {
     <div className="Header-container">
       <header className="Header">
         <h1 className="app-name">tunePicker</h1>
-        {showNav && <Nav />}
+        {showNav && <Nav toggleNav={toggleNav} />}
         <MenuButton toggleNav={toggleNav} />
       </header>
       <Outlet />
