@@ -7,18 +7,19 @@ import Login from './components/Login/Login';
 import Signup from './components/Signup/Signup';
 import FrontPage from './components/FrontPage/FrontPage';
 import Library from './components/Library/Library';
+import Set from './components/Library/Set/Set';
 
 import { db, auth } from './firebaseConfig';
 import { onAuthStateChanged } from 'firebase/auth';
 import {
-  collection, doc, getDocs,
+  collection, doc, getDocs, getDoc, onSnapshot,
 } from 'firebase/firestore';
 
 function App() {
 
   const [user, setUser] = useState('');
   const [sets, setSets] = useState([]);
-  const [setsRef, setSetsRef] = useState({});
+  const [currentLibSet, setCurrentLibSet] = useState({});
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -31,7 +32,6 @@ function App() {
       }
       else {
         setUser('');
-        setSetsRef({});
         navigate('/login');
       }
     })
@@ -42,25 +42,27 @@ function App() {
   }, []);
 
   useEffect(() => {
-    async function initializeData() {
-      try {
-        const colRef = collection(db, `users/${user.uid}/sets`);
-        setSetsRef(colRef);
-        const setsSnapshot = await getDocs(colRef);
-        const setsTemp = [];
-        console.log(setsSnapshot.docs);
-        setsSnapshot.docs.forEach((doc) => {
-          setsTemp.push({ ...doc.data() });
-        });
-        setSets(setsTemp);
-      }
-      catch (error) {
-        console.log(error);
+
+    if (!user) {
+      return;
+    }
+    const unsubscribeSets = onSnapshot(collection(doc(db, 'users', user.uid), 'sets'), (snapshot) => {
+
+      console.log('snapshot');
+      const setsTemp = [];
+      snapshot.docs.forEach((doc) => {
+        setsTemp.push({ ...doc.data() });
+      })
+      console.log(setsTemp, 'setsTemp');
+      setSets(setsTemp);
+    })
+
+    return () => {
+      if (unsubscribeSets) {
+        console.log('unsubscribe');
+        unsubscribeSets();
       }
     }
-
-    initializeData();
-
   }, [user]);
 
   useEffect(() => {
@@ -73,10 +75,11 @@ function App() {
         <Route path="/" element={<Header user={user} />}>
           <Route index element={<FrontPage user={user.email} />} />
           <Route path="/controller" element={<PickController />} />
-          <Route path="/library" element={<Library />} />
+          <Route path="/library" element={<Library sets={sets} setCurrentLibSet={setCurrentLibSet} user={user} />} />
+          <Route path="/library/:setName" element={<Set set={currentLibSet} />} />
         </Route>
         <Route path="/login" element={<Login />} />
-        <Route path="/signup" element={<Signup setSetsRef={setSetsRef} setSets={setSets} />} />
+        <Route path="/signup" element={<Signup setUser={setUser} />} />
       </Routes>
 
     </div>

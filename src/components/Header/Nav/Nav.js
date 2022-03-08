@@ -4,7 +4,9 @@ import { Link } from 'react-router-dom';
 import { signOut } from 'firebase/auth';
 import { auth } from '../../../firebaseConfig';
 
-function Nav() {
+function Nav(props) {
+
+  const { toggleNav } = props;
 
   function handleLogOut() {
     signOut(auth).then(() => {
@@ -18,8 +20,8 @@ function Nav() {
   return (
     <nav className="Nav">
       <ul className="Nav-links">
-        <li className="Nav-links-link item1"><Link to='/controller'>Picker</Link></li>
-        <li className="Nav-links-link item2"><Link to='/library'>Library</Link></li>
+        <li className="Nav-links-link item1" onClick={toggleNav}><Link to='/controller'>Picker</Link></li>
+        <li className="Nav-links-link item2" onClick={toggleNav}><Link to='/library'>Library</Link></li>
         <li className="Nav-links-link item3">Link 3</li>
         <li className="Nav-links-link" onClick={handleLogOut}>Log Out</li>
       </ul>

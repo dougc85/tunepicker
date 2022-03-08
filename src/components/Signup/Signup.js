@@ -45,11 +45,18 @@ function Signup(props) {
       );
       const userDoc = doc(db, 'users', userCredential.user.uid);
       const setsRef = collection(userDoc, 'sets');
-      props.setSetsRef(setsRef);
-      const defaultSet = { setName: "Tunes I Know" };
-      props.setSets([defaultSet]);
+      const defaultSet = {
+        setName: "Tunes I Know",
+        fullKnow: [],
+        currentKnow: [],
+        fullNew: [],
+        currentNew: [],
+        fullMedium: [],
+        currentMedium: [],
+        allSongs: [],
+      };
       const tunesIKnowSetRef = await addDoc(setsRef, defaultSet);
-
+      props.setUser(userCredential.user);
     }
     catch (error) {
       console.log(error);
