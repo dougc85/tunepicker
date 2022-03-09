@@ -1,16 +1,21 @@
 import './Set.scss';
-import { React } from 'react';
-import { useParams } from 'react-router-dom';
+import { React, useState } from 'react';
+import AddSong from '../../AddSong/AddSong';
 
 function Set(props) {
 
   const { set } = props;
+  const [showAdd, setShowAdd] = useState(false);
 
-  const params = useParams();
+  function handleAddButton(e) {
+    setShowAdd(true);
+  }
 
   return (
     <div className="Set">
       <h2 className="Set-heading">{set.setName}</h2>
+      <button onClick={handleAddButton} className="Set-add">Add a Song</button>
+      {showAdd && <AddSong set={set} setShowAdd={setShowAdd} />}
     </div>
   )
 }
