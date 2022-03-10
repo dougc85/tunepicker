@@ -17,11 +17,79 @@
     left: 10%;
     background-color: white;
     font-size: 2rem;
-    padding: 1rem;
+    padding: 1.5rem;
     box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+
+    & label {
+      font-weight: bold;
+    }
+
+    &-heading {
+      font-weight: bold;
+      font-size: 1.3rem;
+      align-self: flex-end;
+      transform: translateY(-.5rem);
+    }
 
     &-title {
+      display: flex;
+      align-items: center;
+      justify-content: space-evenly;
+      width: 100%;
 
+      &-input {
+        width: 17rem;
+      }
+    }
+
+    &-key {
+      display: flex;
+      align-items: center;
+      justify-content: space-evenly;
+      width: 70%;
+    }
+
+    &-knowledge {
+      border: none;
+
+      & legend {
+        font-weight: bold;
+        font-size: 1.8rem;
+        transform: translateY(.5rem);
+      }
+
+      &-grouping {
+        display: flex;
+        align-items: center;
+      }
+
+      &-checkbox {
+        margin-right: 1.5rem;
+      }
+
+      &-label {
+        font-size: 1.8rem;
+        display: block;
+        text-align: left;
+        & span {
+          font-size: 1.4rem;
+          display: block;
+          font-weight: 400;
+        }
+      }
+    }
+
+    &-notes-label {
+      display: block;
+    }
+    
+    &-notes-input {
+      width: 80%;
+      height: 8rem;
     }
 
     &-buttons {
@@ -37,10 +105,6 @@
       background-color: inherit;
       border: 1px solid black;
       border-radius: 5px;
-      display: block;
-    }
-
-    &-notes-label {
       display: block;
     }
   }
