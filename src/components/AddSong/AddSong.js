@@ -1,5 +1,5 @@
 import './AddSong.scss';
-import { React, useState, useEffect } from 'react';
+import { React, useState } from 'react';
 import useFormInput from '../../hooks/useFormInput';
 
 function AddSong(props) {
@@ -9,6 +9,7 @@ function AddSong(props) {
 
   const [title, handleTitleChange, resetTitle] = useFormInput('');
   const [songKey, handleSongKeyChange, resetSongKey] = useFormInput('random');
+  const [notes, handleNotesChange, resetNotes] = useFormInput('');
   const [knowledge, setKnowledge] = useState('know');
 
   function handleOutsideClick() {
@@ -18,6 +19,8 @@ function AddSong(props) {
   function handleCancel(e) {
     e.preventDefault();
     resetTitle();
+    resetSongKey();
+    resetNotes();
     setShowAdd(false);
   }
 
@@ -35,10 +38,6 @@ function AddSong(props) {
     return value === knowledge;
 
   }
-
-  useEffect(() => {
-    console.log(knowledge);
-  }, [knowledge]);
 
   return (
     <div className="AddSong">
@@ -92,7 +91,7 @@ function AddSong(props) {
         </fieldset>
 
         <label htmlFor="song-notes" className="AddSong-form-notes-label">Notes</label>
-        <textarea className="AddSong-form-notes-input"></textarea>
+        <textarea className="AddSong-form-notes-input" value={notes} onChange={handleNotesChange}></textarea>
         <div className="AddSong-form-buttons">
           <button onClick={handleCancel} className="AddSong-form-cancel">Cancel</button>
           <button onClick={handleAdd} className="AddSong-form-add">Add Song</button>
