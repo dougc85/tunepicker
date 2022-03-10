@@ -58,13 +58,14 @@
 
       & legend {
         font-weight: bold;
-        font-size: 1.8rem;
+        font-size: 1.7rem;
         transform: translateY(.5rem);
       }
 
       &-grouping {
         display: flex;
         align-items: center;
+        margin-top: 1.2rem;
       }
 
       &-checkbox {
