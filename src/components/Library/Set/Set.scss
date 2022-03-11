@@ -1,25 +1,59 @@
 .Set {
 
-  &-header {
+  &-path {
     display: flex;
-    justify-content: space-around;
     align-items: center;
     padding: 1rem;
-  }
-  &-heading {
-    font-size: 3rem;
-  }
-  &-add {
-    font-size: 2rem;
-    background-color: white;
-    padding: .5rem;
-    border: 1px solid black;
-    border-radius: 10px;
-    display: block;
+    font-size: 1.7rem;
+    margin-bottom: 1.5rem;
+
+    &-divider {
+      font-weight: bold;
+      margin-left: 3px;
+    }
+    &-icon {
+      width: 2rem;
+      display: block;
+
+      &-book {
+        width: 1.8rem;
+        margin-left: 3px;
+      }
+
+      &-doc {
+        margin-left: 3px;
+      }
+    }
+    &-heading {
+      margin-left: 3px;
+    }
   }
 
   &-songs {
-    border-top: 1px solid rgb(126, 126, 126);
-    border-bottom: 1px solid rgb(126, 126, 126);
+    &-header {
+      margin-left: 1rem;
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+
+
+      &-heading {
+        text-align: start;
+        font-weight: bold;
+        font-size: 2.5rem;
+        margin-right: auto;
+        
+      }
+
+      &-add {
+        font-size: 1.8rem;
+        background-color: white;
+        padding: .7rem;
+        border: 1px solid black;
+        border-radius: 10px;
+        display: block;
+        margin-right: 2rem;
+      }
+    }
   }
 }

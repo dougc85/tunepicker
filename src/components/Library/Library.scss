@@ -1,14 +1,36 @@
 .Library {
-  height: calc(100vh - 90px);
+  height: calc(100vh - 95px);
+  display: flex;
+  flex-direction: column;
+  padding: .5rem;
+
+  &-path {
+    display: flex;
+    align-items: center;
+    padding: .5rem;
+
+    &-heading {
+      font-size: 1.7rem;
+      margin-left: .5rem;
+    }
+    &-icon-library {
+      height: 2rem;
+      display: block;
+    }
+  }
+  
   & a {
     display: block;
-    height: 50%;
+    height: 40%;
     background-color: blue;
     display: flex;
     justify-content: center;
     align-items: center;
-    border: 1px solid red;
     font-size: 6rem;
+    margin: 1rem;
+    margin-top: 1rem;
+    border-radius: 10px;
+    flex-grow: 1;
 
     &:link, &:visited {
       color: white;
