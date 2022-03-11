@@ -1,0 +1,25 @@
+.Set {
+
+  &-header {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding: 1rem;
+  }
+  &-heading {
+    font-size: 3rem;
+  }
+  &-add {
+    font-size: 2rem;
+    background-color: white;
+    padding: .5rem;
+    border: 1px solid black;
+    border-radius: 10px;
+    display: block;
+  }
+
+  &-songs {
+    border-top: 1px solid rgb(126, 126, 126);
+    border-bottom: 1px solid rgb(126, 126, 126);
+  }
+}
