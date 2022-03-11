@@ -76,10 +76,6 @@ function App() {
     }
   }, [user]);
 
-  useEffect(() => {
-    console.log(sets);
-  }, [sets]);
-
   return (
     <div className="App">
       <Routes>
@@ -88,7 +84,7 @@ function App() {
           <Route path="/controller" element={<PickController />} />
           <Route path="/library" element={<Library sets={sets} user={user} loading={loading} />} />
           <Route path="/library/allsongs" element={<AllSongs />} />
-          <Route path="/library/sets" element={<Sets sets={sets} setCurrentLibSet={setCurrentLibSet} />} />
+          <Route path="/library/sets" element={<Sets sets={sets} setCurrentLibSet={setCurrentLibSet} user={user} />} />
           <Route path="/library/sets/:setName" element={<Set sets={sets} user={user} loading={loading} setShowAlreadyInLibrary={setShowAlreadyInLibrary} showAlreadyInLibrary={showAlreadyInLibrary} />} />
         </Route>
         <Route path="/login" element={<Login />} />

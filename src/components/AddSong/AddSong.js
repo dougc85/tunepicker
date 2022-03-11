@@ -81,11 +81,11 @@ function AddSong(props) {
           songKey,
         },
       })
-      setShowAdd(false);
       resetTitle();
       resetSongKey();
       resetNotes();
       setKnowledge('know');
+      setShowAdd(false);
     }
     catch (error) {
       console.log(error);
@@ -117,7 +117,7 @@ function AddSong(props) {
 
   return (
     <div className="AddSong">
-      <div onClick={handleOutsideClick} className="AddSong-screen">
+      <div onClick={handleCancel} className="AddSong-screen">
       </div>
       <form className="AddSong-form">
         <legend className="AddSong-form-heading">Add Song to '{set.setName}'</legend>

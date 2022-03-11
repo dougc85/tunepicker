@@ -1,14 +1,22 @@
 import './Sets.scss';
-import { React } from 'react';
+import { React, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import {
+  doc,
+  collection,
+  setDoc,
+} from 'firebase/firestore';
+import { db } from '../../../firebaseConfig';
+import AddSet from './AddSet/AddSet';
 
 function Sets(props) {
 
-  const { sets, setCurrentLibSet } = props;
+  const { sets, setCurrentLibSet, user } = props;
   const navigate = useNavigate();
+  const [showAddSet, setShowAddSet] = useState(false);
 
   function handleAddButton() {
-
+    setShowAddSet(true);
   }
 
   function handleClick(set) {
@@ -43,6 +51,7 @@ function Sets(props) {
         }
         )}
       </ul>
+      {showAddSet && <AddSet user={user} setShowAddSet={setShowAddSet} sets={sets} />}
     </div >
   )
 }
