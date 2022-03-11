@@ -21,6 +21,7 @@ function App() {
   const [sets, setSets] = useState({});
   const [loading, setLoading] = useState(true);
   const [currentLibSet, setCurrentLibSet] = useState({});
+  const [showAlreadyInLibrary, setShowAlreadyInLibrary] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -83,7 +84,7 @@ function App() {
           <Route index element={<FrontPage user={user.email} />} />
           <Route path="/controller" element={<PickController />} />
           <Route path="/library" element={<Library sets={sets} setCurrentLibSet={setCurrentLibSet} user={user} loading={loading} />} />
-          <Route path="/library/:setName" element={<Set sets={sets} user={user} loading={loading} />} />
+          <Route path="/library/:setName" element={<Set sets={sets} user={user} loading={loading} setShowAlreadyInLibrary={setShowAlreadyInLibrary} showAlreadyInLibrary={showAlreadyInLibrary} />} />
         </Route>
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup setUser={setUser} />} />
