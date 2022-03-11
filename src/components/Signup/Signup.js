@@ -25,7 +25,6 @@ function Signup(props) {
     e.preventDefault();
     try {
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-      console.log(userCredential);
       await setDoc(
         doc(db, 'users', userCredential.user.uid),
         {

@@ -28,7 +28,6 @@ function PickController() {
   }
 
   function pickList(choices) {
-    console.log('here in pick list');
 
     let choicesTemp = choices;
 
@@ -127,7 +126,6 @@ function PickController() {
 
   useEffect(() => {
     if (tune !== '') {
-      console.log('after tune');
       pickList(choices);
       pickKey();
     }
@@ -139,7 +137,6 @@ function PickController() {
         (tune.length > 5) ? "6.5rem" :
           "7.5rem";
 
-  console.log(oldList);
   const listColor = (oldList === "know") ? EMERALD :
     (oldList === "med") ? YELLOW :
       ORANGE;
