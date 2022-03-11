@@ -11,15 +11,6 @@ function Header(props) {
   const { user } = props;
   const navigate = useNavigate();
 
-  useEffect(() => {
-    if (!user) {
-      navigate('/login');
-    } else {
-      navigate('/');
-    }
-
-  }, [user])
-
   function toggleNav() {
     setShowNav((current) => !current);
   }

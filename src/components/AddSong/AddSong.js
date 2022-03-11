@@ -1,16 +1,30 @@
 import './AddSong.scss';
 import { React, useState } from 'react';
+import {
+  arrayUnion,
+  doc,
+  updateDoc,
+} from 'firebase/firestore';
+import {
+  db
+} from '../../firebaseConfig';
 import useFormInput from '../../hooks/useFormInput';
 
 function AddSong(props) {
 
-  const { set, setShowAdd } = props;
+  const { set, user, setShowAdd } = props;
   const keys = ['C', 'Db', 'D', 'Eb', 'E', 'F', 'F#', 'G', 'Ab', 'A', 'Bb', 'B'];
+  const knowledgeFields = {
+    know: ["fullKnow", "currentKnow"],
+    med: ["fullMedium", "currentMedium"],
+    new: ["fullNew", "currentNew"],
+  }
 
   const [title, handleTitleChange, resetTitle] = useFormInput('');
   const [songKey, handleSongKeyChange, resetSongKey] = useFormInput('random');
   const [notes, handleNotesChange, resetNotes] = useFormInput('');
   const [knowledge, setKnowledge] = useState('know');
+  const [disableForm, setDisableForm] = useState(false);
 
   function handleOutsideClick() {
     setShowAdd(false);
@@ -24,8 +38,48 @@ function AddSong(props) {
     setShowAdd(false);
   }
 
-  function handleAdd(e) {
+  async function handleAdd(e) {
     e.preventDefault();
+    try {
+      const userDoc = doc(db, 'users', user.uid);
+      const setDoc = doc(userDoc, 'sets', set.setName);
+      const date = Date.now();
+      const titleLower = title.toLowerCase();
+
+      updateDoc(userDoc, {
+
+        [`songs.${titleLower}`]: {
+          notes,
+          songKey,
+          knowledge,
+          sets: set.setName,
+          createdAt: date,
+        }
+      });
+      updateDoc(setDoc, {
+        [knowledgeFields[knowledge][0]]: arrayUnion(titleLower),
+        [knowledgeFields[knowledge][1]]: arrayUnion(titleLower),
+        [`allSongs.${titleLower}`]: {
+          knowledge,
+          createdAt: date,
+        },
+      })
+
+    }
+    catch (error) {
+      console.log(error);
+    }
+
+
+  }
+
+  function handleTitleChangeAndDuplicates(e) {
+    if (set.allSongs[e.target.value.toLowerCase()]) {
+      setDisableForm(true);
+    } else {
+      setDisableForm(false);
+    }
+    handleTitleChange(e);
   }
 
   function onRadioChange(e) {
@@ -47,11 +101,11 @@ function AddSong(props) {
         <legend className="AddSong-form-heading">Add Song to '{set.setName}'</legend>
         <div className="AddSong-form-title">
           <label className="AddSong-form-title-label" htmlFor="song-title">Title:</label>
-          <input className="AddSong-form-title-input" onChange={handleTitleChange} value={title} id="song-title" type="text" name="song-title" autoComplete="off"></input>
+          <input className="AddSong-form-title-input" onChange={handleTitleChangeAndDuplicates} value={title} id="song-title" type="text" name="song-title" autoComplete="off"></input>
         </div>
         <div className="AddSong-form-key">
           <label htmlFor="key" className="AddSong-form-key-label">Key:</label>
-          <select name="key" id="key" onChange={handleSongKeyChange} value={songKey} className="AddSong-form-key-input">
+          <select disabled={disableForm} name="key" id="key" onChange={handleSongKeyChange} value={songKey} className="AddSong-form-key-input">
             <option value="random" key="random">random</option>
             {keys.map((key) => {
               let keyModified = key;
@@ -65,7 +119,7 @@ function AddSong(props) {
             })}
           </select>
         </div>
-        <fieldset className="AddSong-form-knowledge">
+        <fieldset className="AddSong-form-knowledge" disabled={disableForm}>
           <legend>How well do you know this tune?</legend>
           <div className="AddSong-form-knowledge-grouping">
             <input id="knowNew" value="new" type="radio" className="AddSong-form-knowledge-checkbox" name="knowledge" onChange={onRadioChange} checked={isChecked('new')} />
@@ -91,10 +145,10 @@ function AddSong(props) {
         </fieldset>
 
         <label htmlFor="song-notes" className="AddSong-form-notes-label">Notes</label>
-        <textarea className="AddSong-form-notes-input" value={notes} onChange={handleNotesChange}></textarea>
+        <textarea disabled={disableForm} className="AddSong-form-notes-input" value={notes} onChange={handleNotesChange}></textarea>
         <div className="AddSong-form-buttons">
           <button onClick={handleCancel} className="AddSong-form-cancel">Cancel</button>
-          <button onClick={handleAdd} className="AddSong-form-add">Add Song</button>
+          <button disabled={disableForm} onClick={handleAdd} className="AddSong-form-add">Add Song</button>
         </div>
       </form>
     </div>
