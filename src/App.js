@@ -1,7 +1,7 @@
 import { React, useEffect, useState } from 'react';
 import './App.css';
 import PickController from './components/PickController/PickController';
-import { Routes, Route, useNavigate } from 'react-router-dom';
+import { Routes, Route, useNavigate, useLocation } from 'react-router-dom';
 import Header from './components/Header/Header';
 import Login from './components/Login/Login';
 import Signup from './components/Signup/Signup';
@@ -18,21 +18,29 @@ import {
 function App() {
 
   const [user, setUser] = useState('');
-  const [sets, setSets] = useState([]);
+  const [sets, setSets] = useState({});
+  const [loading, setLoading] = useState(true);
   const [currentLibSet, setCurrentLibSet] = useState({});
   const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
     const unsubAuthChange = onAuthStateChanged(auth, currentUser => {
       if (currentUser) {
-        console.log(currentUser.uid);
         setUser(currentUser);
         const userRef = doc(db, 'users', currentUser.uid);
-        navigate('/');
+        if (location.pathname === '/login' || location.pathname === '/signup') {
+          navigate('/');
+        }
+        else {
+          navigate(location.pathname);
+        }
       }
       else {
         setUser('');
-        navigate('/login');
+        if (location.pathname !== '/signup') {
+          navigate('/login');
+        }
       }
     })
 
@@ -48,18 +56,17 @@ function App() {
     }
     const unsubscribeSets = onSnapshot(collection(doc(db, 'users', user.uid), 'sets'), (snapshot) => {
 
-      console.log('snapshot');
-      const setsTemp = [];
+      const setsTemp = {};
       snapshot.docs.forEach((doc) => {
-        setsTemp.push({ ...doc.data() });
+        const setTemp = doc.data();
+        setsTemp[setTemp.setName] = { ...setTemp };
       })
-      console.log(setsTemp, 'setsTemp');
       setSets(setsTemp);
+      setLoading(false);
     })
 
     return () => {
       if (unsubscribeSets) {
-        console.log('unsubscribe');
         unsubscribeSets();
       }
     }
@@ -75,8 +82,8 @@ function App() {
         <Route path="/" element={<Header user={user} />}>
           <Route index element={<FrontPage user={user.email} />} />
           <Route path="/controller" element={<PickController />} />
-          <Route path="/library" element={<Library sets={sets} setCurrentLibSet={setCurrentLibSet} user={user} />} />
-          <Route path="/library/:setName" element={<Set set={currentLibSet} />} />
+          <Route path="/library" element={<Library sets={sets} setCurrentLibSet={setCurrentLibSet} user={user} loading={loading} />} />
+          <Route path="/library/:setName" element={<Set sets={sets} user={user} loading={loading} />} />
         </Route>
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup setUser={setUser} />} />
