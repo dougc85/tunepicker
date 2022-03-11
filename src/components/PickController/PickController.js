@@ -84,8 +84,6 @@ function PickController() {
 
   function pickTune() {
 
-    console.log('here in pick tune');
-
     const current = (currentList === 'new') ?
       { list: newList, set: setNewList } :
       (currentList === 'med') ?
@@ -103,13 +101,12 @@ function PickController() {
   }
 
   useEffect(() => {
-    console.log('mounting');
     pickTune();
   }, []);
 
 
   function pickKey() {
-    console.log('here in pick key');
+
     let tempKeys = [...keys];
 
     if (tempKeys.length === 0) {

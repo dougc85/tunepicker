@@ -4,14 +4,16 @@ import { useParams } from 'react-router-dom';
 import AddSong from '../../AddSong/AddSong';
 import SongEntry from '../SongEntry/SongEntry';
 import Loading from '../../Loading/Loading';
+import AlreadyInLibrary from '../../AlreadyInLibrary/AlreadyInLibrary';
 
 function Set(props) {
 
-  const { sets, user, loading } = props;
+  const { sets, user, loading, showAlreadyInLibrary, setShowAlreadyInLibrary } = props;
   const params = useParams();
   const set = sets[params.setName];
 
   const [showAdd, setShowAdd] = useState(false);
+  const [songConsidered, setSongConsidered] = useState('');
 
   function handleAddButton(e) {
     setShowAdd(true);
@@ -33,7 +35,9 @@ function Set(props) {
             )
           })}
         </div>
-        {showAdd && <AddSong set={set} setShowAdd={setShowAdd} user={user} />}
+        {showAdd && <AddSong set={set} setShowAdd={setShowAdd} user={user} setShowAlreadyInLibrary={setShowAlreadyInLibrary} setSongConsidered={setSongConsidered} />}
+        {showAlreadyInLibrary && <AlreadyInLibrary songConsidered={songConsidered} set={set} />}
+
       </div>
 
   )

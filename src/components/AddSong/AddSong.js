@@ -3,6 +3,7 @@ import { React, useState } from 'react';
 import {
   arrayUnion,
   doc,
+  getDoc,
   updateDoc,
 } from 'firebase/firestore';
 import {
@@ -12,7 +13,8 @@ import useFormInput from '../../hooks/useFormInput';
 
 function AddSong(props) {
 
-  const { set, user, setShowAdd } = props;
+  const { set, user, setShowAdd, setShowAlreadyInLibrary, setSongConsidered } = props;
+
   const keys = ['C', 'Db', 'D', 'Eb', 'E', 'F', 'F#', 'G', 'Ab', 'A', 'Bb', 'B'];
   const knowledgeFields = {
     know: ["fullKnow", "currentKnow"],
@@ -25,6 +27,7 @@ function AddSong(props) {
   const [notes, handleNotesChange, resetNotes] = useFormInput('');
   const [knowledge, setKnowledge] = useState('know');
   const [disableForm, setDisableForm] = useState(false);
+
 
   function handleOutsideClick() {
     setShowAdd(false);
@@ -46,6 +49,18 @@ function AddSong(props) {
       const date = Date.now();
       const titleLower = title.toLowerCase();
 
+      const userFirebase = await getDoc(userDoc);
+      const userDocData = userFirebase.data();
+      if (userDocData.songs[titleLower]) {
+        setShowAdd(false);
+        resetTitle();
+        resetSongKey();
+        resetNotes();
+        setKnowledge('know');
+        setShowAlreadyInLibrary(true);
+        setSongConsidered(titleLower);
+      }
+
       updateDoc(userDoc, {
 
         [`songs.${titleLower}`]: {
@@ -62,13 +77,20 @@ function AddSong(props) {
         [`allSongs.${titleLower}`]: {
           knowledge,
           createdAt: date,
+          notes,
+          songKey,
         },
       })
-
+      setShowAdd(false);
+      resetTitle();
+      resetSongKey();
+      resetNotes();
+      setKnowledge('know');
     }
     catch (error) {
       console.log(error);
     }
+
 
 
   }
@@ -152,8 +174,6 @@ function AddSong(props) {
         </div>
       </form>
     </div>
-
-
   )
 }
 
