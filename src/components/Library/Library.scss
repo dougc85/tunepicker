@@ -1,11 +1,18 @@
 .Library {
-  &-sets {
-    &-heading {
-      font-size: 2.5rem;
-    }
+  height: calc(100vh - 90px);
+  & a {
+    display: block;
+    height: 50%;
+    background-color: blue;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid red;
+    font-size: 6rem;
 
-    &-set {
-      font-size: 1.5rem;
+    &:link, &:visited {
+      color: white;
+      text-decoration: none;
     }
   }
 }

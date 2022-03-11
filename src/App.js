@@ -8,12 +8,15 @@ import Signup from './components/Signup/Signup';
 import FrontPage from './components/FrontPage/FrontPage';
 import Library from './components/Library/Library';
 import Set from './components/Library/Set/Set';
+import Sets from './components/Library/Sets/Sets';
+import AllSongs from './components/Library/AllSongs/AllSongs';
 
 import { db, auth } from './firebaseConfig';
 import { onAuthStateChanged } from 'firebase/auth';
 import {
   collection, doc, getDocs, getDoc, onSnapshot,
 } from 'firebase/firestore';
+
 
 function App() {
 
@@ -83,8 +86,10 @@ function App() {
         <Route path="/" element={<Header user={user} />}>
           <Route index element={<FrontPage user={user.email} />} />
           <Route path="/controller" element={<PickController />} />
-          <Route path="/library" element={<Library sets={sets} setCurrentLibSet={setCurrentLibSet} user={user} loading={loading} />} />
-          <Route path="/library/:setName" element={<Set sets={sets} user={user} loading={loading} setShowAlreadyInLibrary={setShowAlreadyInLibrary} showAlreadyInLibrary={showAlreadyInLibrary} />} />
+          <Route path="/library" element={<Library sets={sets} user={user} loading={loading} />} />
+          <Route path="/library/allsongs" element={<AllSongs />} />
+          <Route path="/library/sets" element={<Sets sets={sets} setCurrentLibSet={setCurrentLibSet} />} />
+          <Route path="/library/sets/:setName" element={<Set sets={sets} user={user} loading={loading} setShowAlreadyInLibrary={setShowAlreadyInLibrary} showAlreadyInLibrary={showAlreadyInLibrary} />} />
         </Route>
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup setUser={setUser} />} />
