@@ -67,7 +67,7 @@ function AddSong(props) {
           notes,
           songKey,
           knowledge,
-          sets: set.setName,
+          sets: [set.setName],
           createdAt: date,
         }
       });
@@ -79,6 +79,7 @@ function AddSong(props) {
           createdAt: date,
           notes,
           songKey,
+          sets: [set.setName],
         },
       })
       resetTitle();

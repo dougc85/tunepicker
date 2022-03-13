@@ -1,9 +1,12 @@
 import './SongEntry.scss';
 import { React } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 function SongEntry(props) {
 
-  const { title, knowledge } = props;
+  const { song, title, setCurrentSong } = props;
+  const { knowledge, createdAt } = song;
+  const navigate = useNavigate();
 
   const bgColor =
     knowledge === 'know' ? 'hsl(145, 63%, 49%)' :
@@ -12,8 +15,13 @@ function SongEntry(props) {
 
   const titleCapitalized = title.split(' ').map((word) => word[0].toUpperCase().concat(word.substring(1))).join(' ');
 
+  function handleClick() {
+    setCurrentSong({ ...song, title });
+    navigate(`/library/allsongs/${title}`);
+  }
+
   return (
-    <div className="SongEntry" style={{ backgroundColor: bgColor }}>
+    <div onClick={handleClick} className="SongEntry" style={{ backgroundColor: bgColor }}>
       <p className="SongEntry-title">{titleCapitalized}</p>
     </div>
   )

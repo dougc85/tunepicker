@@ -8,7 +8,7 @@ import AlreadyInLibrary from '../../AlreadyInLibrary/AlreadyInLibrary';
 
 function Set(props) {
 
-  const { sets, user, loading, showAlreadyInLibrary, setShowAlreadyInLibrary } = props;
+  const { sets, user, loading, showAlreadyInLibrary, setShowAlreadyInLibrary, setCurrentSong } = props;
   const params = useParams();
   const set = sets[params.setName];
 
@@ -44,9 +44,9 @@ function Set(props) {
           </div>
 
           {Object.keys(set.allSongs).map((songTitle) => {
-            const { knowledge, createdAt } = set.allSongs[songTitle];
+            const song = set.allSongs[songTitle];
             return (
-              <SongEntry title={songTitle} knowledge={knowledge} createdAt={createdAt} sortByDateAdded={false} key={songTitle} />
+              <SongEntry title={songTitle} song={song} sortByDateAdded={false} key={songTitle} setCurrentSong={setCurrentSong} />
             )
           })}
         </div>
