@@ -10,6 +10,7 @@ import Library from './components/Library/Library';
 import Set from './components/Library/Set/Set';
 import Sets from './components/Library/Sets/Sets';
 import AllSongs from './components/Library/AllSongs/AllSongs';
+import Song from './components/Library/Song/Song';
 
 import { db, auth } from './firebaseConfig';
 import { onAuthStateChanged } from 'firebase/auth';
@@ -24,6 +25,7 @@ function App() {
   const [sets, setSets] = useState({});
   const [loading, setLoading] = useState(true);
   const [currentLibSet, setCurrentLibSet] = useState({});
+  const [currentSong, setCurrentSong] = useState({});
   const [showAlreadyInLibrary, setShowAlreadyInLibrary] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
@@ -83,9 +85,10 @@ function App() {
           <Route index element={<FrontPage user={user.email} />} />
           <Route path="/controller" element={<PickController />} />
           <Route path="/library" element={<Library sets={sets} user={user} loading={loading} />} />
-          <Route path="/library/allsongs" element={<AllSongs />} />
+          <Route path="/library/allsongs" element={<AllSongs user={user} setCurrentSong={setCurrentSong} />} />
+          <Route path="/library/allsongs/:songTitle" element={<Song song={currentSong} />} />
           <Route path="/library/sets" element={<Sets sets={sets} setCurrentLibSet={setCurrentLibSet} user={user} />} />
-          <Route path="/library/sets/:setName" element={<Set sets={sets} user={user} loading={loading} setShowAlreadyInLibrary={setShowAlreadyInLibrary} showAlreadyInLibrary={showAlreadyInLibrary} />} />
+          <Route path="/library/sets/:setName" element={<Set sets={sets} user={user} loading={loading} setShowAlreadyInLibrary={setShowAlreadyInLibrary} showAlreadyInLibrary={showAlreadyInLibrary} setCurrentSong={setCurrentSong} />} />
         </Route>
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup setUser={setUser} />} />
