@@ -15,7 +15,8 @@ function useFormInput(initialVal) {
   return [
     state,
     handleChange,
-    resetInput
+    resetInput,
+    setState,
   ]
 }
 
