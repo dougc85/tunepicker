@@ -1,19 +1,34 @@
 import './Song.scss';
 import { React } from 'react';
+import { useParams } from 'react-router-dom';
 import Path from '../Path/Path';
+import Loading from '../../Loading/Loading';
 
 function Song(props) {
 
   // If song prop is empty, have to make a call to the database!!!
 
-  const { song } = props;
+  const { song, loading, getSongData } = props;
+  const params = useParams();
 
-  const titleCapitalized = song.title.split(' ').map((word) => word[0].toUpperCase().concat(word.substring(1))).join(' ');
+  if (!loading && !song.title) {
+    getSongData(params.songTitle);
+  }
+
+  console.log(song);
+
+  function capitalizeTitle() {
+    return params.songTitle.split(' ').map((word) => word[0].toUpperCase().concat(word.substring(1))).join(' ');
+  }
+
+  console.log(song);
 
   return (
-    <div className="Song">
-      <Path heading={titleCapitalized} pathType={'Song'} />
-    </div>
+    loading ?
+      <Loading /> :
+      <div className="Song">
+        <Path heading={capitalizeTitle()} pathType={'Song'} />
+      </div>
   )
 }
 

@@ -22,7 +22,7 @@ import {
 function App() {
 
   const [user, setUser] = useState('');
-  const [sets, setSets] = useState({});
+  const [sets, setSets] = useState(undefined);
   const [loading, setLoading] = useState(true);
   const [currentLibSet, setCurrentLibSet] = useState({});
   const [currentSong, setCurrentSong] = useState({});
@@ -31,6 +31,7 @@ function App() {
   const location = useLocation();
 
   useEffect(() => {
+
     const unsubAuthChange = onAuthStateChanged(auth, currentUser => {
       if (currentUser) {
         setUser(currentUser);
@@ -78,6 +79,19 @@ function App() {
     }
   }, [user]);
 
+  useEffect(() => {
+    if (sets) {
+      setLoading(false)
+    }
+  }, [sets]);
+
+  async function getSongData(title) {
+    console.log('getting');
+    const userFirebase = await getDoc(doc(db, 'users', user.uid));
+    const userData = userFirebase.data();
+    setCurrentSong({ ...userData.songs[title], title });
+  }
+
   return (
     <div className="App">
       <Routes>
@@ -86,7 +100,7 @@ function App() {
           <Route path="/controller" element={<PickController />} />
           <Route path="/library" element={<Library sets={sets} user={user} loading={loading} />} />
           <Route path="/library/allsongs" element={<AllSongs user={user} setCurrentSong={setCurrentSong} />} />
-          <Route path="/library/allsongs/:songTitle" element={<Song song={currentSong} />} />
+          <Route path="/library/allsongs/:songTitle" element={<Song song={currentSong} loading={loading} getSongData={getSongData} />} />
           <Route path="/library/sets" element={<Sets sets={sets} setCurrentLibSet={setCurrentLibSet} user={user} />} />
           <Route path="/library/sets/:setName" element={<Set sets={sets} user={user} loading={loading} setShowAlreadyInLibrary={setShowAlreadyInLibrary} showAlreadyInLibrary={showAlreadyInLibrary} setCurrentSong={setCurrentSong} />} />
         </Route>

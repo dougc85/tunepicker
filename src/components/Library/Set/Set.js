@@ -24,7 +24,7 @@ function Set(props) {
     loading ?
       <Loading /> :
       <div className="Set">
-        <Path heading="Set" pathType="Set" />
+        <Path heading={set.setName} pathType="Set" />
         <div className="Set-songs">
           <div className="Set-songs-header">
             <h2 className="Set-songs-header-heading">Songs</h2>
