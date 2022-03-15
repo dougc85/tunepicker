@@ -11,7 +11,7 @@ function Set(props) {
 
   const { sets, user, loading, showAlreadyInLibrary, setShowAlreadyInLibrary, setCurrentSong } = props;
   const params = useParams();
-  const set = sets[params.setName];
+  const set = sets ? sets[params.setName] : null;
 
   const [showAdd, setShowAdd] = useState(false);
   const [songConsidered, setSongConsidered] = useState('');
