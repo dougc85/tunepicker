@@ -3,11 +3,15 @@ import { React } from 'react';
 
 function EditConfirm(props) {
 
-  const { show } = props;
+  const { show, focusInput, field } = props;
 
+  function handleClick() {
+    show(true);
+    focusInput(field);
+  }
   return (
     <div className="EditConfirm">
-      <button onClick={show} className="EditConfirm-edit">edit</button>
+      <button onClick={handleClick} className="EditConfirm-edit">edit</button>
     </div>
   )
 }

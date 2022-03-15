@@ -8,22 +8,48 @@
     font-weight: bold;
   }
 
+  &-fields {
+    position: relative;
+    padding-left: 2rem;
+    margin-bottom: 2rem;
+    display: grid;
+    row-gap: 5px;
+    grid-template-columns: 1fr 5rem;
+    text-align: start;
+  }
+
+  &-entry {
+    grid-area: 2 / 1 / 3 / 2;
+    height: 2.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+  }
+
+  &-input {
+    font-size: 1.7rem;
+    box-sizing: content-box;
+    height: 100%;
+    transform: translateX(-2px);
+  }
+
   &-value {
     font-size: 1.7rem;
   }
 
-  &-fields {
-    position: relative;
-    padding-left: 2rem;
-    text-align: left;
-    margin-bottom: 2rem;
+  &-title-entry {
+    &-input {
+    }
+    &-value {
+
+    }
   }
 
   &-knowledge-label {
     font-size: 1.8rem;
   }
 
-  &-sets-value-set {
+  &-sets-entry-value-set {
     margin-left: 3rem;
   }
 
