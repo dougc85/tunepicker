@@ -1,3 +1,11 @@
 .EditConfirm {
-  
+  position: absolute;
+  top: 50%;
+  right: 3rem;
+  transform: translateY(-50%);
+  &-edit {
+    background-color: inherit;
+    border: none;
+    border-bottom: 1px solid black;
+  }
 }

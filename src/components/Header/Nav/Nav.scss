@@ -6,8 +6,9 @@
   right: 0;
   width: 70%;
   transform: translateY(100%);
-  box-shadow: -2px 10px 5px rgba(0,0,0,.2);
+  box-shadow: -2px 10px 10px rgba(0,0,0,.2);
   padding: 1.5rem 0;
+  z-index: 10;
 
   &-links {
     list-style: none;
