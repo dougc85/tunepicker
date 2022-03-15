@@ -1,35 +1,9 @@
 .Set {
 
-  &-path {
-    display: flex;
-    align-items: center;
-    padding: 1rem;
-    font-size: 1.7rem;
-    margin-bottom: 1.5rem;
-
-    &-divider {
-      font-weight: bold;
-      margin-left: 3px;
-    }
-    &-icon {
-      width: 2rem;
-      display: block;
-
-      &-book {
-        width: 1.8rem;
-        margin-left: 3px;
-      }
-
-      &-doc {
-        margin-left: 3px;
-      }
-    }
-    &-heading {
-      margin-left: 3px;
-    }
-  }
-
   &-songs {
+
+    margin-top: 1.5rem;
+    
     &-header {
       margin-left: 1rem;
       margin-bottom: 1rem;
