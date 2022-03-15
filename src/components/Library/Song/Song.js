@@ -6,8 +6,6 @@ import Loading from '../../Loading/Loading';
 
 function Song(props) {
 
-  // If song prop is empty, have to make a call to the database!!!
-
   const { song, loading, getSongData } = props;
   const params = useParams();
 
@@ -15,13 +13,9 @@ function Song(props) {
     getSongData(params.songTitle);
   }
 
-  console.log(song);
-
   function capitalizeTitle() {
     return params.songTitle.split(' ').map((word) => word[0].toUpperCase().concat(word.substring(1))).join(' ');
   }
-
-  console.log(song);
 
   return (
     loading ?
