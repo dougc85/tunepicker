@@ -1,10 +1,13 @@
 import './EditConfirm.scss';
 import { React } from 'react';
 
-function EditConfirm() {
+function EditConfirm(props) {
+
+  const { show } = props;
+
   return (
     <div className="EditConfirm">
-      <button className="EditConfirm-edit">edit</button>
+      <button onClick={show} className="EditConfirm-edit">edit</button>
     </div>
   )
 }
