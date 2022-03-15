@@ -5,7 +5,9 @@
   margin: 0;
 }
 
-html {
+html,
+input,
+textarea {
   font-size: 62.5%;
   font-family: 'Nunito';
 }

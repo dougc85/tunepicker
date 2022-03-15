@@ -1,5 +1,5 @@
 import './Song.scss';
-import { React, useState, useEffect } from 'react';
+import { React, useState, useEffect, useRef } from 'react';
 import { useParams } from 'react-router-dom';
 import useFormInput from '../../../hooks/useFormInput';
 import Path from '../Path/Path';
@@ -15,6 +15,14 @@ function Song(props) {
   const [showKnowledgeEdit, setShowKnowledgeEdit] = useState(false);
   const [showNotesEdit, setShowNotesEdit] = useState(false);
   const [showSetsEdit, setShowSetsEdit] = useState(false);
+
+  const titleInput = useRef(null);
+  const keyInput = useRef(null);
+  const knowledgeInput = useRef(null);
+  const notesInput = useRef(null);
+  const setsInput = useRef(null);
+
+  const [focus, setFocus] = useState(null);
 
   const [title, handleTitleChange] = useFormInput(capitalizeTitle());
   const [songKey, handleSongKeyChange, , setSongKey] = useFormInput(song.key);
@@ -36,6 +44,16 @@ function Song(props) {
   }
 
   useEffect(() => {
+    if (focus) {
+      focus === 'title' ? titleInput.current.focus() : setFocus(null);
+    }
+  }, [focus])
+
+  function focusInput(field) {
+    setFocus(field);
+  }
+
+  useEffect(() => {
     setSongKey(song.songKey);
     setKnowledge(song.knowledge);
     setNotes(song.notes);
@@ -48,32 +66,43 @@ function Song(props) {
         <Path heading={capitalizeTitle()} pathType={'Song'} />
         <div className="Song-fields Song-title">
           <label htmlFor="songTitle-songPage" className="Song-title-label Song-label">Title</label>
-          {showTitleEdit ? <input id="songTitle-songPage" onChange={handleTitleChange} type="text" className="Song-title-input" value={title}></input> : <p className="Song-value Song-title-value">{capitalizeTitle()}</p>}
-          <EditConfirm show={setShowTitleEdit} />
+          <div className="Song-title-entry Song-entry">
+            <input style={{ display: (showTitleEdit ? 'block' : 'none') }} id="songTitle-songPage" ref={titleInput} onChange={handleTitleChange} type="text" className="Song-title-entry-input Song-input" value={title}></input>
+            <p style={{ display: (showTitleEdit ? 'none' : 'block') }} className="Song-value Song-title-entry-value">{capitalizeTitle()}</p>
+          </div>
+          <EditConfirm field="title" show={setShowTitleEdit} focusInput={focusInput} />
         </div>
         <div className="Song-fields Song-key">
           <label htmlFor="songKey-songPage" className="Song-key-label Song-label">Key</label>
-          {showKeyEdit ? <input id="songKey-songPage" type="text" value={songKey} onChange={handleSongKeyChange} className="Song-key-input"></input> : <p className="Song-value Song-key-value">{song.songKey}</p>}
+          <div className="Song-key-entry Song-entry">
+            {showKeyEdit ? <input id="songKey-songPage" ref={keyInput} type="text" value={songKey} onChange={handleSongKeyChange} className="Song-key-entry-input Song-input"></input> : <p className="Song-value Song-key-entry-value">{song.songKey}</p>}
+          </div>
           <EditConfirm show={setShowKeyEdit} />
         </div>
         <div className="Song-fields Song-knowledge">
           <label htmlFor="songKnowledge-songPage" className="Song-knowledge-label Song-label">How Well Do I Know This Tune?</label>
-          {showKnowledgeEdit ? <input id="songKnowledge-songPage" type="text" className="Song-knowledge-input" value={knowledge} onChange={handleKnowledgeChange}></input> : <p className="Song-value Song-knowledge-value">{knowledgeOptions[song.knowledge]}</p>}
+          <div className="Song-knowledge-entry Song-entry">
+            {showKnowledgeEdit ? <input id="songKnowledge-songPage" ref={knowledgeInput} type="text" className="Song-knowledge-entry-input Song-input" value={knowledge} onChange={handleKnowledgeChange}></input> : <p className="Song-value Song-knowledge-entry-value">{knowledgeOptions[song.knowledge]}</p>}
+          </div>
           <EditConfirm show={setShowKnowledgeEdit} />
         </div>
         <div className="Song-fields Song-notes">
           <label htmlFor="songNotes-songPage" className="Song-notes-label Song-label">Notes</label>
-          {showNotesEdit ? <input id="songNotes-songPage" type="text" className="Song-notes-input" value={notes} onChange={handleNotesChange} ></input> : <p className="Song-value Song-notes-value">{song.notes || 'none'}</p>}
+          <div className="Song-notes-entry Song-entry">
+            {showNotesEdit ? <input id="songNotes-songPage" ref={notesInput} type="text" className="Song-notes-entry-input Song-input" value={notes} onChange={handleNotesChange} ></input> : <p className="Song-value Song-notes-entry-value">{song.notes || 'none'}</p>}
+          </div>
           <EditConfirm show={setShowNotesEdit} />
         </div>
         <div className="Song-fields Song-sets">
           <label htmlFor="songSets-songPage" className="Song-sets-label Song-label">Sets</label>
-          {showSetsEdit ? <input id="songSets-songPage" type="text" className="Song-sets-input">{song.notes}</input> :
-            <ul className="Song-value Song-sets-value">
-              {song.sets && song.sets.map((set) => (
-                <li className="Song-sets-value-set" key="set">{set}</li>
-              ))}
-            </ul>}
+          <div className="Song-sets-entry Song-entry">
+            {showSetsEdit ? <input id="songSets-songPage" ref={setsInput} type="text" className="Song-sets-entry-input Song-input">{song.notes}</input> :
+              <ul className="Song-value Song-sets-entry-value">
+                {song.sets && song.sets.map((set) => (
+                  <li className="Song-sets-entry-value-set" key="set">{set}</li>
+                ))}
+              </ul>}
+          </div>
           <EditConfirm show={setShowSetsEdit} />
         </div>
         <button className="Song-delete">Delete Song</button>
