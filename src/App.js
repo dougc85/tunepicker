@@ -98,7 +98,7 @@ function App() {
           <Route path="/controller" element={<PickController />} />
           <Route path="/library" element={<Library sets={sets} user={user} loading={loading} />} />
           <Route path="/library/allsongs" element={<AllSongs user={user} setCurrentSong={setCurrentSong} />} />
-          <Route path="/library/allsongs/:songTitle" element={<Song song={currentSong} loading={loading} getSongData={getSongData} />} />
+          <Route path="/library/allsongs/:songTitle" element={<Song song={currentSong} loading={loading} getSongData={getSongData} sets={sets} />} />
           <Route path="/library/sets" element={<Sets loading={loading} sets={sets} setCurrentLibSet={setCurrentLibSet} user={user} />} />
           <Route path="/library/sets/:setName" element={<Set sets={sets} user={user} loading={loading} setShowAlreadyInLibrary={setShowAlreadyInLibrary} showAlreadyInLibrary={showAlreadyInLibrary} setCurrentSong={setCurrentSong} />} />
         </Route>

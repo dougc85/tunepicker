@@ -8,7 +8,6 @@
     flex-grow: 1;
     display: flex;
     flex-direction: column;
-    justify-content: space-evenly;
   }
 
   &-label {
@@ -23,6 +22,7 @@
     display: grid;
     row-gap: 5px;
     grid-template-columns: 1fr 5rem;
+    grid-template-rows: min-content auto;
     text-align: start;
     align-items: center;
   }
@@ -49,7 +49,8 @@
   }
 
   &-key-entry-input,
-  &-knowledge-entry-input {
+  &-knowledge-entry-input,
+  &-notes-entry-input  {
     font-family: 'Nunito';
     transform: translateX(-5px);
   }
@@ -68,10 +69,39 @@
       width: 14px;
     }
   }
-  
+  &-notes {
 
-  &-sets-entry-value-set {
-    margin-left: 1.5rem;
+    &-entry {
+      height: min-content;
+      width: 90%;
+
+      &-input {
+        height: 7rem;
+        width: 100%;
+      }
+      
+      &-value {
+        white-space: pre-line;
+        height: 7rem;
+        overflow: scroll;
+      }
+    }
+  }
+
+  &-sets-entry {
+    height: min-content;
+    display: block;
+    &-checkbox {
+      &-label {
+        font-size: 1.5rem;
+      }
+      &-box {
+        height: 1.5rem;
+      }
+    }
+    &-value-set {
+      margin-left: 1.5rem;
+    }
   }
 
   &-delete {
