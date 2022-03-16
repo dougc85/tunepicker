@@ -8,7 +8,7 @@ import EditConfirm from './EditConfirm/EditConfirm';
 
 function Song(props) {
 
-  const { song, loading, getSongData } = props;
+  const { song, loading, getSongData, sets } = props;
   const params = useParams();
   const [showTitleEdit, setShowTitleEdit] = useState(false);
   const [showKeyEdit, setShowKeyEdit] = useState(false);
@@ -20,7 +20,6 @@ function Song(props) {
   const keyInput = useRef(null);
   const knowledgeInput = useRef(null);
   const notesInput = useRef(null);
-  const setsInput = useRef(null);
 
   const [focus, setFocus] = useState(null);
 
@@ -28,6 +27,7 @@ function Song(props) {
   const [songKey, handleSongKeyChange, , setSongKey] = useFormInput(song.key);
   const [knowledge, handleKnowledgeChange, , setKnowledge] = useFormInput(song.knowledge);
   const [notes, handleNotesChange, , setNotes] = useFormInput(song.notes);
+  const [setArray, setSetArray] = useState([]);
 
   const knowledgeOptions = {
     know: 'Know it inside and out',
@@ -51,11 +51,15 @@ function Song(props) {
   }
 
   useEffect(() => {
-    console.log(focus);
+    console.log(songKey);
+  }, [songKey])
+
+  useEffect(() => {
     if (focus) {
       focus === 'title' ? titleInput.current.focus() :
         focus === 'key' ? keyInput.current.focus() :
-          focus === 'knowledge' ? knowledgeInput.current.focus() : setFocus(null);
+          focus === 'knowledge' ? knowledgeInput.current.focus() :
+            focus === 'notes' ? notesInput.current.focus() : setFocus(null);
     }
   }, [focus])
 
@@ -67,7 +71,28 @@ function Song(props) {
     setSongKey(song.songKey);
     setKnowledge(song.knowledge);
     setNotes(song.notes);
+    if (sets) {
+      setSetArray(Object.keys(sets).map((setName) => {
+        for (let songSet of song.sets) {
+          if (songSet === setName) {
+            return [setName, true];
+          }
+        }
+        return [setName, false];
+      }))
+    }
   }, [song])
+
+  function handleCheckboxChange(e) {
+    setSetArray((oldSets) => {
+      return oldSets.map((set) => {
+        if (set[0] === e.target.value) {
+          return [set[0], !set[1]];
+        }
+        return set;
+      })
+    })
+  }
 
   return (
     loading ?
@@ -125,19 +150,28 @@ function Song(props) {
           <div className="Song-field Song-notes">
             <label htmlFor="songNotes-songPage" className="Song-notes-label Song-label">Notes</label>
             <div className="Song-notes-entry Song-entry">
-              {showNotesEdit ? <input id="songNotes-songPage" ref={notesInput} type="text" className="Song-notes-entry-input Song-input" value={notes} onChange={handleNotesChange} ></input> : <p className="Song-value Song-notes-entry-value">{song.notes || 'none'}</p>}
+              <textarea style={{ display: (showNotesEdit ? 'block' : 'none') }} id="songNotes-songPage" ref={notesInput} className="Song-notes-entry-input Song-input" value={notes} onChange={handleNotesChange} ></textarea>
+              <p style={{ display: (showNotesEdit ? 'none' : 'block') }} className="Song-value Song-notes-entry-value">{song.notes || 'none'}</p>
             </div>
-            <EditConfirm show={setShowNotesEdit} />
+            <EditConfirm show={setShowNotesEdit} focusInput={focusInput} field="notes" />
           </div>
           <div className="Song-field Song-sets">
-            <label htmlFor="songSets-songPage" className="Song-sets-label Song-label">Sets</label>
+            <fieldset className="Song-sets-label Song-label">Sets</fieldset>
             <div className="Song-sets-entry Song-entry">
-              {showSetsEdit ? <input id="songSets-songPage" ref={setsInput} type="text" className="Song-sets-entry-input Song-input">{song.notes}</input> :
-                <ul className="Song-value Song-sets-entry-value">
-                  {song.sets && song.sets.map((set) => (
-                    <li className="Song-sets-entry-value-set" key="set">{set}</li>
-                  ))}
-                </ul>}
+              {setArray.map((set, idx) => {
+                console.log(set);
+                return (
+                  <div className="Song-sets-entry-checkbox">
+                    <label htmlFor={`${set[0] + idx}`} className="Song-sets-entry-checkbox-label">{set[0]}</label>
+                    <input id={`${set[0] + idx}`} value={set[0]} checked={set[1]} onChange={handleCheckboxChange} type="checkbox" className="Song-sets-entry-checkbox-box Song-input"></input>
+                  </div>
+                )
+              })}
+              <ul className="Song-value Song-sets-entry-value">
+                {song.sets && song.sets.map((set) => (
+                  <li className="Song-sets-entry-value-set" key="set">{set}</li>
+                ))}
+              </ul>
             </div>
             <EditConfirm show={setShowSetsEdit} />
           </div>
