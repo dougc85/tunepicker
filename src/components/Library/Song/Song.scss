@@ -88,21 +88,32 @@
     }
   }
 
-  &-sets-entry {
-    height: min-content;
-    display: block;
-    &-checkbox {
-      &-label {
-        font-size: 1.5rem;
-      }
-      &-box {
-        height: 1.5rem;
-      }
+  &-sets {
+
+    &-label {
+      border: none;
     }
-    &-value-set {
-      margin-left: 1.5rem;
+
+    &-entry {
+      height: min-content;
+      display: block;
+      &-checkbox {
+        list-style: none;
+  
+        &-label {
+          font-size: 1.5rem;
+        }
+        &-box {
+          height: 1.5rem;
+        }
+      }
+      &-value-set {
+        margin-left: 1.5rem;
+      }
     }
   }
+
+  
 
   &-delete {
     background-color: white;
