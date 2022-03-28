@@ -1,5 +1,7 @@
 import './Set.scss';
-import { React, useState } from 'react';
+import { React, useState, useEffect } from 'react';
+import { onSnapshot, doc } from 'firebase/firestore';
+import { db } from '../../../firebaseConfig';
 import { useParams } from 'react-router-dom';
 import AddSong from '../../AddSong/AddSong';
 import SongEntry from '../SongEntry/SongEntry';
@@ -11,17 +13,39 @@ function Set(props) {
 
   const { sets, user, loading, showAlreadyInLibrary, setShowAlreadyInLibrary, setCurrentSong } = props;
   const params = useParams();
-  const set = sets ? sets[params.setName] : null;
 
   const [showAdd, setShowAdd] = useState(false);
   const [songConsidered, setSongConsidered] = useState('');
+  const [set, setSet] = useState(undefined);
 
   function handleAddButton(e) {
     setShowAdd(true);
   }
 
+  useEffect(() => {
+
+    let unsubscribeSetSnapshot;
+
+    if (user) {
+      try {
+        unsubscribeSetSnapshot = onSnapshot(doc(db, 'users', user.uid, 'sets', params.setName), (doc) => {
+          setSet(doc.data());
+        });
+
+      } catch (err) {
+        console.log(err.message);
+      }
+    }
+
+    return () => {
+      if (unsubscribeSetSnapshot) {
+        unsubscribeSetSnapshot();
+      }
+    }
+  }, [user, params.setName])
+
   return (
-    loading ?
+    (loading || !set) ?
       <Loading /> :
       <div className="Set">
         <Path heading={set.setName} pathType="Set" />

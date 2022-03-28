@@ -13,7 +13,8 @@ import Loading from '../../Loading/Loading';
 
 function Sets(props) {
 
-  const { sets, setCurrentLibSet, user, loading } = props;
+  const { sets, user, loading, setNames } = props;
+
   const navigate = useNavigate();
   const [showAddSet, setShowAddSet] = useState(false);
 
@@ -22,8 +23,11 @@ function Sets(props) {
   }
 
   function handleClick(set) {
-    setCurrentLibSet(set.setName)
-    navigate(`/library/sets/${set.setName}`)
+    navigate(`/library/sets/${set}`)
+  }
+
+  if (!setNames) {
+    return (<div>Needs fixing</div>)
   }
 
   return (
@@ -36,17 +40,16 @@ function Sets(props) {
             <h2 className="Sets-sets-header-heading">Sets</h2>
             <button onClick={handleAddButton} className="Sets-sets-header-add">Add a Set</button>
           </div>
-          {Object.keys(sets).map((setKey) => {
-            const set = sets[setKey];
+          {setNames.map((set) => {
             return (
-              <li onClick={() => { handleClick(set) }} className="Sets-sets-set" key={set.setName}>
-                {set.setName}
+              <li onClick={() => { handleClick(set) }} className="Sets-sets-set" key={set}>
+                {set}
               </li>
             )
           }
           )}
         </ul>
-        {showAddSet && <AddSet user={user} setShowAddSet={setShowAddSet} sets={sets} />}
+        {showAddSet && <AddSet user={user} setShowAddSet={setShowAddSet} setNames={setNames} />}
       </div >
   )
 }

@@ -6,7 +6,7 @@ import Path from './Path/Path';
 
 function Library(props) {
 
-  const { sets, setCurrentLibSet, loading } = props;
+  const { loading } = props;
 
   return (
     loading ?

@@ -28,15 +28,16 @@ function Signup(props) {
       await setDoc(
         doc(db, 'users', userCredential.user.uid),
         {
-          defaultSet: "Tunes I Know",
+          defaultSet: "First Set",
           songs: {},
           email: userCredential.user.email,
+          setNames: ["First Set"],
         }
       );
       const userDoc = doc(db, 'users', userCredential.user.uid);
       const setsRef = collection(userDoc, 'sets');
       const defaultSet = {
-        setName: "Tunes I Know",
+        setName: "First Set",
         fullKnow: [],
         currentKnow: [],
         fullNew: [],

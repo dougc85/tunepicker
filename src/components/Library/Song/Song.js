@@ -1,6 +1,10 @@
 import './Song.scss';
 import { React, useState, useEffect, useRef } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
+import {
+  doc, updateDoc, deleteField, deleteDoc
+} from 'firebase/firestore';
+import { db } from '../../../firebaseConfig';
 import useFormInput from '../../../hooks/useFormInput';
 import Path from '../Path/Path';
 import Loading from '../../Loading/Loading';
@@ -8,13 +12,17 @@ import EditConfirm from './EditConfirm/EditConfirm';
 
 function Song(props) {
 
-  const { song, loading, getSongData, sets } = props;
+  const { song, loading, getSongData, sets, user, setCurrentSong } = props;
   const params = useParams();
+  const navigate = useNavigate();
+
+  //Hide/Show Inputs for fields
   const [showTitleEdit, setShowTitleEdit] = useState(false);
   const [showKeyEdit, setShowKeyEdit] = useState(false);
   const [showKnowledgeEdit, setShowKnowledgeEdit] = useState(false);
   const [showNotesEdit, setShowNotesEdit] = useState(false);
   const [showSetsEdit, setShowSetsEdit] = useState(false);
+  const [disableEdit, setDisableEdit] = useState(false);
 
   const titleInput = useRef(null);
   const keyInput = useRef(null);
@@ -24,6 +32,7 @@ function Song(props) {
 
   const [focus, setFocus] = useState(null);
 
+  //Controlled inputs
   const [title, handleTitleChange] = useFormInput(capitalizeTitle());
   const [songKey, handleSongKeyChange, , setSongKey] = useFormInput(song.key);
   const [knowledge, handleKnowledgeChange, , setKnowledge] = useFormInput(song.knowledge);
@@ -52,7 +61,6 @@ function Song(props) {
   }
 
   useEffect(() => {
-    console.log(setsInput);
     if (focus) {
       focus === 'title' ? titleInput.current.focus() :
         focus === 'key' ? keyInput.current.focus() :
@@ -67,18 +75,21 @@ function Song(props) {
   }
 
   useEffect(() => {
+    console.log(song);
     setSongKey(song.songKey);
     setKnowledge(song.knowledge);
     setNotes(song.notes);
     if (sets) {
-      setSetArray(Object.keys(sets).map((setName) => {
+      const setsList = Object.keys(sets).map((setName) => {
         for (let songSet of song.sets) {
           if (songSet === setName) {
             return [setName, true];
           }
         }
         return [setName, false];
-      }))
+      }).sort();
+
+      setSetArray(setsList)
     }
   }, [song])
 
@@ -93,6 +104,35 @@ function Song(props) {
     })
   }
 
+  async function saveTitleData() {
+
+    const titleLower = title.toLowerCase();
+
+    if (song.title.toLowerCase() === titleLower) {
+      return;
+    }
+
+    const userDoc = doc(db, 'users', user.uid);
+
+    const currentSong = {
+      createdAt: song.createdAt,
+      knowledge: song.knowledge,
+      notes: song.notes,
+      sets: song.sets,
+      songKey: song.songKey
+    }
+
+    await updateDoc(userDoc, {
+      [`songs.${song.title.toLowerCase()}`]: deleteField(),
+      [`songs.${titleLower}`]: currentSong
+    })
+    setCurrentSong({
+      ...currentSong,
+      title: titleLower
+    });
+    navigate(`/library/allsongs/${titleLower}`);
+  }
+
   return (
     loading ?
       <Loading /> :
@@ -105,7 +145,7 @@ function Song(props) {
               <input style={{ display: (showTitleEdit ? 'block' : 'none') }} id="songTitle-songPage" ref={titleInput} onChange={handleTitleChange} type="text" className="Song-title-entry-input Song-input" value={title}></input>
               <p style={{ display: (showTitleEdit ? 'none' : 'block') }} className="Song-value Song-title-entry-value">{capitalizeTitle()}</p>
             </div>
-            <EditConfirm field="title" show={setShowTitleEdit} focusInput={focusInput} />
+            <EditConfirm field="title" show={setShowTitleEdit} focusInput={focusInput} disableEdit={disableEdit} setDisableEdit={setDisableEdit} saveData={saveTitleData} />
           </div>
           <div className="Song-field Song-key">
             <label htmlFor="songKey-songPage" className="Song-key-label Song-label">Key</label>
@@ -125,7 +165,7 @@ function Song(props) {
               </select>
               <p style={{ display: (showKeyEdit ? 'none' : 'block') }} className="Song-value Song-key-entry-value">{song.songKey}</p>
             </div>
-            <EditConfirm show={setShowKeyEdit} focusInput={focusInput} field="key" />
+            <EditConfirm show={setShowKeyEdit} focusInput={focusInput} field="key" disableEdit={disableEdit} setDisableEdit={setDisableEdit} />
           </div>
           <div className="Song-field Song-knowledge">
             <label htmlFor="songKnowledge-songPage" className="Song-knowledge-label Song-label">How Well Do I Know This Tune?</label>
@@ -144,7 +184,7 @@ function Song(props) {
               </div>
 
             </div>
-            <EditConfirm show={setShowKnowledgeEdit} focusInput={focusInput} field="knowledge" />
+            <EditConfirm show={setShowKnowledgeEdit} focusInput={focusInput} field="knowledge" disableEdit={disableEdit} setDisableEdit={setDisableEdit} />
           </div>
           <div className="Song-field Song-notes">
             <label htmlFor="songNotes-songPage" className="Song-notes-label Song-label">Notes</label>
@@ -152,7 +192,7 @@ function Song(props) {
               <textarea style={{ display: (showNotesEdit ? 'block' : 'none') }} id="songNotes-songPage" ref={notesInput} className="Song-notes-entry-input Song-input" value={notes} onChange={handleNotesChange} ></textarea>
               <p style={{ display: (showNotesEdit ? 'none' : 'block') }} className="Song-value Song-notes-entry-value">{song.notes || 'none'}</p>
             </div>
-            <EditConfirm show={setShowNotesEdit} focusInput={focusInput} field="notes" />
+            <EditConfirm show={setShowNotesEdit} focusInput={focusInput} field="notes" disableEdit={disableEdit} setDisableEdit={setDisableEdit} />
           </div>
           <div className="Song-field Song-sets">
             <fieldset className="Song-sets-label Song-label">Sets</fieldset>
@@ -173,7 +213,7 @@ function Song(props) {
                 ))}
               </ul>
             </div>
-            <EditConfirm show={setShowSetsEdit} focusInput={focusInput} field="sets" />
+            <EditConfirm show={setShowSetsEdit} focusInput={focusInput} field="sets" disableEdit={disableEdit} setDisableEdit={setDisableEdit} />
           </div>
           <button className="Song-delete">Delete Song</button>
         </div>
