@@ -1,12 +1,13 @@
 import './SongEntry.scss';
 import { React } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 function SongEntry(props) {
 
   const { song, title, setCurrentSong } = props;
   const { knowledge, createdAt } = song;
   const navigate = useNavigate();
+  const params = useParams();
 
   const bgColor =
     knowledge === 'know' ? 'hsl(145, 63%, 49%)' :
@@ -17,7 +18,12 @@ function SongEntry(props) {
 
   function handleClick() {
     setCurrentSong({ ...song, title });
-    navigate(`/library/allsongs/${title}`);
+    if (params.setName) {
+      navigate(`/library/sets/${params.setName}/${title}`);
+    }
+    else {
+      navigate(`/library/allsongs/${title}`);
+    }
   }
 
   return (
