@@ -18,10 +18,11 @@
   &-field {
     position: relative;
     padding-left: 2rem;
+    padding-right: 1rem;
     margin-bottom: 2rem;
     display: grid;
     row-gap: 5px;
-    grid-template-columns: 1fr 5rem;
+    grid-template-columns: 1fr 7rem;
     grid-template-rows: min-content auto;
     text-align: start;
     align-items: center;
@@ -78,6 +79,8 @@
       &-input {
         height: 7rem;
         width: 100%;
+        box-sizing: border-box;
+        transform: translate(-1px, 1px);
       }
       
       &-value {

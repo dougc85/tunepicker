@@ -23,8 +23,9 @@ function App() {
 
   const [user, setUser] = useState('');
   const [sets, setSets] = useState(undefined);
+  const [userDoc, setUserDoc] = useState(undefined);
+
   const [loading, setLoading] = useState(true);
-  const [currentLibSet, setCurrentLibSet] = useState({});
   const [currentSong, setCurrentSong] = useState({});
   const [showAlreadyInLibrary, setShowAlreadyInLibrary] = useState(false);
   const navigate = useNavigate();
@@ -35,7 +36,6 @@ function App() {
     const unsubAuthChange = onAuthStateChanged(auth, currentUser => {
       if (currentUser) {
         setUser(currentUser);
-        const userRef = doc(db, 'users', currentUser.uid);
         if (location.pathname === '/login' || location.pathname === '/signup') {
           navigate('/');
         }
@@ -54,7 +54,7 @@ function App() {
     return () => {
       unsubAuthChange();
     }
-  }, []);
+  }, [location.pathname, navigate]);
 
   useEffect(() => {
 
@@ -79,6 +79,22 @@ function App() {
   }, [user]);
 
   useEffect(() => {
+
+    if (!user) {
+      return;
+    }
+    const unsubscribeUserDoc = onSnapshot(doc(db, 'users', user.uid), (doc) => {
+      setUserDoc({ ...doc.data(), uid: doc.id });
+    })
+
+    return () => {
+      if (unsubscribeUserDoc) {
+        unsubscribeUserDoc();
+      }
+    }
+  }, [user]);
+
+  useEffect(() => {
     if (sets) {
       setLoading(false)
     }
@@ -90,6 +106,8 @@ function App() {
     setCurrentSong({ ...userData.songs[title], title });
   }
 
+
+
   return (
     <div className="App">
       <Routes>
@@ -98,8 +116,8 @@ function App() {
           <Route path="/controller" element={<PickController />} />
           <Route path="/library" element={<Library sets={sets} user={user} loading={loading} />} />
           <Route path="/library/allsongs" element={<AllSongs user={user} setCurrentSong={setCurrentSong} />} />
-          <Route path="/library/allsongs/:songTitle" element={<Song song={currentSong} loading={loading} getSongData={getSongData} sets={sets} />} />
-          <Route path="/library/sets" element={<Sets loading={loading} sets={sets} setCurrentLibSet={setCurrentLibSet} user={user} />} />
+          <Route path="/library/allsongs/:songTitle" element={<Song song={currentSong} loading={loading} getSongData={getSongData} sets={sets} user={user} setCurrentSong={setCurrentSong} />} />
+          <Route path="/library/sets" element={<Sets loading={loading} setNames={userDoc && userDoc.setNames} user={user} />} />
           <Route path="/library/sets/:setName" element={<Set sets={sets} user={user} loading={loading} setShowAlreadyInLibrary={setShowAlreadyInLibrary} showAlreadyInLibrary={showAlreadyInLibrary} setCurrentSong={setCurrentSong} />} />
         </Route>
         <Route path="/login" element={<Login />} />
