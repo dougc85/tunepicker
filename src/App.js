@@ -22,11 +22,10 @@ import {
 function App() {
 
   const [user, setUser] = useState('');
-  const [sets, setSets] = useState(undefined);
   const [userDoc, setUserDoc] = useState(undefined);
 
   const [loading, setLoading] = useState(true);
-  const [currentSong, setCurrentSong] = useState({});
+  const [currentSong, setCurrentSong] = useState(undefined);
   const [showAlreadyInLibrary, setShowAlreadyInLibrary] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
@@ -61,28 +60,6 @@ function App() {
     if (!user) {
       return;
     }
-    const unsubscribeSets = onSnapshot(collection(doc(db, 'users', user.uid), 'sets'), (snapshot) => {
-
-      const setsTemp = {};
-      snapshot.docs.forEach((doc) => {
-        const setTemp = doc.data();
-        setsTemp[setTemp.setName] = { ...setTemp };
-      })
-      setSets(setsTemp);
-    })
-
-    return () => {
-      if (unsubscribeSets) {
-        unsubscribeSets();
-      }
-    }
-  }, [user]);
-
-  useEffect(() => {
-
-    if (!user) {
-      return;
-    }
     const unsubscribeUserDoc = onSnapshot(doc(db, 'users', user.uid), (doc) => {
       setUserDoc({ ...doc.data(), uid: doc.id });
     })
@@ -95,10 +72,10 @@ function App() {
   }, [user]);
 
   useEffect(() => {
-    if (sets) {
+    if (userDoc) {
       setLoading(false)
     }
-  }, [sets]);
+  }, [userDoc]);
 
   async function getSongData(title) {
     const userFirebase = await getDoc(doc(db, 'users', user.uid));
@@ -114,11 +91,11 @@ function App() {
         <Route path="/" element={<Header user={user} />}>
           <Route index element={<FrontPage user={user.email} />} />
           <Route path="/controller" element={<PickController />} />
-          <Route path="/library" element={<Library sets={sets} user={user} loading={loading} />} />
+          <Route path="/library" element={<Library user={user} loading={loading} />} />
           <Route path="/library/allsongs" element={<AllSongs user={user} setCurrentSong={setCurrentSong} />} />
-          <Route path="/library/allsongs/:songTitle" element={<Song song={currentSong} loading={loading} getSongData={getSongData} sets={sets} user={user} setCurrentSong={setCurrentSong} />} />
+          <Route path="/library/allsongs/:songTitle" element={<Song song={currentSong} loading={loading} getSongData={getSongData} setNames={userDoc && userDoc.setNames} user={user} setCurrentSong={setCurrentSong} />} />
           <Route path="/library/sets" element={<Sets loading={loading} setNames={userDoc && userDoc.setNames} user={user} />} />
-          <Route path="/library/sets/:setName/*" element={<Set sets={sets} user={user} loading={loading} currentSong={currentSong} getSongData={getSongData} setShowAlreadyInLibrary={setShowAlreadyInLibrary} showAlreadyInLibrary={showAlreadyInLibrary} setCurrentSong={setCurrentSong} />} />
+          <Route path="/library/sets/:setName/*" element={<Set setNames={userDoc && userDoc.setNames} user={user} loading={loading} currentSong={currentSong} getSongData={getSongData} setShowAlreadyInLibrary={setShowAlreadyInLibrary} showAlreadyInLibrary={showAlreadyInLibrary} setCurrentSong={setCurrentSong} />} />
         </Route>
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup setUser={setUser} />} />
