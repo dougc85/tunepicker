@@ -2,7 +2,7 @@ import './Song.scss';
 import { React, useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import {
-  doc, updateDoc, deleteField,
+  doc, updateDoc, deleteField, arrayUnion, arrayRemove,
 } from 'firebase/firestore';
 import { db } from '../../../firebaseConfig';
 import useFormInput from '../../../hooks/useFormInput';
@@ -45,6 +45,12 @@ function Song(props) {
     new: 'Just learned; needs practice',
   };
 
+  const knowledgeArrays = {
+    know: ['currentKnow', 'fullKnow'],
+    med: ['currentMedium', 'fullMedium'],
+    new: ['currentNew', 'fullNew']
+  }
+
   const bgColor =
     knowledge === 'know' ? 'hsl(145, 63%, 49%)' :
       knowledge === 'med' ? 'hsl(54, 98%, 66%)' :
@@ -82,10 +88,8 @@ function Song(props) {
       setNotes(song.notes);
 
       const setsList = setNames.map((setName) => {
-        for (let songSet of song.sets) {
-          if (songSet === setName) {
-            return [setName, true];
-          }
+        if (song.sets[setName]) {
+          return [setName, true];
         }
         return [setName, false];
       }).sort();
@@ -93,6 +97,14 @@ function Song(props) {
     }
 
   }, [song, setNames, setKnowledge, setNotes, setSongKey])
+
+  useEffect(() => {
+    if (song) {
+      if (!song.sets.hasOwnProperty(params.setName)) {
+        navigate(`/library/allsongs/${song.title}`);
+      }
+    }
+  }, [song, params.setName])
 
   function handleCheckboxChange(e) {
     setSetArray((oldSets) => {
@@ -134,7 +146,7 @@ function Song(props) {
     navigate(`/library/allsongs/${titleLower}`);
   }
 
-  async function saveStringData(fieldString, inputData) {
+  async function saveSongData(fieldString, inputData) {
     if (song[fieldString] === inputData) {
       return;
     }
@@ -152,7 +164,7 @@ function Song(props) {
 
     currentSong[fieldString] = inputData;
 
-    await updateDoc(userDoc, {
+    updateDoc(userDoc, {
       [`songs.${song.title}.${fieldString}`]: inputData
     })
     setCurrentSong({
@@ -161,15 +173,70 @@ function Song(props) {
   }
 
   async function saveKeyData() {
-    saveStringData('songKey', songKey);
+    saveSongData('songKey', songKey);
   }
 
   async function saveKnowledgeData() {
-    saveStringData('knowledge', knowledge);
+    saveSongData('knowledge', knowledge);
   }
 
   async function saveNotesData() {
-    saveStringData('notes', notes);
+    saveSongData('notes', notes);
+  }
+
+  async function saveSetsData() {
+
+    //Check for no changes
+    if (setArray.every((setItem) => {
+      if (setItem[1] && song.sets[setItem[0]]) {
+        return true;
+      } else if (!setItem[1] && !song.sets.hasOwnProperty(setItem[0])) {
+        return true;
+      } else {
+        return false;
+      }
+    })) {
+      return;
+    }
+
+    let newSetsObject = {};
+
+    for (let setItem of setArray) {
+      if (setItem[1]) {
+        newSetsObject[setItem[0]] = true;
+      }
+    }
+
+    saveSongData('sets', newSetsObject);
+
+    for (let setItem of setArray) {
+      let setName = setItem[0];
+      let songInSet = setItem[1];
+
+      if (songInSet && song.sets[setName]) {
+        continue;
+      } else if (songInSet && !song.sets.hasOwnProperty(setName)) {
+        //add the song to that set in the database
+        let setDoc = doc(db, 'users', user.uid, 'sets', setName);
+
+        updateDoc(setDoc, {
+          allSongs: arrayUnion(song.title),
+          [knowledgeArrays[song.knowledge][0]]: arrayUnion(song.title),
+          [knowledgeArrays[song.knowledge][1]]: arrayUnion(song.title),
+        })
+      } else if (!songInSet && !song.sets.hasOwnProperty(setName)) {
+        continue;
+      } else {
+        //delete the song from that set in the database
+        let setDoc = doc(db, 'users', user.uid, 'sets', setName);
+
+        updateDoc(setDoc, {
+          allSongs: arrayRemove(song.title),
+          [knowledgeArrays[0]]: arrayRemove(song.title),
+          [knowledgeArrays[1]]: arrayRemove(song.title),
+        });
+      }
+    }
   }
 
   return (
@@ -247,12 +314,12 @@ function Song(props) {
                 })}
               </ul>
               <ul className="Song-value Song-sets-entry-value" style={{ display: (showSetsEdit ? 'none' : 'block') }}>
-                {song.sets && song.sets.map((set) => (
-                  <li className="Song-sets-entry-value-set" key="set">{set}</li>
+                {song.sets && Object.keys(song.sets).map((set) => (
+                  <li className="Song-sets-entry-value-set" key={set}>{set}</li>
                 ))}
               </ul>
             </div>
-            <EditConfirm show={setShowSetsEdit} focusInput={focusInput} field="sets" disableEdit={disableEdit} setDisableEdit={setDisableEdit} />
+            <EditConfirm show={setShowSetsEdit} focusInput={focusInput} field="sets" disableEdit={disableEdit} setDisableEdit={setDisableEdit} saveData={saveSetsData} />
           </div>
           <button className="Song-delete">Delete Song</button>
         </div>
