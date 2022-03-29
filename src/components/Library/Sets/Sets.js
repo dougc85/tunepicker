@@ -1,19 +1,14 @@
 import './Sets.scss';
 import { React, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import {
-  doc,
-  collection,
-  setDoc,
-} from 'firebase/firestore';
-import { db } from '../../../firebaseConfig';
+import { useNavigate } from 'react-router-dom';
+
 import AddSet from './AddSet/AddSet';
 import Path from '../Path/Path';
 import Loading from '../../Loading/Loading';
 
 function Sets(props) {
 
-  const { sets, user, loading, setNames } = props;
+  const { user, loading, setNames } = props;
 
   const navigate = useNavigate();
   const [showAddSet, setShowAddSet] = useState(false);
