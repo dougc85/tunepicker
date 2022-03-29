@@ -2,7 +2,7 @@ import './Song.scss';
 import { React, useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import {
-  doc, updateDoc, deleteField, deleteDoc
+  doc, updateDoc, deleteField,
 } from 'firebase/firestore';
 import { db } from '../../../firebaseConfig';
 import useFormInput from '../../../hooks/useFormInput';
@@ -91,7 +91,7 @@ function Song(props) {
       setSetArray(setsList)
     }
 
-  }, [song, setNames])
+  }, [song, setNames, setKnowledge, setNotes, setSongKey])
 
   function handleCheckboxChange(e) {
     setSetArray((oldSets) => {
