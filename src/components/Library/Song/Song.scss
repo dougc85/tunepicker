@@ -72,21 +72,37 @@
   }
   &-notes {
 
+    &-label {
+      margin-bottom: 5px;
+    }
+
     &-entry {
       height: min-content;
       width: 90%;
 
       &-input {
         height: 7rem;
-        width: 100%;
+        width: 25rem;
         box-sizing: border-box;
-        transform: translate(-1px, 1px);
+        transform: translate(-6px, -6px);
+        padding: 5px;
       }
       
       &-value {
         white-space: pre-line;
         height: 7rem;
         overflow: scroll;
+        &::after {
+          position: absolute;
+          top: 31px;
+          left: 30px;
+          content: "";
+          width: 23rem;
+          height: 7rem;
+          border: 1px solid rgb(218, 218, 218);
+          box-sizing: border-box;
+          border-radius: 3px;
+        }
       }
     }
   }
