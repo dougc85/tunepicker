@@ -12,7 +12,7 @@ import EditConfirm from './EditConfirm/EditConfirm';
 
 function Song(props) {
 
-  const { song, loading, getSongData, sets, user, setCurrentSong } = props;
+  const { song, loading, getSongData, setNames, user, setCurrentSong } = props;
   const params = useParams();
   const navigate = useNavigate();
 
@@ -34,9 +34,9 @@ function Song(props) {
 
   //Controlled inputs
   const [title, handleTitleChange] = useFormInput(capitalizeTitle());
-  const [songKey, handleSongKeyChange, , setSongKey] = useFormInput(song.key);
-  const [knowledge, handleKnowledgeChange, , setKnowledge] = useFormInput(song.knowledge);
-  const [notes, handleNotesChange, , setNotes] = useFormInput(song.notes);
+  const [songKey, handleSongKeyChange, , setSongKey] = useFormInput('');
+  const [knowledge, handleKnowledgeChange, , setKnowledge] = useFormInput('');
+  const [notes, handleNotesChange, , setNotes] = useFormInput('');
   const [setArray, setSetArray] = useState([]);
 
   const knowledgeOptions = {
@@ -52,7 +52,7 @@ function Song(props) {
 
   const keys = ['C', 'Db', 'D', 'Eb', 'E', 'F', 'F#', 'G', 'Ab', 'A', 'Bb', 'B'];
 
-  if (!loading && !song.title) {
+  if (!loading && !song) {
     getSongData(params.songTitle);
   }
 
@@ -75,12 +75,12 @@ function Song(props) {
   }
 
   useEffect(() => {
-    console.log(song);
-    setSongKey(song.songKey);
-    setKnowledge(song.knowledge);
-    setNotes(song.notes);
-    if (sets) {
-      const setsList = Object.keys(sets).map((setName) => {
+    if (song) {
+      setSongKey(song.songKey);
+      setKnowledge(song.knowledge);
+      setNotes(song.notes);
+
+      const setsList = setNames.map((setName) => {
         for (let songSet of song.sets) {
           if (songSet === setName) {
             return [setName, true];
@@ -88,10 +88,10 @@ function Song(props) {
         }
         return [setName, false];
       }).sort();
-
       setSetArray(setsList)
     }
-  }, [song])
+
+  }, [song, setNames])
 
   function handleCheckboxChange(e) {
     setSetArray((oldSets) => {
@@ -134,7 +134,7 @@ function Song(props) {
   }
 
   return (
-    loading ?
+    (loading || !song) ?
       <Loading /> :
       <div className="Song">
         <Path heading={capitalizeTitle()} pathType={'Song'} />

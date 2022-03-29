@@ -12,7 +12,7 @@ import Song from '../Song/Song';
 
 function Set(props) {
 
-  const { sets, user, loading, showAlreadyInLibrary, setShowAlreadyInLibrary, setCurrentSong, currentSong, getSongData } = props;
+  const { setNames, user, loading, showAlreadyInLibrary, setShowAlreadyInLibrary, setCurrentSong, currentSong, getSongData } = props;
   const params = useParams();
 
   const [showAdd, setShowAdd] = useState(false);
@@ -73,7 +73,7 @@ function Set(props) {
           </div>
         )}
         <Routes>
-          <Route path=":songTitle" element={<Song song={currentSong} loading={loading} getSongData={getSongData} sets={sets} user={user} setCurrentSong={setCurrentSong} />} />
+          <Route path=":songTitle" element={<Song song={currentSong} loading={loading} getSongData={getSongData} setNames={setNames} user={user} setCurrentSong={setCurrentSong} />} />
         </Routes>
       </div>
 
