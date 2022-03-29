@@ -48,7 +48,7 @@ function AddSet(props) {
           currentNew: [],
           fullMedium: [],
           currentMedium: [],
-          allSongs: {},
+          allSongs: [],
         };
         await setDoc(
           doc(db, 'users', user.uid, 'sets', title),

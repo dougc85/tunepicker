@@ -44,7 +44,7 @@ function Signup(props) {
         currentNew: [],
         fullMedium: [],
         currentMedium: [],
-        allSongs: {},
+        allSongs: [],
       };
       await setDoc(
         doc(db, 'users', userCredential.user.uid, 'sets', defaultSet.setName),

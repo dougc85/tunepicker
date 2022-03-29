@@ -74,13 +74,7 @@ function AddSong(props) {
       updateDoc(setDoc, {
         [knowledgeFields[knowledge][0]]: arrayUnion(titleLower),
         [knowledgeFields[knowledge][1]]: arrayUnion(titleLower),
-        [`allSongs.${titleLower}`]: {
-          knowledge,
-          createdAt: date,
-          notes,
-          songKey,
-          sets: [set.setName],
-        },
+        allSongs: arrayUnion(titleLower),
       })
       resetTitle();
       resetSongKey();

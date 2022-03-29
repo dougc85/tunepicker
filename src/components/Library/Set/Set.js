@@ -12,7 +12,7 @@ import Song from '../Song/Song';
 
 function Set(props) {
 
-  const { setNames, user, loading, showAlreadyInLibrary, setShowAlreadyInLibrary, setCurrentSong, currentSong, getSongData } = props;
+  const { setNames, user, loading, showAlreadyInLibrary, setShowAlreadyInLibrary, setCurrentSong, currentSong, getSongData, allSongs } = props;
   const params = useParams();
 
   const [showAdd, setShowAdd] = useState(false);
@@ -61,8 +61,8 @@ function Set(props) {
                 <button onClick={handleAddButton} className="Set-songs-header-add">Add a Song</button>
               </div>
 
-              {Object.keys(set.allSongs).map((songTitle) => {
-                const song = set.allSongs[songTitle];
+              {set.allSongs.map((songTitle) => {
+                const song = allSongs[songTitle];
                 return (
                   <SongEntry title={songTitle} song={song} sortByDateAdded={false} key={songTitle} setCurrentSong={setCurrentSong} />
                 )
