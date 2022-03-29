@@ -53,6 +53,7 @@ function Song(props) {
   const keys = ['C', 'Db', 'D', 'Eb', 'E', 'F', 'F#', 'G', 'Ab', 'A', 'Bb', 'B'];
 
   if (!loading && !song) {
+    console.log('here');
     getSongData(params.songTitle);
   }
 
@@ -133,9 +134,8 @@ function Song(props) {
     navigate(`/library/allsongs/${titleLower}`);
   }
 
-  async function saveKeyData() {
-
-    if (song.songKey === songKey) {
+  async function saveStringData(fieldString, inputData) {
+    if (song[fieldString] === inputData) {
       return;
     }
 
@@ -146,15 +146,30 @@ function Song(props) {
       knowledge: song.knowledge,
       notes: song.notes,
       sets: song.sets,
+      songKey: song.songKey,
+      title: song.title,
     }
 
+    currentSong[fieldString] = inputData;
+
     await updateDoc(userDoc, {
-      [`songs.${song.title}.songKey`]: songKey
+      [`songs.${song.title}.${fieldString}`]: inputData
     })
     setCurrentSong({
-      ...currentSong,
-      songKey,
+      ...currentSong
     });
+  }
+
+  async function saveKeyData() {
+    saveStringData('songKey', songKey);
+  }
+
+  async function saveKnowledgeData() {
+    saveStringData('knowledge', knowledge);
+  }
+
+  async function saveNotesData() {
+    saveStringData('notes', notes);
   }
 
   return (
@@ -198,7 +213,7 @@ function Song(props) {
                 {Object.keys(knowledgeOptions).map((key) => {
                   let knowledgeChoice = knowledgeOptions[key];
                   return (
-                    <option key={knowledgeChoice}>{knowledgeChoice}</option>
+                    <option value={key} key={knowledgeChoice}>{knowledgeChoice}</option>
                   )
                 })}
               </select>
@@ -208,7 +223,7 @@ function Song(props) {
               </div>
 
             </div>
-            <EditConfirm show={setShowKnowledgeEdit} focusInput={focusInput} field="knowledge" disableEdit={disableEdit} setDisableEdit={setDisableEdit} />
+            <EditConfirm show={setShowKnowledgeEdit} focusInput={focusInput} field="knowledge" disableEdit={disableEdit} setDisableEdit={setDisableEdit} saveData={saveKnowledgeData} />
           </div>
           <div className="Song-field Song-notes">
             <label htmlFor="songNotes-songPage" className="Song-notes-label Song-label">Notes</label>
@@ -216,7 +231,7 @@ function Song(props) {
               <textarea style={{ display: (showNotesEdit ? 'block' : 'none') }} id="songNotes-songPage" ref={notesInput} className="Song-notes-entry-input Song-input" value={notes} onChange={handleNotesChange} ></textarea>
               <p style={{ display: (showNotesEdit ? 'none' : 'block') }} className="Song-value Song-notes-entry-value">{song.notes || 'none'}</p>
             </div>
-            <EditConfirm show={setShowNotesEdit} focusInput={focusInput} field="notes" disableEdit={disableEdit} setDisableEdit={setDisableEdit} />
+            <EditConfirm show={setShowNotesEdit} focusInput={focusInput} field="notes" disableEdit={disableEdit} setDisableEdit={setDisableEdit} saveData={saveNotesData} />
           </div>
           <div className="Song-field Song-sets">
             <fieldset className="Song-sets-label Song-label">Sets</fieldset>

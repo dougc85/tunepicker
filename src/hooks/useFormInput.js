@@ -5,7 +5,6 @@ function useFormInput(initialVal) {
 
   function handleChange(e) {
     setState(e.target.value);
-    console.log('in HandleChange');
   }
 
   function resetInput(e) {
