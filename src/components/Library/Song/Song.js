@@ -133,6 +133,30 @@ function Song(props) {
     navigate(`/library/allsongs/${titleLower}`);
   }
 
+  async function saveKeyData() {
+
+    if (song.songKey === songKey) {
+      return;
+    }
+
+    const userDoc = doc(db, 'users', user.uid);
+
+    const currentSong = {
+      createdAt: song.createdAt,
+      knowledge: song.knowledge,
+      notes: song.notes,
+      sets: song.sets,
+    }
+
+    await updateDoc(userDoc, {
+      [`songs.${song.title}.songKey`]: songKey
+    })
+    setCurrentSong({
+      ...currentSong,
+      songKey,
+    });
+  }
+
   return (
     (loading || !song) ?
       <Loading /> :
@@ -165,7 +189,7 @@ function Song(props) {
               </select>
               <p style={{ display: (showKeyEdit ? 'none' : 'block') }} className="Song-value Song-key-entry-value">{song.songKey}</p>
             </div>
-            <EditConfirm show={setShowKeyEdit} focusInput={focusInput} field="key" disableEdit={disableEdit} setDisableEdit={setDisableEdit} />
+            <EditConfirm show={setShowKeyEdit} focusInput={focusInput} field="key" disableEdit={disableEdit} setDisableEdit={setDisableEdit} saveData={saveKeyData} />
           </div>
           <div className="Song-field Song-knowledge">
             <label htmlFor="songKnowledge-songPage" className="Song-knowledge-label Song-label">How Well Do I Know This Tune?</label>
