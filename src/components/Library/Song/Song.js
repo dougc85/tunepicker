@@ -178,6 +178,21 @@ function Song(props) {
 
   async function saveKnowledgeData() {
     saveSongData('knowledge', knowledge);
+
+    if (knowledge === song.knowledge) {
+      return;
+    }
+
+    for (let set in song.sets) {
+      const setDoc = doc(db, 'users', user.uid, 'sets', set);
+
+      updateDoc(setDoc, {
+        [knowledgeArrays[song.knowledge][0]]: arrayRemove(song.title),
+        [knowledgeArrays[song.knowledge][1]]: arrayRemove(song.title),
+        [knowledgeArrays[knowledge][0]]: arrayUnion(song.title),
+        [knowledgeArrays[knowledge][1]]: arrayUnion(song.title),
+      });
+    }
   }
 
   async function saveNotesData() {
