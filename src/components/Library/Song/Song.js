@@ -143,7 +143,24 @@ function Song(props) {
       ...currentSong,
       title: titleLower
     });
+
     navigate(`/library/allsongs/${titleLower}`);
+
+    for (let set in song.sets) {
+      const setDoc = doc(db, 'users', user.uid, 'sets', set);
+
+      await updateDoc(setDoc, {
+        allSongs: arrayRemove(song.title),
+        [knowledgeArrays[song.knowledge][0]]: arrayRemove(song.title),
+        [knowledgeArrays[song.knowledge][1]]: arrayRemove(song.title),
+      });
+
+      updateDoc(setDoc, {
+        allSongs: arrayUnion(titleLower),
+        [knowledgeArrays[song.knowledge][0]]: arrayUnion(titleLower),
+        [knowledgeArrays[song.knowledge][1]]: arrayUnion(titleLower),
+      });
+    }
   }
 
   async function saveSongData(fieldString, inputData) {
@@ -247,8 +264,8 @@ function Song(props) {
 
         updateDoc(setDoc, {
           allSongs: arrayRemove(song.title),
-          [knowledgeArrays[0]]: arrayRemove(song.title),
-          [knowledgeArrays[1]]: arrayRemove(song.title),
+          [knowledgeArrays[song.knowledge][0]]: arrayRemove(song.title),
+          [knowledgeArrays[song.knowledge][1]]: arrayRemove(song.title),
         });
       }
     }
