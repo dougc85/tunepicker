@@ -7,6 +7,8 @@ import {
   doc,
   collection,
   setDoc,
+  addDoc,
+  updateDoc,
 } from 'firebase/firestore';
 import useFormInput from "../../hooks/useFormInput";
 
@@ -28,10 +30,8 @@ function Signup(props) {
       await setDoc(
         doc(db, 'users', userCredential.user.uid),
         {
-          defaultSet: "First Set",
           songs: {},
           email: userCredential.user.email,
-          setNames: ["First Set"],
         }
       );
       const userDoc = doc(db, 'users', userCredential.user.uid);
@@ -46,17 +46,25 @@ function Signup(props) {
         currentMedium: [],
         allSongs: [],
       };
-      await setDoc(
-        doc(db, 'users', userCredential.user.uid, 'sets', defaultSet.setName),
+      const newSetDoc = await addDoc(
+        setsRef,
         defaultSet,
       );
+      await updateDoc(userDoc, {
+        defaultSet: newSetDoc.id,
+        setNames: {
+          [newSetDoc.id]: "First Set",
+        },
+      });
+
+      resetEmail();
+      resetPassword();
       props.setUser(userCredential.user);
     }
     catch (error) {
       console.log(error);
       setErrorMessage(error.message);
     }
-
   }
 
   return (
