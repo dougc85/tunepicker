@@ -59,6 +59,8 @@ function AddSong(props) {
         setKnowledge('know');
         setShowAlreadyInLibrary(true);
         setSongConsidered(titleLower);
+
+        //Return here???!?
       }
 
       updateDoc(userDoc, {

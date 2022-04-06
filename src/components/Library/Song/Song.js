@@ -59,7 +59,6 @@ function Song(props) {
   const keys = ['C', 'Db', 'D', 'Eb', 'E', 'F', 'F#', 'G', 'Ab', 'A', 'Bb', 'B'];
 
   if (!loading && !song) {
-    console.log('here');
     getSongData(params.songTitle);
   }
 
@@ -89,9 +88,9 @@ function Song(props) {
 
       const setsList = Object.keys(setNames).map((setId) => {
         if (song.sets[setId]) {
-          return [song.sets[setId], true, setId];
+          return [setNames[setId], true, setId];
         }
-        return [song.sets[setId], false, setId];
+        return [setNames[setId], false, setId];
       }).sort();
       setSetArray(setsList)
     }
@@ -220,9 +219,9 @@ function Song(props) {
 
     //Check for no changes
     if (setArray.every((setItem) => {
-      if (setItem[1] && song.sets[setItem[0]]) {
+      if (setItem[1] && song.sets.hasOwnProperty(setItem[2])) {
         return true;
-      } else if (!setItem[1] && !song.sets.hasOwnProperty(setItem[0])) {
+      } else if (!setItem[1] && !song.sets.hasOwnProperty(setItem[2])) {
         return true;
       } else {
         return false;
@@ -235,7 +234,7 @@ function Song(props) {
 
     for (let setItem of setArray) {
       if (setItem[1]) {
-        newSetsObject[setItem[0]] = true;
+        newSetsObject[setItem[2]] = setItem[0];
       }
     }
 

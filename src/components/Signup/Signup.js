@@ -57,8 +57,6 @@ function Signup(props) {
         },
       });
 
-      resetEmail();
-      resetPassword();
       props.setUser(userCredential.user);
     }
     catch (error) {
