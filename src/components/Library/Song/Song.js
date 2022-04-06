@@ -87,11 +87,11 @@ function Song(props) {
       setKnowledge(song.knowledge);
       setNotes(song.notes);
 
-      const setsList = setNames.map((setName) => {
-        if (song.sets[setName]) {
-          return [setName, true];
+      const setsList = Object.keys(setNames).map((setId) => {
+        if (song.sets[setId]) {
+          return [song.sets[setId], true, setId];
         }
-        return [setName, false];
+        return [song.sets[setId], false, setId];
       }).sort();
       setSetArray(setsList)
     }
@@ -100,17 +100,17 @@ function Song(props) {
 
   useEffect(() => {
     if (song) {
-      if (!song.sets.hasOwnProperty(params.setName)) {
+      if (!song.sets.hasOwnProperty(params.setId)) {
         navigate(`/library/allsongs/${song.title}`);
       }
     }
-  }, [song, params.setName])
+  }, [song, params.setId])
 
   function handleCheckboxChange(e) {
     setSetArray((oldSets) => {
       return oldSets.map((set) => {
         if (set[0] === e.target.value) {
-          return [set[0], !set[1]];
+          return [set[0], !set[1], set[2]];
         }
         return set;
       })
@@ -244,23 +244,24 @@ function Song(props) {
     for (let setItem of setArray) {
       let setName = setItem[0];
       let songInSet = setItem[1];
+      let setId = setItem[2];
 
-      if (songInSet && song.sets[setName]) {
+      if (songInSet && song.sets.hasOwnProperty(setId)) {
         continue;
-      } else if (songInSet && !song.sets.hasOwnProperty(setName)) {
+      } else if (songInSet && !song.sets.hasOwnProperty(setId)) {
         //add the song to that set in the database
-        let setDoc = doc(db, 'users', user.uid, 'sets', setName);
+        let setDoc = doc(db, 'users', user.uid, 'sets', setId);
 
         updateDoc(setDoc, {
           allSongs: arrayUnion(song.title),
           [knowledgeArrays[song.knowledge][0]]: arrayUnion(song.title),
           [knowledgeArrays[song.knowledge][1]]: arrayUnion(song.title),
         })
-      } else if (!songInSet && !song.sets.hasOwnProperty(setName)) {
+      } else if (!songInSet && !song.sets.hasOwnProperty(setId)) {
         continue;
       } else {
         //delete the song from that set in the database
-        let setDoc = doc(db, 'users', user.uid, 'sets', setName);
+        let setDoc = doc(db, 'users', user.uid, 'sets', setId);
 
         updateDoc(setDoc, {
           allSongs: arrayRemove(song.title),
@@ -338,16 +339,16 @@ function Song(props) {
               <ul className="Song-sets-entry-checkboxes" style={{ display: (showSetsEdit ? 'block' : 'none') }}>
                 {setArray.map((set, idx) => {
                   return (
-                    <li className="Song-sets-entry-checkbox" key={`${set[0] + idx}`}>
-                      <label htmlFor={`${set[0] + idx}`} className="Song-sets-entry-checkbox-label">{set[0]}</label>
-                      <input id={`${set[0] + idx}`} value={set[0]} checked={set[1]} onChange={handleCheckboxChange} type="checkbox" className="Song-sets-entry-checkbox-box Song-input" ref={idx === 0 ? setsInput : undefined}></input>
+                    <li className="Song-sets-entry-checkbox" key={`${set[2]}`}>
+                      <label htmlFor={`${set[2]}`} className="Song-sets-entry-checkbox-label">{set[0]}</label>
+                      <input id={`${set[2]}`} value={set[0]} checked={set[1]} onChange={handleCheckboxChange} type="checkbox" className="Song-sets-entry-checkbox-box Song-input" ref={idx === 0 ? setsInput : undefined}></input>
                     </li>
                   )
                 })}
               </ul>
               <ul className="Song-value Song-sets-entry-value" style={{ display: (showSetsEdit ? 'none' : 'block') }}>
-                {song.sets && Object.keys(song.sets).map((set) => (
-                  <li className="Song-sets-entry-value-set" key={set}>{set}</li>
+                {song.sets && Object.keys(song.sets).map((setId) => (
+                  <li className="Song-sets-entry-value-set" key={setId}>{song.sets[setId]}</li>
                 ))}
               </ul>
             </div>

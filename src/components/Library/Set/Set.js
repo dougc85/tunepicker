@@ -30,8 +30,11 @@ function Set(props) {
 
     if (user) {
       try {
-        unsubscribeSetSnapshot = onSnapshot(doc(db, 'users', user.uid, 'sets', params.setName), (doc) => {
-          setSet(doc.data());
+        unsubscribeSetSnapshot = onSnapshot(doc(db, 'users', user.uid, 'sets', params.setId), (doc) => {
+          setSet({
+            ...doc.data(),
+            id: params.setId,
+          });
         });
 
       } catch (err) {
@@ -44,7 +47,7 @@ function Set(props) {
         unsubscribeSetSnapshot();
       }
     }
-  }, [user, params.setName])
+  }, [user, params.setId])
 
   const renderSet = params['*'] ? false : true;
 
