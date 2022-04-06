@@ -1,7 +1,7 @@
 import './AddSet.scss';
 import { React, useState } from 'react';
 import {
-  setDoc, doc, arrayUnion, updateDoc,
+  addDoc, setDoc, doc, collection, arrayUnion, updateDoc,
 } from 'firebase/firestore';
 import { db } from '../../../../firebaseConfig';
 import useFormInput from '../../../../hooks/useFormInput';
@@ -23,7 +23,7 @@ function AddSet(props) {
   function handleTitleChangeAndDuplicates(e) {
     setShowError(false);
     setErrorMessage('');
-    if (setNames.some((set) => set.toLowerCase() === e.target.value.toLowerCase())) {
+    if (Object.keys(setNames).some((setId) => setNames[setId].toLowerCase() === e.target.value.toLowerCase())) {
       setShowError(true);
       setErrorMessage('This set name already taken')
       setDisableForm(true);
@@ -50,14 +50,14 @@ function AddSet(props) {
           currentMedium: [],
           allSongs: [],
         };
-        await setDoc(
-          doc(db, 'users', user.uid, 'sets', title),
+        const newSetDoc = await addDoc(
+          collection(db, 'users', user.uid, 'sets'),
           newSet,
         );
         await updateDoc(
           doc(db, 'users', user.uid),
           {
-            "setNames": arrayUnion(title)
+            [`setNames.${newSetDoc.id}`]: title,
           });
 
         resetTitle();
