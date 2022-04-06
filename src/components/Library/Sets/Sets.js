@@ -17,8 +17,8 @@ function Sets(props) {
     setShowAddSet(true);
   }
 
-  function handleClick(set) {
-    navigate(`/library/sets/${set}`)
+  function handleClick(setId) {
+    navigate(`/library/sets/${setId}`)
   }
 
   if (!setNames) {
@@ -35,10 +35,10 @@ function Sets(props) {
             <h2 className="Sets-sets-header-heading">Sets</h2>
             <button onClick={handleAddButton} className="Sets-sets-header-add">Add a Set</button>
           </div>
-          {setNames.map((set) => {
+          {Object.keys(setNames).map((setId) => {
             return (
-              <li onClick={() => { handleClick(set) }} className="Sets-sets-set" key={set}>
-                {set}
+              <li onClick={() => { handleClick(setId) }} className="Sets-sets-set" key={setId}>
+                {setNames[setId]}
               </li>
             )
           }
