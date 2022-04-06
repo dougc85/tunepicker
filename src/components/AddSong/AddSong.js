@@ -45,7 +45,7 @@ function AddSong(props) {
     e.preventDefault();
     try {
       const userDoc = doc(db, 'users', user.uid);
-      const setDoc = doc(userDoc, 'sets', set.setName);
+      const setDoc = doc(userDoc, 'sets', set.id);
       const date = Date.now();
       const titleLower = title.toLowerCase();
 
@@ -67,7 +67,7 @@ function AddSong(props) {
           notes,
           songKey,
           knowledge,
-          sets: { [set.setName]: true, },
+          sets: { [set.id]: set.setName },
           createdAt: date,
         }
       });
