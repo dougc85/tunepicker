@@ -1,7 +1,7 @@
 import './AddSet.scss';
 import { React, useState } from 'react';
 import {
-  addDoc, setDoc, doc, collection, arrayUnion, updateDoc,
+  addDoc, doc, collection, updateDoc,
 } from 'firebase/firestore';
 import { db } from '../../../../firebaseConfig';
 import useFormInput from '../../../../hooks/useFormInput';
