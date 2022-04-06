@@ -35,7 +35,12 @@ function Sets(props) {
             <h2 className="Sets-sets-header-heading">Sets</h2>
             <button onClick={handleAddButton} className="Sets-sets-header-add">Add a Set</button>
           </div>
-          {Object.keys(setNames).map((setId) => {
+          {Object.keys(setNames).sort((id1, id2) => {
+            if (setNames[id1] < setNames[id2]) {
+              return -1;
+            }
+            return 1;
+          }).map((setId) => {
             return (
               <li onClick={() => { handleClick(setId) }} className="Sets-sets-set" key={setId}>
                 {setNames[setId]}
