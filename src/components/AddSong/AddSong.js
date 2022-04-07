@@ -1,5 +1,6 @@
 import './AddSong.scss';
 import { React, useState } from 'react';
+import { v4 as uuid } from 'uuid';
 import {
   arrayUnion,
   doc,
@@ -51,6 +52,8 @@ function AddSong(props) {
 
       const userFirebase = await getDoc(userDoc);
       const userDocData = userFirebase.data();
+
+      //Need to learn how to query in order to refactor this
       if (userDocData.songs[titleLower]) {
         setShowAdd(false);
         resetTitle();
@@ -63,9 +66,12 @@ function AddSong(props) {
         //Return here???!?
       }
 
+      const songId = uuid();
+
       updateDoc(userDoc, {
 
-        [`songs.${titleLower}`]: {
+        [`songs.${songId}`]: {
+          title: titleLower,
           notes,
           songKey,
           knowledge,
@@ -74,9 +80,9 @@ function AddSong(props) {
         }
       });
       updateDoc(setDoc, {
-        [knowledgeFields[knowledge][0]]: arrayUnion(titleLower),
-        [knowledgeFields[knowledge][1]]: arrayUnion(titleLower),
-        allSongs: arrayUnion(titleLower),
+        [knowledgeFields[knowledge][0]]: arrayUnion(songId),
+        [knowledgeFields[knowledge][1]]: arrayUnion(songId),
+        allSongs: arrayUnion(songId),
       })
       resetTitle();
       resetSongKey();
