@@ -4,8 +4,8 @@ import { useNavigate, useParams } from 'react-router-dom';
 
 function SongEntry(props) {
 
-  const { song, title, setCurrentSong } = props;
-  const { knowledge, createdAt } = song;
+  const { song, setCurrentSong } = props;
+  const { knowledge, createdAt, title, id } = song;
   const navigate = useNavigate();
   const params = useParams();
 
@@ -17,12 +17,12 @@ function SongEntry(props) {
   const titleCapitalized = title.split(' ').map((word) => word[0].toUpperCase().concat(word.substring(1))).join(' ');
 
   function handleClick() {
-    setCurrentSong({ ...song, title });
+    setCurrentSong({ ...song });
     if (params.setName) {
-      navigate(`/library/sets/${params.setName}/${title}`);
+      navigate(`/library/sets/${params.setName}/${id}`);
     }
     else {
-      navigate(`/library/allsongs/${title}`);
+      navigate(`/library/allsongs/${id}`);
     }
   }
 

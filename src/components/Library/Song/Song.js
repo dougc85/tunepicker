@@ -12,7 +12,7 @@ import EditConfirm from './EditConfirm/EditConfirm';
 
 function Song(props) {
 
-  const { song, loading, getSongData, setNames, user, setCurrentSong } = props;
+  const { song, loading, getSongData, setNames, user, setCurrentSong, allSongs } = props;
   const params = useParams();
   const navigate = useNavigate();
 
@@ -59,11 +59,11 @@ function Song(props) {
   const keys = ['C', 'Db', 'D', 'Eb', 'E', 'F', 'F#', 'G', 'Ab', 'A', 'Bb', 'B'];
 
   if (!loading && !song) {
-    getSongData(params.songTitle);
+    getSongData(params.songId);
   }
 
   function capitalizeTitle() {
-    return params.songTitle.split(' ').map((word) => word[0].toUpperCase().concat(word.substring(1))).join(' ');
+    return allSongs[params.songId].title.split(' ').map((word) => word[0].toUpperCase().concat(word.substring(1))).join(' ');
   }
 
   useEffect(() => {
@@ -100,7 +100,7 @@ function Song(props) {
   useEffect(() => {
     if (song) {
       if (!song.sets.hasOwnProperty(params.setId)) {
-        navigate(`/library/allsongs/${song.title}`);
+        navigate(`/library/allsongs/${song.id}`);
       }
     }
   }, [song, params.setId])
@@ -131,8 +131,14 @@ function Song(props) {
       knowledge: song.knowledge,
       notes: song.notes,
       sets: song.sets,
-      songKey: song.songKey
+      songKey: song.songKey,
+      title: song.title,
+      id: song.id,
     }
+
+
+
+    //Stopped Here   !!
 
     await updateDoc(userDoc, {
       [`songs.${song.title.toLowerCase()}`]: deleteField(),
