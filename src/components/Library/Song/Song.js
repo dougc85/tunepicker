@@ -33,7 +33,7 @@ function Song(props) {
   const [focus, setFocus] = useState(null);
 
   //Controlled inputs
-  const [title, handleTitleChange] = useFormInput(capitalizeTitle());
+  const [title, handleTitleChange, , setTitle] = useFormInput('');
   const [songKey, handleSongKeyChange, , setSongKey] = useFormInput('');
   const [knowledge, handleKnowledgeChange, , setKnowledge] = useFormInput('');
   const [notes, handleNotesChange, , setNotes] = useFormInput('');
@@ -63,7 +63,9 @@ function Song(props) {
   }
 
   function capitalizeTitle() {
-    return allSongs[params.songId].title.split(' ').map((word) => word[0].toUpperCase().concat(word.substring(1))).join(' ');
+    if (allSongs) {
+      return allSongs[params.songId].title.split(' ').map((word) => word[0].toUpperCase().concat(word.substring(1))).join(' ');
+    }
   }
 
   useEffect(() => {
@@ -85,6 +87,7 @@ function Song(props) {
       setSongKey(song.songKey);
       setKnowledge(song.knowledge);
       setNotes(song.notes);
+      setTitle(capitalizeTitle());
 
       const setsList = Object.keys(setNames).map((setId) => {
         if (song.sets[setId]) {
@@ -116,11 +119,9 @@ function Song(props) {
     })
   }
 
-  async function saveTitleData() {
+  async function saveSongData(fieldString, inputData) {
 
-    const titleLower = title.toLowerCase();
-
-    if (song.title.toLowerCase() === titleLower) {
+    if (song[fieldString] === inputData) {
       return;
     }
 
@@ -136,62 +137,21 @@ function Song(props) {
       id: song.id,
     }
 
-
-
-    //Stopped Here   !!
-
-    await updateDoc(userDoc, {
-      [`songs.${song.title.toLowerCase()}`]: deleteField(),
-      [`songs.${titleLower}`]: currentSong
-    })
-    setCurrentSong({
-      ...currentSong,
-      title: titleLower
-    });
-
-    navigate(`/library/allsongs/${titleLower}`);
-
-    for (let set in song.sets) {
-      const setDoc = doc(db, 'users', user.uid, 'sets', set);
-
-      await updateDoc(setDoc, {
-        allSongs: arrayRemove(song.title),
-        [knowledgeArrays[song.knowledge][0]]: arrayRemove(song.title),
-        [knowledgeArrays[song.knowledge][1]]: arrayRemove(song.title),
-      });
-
-      updateDoc(setDoc, {
-        allSongs: arrayUnion(titleLower),
-        [knowledgeArrays[song.knowledge][0]]: arrayUnion(titleLower),
-        [knowledgeArrays[song.knowledge][1]]: arrayUnion(titleLower),
-      });
-    }
-  }
-
-  async function saveSongData(fieldString, inputData) {
-    if (song[fieldString] === inputData) {
-      return;
-    }
-
-    const userDoc = doc(db, 'users', user.uid);
-
-    const currentSong = {
-      createdAt: song.createdAt,
-      knowledge: song.knowledge,
-      notes: song.notes,
-      sets: song.sets,
-      songKey: song.songKey,
-      title: song.title,
-    }
-
     currentSong[fieldString] = inputData;
 
     updateDoc(userDoc, {
-      [`songs.${song.title}.${fieldString}`]: inputData
+      [`songs.${song.id}.${fieldString}`]: inputData
     })
     setCurrentSong({
       ...currentSong
     });
+  }
+
+  async function saveTitleData() {
+
+    const titleLower = title.toLowerCase();
+
+    saveSongData('title', titleLower);
   }
 
   async function saveKeyData() {
@@ -209,10 +169,10 @@ function Song(props) {
       const setDoc = doc(db, 'users', user.uid, 'sets', set);
 
       updateDoc(setDoc, {
-        [knowledgeArrays[song.knowledge][0]]: arrayRemove(song.title),
-        [knowledgeArrays[song.knowledge][1]]: arrayRemove(song.title),
-        [knowledgeArrays[knowledge][0]]: arrayUnion(song.title),
-        [knowledgeArrays[knowledge][1]]: arrayUnion(song.title),
+        [knowledgeArrays[song.knowledge][0]]: arrayRemove(song.id),
+        [knowledgeArrays[song.knowledge][1]]: arrayRemove(song.id),
+        [knowledgeArrays[knowledge][0]]: arrayUnion(song.id),
+        [knowledgeArrays[knowledge][1]]: arrayUnion(song.id),
       });
     }
   }
@@ -258,9 +218,9 @@ function Song(props) {
         let setDoc = doc(db, 'users', user.uid, 'sets', setId);
 
         updateDoc(setDoc, {
-          allSongs: arrayUnion(song.title),
-          [knowledgeArrays[song.knowledge][0]]: arrayUnion(song.title),
-          [knowledgeArrays[song.knowledge][1]]: arrayUnion(song.title),
+          allSongs: arrayUnion(song.id),
+          [knowledgeArrays[song.knowledge][0]]: arrayUnion(song.id),
+          [knowledgeArrays[song.knowledge][1]]: arrayUnion(song.id),
         })
       } else if (!songInSet && !song.sets.hasOwnProperty(setId)) {
         continue;
@@ -270,8 +230,8 @@ function Song(props) {
 
         updateDoc(setDoc, {
           allSongs: arrayRemove(song.title),
-          [knowledgeArrays[song.knowledge][0]]: arrayRemove(song.title),
-          [knowledgeArrays[song.knowledge][1]]: arrayRemove(song.title),
+          [knowledgeArrays[song.knowledge][0]]: arrayRemove(song.id),
+          [knowledgeArrays[song.knowledge][1]]: arrayRemove(song.id),
         });
       }
     }

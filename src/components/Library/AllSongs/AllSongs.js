@@ -1,39 +1,37 @@
 import './AllSongs.scss';
-import { React, useState, useEffect } from 'react';
-import { doc, onSnapshot } from 'firebase/firestore';
-import { db } from '../../../firebaseConfig';
+import { React } from 'react';
 import SongEntry from '../SongEntry/SongEntry';
 import Path from '../Path/Path';
 
 function AllSongs(props) {
 
-  const { user, setCurrentSong } = props;
-  const [songs, setSongs] = useState({});
-
-  useEffect(() => {
-    if (!user) {
-      return;
-    }
+  const { setCurrentSong, allSongs } = props;
 
 
-    const unsubscribeSongs = onSnapshot(doc(db, 'users', user.uid), (doc) => {
-      setSongs(doc.data().songs);
-    })
+  //vvvvvv  Unnecessary????  vvvvvv
+  // useEffect(() => {
+  //   if (!user) {
+  //     return;
+  //   }
 
-    return () => {
-      if (unsubscribeSongs) {
-        unsubscribeSongs();
-      }
-    }
-  }, [user]);
+  //   const unsubscribeSongs = onSnapshot(doc(db, 'users', user.uid), (doc) => {
+  //     setSongs(doc.data().songs);
+  //   })
+
+  //   return () => {
+  //     if (unsubscribeSongs) {
+  //       unsubscribeSongs();
+  //     }
+  //   }
+  // }, [user]);
 
   return (
     <div className="AllSongs">
       <Path heading="All Songs" pathType="All Songs" />
-      {Object.keys(songs).map((songTitle) => {
-        const songObj = songs[songTitle];
+      {Object.keys(allSongs).map((songId) => {
+        const songObj = allSongs[songId];
         return (
-          <SongEntry title={songTitle} song={songObj} sortByDateAdded={false} key={songTitle} setCurrentSong={setCurrentSong} />
+          <SongEntry title={songObj.title} song={songObj} sortByDateAdded={false} key={songId} setCurrentSong={setCurrentSong} />
         )
       })}
     </div>
