@@ -77,6 +77,7 @@ function AddSong(props) {
           knowledge,
           sets: { [set.id]: set.setName },
           createdAt: date,
+          id: songId,
         }
       });
       updateDoc(setDoc, {

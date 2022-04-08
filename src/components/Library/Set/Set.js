@@ -64,10 +64,10 @@ function Set(props) {
                 <button onClick={handleAddButton} className="Set-songs-header-add">Add a Song</button>
               </div>
 
-              {set.allSongs.map((songTitle) => {
-                const song = allSongs[songTitle];
+              {set.allSongs.map((songId) => {
+                const song = allSongs[songId];
                 return (
-                  <SongEntry title={songTitle} song={song} sortByDateAdded={false} key={songTitle} setCurrentSong={setCurrentSong} />
+                  <SongEntry song={song} sortByDateAdded={false} key={songId} setCurrentSong={setCurrentSong} />
                 )
               })}
             </div>
@@ -76,7 +76,7 @@ function Set(props) {
           </div>
         )}
         <Routes>
-          <Route path=":songTitle" element={<Song song={currentSong} loading={loading} getSongData={getSongData} setNames={setNames} user={user} setCurrentSong={setCurrentSong} />} />
+          <Route path=":songTitle" element={<Song song={currentSong} loading={loading} getSongData={getSongData} setNames={setNames} user={user} allSongs={allSongs} setCurrentSong={setCurrentSong} />} />
         </Routes>
       </div>
 
