@@ -6,21 +6,15 @@ import { auth } from '../../firebaseConfig';
 import {
   signInWithEmailAndPassword
 } from 'firebase/auth';
+import useFormInput from "../../hooks/useFormInput";
+import Password from "../Password/Password";
 
 function Login() {
 
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, handleEmailChange] = useFormInput('');
+  const [password, handlePasswordChange] = useFormInput('');
   const [showPassword, setShowPassword] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
-
-  function changePasswordHandler(e) {
-    setPassword(e.target.value)
-  }
-
-  function changeEmailHandler(e) {
-    setEmail(e.target.value)
-  }
 
   function toggleShowPassword(e) {
     setShowPassword((old) => !old);
@@ -50,11 +44,9 @@ function Login() {
       <form action="" className="Login-form">
         <legend className="Login-form-legend">Log In:</legend>
         <label htmlFor="email-login">email</label>
-        <input onChange={changeEmailHandler} value={email} type="text" name="email-login" id="email-login" className="Login-form-email" />
+        <input onChange={handleEmailChange} value={email} type="text" name="email-login" id="email-login" className="Login-form-email" />
         <label htmlFor="password-login">password</label>
-        <input onChange={changePasswordHandler} value={password} type={`${showPassword ? "text" : "password"}`} name="password-login" id="password-login" className="Login-form-password" />
-        <label htmlFor="show-password-login">Show Password</label>
-        <input onChange={toggleShowPassword} type="checkbox" id="show-password-login" className="Login-form-checkbox"></input>
+        <Password id="password-login" handlePasswordChange={handlePasswordChange} password={password} showPassword={showPassword} toggleShowPassword={toggleShowPassword} />
         {errorMessage && <p>{errorMessage}</p>}
         <button onClick={handleSubmit} className="Login-submit">Click Here to Log In</button>
       </form>
