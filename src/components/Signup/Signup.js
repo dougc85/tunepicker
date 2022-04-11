@@ -1,5 +1,6 @@
 import React from "react";
 import { useState } from 'react';
+import Password from '../Password/Password';
 import './Signup.scss';
 import { auth, db } from '../../firebaseConfig';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
@@ -73,9 +74,7 @@ function Signup(props) {
         <label htmlFor="email-signup">email</label>
         <input onChange={handleEmailChange} value={email} type="text" name="email-signup" id="email-signup" className="Signup-form-email" />
         <label htmlFor="password-signup">password</label>
-        <input onChange={handlePasswordChange} value={password} type={`${showPassword ? "text" : "password"}`} name="password-signup" id="password-signup" className="Signup-form-password" />
-        <label htmlFor="show-password-signup">Show Password</label>
-        <input onChange={toggleShowPassword} type="checkbox" id="show-password-signup" className="Signup-form-checkbox"></input>
+        <Password id="password-signup" handlePasswordChange={handlePasswordChange} password={password} showPassword={showPassword} toggleShowPassword={toggleShowPassword} />
         {errorMessage && <p>{errorMessage}</p>}
         <button onClick={handleSubmit} className="Signup-submit">Submit</button>
       </form>
