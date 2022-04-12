@@ -66,7 +66,7 @@ function LoginSignup(props) {
           <Password id="password-welcome" handlePasswordChange={handlePasswordChange} password={password} showPassword={showPassword} toggleShowPassword={toggleShowPassword} />
           {errorMessage && <p>{errorMessage}</p>}
         </div>
-        <button onClick={handleSubmit} className="LoginSignup-submit">Submit</button>
+        <button onClick={handleSubmit} className="LoginSignup-submit">Enter</button>
         <button className="LoginSignup-switch" id="switch-to-signup" onClick={switchAuth}>Need to create an account?</button>
       </div>
       <div className="LoginSignup-signup LoginSignup-container" style={signupStyle}>
@@ -78,7 +78,7 @@ function LoginSignup(props) {
           <Password id="password-welcome" handlePasswordChange={handlePasswordChange} password={password} showPassword={showPassword} toggleShowPassword={toggleShowPassword} />
           {errorMessage && <p>{errorMessage}</p>}
         </div>
-        <button onClick={handleSubmit} className="LoginSignup-submit">Submit</button>
+        <button onClick={handleSubmit} className="LoginSignup-submit LoginSignup-submit-signin">Create Account</button>
         <button id="switch-to-login" className="LoginSignup-switch" onClick={switchAuth}>Already have an account?</button>
       </div>
     </form>

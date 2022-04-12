@@ -20,12 +20,14 @@ function Welcome() {
     })
     if (e.target.id === 'signup-button') {
       setSignupStyle(
-        { transform: "translateX(-50%)", left: "50%" }
+        { transform: "translateX(50%)", right: "50%" }
       )
-      setLoginStyle({
-        transform: "translateX(150%)",
-        right: 0
-      })
+      setTimeout(() => {
+        setLoginStyle({
+          transform: "translateX(-150%)",
+          left: 0
+        })
+      }, 1000);
     } else if (e.target.id === 'login-button') {
       setLoginStyle({
         transform: "translateX(-50%)", left: "50%"
