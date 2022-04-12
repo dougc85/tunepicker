@@ -3,7 +3,7 @@ import './App.css';
 import PickController from './components/PickController/PickController';
 import { Routes, Route, useNavigate, useLocation } from 'react-router-dom';
 import Header from './components/Header/Header';
-import Login from './components/Login/Login';
+import Welcome from './components/Welcome/Welcome';
 import Signup from './components/Signup/Signup';
 import FrontPage from './components/FrontPage/FrontPage';
 import Library from './components/Library/Library';
@@ -35,7 +35,7 @@ function App() {
     const unsubAuthChange = onAuthStateChanged(auth, currentUser => {
       if (currentUser) {
         setUser(currentUser);
-        if (location.pathname === '/login' || location.pathname === '/signup') {
+        if (location.pathname === '/welcome' || location.pathname === '/signup') {
           navigate('/');
         }
         else {
@@ -45,7 +45,7 @@ function App() {
       else {
         setUser('');
         if (location.pathname !== '/signup') {
-          navigate('/login');
+          navigate('/welcome');
         }
       }
     })
@@ -95,8 +95,7 @@ function App() {
           <Route path="/library/sets" element={<Sets loading={loading} setNames={userDoc && userDoc.setNames} user={user} />} />
           <Route path="/library/sets/:setId/*" element={<Set setNames={userDoc && userDoc.setNames} allSongs={userDoc && userDoc.songs} user={user} loading={loading} currentSong={currentSong} getSongData={getSongData} setShowAlreadyInLibrary={setShowAlreadyInLibrary} showAlreadyInLibrary={showAlreadyInLibrary} setCurrentSong={setCurrentSong} />} />
         </Route>
-        <Route path="/login" element={<Login />} />
-        <Route path="/signup" element={<Signup setUser={setUser} />} />
+        <Route path="/welcome" element={<Welcome />} />
       </Routes>
 
     </div>

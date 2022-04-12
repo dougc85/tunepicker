@@ -1,0 +1,83 @@
+@import '../../partials/variables';
+
+.LoginSignup {
+  height: 100%;
+  width: 100vw;
+  padding-left: 4rem;
+  padding-right: 4rem;
+  transition: transform 1s;
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  box-sizing: border-box;
+
+  &-container {
+    position: absolute;
+    box-sizing: border-box;
+    height: 100%;
+    width: 100vw;
+    padding-left: 4rem;
+    padding-right: 4rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    font-size: 3rem;
+    text-align: left;
+    transition: all 1.3s;
+  }
+
+  & label {
+    font-size: 2rem;
+  }
+
+  &-inputs {}
+
+  &-legend {
+    font-size: 2rem;
+    font-weight: 800;
+    align-self: center;
+    margin-bottom: -1rem;
+  }
+
+  &-email {
+    width: 100%;
+    font-size: 2rem;
+    padding: .5rem;
+    padding-left: 1rem;
+    box-sizing: border-box;
+    display: block;
+    margin-bottom: .5rem;
+  }
+
+  &-password {
+    display: block;
+  }
+
+  &-submit {
+    background-color: white;
+    border: 1px solid black;
+    padding: 1rem;
+    font-size: 2rem;
+    display: block;
+    width: 13rem;
+    align-self: center;
+  }
+
+  &-switch {
+    font-size: 1.3rem;
+    font-weight: bold;
+    align-self: center;
+    background-color: transparent;
+    border: none;
+    border-bottom: 1px solid black;
+
+    &:link,
+    &:active,
+    &:visited {
+      color: black;
+      text-decoration: none;
+      border-bottom: 1px solid black;
+    }
+  }
+}

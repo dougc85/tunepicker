@@ -1,0 +1,61 @@
+@import '../../partials/variables';
+
+.Welcome {
+  padding: 2rem;
+  padding-bottom: 3rem;
+  box-sizing: border-box;
+  background-image: linear-gradient(to right, #cce9d8, #d5ecd8, #def0d9, #e8f3db, #f1f6dd, #f6f6de, #faf6df, #fef6e0, #fef4e0, #fef1e0, #fdefe1, #fcede1);
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+
+
+  &-title {
+    font-family: $app-font;
+    font-size: 6rem;
+    margin-top: 2rem;
+    margin-bottom: 5rem;
+  }
+
+  &-description {
+    font-size: 1.7rem;
+    font-family: $secondary-font;
+    margin-bottom: 5rem;
+  }
+
+  &-bottom {
+    flex-grow: 1;
+    position: relative;
+  }
+
+  &-buttons {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    transition: all 1s;
+
+
+    &-button {
+      border: 1px solid black;
+      background-color: white;
+      padding: 2rem;
+      font-family: 'nunito';
+      font-size: 3rem;
+      border-radius: 5px;
+      display: block;
+      margin: 0 auto;
+      width: 20rem;
+    }
+
+    &-login {
+      margin-bottom: 5rem;
+    }
+
+    &-signup {
+      background-color: black;
+      color: white;
+    }
+  }
+}
