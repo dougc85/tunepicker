@@ -22,6 +22,7 @@ function App() {
 
   const [user, setUser] = useState('');
   const [userDoc, setUserDoc] = useState(undefined);
+  const [songNamesToIds, setSongNamesToIds] = useState(undefined);
 
   const [loading, setLoading] = useState(true);
   const [currentSong, setCurrentSong] = useState(undefined);

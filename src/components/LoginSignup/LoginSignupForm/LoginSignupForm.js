@@ -84,6 +84,7 @@ function LoginSignupForm(props) {
         doc(db, 'users', userCredential.user.uid),
         {
           songs: {},
+          songNames: {},
           email: userCredential.user.email,
         }
       );
@@ -91,13 +92,13 @@ function LoginSignupForm(props) {
       const setsRef = collection(userDoc, 'sets');
       const defaultSet = {
         setName: "First Set",
-        fullKnow: [],
-        currentKnow: [],
-        fullNew: [],
-        currentNew: [],
-        fullMedium: [],
-        currentMedium: [],
-        allSongs: [],
+        fullKnow: {},
+        currentKnow: {},
+        fullNew: {},
+        currentNew: {},
+        fullMedium: {},
+        currentMedium: {},
+        allSongs: {},
       };
       const newSetDoc = await addDoc(
         setsRef,
