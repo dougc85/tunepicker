@@ -1,9 +1,14 @@
 import { React, useState } from 'react';
 import './AddMultiple.scss';
+import useFormInput from '../../hooks/useFormInput';
 
 function AddMultiple(props) {
 
   const { set, setShowAddMultiple } = props;
+
+  const [songList, handleSongListChange, resetSongList] = useFormInput('');
+
+
 
   function handleCancel(e) {
     e.preventDefault();
@@ -15,6 +20,9 @@ function AddMultiple(props) {
 
   function handleAdd(e) {
     e.preventDefault();
+
+    const songArray = songList.split(/\r?\n/);
+    console.log(songArray);
   }
 
   return (
@@ -31,7 +39,7 @@ function AddMultiple(props) {
           Any songs that you list which are already to be found in your library will be imported into this set with all their
           current settings intact.
         </p>
-        <textarea name="" id="" cols="30" rows="10" className="AddMultiple-form-textarea"></textarea>
+        <textarea name="" id="" cols="30" rows="10" className="AddMultiple-form-textarea" value={songList} onChange={handleSongListChange}></textarea>
         <div className="AddMultiple-form-buttons">
           <button onClick={handleCancel} className="AddMultiple-form-cancel">Cancel</button>
           <button onClick={handleAdd} className="AddMultiple-form-add">Add Songs</button>

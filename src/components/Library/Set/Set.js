@@ -71,7 +71,7 @@ function Set(props) {
                 <button className="Set-songs-header-add" onClick={handleAddMultipleButton} >Add Multiple Songs</button>
               </div>
 
-              {set.allSongs.map((songId) => {
+              {Object.keys(set.allSongs).map((songId) => {
                 const song = allSongs[songId];
                 return (
                   <SongEntry song={song} sortByDateAdded={false} key={songId} setCurrentSong={setCurrentSong} />

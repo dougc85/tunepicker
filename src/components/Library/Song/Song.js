@@ -139,9 +139,17 @@ function Song(props) {
 
     currentSong[fieldString] = inputData;
 
-    updateDoc(userDoc, {
-      [`songs.${song.id}.${fieldString}`]: inputData
-    })
+    if (fieldString === 'title') {
+      updateDoc(userDoc, {
+        [`songs.${song.id}.${fieldString}`]: inputData,
+        [`songNames.${song.title}`]: deleteField(),
+        [`songNames.${inputData}`]: song.id,
+      })
+    } else {
+      updateDoc(userDoc, {
+        [`songs.${song.id}.${fieldString}`]: inputData
+      })
+    }
     setCurrentSong({
       ...currentSong
     });
