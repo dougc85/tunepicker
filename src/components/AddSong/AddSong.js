@@ -14,7 +14,7 @@ import useFormInput from '../../hooks/useFormInput';
 
 function AddSong(props) {
 
-  const { set, user, setShowAdd, setShowAlreadyInLibrary, setSongConsidered } = props;
+  const { set, user, setShowAddSong, setShowAlreadyInLibrary, setSongConsidered } = props;
 
   const keys = ['C', 'Db', 'D', 'Eb', 'E', 'F', 'F#', 'G', 'Ab', 'A', 'Bb', 'B'];
   const knowledgeFields = {
@@ -31,7 +31,7 @@ function AddSong(props) {
 
 
   function handleOutsideClick() {
-    setShowAdd(false);
+    setShowAddSong(false);
   }
 
   function handleCancel(e) {
@@ -39,7 +39,7 @@ function AddSong(props) {
     resetTitle();
     resetSongKey();
     resetNotes();
-    setShowAdd(false);
+    setShowAddSong(false);
   }
 
   async function handleAdd(e) {
@@ -55,7 +55,7 @@ function AddSong(props) {
 
       //Need to learn how to query in order to refactor this
       if (userDocData.songs[titleLower]) {
-        setShowAdd(false);
+        setShowAddSong(false);
         resetTitle();
         resetSongKey();
         resetNotes();
@@ -89,7 +89,7 @@ function AddSong(props) {
       resetSongKey();
       resetNotes();
       setKnowledge('know');
-      setShowAdd(false);
+      setShowAddSong(false);
     }
     catch (error) {
       console.log(error);
@@ -121,8 +121,7 @@ function AddSong(props) {
 
   return (
     <div className="AddSong">
-      <div onClick={handleCancel} className="AddSong-screen">
-      </div>
+      <div onClick={handleCancel} className="AddSong-screen"></div>
       <form className="AddSong-form">
         <legend className="AddSong-form-heading">Add Song to '{set.setName}'</legend>
         <div className="AddSong-form-title">
