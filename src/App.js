@@ -4,7 +4,6 @@ import PickController from './components/PickController/PickController';
 import { Routes, Route, useNavigate, useLocation } from 'react-router-dom';
 import Header from './components/Header/Header';
 import Welcome from './components/Welcome/Welcome';
-import Signup from './components/Signup/Signup';
 import FrontPage from './components/FrontPage/FrontPage';
 import Library from './components/Library/Library';
 import Set from './components/Library/Set/Set';
@@ -95,7 +94,7 @@ function App() {
           <Route path="/library/sets" element={<Sets loading={loading} setNames={userDoc && userDoc.setNames} user={user} />} />
           <Route path="/library/sets/:setId/*" element={<Set setNames={userDoc && userDoc.setNames} allSongs={userDoc && userDoc.songs} user={user} loading={loading} currentSong={currentSong} getSongData={getSongData} setShowAlreadyInLibrary={setShowAlreadyInLibrary} showAlreadyInLibrary={showAlreadyInLibrary} setCurrentSong={setCurrentSong} />} />
         </Route>
-        <Route path="/welcome" element={<Welcome />} />
+        <Route path="/welcome" element={<Welcome setUser={setUser} />} />
       </Routes>
 
     </div>
