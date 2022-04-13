@@ -3,7 +3,7 @@ import { useState } from "react";
 import './Welcome.scss';
 import LoginSignup from "../LoginSignup/LoginSignup";
 
-function Welcome() {
+function Welcome(props) {
 
   const [buttonsStyle, setButtonsStyle] = useState({});
   const [authStyle, setAuthStyle] = useState({ transform: "translateX(50%)" });
@@ -62,6 +62,7 @@ function Welcome() {
           setLoginStyle={setLoginStyle}
           signupStyle={signupStyle}
           setSignupStyle={setSignupStyle}
+          setUser={props.setUser}
         />
       </div>
     </div>
