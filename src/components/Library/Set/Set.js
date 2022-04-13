@@ -13,7 +13,7 @@ import Song from '../Song/Song';
 
 function Set(props) {
 
-  const { setNames, user, loading, showAlreadyInLibrary, setShowAlreadyInLibrary, setCurrentSong, currentSong, getSongData, allSongs } = props;
+  const { setNames, songNames, user, loading, showAlreadyInLibrary, setShowAlreadyInLibrary, setCurrentSong, currentSong, getSongData, allSongs } = props;
   const params = useParams();
 
   const [showAddSong, setShowAddSong] = useState(false);
@@ -79,7 +79,7 @@ function Set(props) {
               })}
             </div>
             {showAddSong && <AddSong set={set} setShowAddSong={setShowAddSong} user={user} setShowAlreadyInLibrary={setShowAlreadyInLibrary} setSongConsidered={setSongConsidered} />}
-            {showAddMultiple && <AddMultiple set={set} setShowAddMultiple={setShowAddMultiple} />}
+            {showAddMultiple && <AddMultiple set={set} setShowAddMultiple={setShowAddMultiple} songNames={songNames} user={user} />}
             {showAlreadyInLibrary && <AlreadyInLibrary songConsidered={songConsidered} set={set} />}
           </div>
         )}
