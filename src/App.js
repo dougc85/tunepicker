@@ -22,7 +22,6 @@ function App() {
 
   const [user, setUser] = useState('');
   const [userDoc, setUserDoc] = useState(undefined);
-  const [songNamesToIds, setSongNamesToIds] = useState(undefined);
 
   const [loading, setLoading] = useState(true);
   const [currentSong, setCurrentSong] = useState(undefined);
@@ -93,7 +92,7 @@ function App() {
           <Route path="/library/allsongs" element={<AllSongs user={user} setCurrentSong={setCurrentSong} allSongs={userDoc && userDoc.songs} />} />
           <Route path="/library/allsongs/:songId" element={<Song song={currentSong} loading={loading} getSongData={getSongData} setNames={userDoc && userDoc.setNames} user={user} setCurrentSong={setCurrentSong} allSongs={userDoc && userDoc.songs} />} />
           <Route path="/library/sets" element={<Sets loading={loading} setNames={userDoc && userDoc.setNames} user={user} />} />
-          <Route path="/library/sets/:setId/*" element={<Set setNames={userDoc && userDoc.setNames} allSongs={userDoc && userDoc.songs} user={user} loading={loading} currentSong={currentSong} getSongData={getSongData} setShowAlreadyInLibrary={setShowAlreadyInLibrary} showAlreadyInLibrary={showAlreadyInLibrary} setCurrentSong={setCurrentSong} />} />
+          <Route path="/library/sets/:setId/*" element={<Set setNames={userDoc && userDoc.setNames} songNames={userDoc && userDoc.songNames} allSongs={userDoc && userDoc.songs} user={user} loading={loading} currentSong={currentSong} getSongData={getSongData} setShowAlreadyInLibrary={setShowAlreadyInLibrary} showAlreadyInLibrary={showAlreadyInLibrary} setCurrentSong={setCurrentSong} />} />
         </Route>
         <Route path="/welcome" element={<Welcome setUser={setUser} />} />
       </Routes>

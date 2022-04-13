@@ -1,10 +1,13 @@
-import { React, useState } from 'react';
+import { React } from 'react';
 import './AddMultiple.scss';
 import useFormInput from '../../hooks/useFormInput';
+import { db } from '../../firebaseConfig';
+import { updateDoc, doc } from 'firebase/firestore';
+import { v4 as uuid } from 'uuid';
 
 function AddMultiple(props) {
 
-  const { set, setShowAddMultiple } = props;
+  const { set, setShowAddMultiple, songNames, user } = props;
 
   const [songList, handleSongListChange, resetSongList] = useFormInput('');
 
@@ -13,16 +16,55 @@ function AddMultiple(props) {
   function handleCancel(e) {
     e.preventDefault();
 
-    // Here, reset the form inputs
-
+    resetSongList();
     setShowAddMultiple(false);
   }
 
   function handleAdd(e) {
     e.preventDefault();
 
-    const songArray = songList.split(/\r?\n/);
-    console.log(songArray);
+    const allSongsArray = songList.split(/\r?\n/);
+
+    const allNewSongs = [];
+    const allOldSongs = [];
+
+    allSongsArray.forEach((songName) => {
+      if (songNames.hasOwnProperty(songName)) {
+        allOldSongs.push(songName);
+      } else {
+        allNewSongs.push(songName);
+      }
+    })
+
+    const newSongsObj = {}
+
+    allNewSongs.forEach((songName) => {
+
+      const songId = uuid();
+      const date = Date.now();
+      const titleLower = songName.toLowerCase();
+
+      newSongsObj[`songs.${songId}`] = {
+        createdAt: date,
+        title: titleLower,
+        notes: '',
+        songKey: 'random',
+        knowledge: 'new',
+        sets: {
+          [set.id]: set.setName
+        },
+        id: songId,
+      }
+
+      newSongsObj[`songNames.${titleLower}`] = songId;
+    })
+
+
+
+    const userDoc = doc(db, 'users', user.uid);
+    updateDoc(userDoc, {
+      ...newSongsObj,
+    })
   }
 
   return (
