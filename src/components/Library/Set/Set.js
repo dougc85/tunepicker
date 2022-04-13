@@ -4,6 +4,7 @@ import { onSnapshot, doc } from 'firebase/firestore';
 import { db } from '../../../firebaseConfig';
 import { useParams, Routes, Route } from 'react-router-dom';
 import AddSong from '../../AddSong/AddSong';
+import AddMultiple from '../../AddMultiple/AddMultiple';
 import SongEntry from '../SongEntry/SongEntry';
 import Loading from '../../Loading/Loading';
 import AlreadyInLibrary from '../../AlreadyInLibrary/AlreadyInLibrary';
@@ -15,12 +16,17 @@ function Set(props) {
   const { setNames, user, loading, showAlreadyInLibrary, setShowAlreadyInLibrary, setCurrentSong, currentSong, getSongData, allSongs } = props;
   const params = useParams();
 
-  const [showAdd, setShowAdd] = useState(false);
+  const [showAddSong, setShowAddSong] = useState(false);
+  const [showAddMultiple, setShowAddMultiple] = useState(false);
   const [songConsidered, setSongConsidered] = useState('');
   const [set, setSet] = useState(undefined);
 
   function handleAddButton(e) {
-    setShowAdd(true);
+    setShowAddSong(true);
+  }
+
+  function handleAddMultipleButton(e) {
+    setShowAddMultiple(true);
   }
 
   useEffect(() => {
@@ -62,6 +68,7 @@ function Set(props) {
               <div className="Set-songs-header">
                 <h2 className="Set-songs-header-heading">Songs</h2>
                 <button onClick={handleAddButton} className="Set-songs-header-add">Add a Song</button>
+                <button className="Set-songs-header-add" onClick={handleAddMultipleButton} >Add Multiple Songs</button>
               </div>
 
               {set.allSongs.map((songId) => {
@@ -71,7 +78,8 @@ function Set(props) {
                 )
               })}
             </div>
-            {showAdd && <AddSong set={set} setShowAdd={setShowAdd} user={user} setShowAlreadyInLibrary={setShowAlreadyInLibrary} setSongConsidered={setSongConsidered} />}
+            {showAddSong && <AddSong set={set} setShowAddSong={setShowAddSong} user={user} setShowAlreadyInLibrary={setShowAlreadyInLibrary} setSongConsidered={setSongConsidered} />}
+            {showAddMultiple && <AddMultiple set={set} setShowAddMultiple={setShowAddMultiple} />}
             {showAlreadyInLibrary && <AlreadyInLibrary songConsidered={songConsidered} set={set} />}
           </div>
         )}

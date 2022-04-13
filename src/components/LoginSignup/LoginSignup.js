@@ -1,6 +1,5 @@
 import { React, useState } from 'react';
 import './LoginSignup.scss';
-import useFormInput from '../../hooks/useFormInput';
 import LoginSignupForm from './LoginSignupForm/LoginSignupForm';
 
 function LoginSignup(props) {
@@ -28,7 +27,7 @@ function LoginSignup(props) {
   return (
     <form action="" className="LoginSignup" style={authStyle}>
       <LoginSignupForm formStyle={loginStyle} legend="Log In" submitMessage="Enter" switchAuth={switchAuth} formType="login" switchMessage={"Need to create an account?"} />
-      <LoginSignupForm formStyle={signupStyle} legend="Sign Up" submitMessage="Create Account" switchAuth={switchAuth} formType="signup" setUser={props.setUser} switchMessage={"Already Have An Account?"} />
+      <LoginSignupForm formStyle={signupStyle} legend="Sign Up" submitMessage="Create Account" switchAuth={switchAuth} formType="signup" setUser={setUser} switchMessage={"Already Have An Account?"} />
     </form>
   )
 }
