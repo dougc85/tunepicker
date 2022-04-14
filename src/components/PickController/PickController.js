@@ -5,7 +5,9 @@ import './PickController.scss';
 import MoveControlsPopup from "./MoveControlsPopup/MoveControlsPopup";
 import tuneData from '../../data/tuneData';
 
-function PickController() {
+function PickController(props) {
+
+  const { set } = props;
 
   const ORANGE = 'hsl(26, 100%, 67%)';
   const YELLOW = 'hsl(54, 98%, 66%)';
@@ -18,7 +20,7 @@ function PickController() {
   const [knowList, setKnowList] = useListModifier([...tuneData.knowList]);
   const [currentList, setCurrentList] = useState("new");
   const [oldList, setOldList] = useState('');
-  const [choices, setChoices] = useState(['new', 'new', 'new', 'new', 'med', 'med', 'know']);
+  const [choices, setChoices] = useState(['new', 'new', 'new', 'med', 'med', 'know']);
   const [keys, setKeys] = useState(['A', 'Bb', 'B', 'C', 'Db', 'D', 'Eb', 'E', 'F', 'F#', 'G', 'Ab']);
   const [key, setKey] = useState('');
   const [tune, setTune] = useState('');
@@ -44,7 +46,7 @@ function PickController() {
 
     //Reset choices if necessary
     if (choicesTemp.length === 0) {
-      choicesTemp = ['new', 'new', 'new', 'new', 'med', 'med', 'know'];
+      choicesTemp = ['new', 'new', 'new', 'med', 'med', 'know'];
     }
 
     const choicePosition = Math.floor(Math.random() * choicesTemp.length);
