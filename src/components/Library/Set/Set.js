@@ -79,7 +79,7 @@ function Set(props) {
               })}
             </div>
             {showAddSong && <AddSong set={set} setShowAddSong={setShowAddSong} user={user} setShowAlreadyInLibrary={setShowAlreadyInLibrary} setSongConsidered={setSongConsidered} />}
-            {showAddMultiple && <AddMultiple set={set} setShowAddMultiple={setShowAddMultiple} songNames={songNames} user={user} />}
+            {showAddMultiple && <AddMultiple set={set} setShowAddMultiple={setShowAddMultiple} songNames={songNames} user={user} allSongs={allSongs} />}
             {showAlreadyInLibrary && <AlreadyInLibrary songConsidered={songConsidered} set={set} />}
           </div>
         )}

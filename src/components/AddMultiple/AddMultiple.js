@@ -1,13 +1,13 @@
+import { doc, updateDoc } from 'firebase/firestore';
 import { React } from 'react';
-import './AddMultiple.scss';
-import useFormInput from '../../hooks/useFormInput';
-import { db } from '../../firebaseConfig';
-import { updateDoc, doc } from 'firebase/firestore';
 import { v4 as uuid } from 'uuid';
+import { db } from '../../firebaseConfig';
+import useFormInput from '../../hooks/useFormInput';
+import './AddMultiple.scss';
 
 function AddMultiple(props) {
 
-  const { set, setShowAddMultiple, songNames, user } = props;
+  const { set, setShowAddMultiple, songNames, user, allSongs } = props;
 
   const [songList, handleSongListChange, resetSongList] = useFormInput('');
 
@@ -23,30 +23,46 @@ function AddMultiple(props) {
   function handleAdd(e) {
     e.preventDefault();
 
-    const allSongsArray = songList.split(/\r?\n/);
+    let allSongsArray = songList.split(/\r?\n/);
+
+    allSongsArray = allSongsArray.map((songName) => {
+      let songCharArray = songName.trim().split('');
+      songCharArray = songCharArray.map((char, index) => {
+        console.log(char, 'char');
+        if (char === '~' || char === '*' || char === '/' || char === '[' || char === ']') {
+          return '•';
+        }
+        return char;
+      })
+      return songCharArray.join('');
+    })
 
     const allNewSongs = [];
     const allOldSongs = [];
 
     allSongsArray.forEach((songName) => {
-      if (songNames.hasOwnProperty(songName)) {
-        allOldSongs.push(songName);
+      const titleLower = songName.toLowerCase();
+      if (songName.length === 0) {
+
+      } else if (songNames.hasOwnProperty(titleLower)) {
+        allOldSongs.push(titleLower);
       } else {
-        allNewSongs.push(songName);
+        allNewSongs.push(titleLower);
       }
     })
 
-    const newSongsObj = {}
+    const newSongsObj = {};
+    const oldSongsObj = {};
+
+    const newSongsInSet = {};
+    const oldSongsInSet = {};
 
     allNewSongs.forEach((songName) => {
-
       const songId = uuid();
       const date = Date.now();
-      const titleLower = songName.toLowerCase();
-
       newSongsObj[`songs.${songId}`] = {
         createdAt: date,
-        title: titleLower,
+        title: songName,
         notes: '',
         songKey: 'random',
         knowledge: 'new',
@@ -55,15 +71,40 @@ function AddMultiple(props) {
         },
         id: songId,
       }
+      newSongsObj[`songNames.${songName}`] = songId;
 
-      newSongsObj[`songNames.${titleLower}`] = songId;
+      newSongsInSet[`allSongs.${songId}`] = null;
+      newSongsInSet[`currentNew.${songId}`] = null;
+      newSongsInSet[`fullNew.${songId}`] = null;
     })
 
+    allOldSongs.forEach((songName) => {
+      const songId = songNames[songName];
+      const oldSongObj = allSongs[songId];
+      oldSongObj["sets"][set.id] = set.setName;
+      oldSongsObj[`songs.${songId}`] = oldSongObj;
 
+      if (!set.allSongs.hasOwnProperty(songId)) {
+        oldSongsInSet[`allSongs.${songId}`] = null;
+        oldSongsInSet[`currentNew.${songId}`] = null;
+        oldSongsInSet[`fullNew.${songId}`] = null;
+      }
+    })
+
+    //update userDoc
 
     const userDoc = doc(db, 'users', user.uid);
     updateDoc(userDoc, {
       ...newSongsObj,
+      ...oldSongsObj,
+    })
+
+    //Update Set doc
+
+    const setDoc = doc(db, 'users', user.uid, 'sets', set.id);
+    updateDoc(setDoc, {
+      ...newSongsInSet,
+      ...oldSongsInSet,
     })
   }
 
@@ -80,6 +121,7 @@ function AddMultiple(props) {
           add a list of songs to any number of sets as well as allowing you to set the knowledge level of the group yourself.
           Any songs that you list which are already to be found in your library will be imported into this set with all their
           current settings intact.
+          Songs cannot use the following characters: ~, *, /, [, or ]
         </p>
         <textarea name="" id="" cols="30" rows="10" className="AddMultiple-form-textarea" value={songList} onChange={handleSongListChange}></textarea>
         <div className="AddMultiple-form-buttons">

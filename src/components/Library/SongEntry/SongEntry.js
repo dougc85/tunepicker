@@ -14,6 +14,8 @@ function SongEntry(props) {
       knowledge === 'med' ? 'hsl(54, 98%, 66%)' :
         'hsl(26, 100%, 67%)';
 
+  console.log(title.split(' '), 'titlesplit');
+
   const titleCapitalized = title.split(' ').map((word) => word[0].toUpperCase().concat(word.substring(1))).join(' ');
 
   function handleClick() {
