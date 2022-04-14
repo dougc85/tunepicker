@@ -22,7 +22,7 @@ function App() {
 
   const [user, setUser] = useState('');
   const [userDoc, setUserDoc] = useState(undefined);
-
+  const [pickerSet, setPickerSet] = useState(undefined);
   const [loading, setLoading] = useState(true);
   const [currentSong, setCurrentSong] = useState(undefined);
   const [showAlreadyInLibrary, setShowAlreadyInLibrary] = useState(false);
@@ -71,10 +71,28 @@ function App() {
   }, [user]);
 
   useEffect(() => {
-    if (userDoc) {
-      setLoading(false)
+    if (!userDoc) {
+      return;
     }
-  }, [userDoc]);
+    const unsubscribeSetDoc = onSnapshot(doc(db, 'users', user.uid, 'sets', userDoc.defaultSet), (doc) => {
+      setPickerSet({ ...doc.data(), id: userDoc.defaultSet });
+    });
+
+    return () => {
+      if (unsubscribeSetDoc) {
+        unsubscribeSetDoc();
+      }
+    }
+
+  }, [userDoc, user.uid]);
+
+  useEffect(() => {
+    if (pickerSet) {
+      setLoading(false);
+    }
+  }, [pickerSet]);
+
+
 
   async function getSongData(id) {
     const userFirebase = await getDoc(doc(db, 'users', user.uid));
@@ -87,7 +105,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Header user={user} />}>
           <Route index element={<FrontPage user={user.email} />} />
-          <Route path="/controller" element={<PickController />} />
+          <Route path="/controller" element={<PickController set={pickerSet} />} />
           <Route path="/library" element={<Library user={user} loading={loading} />} />
           <Route path="/library/allsongs" element={<AllSongs user={user} setCurrentSong={setCurrentSong} allSongs={userDoc && userDoc.songs} />} />
           <Route path="/library/allsongs/:songId" element={<Song song={currentSong} loading={loading} getSongData={getSongData} setNames={userDoc && userDoc.setNames} user={user} setCurrentSong={setCurrentSong} allSongs={userDoc && userDoc.songs} />} />
