@@ -28,7 +28,6 @@ function AddMultiple(props) {
     allSongsArray = allSongsArray.map((songName) => {
       let songCharArray = songName.trim().split('');
       songCharArray = songCharArray.map((char, index) => {
-        console.log(char, 'char');
         if (char === '~' || char === '*' || char === '/' || char === '[' || char === ']') {
           return '•';
         }

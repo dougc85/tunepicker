@@ -74,7 +74,6 @@ function App() {
     if (!userDoc || !user.uid || !userDoc.defaultSet) {
       return;
     }
-    console.log(user.uid, 'uid', userDoc, 'userDoc')
     const unsubscribeSetDoc = onSnapshot(doc(db, 'users', user.uid, 'sets', userDoc.defaultSet), (doc) => {
       setPickerSet({ ...doc.data(), id: userDoc.defaultSet });
     });

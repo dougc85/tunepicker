@@ -107,16 +107,22 @@ function PickController(props) {
         return;
       case 'know':
         if (set.currentKnow.length === 0) {
+          //If there are no songs marked 'know' but there are songs in the other knowledge categories
           if (set.fullKnow.length === 0) {
             return pickList(choicesTemp);
           }
-          setChoices(choicesTemp);
-          setOldList(currentList);
-          setCurrentList('know');
-          const updatedSet = { ...set };
-          updatedSet.currentKnow = set.fullKnow;
-          setSet(updatedSet);
-          return;
+          //If user is done with 'new' and 'med' and needs to recycle 'know'
+          if (set.currentNew.length === 0 && set.currentMedium.length === 0) {
+            setChoices(choicesTemp);
+            setOldList(currentList);
+            setCurrentList('know');
+            const updatedSet = { ...set };
+            updatedSet.currentKnow = set.fullKnow;
+            setSet(updatedSet);
+            return;
+          }
+          //If there are still 'new' and 'med' songs to be picked from current
+          return pickList(choicesTemp);
         }
         setChoices(choicesTemp);
         setOldList(currentList);
@@ -171,6 +177,10 @@ function PickController(props) {
     pickTune(currentList);
   }
 
+  function capitalizeTitle(title) {
+    return title.split(' ').map((word) => word[0].toUpperCase().concat(word.substring(1))).join(' ');
+  }
+
   useEffect(() => {
     if (tune !== '') {
       pickList(choices);
@@ -178,11 +188,16 @@ function PickController(props) {
     }
   }, [triggerListKey]);
 
-  const tuneFontSize = (tune.length > 20) ? "4rem" :
-    (tune.length > 9) ? "4.6rem" :
-      (tune.length > 7) ? "5.3rem" :
-        (tune.length > 5) ? "6.5rem" :
-          "7.5rem";
+  const tuneLength = allSongs ? (allSongs[tune] ?
+    allSongs[tune].title.length :
+    21) : 21;
+
+  const tuneFontSize =
+    (tuneLength > 20) ? "4rem" :
+      (tuneLength > 9) ? "4.6rem" :
+        (tuneLength > 7) ? "5.3rem" :
+          (tuneLength > 5) ? "6.5rem" :
+            "7.5rem";
 
   const listColor = (allSongs && tune) ? ((allSongs[tune].knowledge === "know") ? EMERALD :
     (allSongs[tune].knowledge === "med") ? YELLOW :
@@ -196,7 +211,7 @@ function PickController(props) {
         <div className="showNoSongs">You don't have any songs yet.  Add some! </div> :
         <div className="PickController" style={{ backgroundColor: listColor }}>
           <div className="tune-wrapper">
-            <p className="tune-name" style={{ fontSize: tuneFontSize }}>{tune}</p>
+            <p className="tune-name" style={{ fontSize: tuneFontSize }}>{allSongs[tune] && capitalizeTitle(allSongs[tune].title)}</p>
           </div>
 
           <p className="key">{key}</p>
