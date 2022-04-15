@@ -1,47 +1,83 @@
 import React from "react";
 import { useState, useEffect } from "react";
-import useListModifier from '../../hooks/useListModifier';
 import './PickController.scss';
 import MoveControlsPopup from "./MoveControlsPopup/MoveControlsPopup";
-import tuneData from '../../data/tuneData';
+import Loading from "../Loading/Loading";
 
 function PickController(props) {
 
-  const { set } = props;
+  const { set, setSet, loading, allSongs } = props;
 
   const ORANGE = 'hsl(26, 100%, 67%)';
   const YELLOW = 'hsl(54, 98%, 66%)';
   const EMERALD = 'hsl(145, 63%, 50%)';
 
-  //States needed by picker
-  const fullKnow = tuneData.fullKnow;
-  const [newList, setNewList] = useListModifier([...tuneData.newList]);
-  const [medList, setMedList] = useListModifier([...tuneData.medList]);
-  const [knowList, setKnowList] = useListModifier([...tuneData.knowList]);
-  const [currentList, setCurrentList] = useState("new");
+  // const [newList, setNewList] = useListModifier([...tuneData.newList]);
+  // const [medList, setMedList] = useListModifier([...tuneData.medList]);
+  // const [knowList, setKnowList] = useListModifier([...tuneData.knowList]);
+  const [initialList, setInitialList] = useState('');
+  const [currentList, setCurrentList] = useState('');
   const [oldList, setOldList] = useState('');
   const [choices, setChoices] = useState(['new', 'new', 'new', 'med', 'med', 'know']);
   const [keys, setKeys] = useState(['A', 'Bb', 'B', 'C', 'Db', 'D', 'Eb', 'E', 'F', 'F#', 'G', 'Ab']);
   const [key, setKey] = useState('');
   const [tune, setTune] = useState('');
+  const [triggerListKey, setTriggerListKey] = useState(false);
 
-  function resetKnowList() {
-    setKnowList([...fullKnow]);
-  }
+  const [showNoSongs, setShowNoSongs] = useState(false);
+
+  useEffect(() => {
+    if (set) {
+
+      if (Object.keys(set.allSongs).length === 0) {
+        setShowNoSongs(true);
+        return;
+      }
+      if (set.currentNew.length !== 0) {
+        setInitialList('new');
+      } else if (set.currentMedium.length !== 0) {
+        setInitialList('med');
+      } else {
+        setInitialList('know');
+      }
+    }
+  }, [loading]);
+
+  useEffect(() => {
+    if (initialList) {
+      pickTune(initialList);
+    }
+  }, [initialList])
 
   function pickList(choices) {
-
     let choicesTemp = choices;
 
-    if (newList.length === 0 && medList.length === 0) {
+    if (set.currentNew.length === 0 && set.currentMedium.length === 0) {
 
-      if (knowList.length === 0) {
-        resetKnowList();
-        window.localStorage.setItem('tuneStorageKnow', JSON.stringify(fullKnow));
+      if (set.currentKnow.length === 0) {
+        if (set.fullKnow.length === 0) {
+          const updatedSet = { ...set };
+          updatedSet.currentNew = [...set.fullNew];
+          updatedSet.currentMedium = [...set.fullMedium];
+          setOldList(currentList);
+          if (set.fullNew.length > 0) {
+            setCurrentList('new');
+          } else {
+            setCurrentList('med');
+          }
+          setSet(updatedSet);
+          return;
+        }
+        const updatedSet = { ...set };
+        updatedSet.currentKnow = [...set.fullKnow];
+        setOldList(currentList);
+        setCurrentList('know');
+        setSet(updatedSet);
+        return;
       }
       setOldList(currentList);
       setCurrentList('know');
-      return 'know';
+      return;
     }
 
     //Reset choices if necessary
@@ -55,56 +91,63 @@ function PickController(props) {
 
     switch (choice) {
       case 'new':
-        if (newList.length === 0) {
+        if (set.currentKnow.length === 0) {
           return pickList(choicesTemp);
         }
         setChoices(choicesTemp);
         setOldList(currentList);
         setCurrentList('new');
-        return 'new';
+        return;
       case 'med':
-        if (medList.length === 0) {
+        if (set.currentMedium.length === 0) {
           return pickList(choicesTemp);
         }
         setChoices(choicesTemp);
         setOldList(currentList);
         setCurrentList('med');
-        return 'med';
+        return;
       case 'know':
-        if (knowList.length === 0) {
-          resetKnowList();
+        if (set.currentKnow.length === 0) {
+          setChoices(choicesTemp);
+          setOldList(currentList);
+          setCurrentList('know');
+          const updatedSet = { ...set };
+          updatedSet.currentKnow = set.fullKnow;
+          setSet(updatedSet);
+          return;
         }
         setChoices(choicesTemp);
         setOldList(currentList);
         setCurrentList('know');
-        return 'know';
+        return;
       default:
         console.log('error');
     }
   }
 
-  function pickTune() {
+  function setCurrentKnowledge(currentKnowledgeArray, newArray) {
+    const updatedSet = { ...set };
+    updatedSet[currentKnowledgeArray] = newArray;
+    setSet(updatedSet);
+  }
 
-    const current = (currentList === 'new') ?
-      { list: newList, set: setNewList } :
-      (currentList === 'med') ?
-        { list: medList, set: setMedList } :
-        { list: knowList, set: setKnowList };
+  function pickTune(listToPickFrom) {
+
+    const current = (listToPickFrom === 'new') ?
+      { list: set.currentNew, name: 'currentNew' } :
+      (listToPickFrom === 'med') ?
+        { list: set.currentMedium, name: 'currentMedium' } :
+        { list: set.currentKnow, name: 'currentKnow' };
     const choicePosition = Math.floor(Math.random() * current.list.length);
     const choice = current.list[choicePosition];
 
     const updatedList = [...current.list];
     updatedList.splice(choicePosition, 1);
-    current.set(updatedList);
+    setCurrentKnowledge(current.name, updatedList);
     setTune(choice);
-
+    setTriggerListKey((old) => !old);
     return choice;
   }
-
-  useEffect(() => {
-    pickTune();
-  }, []);
-
 
   function pickKey() {
 
@@ -123,15 +166,17 @@ function PickController(props) {
   }
 
   function nextHandler() {
-    pickTune();
+
+    pickTune(currentList);
   }
 
   useEffect(() => {
+
     if (tune !== '') {
       pickList(choices);
       pickKey();
     }
-  }, [tune]);
+  }, [triggerListKey]);
 
   const tuneFontSize = (tune.length > 20) ? "4rem" :
     (tune.length > 9) ? "4.6rem" :
@@ -139,27 +184,32 @@ function PickController(props) {
         (tune.length > 5) ? "6.5rem" :
           "7.5rem";
 
-  const listColor = (oldList === "know") ? EMERALD :
-    (oldList === "med") ? YELLOW :
-      ORANGE;
+  const listColor = (allSongs && tune) ? ((allSongs[tune].knowledge === "know") ? EMERALD :
+    (allSongs[tune].knowledge === "med") ? YELLOW :
+      ORANGE) :
+    'white';
 
   return (
-    <div className="PickController" style={{ backgroundColor: listColor }}>
-      <div className="tune-wrapper">
-        <p className="tune-name" style={{ fontSize: tuneFontSize }}>{tune}</p>
-      </div>
+    (loading) ?
+      <Loading /> :
+      (showNoSongs) ?
+        <div className="showNoSongs">You don't have any songs yet.  Add some! </div> :
+        <div className="PickController" style={{ backgroundColor: listColor }}>
+          <div className="tune-wrapper">
+            <p className="tune-name" style={{ fontSize: tuneFontSize }}>{tune}</p>
+          </div>
 
-      <p className="key">{key}</p>
+          <p className="key">{key}</p>
 
-      <button className="next-button" onClick={nextHandler} >NEXT</button>
+          <button className="next-button" onClick={nextHandler} >NEXT</button>
 
-      <div className="small-buttons-wrapper">
-        <button className="skip-button small-btn">SKIP</button>
-        <button className="raise-button small-btn">&uarr;</button>
-        <button className="lower-button small-btn">&darr;</button>
-      </div>
-      <MoveControlsPopup />
-    </div>
+          <div className="small-buttons-wrapper">
+            <button className="skip-button small-btn">SKIP</button>
+            <button className="raise-button small-btn">&uarr;</button>
+            <button className="lower-button small-btn">&darr;</button>
+          </div>
+          <MoveControlsPopup />
+        </div>
   )
 }
 
