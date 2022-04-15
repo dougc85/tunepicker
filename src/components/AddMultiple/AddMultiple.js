@@ -55,7 +55,8 @@ function AddMultiple(props) {
     const oldSongsObj = {};
 
     const newSongsInSet = {};
-    const oldSongsInSet = {};
+
+    const songIdsForSetlists = [];
 
     allNewSongs.forEach((songName) => {
       const songId = uuid();
@@ -74,8 +75,7 @@ function AddMultiple(props) {
       newSongsObj[`songNames.${songName}`] = songId;
 
       newSongsInSet[`allSongs.${songId}`] = null;
-      newSongsInSet[`currentNew`] = arrayUnion(songId);
-      newSongsInSet[`fullNew`] = arrayUnion(songId);
+      songIdsForSetlists.push(songId);
     })
 
     allOldSongs.forEach((songName) => {
@@ -85,9 +85,8 @@ function AddMultiple(props) {
       oldSongsObj[`songs.${songId}`] = oldSongObj;
 
       if (!set.allSongs.hasOwnProperty(songId)) {
-        oldSongsInSet[`allSongs.${songId}`] = null;
-        oldSongsInSet[`currentNew`] = arrayUnion(songId);
-        oldSongsInSet[`fullNew`] = arrayUnion(songId);
+        newSongsInSet[`allSongs.${songId}`] = null;
+        songIdsForSetlists.push(songId);
       }
     })
 
@@ -101,10 +100,12 @@ function AddMultiple(props) {
 
     //Update Set doc
 
+    newSongsInSet[`currentNew`] = arrayUnion(...songIdsForSetlists);
+    newSongsInSet[`fullNew`] = arrayUnion(...songIdsForSetlists);
+
     const setDoc = doc(db, 'users', user.uid, 'sets', set.id);
     updateDoc(setDoc, {
       ...newSongsInSet,
-      ...oldSongsInSet,
     })
   }
 

@@ -53,7 +53,6 @@ function PickController(props) {
     let choicesTemp = choices;
 
     if (set.currentNew.length === 0 && set.currentMedium.length === 0) {
-
       if (set.currentKnow.length === 0) {
         if (set.fullKnow.length === 0) {
           const updatedSet = { ...set };
@@ -91,7 +90,7 @@ function PickController(props) {
 
     switch (choice) {
       case 'new':
-        if (set.currentKnow.length === 0) {
+        if (set.currentNew.length === 0) {
           return pickList(choicesTemp);
         }
         setChoices(choicesTemp);
@@ -108,6 +107,9 @@ function PickController(props) {
         return;
       case 'know':
         if (set.currentKnow.length === 0) {
+          if (set.fullKnow.length === 0) {
+            return pickList(choicesTemp);
+          }
           setChoices(choicesTemp);
           setOldList(currentList);
           setCurrentList('know');
@@ -166,12 +168,10 @@ function PickController(props) {
   }
 
   function nextHandler() {
-
     pickTune(currentList);
   }
 
   useEffect(() => {
-
     if (tune !== '') {
       pickList(choices);
       pickKey();
