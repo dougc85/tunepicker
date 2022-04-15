@@ -1,4 +1,4 @@
-import { doc, updateDoc } from 'firebase/firestore';
+import { doc, updateDoc, arrayUnion } from 'firebase/firestore';
 import { React } from 'react';
 import { v4 as uuid } from 'uuid';
 import { db } from '../../firebaseConfig';
@@ -74,8 +74,8 @@ function AddMultiple(props) {
       newSongsObj[`songNames.${songName}`] = songId;
 
       newSongsInSet[`allSongs.${songId}`] = null;
-      newSongsInSet[`currentNew.${songId}`] = null;
-      newSongsInSet[`fullNew.${songId}`] = null;
+      newSongsInSet[`currentNew`] = arrayUnion(songId);
+      newSongsInSet[`fullNew`] = arrayUnion(songId);
     })
 
     allOldSongs.forEach((songName) => {
@@ -86,8 +86,8 @@ function AddMultiple(props) {
 
       if (!set.allSongs.hasOwnProperty(songId)) {
         oldSongsInSet[`allSongs.${songId}`] = null;
-        oldSongsInSet[`currentNew.${songId}`] = null;
-        oldSongsInSet[`fullNew.${songId}`] = null;
+        oldSongsInSet[`currentNew`] = arrayUnion(songId);
+        oldSongsInSet[`fullNew`] = arrayUnion(songId);
       }
     })
 

@@ -71,7 +71,7 @@ function App() {
   }, [user]);
 
   useEffect(() => {
-    if (!userDoc) {
+    if (!userDoc || !user.uid) {
       return;
     }
     const unsubscribeSetDoc = onSnapshot(doc(db, 'users', user.uid, 'sets', userDoc.defaultSet), (doc) => {
@@ -87,7 +87,7 @@ function App() {
   }, [userDoc, user.uid]);
 
   useEffect(() => {
-    if (pickerSet) {
+    if (pickerSet && loading) {
       setLoading(false);
     }
   }, [pickerSet]);
@@ -105,7 +105,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Header user={user} />}>
           <Route index element={<FrontPage user={user.email} />} />
-          <Route path="/controller" element={<PickController set={pickerSet} />} />
+          <Route path="/controller" element={<PickController set={pickerSet} setSet={setPickerSet} loading={loading} allSongs={userDoc && userDoc.songs} />} />
           <Route path="/library" element={<Library user={user} loading={loading} />} />
           <Route path="/library/allsongs" element={<AllSongs user={user} setCurrentSong={setCurrentSong} allSongs={userDoc && userDoc.songs} />} />
           <Route path="/library/allsongs/:songId" element={<Song song={currentSong} loading={loading} getSongData={getSongData} setNames={userDoc && userDoc.setNames} user={user} setCurrentSong={setCurrentSong} allSongs={userDoc && userDoc.songs} />} />
