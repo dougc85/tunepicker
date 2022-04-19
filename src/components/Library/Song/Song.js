@@ -245,92 +245,95 @@ function Song(props) {
     }
   }
 
+  if (loading || !song) {
+    return (
+      <Loading />
+    )
+  }
+
   return (
-    (loading || !song) ?
-      <Loading /> :
-      <div className="Song">
-        <Path heading={capitalizeTitle()} pathType={'Song'} />
-        <div className="Song-fields">
-          <div className="Song-field Song-title">
-            <label htmlFor="songTitle-songPage" className="Song-title-label Song-label">Title</label>
-            <div className="Song-title-entry Song-entry">
-              <input style={{ display: (showTitleEdit ? 'block' : 'none') }} id="songTitle-songPage" ref={titleInput} onChange={handleTitleChange} type="text" className="Song-title-entry-input Song-input" value={title}></input>
-              <p style={{ display: (showTitleEdit ? 'none' : 'block') }} className="Song-value Song-title-entry-value">{capitalizeTitle()}</p>
-            </div>
-            <EditConfirm field="title" show={setShowTitleEdit} focusInput={focusInput} disableEdit={disableEdit} setDisableEdit={setDisableEdit} saveData={saveTitleData} />
+    <div className="Song">
+      <Path heading={capitalizeTitle()} pathType={'Song'} />
+      <div className="Song-fields">
+        <div className="Song-field Song-title">
+          <label htmlFor="songTitle-songPage" className="Song-title-label Song-label">Title</label>
+          <div className="Song-title-entry Song-entry">
+            <input style={{ display: (showTitleEdit ? 'block' : 'none') }} id="songTitle-songPage" ref={titleInput} onChange={handleTitleChange} type="text" className="Song-title-entry-input Song-input" value={title}></input>
+            <p style={{ display: (showTitleEdit ? 'none' : 'block') }} className="Song-value Song-title-entry-value">{capitalizeTitle()}</p>
           </div>
-          <div className="Song-field Song-key">
-            <label htmlFor="songKey-songPage" className="Song-key-label Song-label">Key</label>
-            <div className="Song-key-entry Song-entry">
-              <select style={{ display: (showKeyEdit ? 'block' : 'none') }} id="songKey-songPage" ref={keyInput} onChange={handleSongKeyChange} value={songKey} className="Song-key-entry-input Song-input">
-                <option value="random" key="random">random</option>
-                {keys.map((key) => {
-                  let keyModified = key;
-                  if (key.length === 2) {
-                    key[1] === "#" ? keyModified = key[0] + `\u266F` :
-                      keyModified = key[0] + `\u266D`;
-                  }
-                  return (
-                    <option value={key} key={key}>{keyModified}</option>
-                  )
-                })}
-              </select>
-              <p style={{ display: (showKeyEdit ? 'none' : 'block') }} className="Song-value Song-key-entry-value">{song.songKey}</p>
-            </div>
-            <EditConfirm show={setShowKeyEdit} focusInput={focusInput} field="key" disableEdit={disableEdit} setDisableEdit={setDisableEdit} saveData={saveKeyData} />
-          </div>
-          <div className="Song-field Song-knowledge">
-            <label htmlFor="songKnowledge-songPage" className="Song-knowledge-label Song-label">How Well Do I Know This Tune?</label>
-            <div className="Song-knowledge-entry Song-entry">
-              <select style={{ display: (showKnowledgeEdit ? 'block' : 'none') }} id="songKnowledge-songPage" ref={knowledgeInput} onChange={handleKnowledgeChange} value={knowledge} className="Song-knowledge-entry-input Song-input">
-                {Object.keys(knowledgeOptions).map((key) => {
-                  let knowledgeChoice = knowledgeOptions[key];
-                  return (
-                    <option value={key} key={knowledgeChoice}>{knowledgeChoice}</option>
-                  )
-                })}
-              </select>
-              <div style={{ display: (showKnowledgeEdit ? 'none' : 'flex') }} className="Song-value Song-knowledge-entry-value">
-                <p>{knowledgeOptions[song.knowledge]}</p>
-                <div style={{ backgroundColor: bgColor }} className="Song-knowledge-entry-value-color"></div>
-              </div>
-
-            </div>
-            <EditConfirm show={setShowKnowledgeEdit} focusInput={focusInput} field="knowledge" disableEdit={disableEdit} setDisableEdit={setDisableEdit} saveData={saveKnowledgeData} />
-          </div>
-          <div className="Song-field Song-notes">
-            <label htmlFor="songNotes-songPage" className="Song-notes-label Song-label">Notes</label>
-            <div className="Song-notes-entry Song-entry">
-              <textarea style={{ display: (showNotesEdit ? 'block' : 'none') }} id="songNotes-songPage" ref={notesInput} className="Song-notes-entry-input Song-input" value={notes} onChange={handleNotesChange} ></textarea>
-              <p style={{ display: (showNotesEdit ? 'none' : 'block') }} className="Song-value Song-notes-entry-value">{song.notes || 'none'}</p>
-            </div>
-            <EditConfirm show={setShowNotesEdit} focusInput={focusInput} field="notes" disableEdit={disableEdit} setDisableEdit={setDisableEdit} saveData={saveNotesData} />
-          </div>
-          <div className="Song-field Song-sets">
-            <fieldset className="Song-sets-label Song-label">Sets</fieldset>
-            <div className="Song-sets-entry Song-entry">
-              <ul className="Song-sets-entry-checkboxes" style={{ display: (showSetsEdit ? 'block' : 'none') }}>
-                {setArray.map((set, idx) => {
-                  return (
-                    <li className="Song-sets-entry-checkbox" key={`${set[2]}`}>
-                      <label htmlFor={`${set[2]}`} className="Song-sets-entry-checkbox-label">{set[0]}</label>
-                      <input id={`${set[2]}`} value={set[0]} checked={set[1]} onChange={handleCheckboxChange} type="checkbox" className="Song-sets-entry-checkbox-box Song-input" ref={idx === 0 ? setsInput : undefined}></input>
-                    </li>
-                  )
-                })}
-              </ul>
-              <ul className="Song-value Song-sets-entry-value" style={{ display: (showSetsEdit ? 'none' : 'block') }}>
-                {song.sets && Object.keys(song.sets).map((setId) => (
-                  <li className="Song-sets-entry-value-set" key={setId}>{song.sets[setId]}</li>
-                ))}
-              </ul>
-            </div>
-            <EditConfirm show={setShowSetsEdit} focusInput={focusInput} field="sets" disableEdit={disableEdit} setDisableEdit={setDisableEdit} saveData={saveSetsData} />
-          </div>
-          <button className="Song-delete">Delete Song</button>
+          <EditConfirm field="title" show={setShowTitleEdit} focusInput={focusInput} disableEdit={disableEdit} setDisableEdit={setDisableEdit} saveData={saveTitleData} />
         </div>
+        <div className="Song-field Song-key">
+          <label htmlFor="songKey-songPage" className="Song-key-label Song-label">Key</label>
+          <div className="Song-key-entry Song-entry">
+            <select style={{ display: (showKeyEdit ? 'block' : 'none') }} id="songKey-songPage" ref={keyInput} onChange={handleSongKeyChange} value={songKey} className="Song-key-entry-input Song-input">
+              <option value="random" key="random">random</option>
+              {keys.map((key) => {
+                let keyModified = key;
+                if (key.length === 2) {
+                  key[1] === "#" ? keyModified = key[0] + `\u266F` :
+                    keyModified = key[0] + `\u266D`;
+                }
+                return (
+                  <option value={key} key={key}>{keyModified}</option>
+                )
+              })}
+            </select>
+            <p style={{ display: (showKeyEdit ? 'none' : 'block') }} className="Song-value Song-key-entry-value">{song.songKey}</p>
+          </div>
+          <EditConfirm show={setShowKeyEdit} focusInput={focusInput} field="key" disableEdit={disableEdit} setDisableEdit={setDisableEdit} saveData={saveKeyData} />
+        </div>
+        <div className="Song-field Song-knowledge">
+          <label htmlFor="songKnowledge-songPage" className="Song-knowledge-label Song-label">How Well Do I Know This Tune?</label>
+          <div className="Song-knowledge-entry Song-entry">
+            <select style={{ display: (showKnowledgeEdit ? 'block' : 'none') }} id="songKnowledge-songPage" ref={knowledgeInput} onChange={handleKnowledgeChange} value={knowledge} className="Song-knowledge-entry-input Song-input">
+              {Object.keys(knowledgeOptions).map((key) => {
+                let knowledgeChoice = knowledgeOptions[key];
+                return (
+                  <option value={key} key={knowledgeChoice}>{knowledgeChoice}</option>
+                )
+              })}
+            </select>
+            <div style={{ display: (showKnowledgeEdit ? 'none' : 'flex') }} className="Song-value Song-knowledge-entry-value">
+              <p>{knowledgeOptions[song.knowledge]}</p>
+              <div style={{ backgroundColor: bgColor }} className="Song-knowledge-entry-value-color"></div>
+            </div>
 
+          </div>
+          <EditConfirm show={setShowKnowledgeEdit} focusInput={focusInput} field="knowledge" disableEdit={disableEdit} setDisableEdit={setDisableEdit} saveData={saveKnowledgeData} />
+        </div>
+        <div className="Song-field Song-notes">
+          <label htmlFor="songNotes-songPage" className="Song-notes-label Song-label">Notes</label>
+          <div className="Song-notes-entry Song-entry">
+            <textarea style={{ display: (showNotesEdit ? 'block' : 'none') }} id="songNotes-songPage" ref={notesInput} className="Song-notes-entry-input Song-input" value={notes} onChange={handleNotesChange} ></textarea>
+            <p style={{ display: (showNotesEdit ? 'none' : 'block') }} className="Song-value Song-notes-entry-value">{song.notes || 'none'}</p>
+          </div>
+          <EditConfirm show={setShowNotesEdit} focusInput={focusInput} field="notes" disableEdit={disableEdit} setDisableEdit={setDisableEdit} saveData={saveNotesData} />
+        </div>
+        <div className="Song-field Song-sets">
+          <fieldset className="Song-sets-label Song-label">Sets</fieldset>
+          <div className="Song-sets-entry Song-entry">
+            <ul className="Song-sets-entry-checkboxes" style={{ display: (showSetsEdit ? 'block' : 'none') }}>
+              {setArray.map((set, idx) => {
+                return (
+                  <li className="Song-sets-entry-checkbox" key={`${set[2]}`}>
+                    <label htmlFor={`${set[2]}`} className="Song-sets-entry-checkbox-label">{set[0]}</label>
+                    <input id={`${set[2]}`} value={set[0]} checked={set[1]} onChange={handleCheckboxChange} type="checkbox" className="Song-sets-entry-checkbox-box Song-input" ref={idx === 0 ? setsInput : undefined}></input>
+                  </li>
+                )
+              })}
+            </ul>
+            <ul className="Song-value Song-sets-entry-value" style={{ display: (showSetsEdit ? 'none' : 'block') }}>
+              {song.sets && Object.keys(song.sets).map((setId) => (
+                <li className="Song-sets-entry-value-set" key={setId}>{song.sets[setId]}</li>
+              ))}
+            </ul>
+          </div>
+          <EditConfirm show={setShowSetsEdit} focusInput={focusInput} field="sets" disableEdit={disableEdit} setDisableEdit={setDisableEdit} saveData={saveSetsData} />
+        </div>
+        <button className="Song-delete">Delete Song</button>
       </div>
+    </div>
   )
 }
 

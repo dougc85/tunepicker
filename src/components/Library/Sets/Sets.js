@@ -25,32 +25,36 @@ function Sets(props) {
     return (<div>Needs fixing</div>)
   }
 
+  if (loading) {
+    return (
+      <Loading />
+    )
+  }
+
   return (
-    loading ?
-      <Loading /> :
-      <div className="Sets">
-        <Path heading="Sets" pathType="Sets" />
-        <ul className="Sets-sets">
-          <div className="Sets-sets-header">
-            <h2 className="Sets-sets-header-heading">Sets</h2>
-            <button onClick={handleAddButton} className="Sets-sets-header-add">Add a Set</button>
-          </div>
-          {Object.keys(setNames).sort((id1, id2) => {
-            if (setNames[id1] < setNames[id2]) {
-              return -1;
-            }
-            return 1;
-          }).map((setId) => {
-            return (
-              <li onClick={() => { handleClick(setId) }} className="Sets-sets-set" key={setId}>
-                {setNames[setId]}
-              </li>
-            )
+    <div className="Sets">
+      <Path heading="Sets" pathType="Sets" />
+      <ul className="Sets-sets">
+        <div className="Sets-sets-header">
+          <h2 className="Sets-sets-header-heading">Sets</h2>
+          <button onClick={handleAddButton} className="Sets-sets-header-add">Add a Set</button>
+        </div>
+        {Object.keys(setNames).sort((id1, id2) => {
+          if (setNames[id1] < setNames[id2]) {
+            return -1;
           }
-          )}
-        </ul>
-        {showAddSet && <AddSet user={user} setShowAddSet={setShowAddSet} setNames={setNames} />}
-      </div >
+          return 1;
+        }).map((setId) => {
+          return (
+            <li onClick={() => { handleClick(setId) }} className="Sets-sets-set" key={setId}>
+              {setNames[setId]}
+            </li>
+          )
+        }
+        )}
+      </ul>
+      {showAddSet && <AddSet user={user} setShowAddSet={setShowAddSet} setNames={setNames} />}
+    </div >
   )
 }
 
