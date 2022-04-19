@@ -111,7 +111,8 @@ function PickController(props) {
           if (set.fullKnow.length === 0) {
             return pickList(choicesTemp);
           }
-          //If user is done with 'new' and 'med' and needs to recycle 'know'
+
+          //If user is done with 'new' and 'med' and needs to recycle 'know'ç
           if (set.currentNew.length === 0 && set.currentMedium.length === 0) {
             setChoices(choicesTemp);
             setOldList(currentList);
@@ -204,27 +205,35 @@ function PickController(props) {
       ORANGE) :
     'white';
 
+  if (loading) {
+    return (
+      <Loading />
+    )
+  }
+
+  if (showNoSongs) {
+    return (
+      <div className="showNoSongs">You don't have any songs yet.  Add some! </div>
+    )
+  }
+
   return (
-    (loading) ?
-      <Loading /> :
-      (showNoSongs) ?
-        <div className="showNoSongs">You don't have any songs yet.  Add some! </div> :
-        <div className="PickController" style={{ backgroundColor: listColor }}>
-          <div className="tune-wrapper">
-            <p className="tune-name" style={{ fontSize: tuneFontSize }}>{allSongs[tune] && capitalizeTitle(allSongs[tune].title)}</p>
-          </div>
+    <div className="PickController" style={{ backgroundColor: listColor }}>
+      <div className="tune-wrapper">
+        <p className="tune-name" style={{ fontSize: tuneFontSize }}>{allSongs[tune] && capitalizeTitle(allSongs[tune].title)}</p>
+      </div>
 
-          <p className="key">{key}</p>
+      <p className="key">{key}</p>
 
-          <button className="next-button" onClick={nextHandler} >NEXT</button>
+      <button className="next-button" onClick={nextHandler} >NEXT</button>
 
-          <div className="small-buttons-wrapper">
-            <button className="skip-button small-btn">SKIP</button>
-            <button className="raise-button small-btn">&uarr;</button>
-            <button className="lower-button small-btn">&darr;</button>
-          </div>
-          <MoveControlsPopup />
-        </div>
+      <div className="small-buttons-wrapper">
+        <button className="skip-button small-btn">SKIP</button>
+        <button className="raise-button small-btn">&uarr;</button>
+        <button className="lower-button small-btn">&darr;</button>
+      </div>
+      <MoveControlsPopup />
+    </div>
   )
 }
 

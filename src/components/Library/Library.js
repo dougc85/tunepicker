@@ -8,14 +8,18 @@ function Library(props) {
 
   const { loading } = props;
 
+  if (loading) {
+    return (
+      <Loading />
+    )
+  }
+
   return (
-    loading ?
-      <Loading /> :
-      <div className="Library">
-        <Path heading="Library" pathType="Library" />
-        <Link to={'/library/sets'}>Sets</Link>
-        <Link to={'/library/allsongs'}>All Songs</Link>
-      </div>
+    <div className="Library">
+      <Path heading="Library" pathType="Library" />
+      <Link to={'/library/sets'}>Sets</Link>
+      <Link to={'/library/allsongs'}>All Songs</Link>
+    </div>
   )
 }
 

@@ -57,38 +57,40 @@ function Set(props) {
 
   const renderSet = params['*'] ? false : true;
 
+  if (loading || !set) {
+    return (
+      <Loading />
+    )
+  }
+
   return (
-    (loading || !set) ?
-      <Loading /> :
-      <div className="container">
-        {renderSet && (
-          <div className="Set">
-            <Path heading={set.setName} pathType="Set" />
-            <div className="Set-songs">
-              <div className="Set-songs-header">
-                <h2 className="Set-songs-header-heading">Songs</h2>
-                <button onClick={handleAddButton} className="Set-songs-header-add">Add a Song</button>
-                <button className="Set-songs-header-add" onClick={handleAddMultipleButton} >Add Multiple Songs</button>
-              </div>
-
-              {Object.keys(set.allSongs).map((songId) => {
-                const song = allSongs[songId];
-                return (
-                  <SongEntry song={song} sortByDateAdded={false} key={songId} setCurrentSong={setCurrentSong} />
-                )
-              })}
+    <div className="container">
+      {renderSet && (
+        <div className="Set">
+          <Path heading={set.setName} pathType="Set" />
+          <div className="Set-songs">
+            <div className="Set-songs-header">
+              <h2 className="Set-songs-header-heading">Songs</h2>
+              <button onClick={handleAddButton} className="Set-songs-header-add">Add a Song</button>
+              <button className="Set-songs-header-add" onClick={handleAddMultipleButton} >Add Multiple Songs</button>
             </div>
-            {showAddSong && <AddSong set={set} setShowAddSong={setShowAddSong} user={user} setShowAlreadyInLibrary={setShowAlreadyInLibrary} setSongConsidered={setSongConsidered} />}
-            {showAddMultiple && <AddMultiple set={set} setShowAddMultiple={setShowAddMultiple} songNames={songNames} user={user} allSongs={allSongs} />}
-            {showAlreadyInLibrary && <AlreadyInLibrary songConsidered={songConsidered} set={set} />}
+
+            {Object.keys(set.allSongs).map((songId) => {
+              const song = allSongs[songId];
+              return (
+                <SongEntry song={song} sortByDateAdded={false} key={songId} setCurrentSong={setCurrentSong} />
+              )
+            })}
           </div>
-        )}
-        <Routes>
-          <Route path=":songTitle" element={<Song song={currentSong} loading={loading} getSongData={getSongData} setNames={setNames} user={user} allSongs={allSongs} setCurrentSong={setCurrentSong} />} />
-        </Routes>
-      </div>
-
-
+          {showAddSong && <AddSong set={set} setShowAddSong={setShowAddSong} user={user} setShowAlreadyInLibrary={setShowAlreadyInLibrary} setSongConsidered={setSongConsidered} />}
+          {showAddMultiple && <AddMultiple set={set} setShowAddMultiple={setShowAddMultiple} songNames={songNames} user={user} allSongs={allSongs} />}
+          {showAlreadyInLibrary && <AlreadyInLibrary songConsidered={songConsidered} set={set} />}
+        </div>
+      )}
+      <Routes>
+        <Route path=":songTitle" element={<Song song={currentSong} loading={loading} getSongData={getSongData} setNames={setNames} user={user} allSongs={allSongs} setCurrentSong={setCurrentSong} />} />
+      </Routes>
+    </div>
   )
 }
 
