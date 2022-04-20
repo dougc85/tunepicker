@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import ReactDOM from 'react-dom';
 
 const Screen = styled.div`
   position: fixed;
@@ -7,6 +8,7 @@ const Screen = styled.div`
   top: 0;
   left: 0;
   background-color: rgba(0, 0, 0, .6);
+  z-index: 100;
 `;
 
 const Content = styled.div`
@@ -19,6 +21,7 @@ const Content = styled.div`
   font-size: 2rem;
   padding: 1.5rem;
   box-sizing: border-box;
+  z-index: 101;
 `;
 
 function Modal(props) {
@@ -27,10 +30,16 @@ function Modal(props) {
 
   return (
     <>
-      <Screen onClick={handleOutsideClick} />
-      <Content>
-        {props.children}
-      </Content>
+      {ReactDOM.createPortal(
+        <Screen onClick={handleOutsideClick} />,
+        document.getElementById('screen-root')
+      )}
+      {ReactDOM.createPortal(
+        <Content>
+          {props.children}
+        </Content>,
+        document.getElementById('overlay-root')
+      )}
     </>
   )
 }
