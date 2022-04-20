@@ -1,4 +1,3 @@
-import './AddSong.scss';
 import { React, useState } from 'react';
 import { v4 as uuid } from 'uuid';
 import {
@@ -126,7 +125,7 @@ function AddSong(props) {
   }
 
   return (
-    <Modal handleOutisdeClick={handleCancel} >
+    <Modal handleOutsideClick={handleCancel} >
       <AddSongStyled>
         <legend>Add Song to '{set.setName}'</legend>
         <InputGrouping width={"100%"}>
