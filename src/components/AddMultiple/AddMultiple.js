@@ -17,7 +17,6 @@ function AddMultiple(props) {
 
   function handleCancel(e) {
     e.preventDefault();
-
     resetSongList();
     setShowAddMultiple(false);
   }
@@ -111,7 +110,7 @@ function AddMultiple(props) {
   }
 
   return (
-    <Modal showModal={setShowAddMultiple} reset={resetSongList} >
+    <Modal handleOutsideClick={handleCancel} >
       <AddMultipleStyled>
         <legend>Add Multiple Songs to '{set.setName}'</legend>
         <p>

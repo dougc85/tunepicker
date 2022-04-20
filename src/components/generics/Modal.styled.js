@@ -23,17 +23,11 @@ const Content = styled.div`
 
 function Modal(props) {
 
-  const { reset, showModal } = props;
-
-  function handleCancel(e) {
-    e.preventDefault();
-    reset();
-    showModal(false);
-  }
+  const { handleOutsideClick } = props;
 
   return (
     <>
-      <Screen onClick={handleCancel} />
+      <Screen onClick={handleOutsideClick} />
       <Content>
         {props.children}
       </Content>
