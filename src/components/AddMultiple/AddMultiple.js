@@ -3,8 +3,9 @@ import { React } from 'react';
 import { v4 as uuid } from 'uuid';
 import { db } from '../../firebaseConfig';
 import useFormInput from '../../hooks/useFormInput';
-import './AddMultiple.scss';
 import Modal from '../generics/Modal.styled';
+import AddButton from '../generics/AddButton.styled';
+import { AddMultipleStyled, AddMultipleButtonsStyled } from './AddMultiple.styled';
 
 function AddMultiple(props) {
 
@@ -110,28 +111,26 @@ function AddMultiple(props) {
   }
 
   return (
-    <div className="AddMultiple">
-      <Modal showModal={setShowAddMultiple} reset={resetSongList} >
-        <form action="" className="AddMultiple-form">
-          <legend className="AddMultiple-form-heading">Add Multiple Songs to '{set.setName}'</legend>
-          <p className="AddMultiple-form-directions">
-            Add multiple songs at once by pasting (or typing out) a list of songs into the text box below.
-            Make sure you strike the return/enter key after each song. Songs will be entered into this set and default
-            to the 'New' knowledge level.  Also, all will be entered such that your preference for their key will be 'random'.
-            Later updates will provide the ability to
-            add a list of songs to any number of sets as well as allowing you to set the knowledge level of the group yourself.
-            Any songs that you list which are already to be found in your library will be imported into this set with all their
-            current settings intact.
-            Songs cannot use the following characters: ~, *, /, [, or ]
-          </p>
-          <textarea name="" id="" cols="30" rows="10" className="AddMultiple-form-textarea" value={songList} onChange={handleSongListChange}></textarea>
-          <div className="AddMultiple-form-buttons">
-            <button onClick={handleCancel} className="AddMultiple-form-cancel">Cancel</button>
-            <button onClick={handleAdd} className="AddMultiple-form-add">Add Songs</button>
-          </div>
-        </form>
-      </Modal>
-    </div>
+    <Modal showModal={setShowAddMultiple} reset={resetSongList} >
+      <AddMultipleStyled>
+        <legend>Add Multiple Songs to '{set.setName}'</legend>
+        <p>
+          Add multiple songs at once by pasting (or typing out) a list of songs into the text box below.
+          Make sure you strike the return/enter key after each song. Songs will be entered into this set and default
+          to the 'New' knowledge level.  Also, all will be entered such that your preference for their key will be 'random'.
+          Later updates will provide the ability to
+          add a list of songs to any number of sets as well as allowing you to set the knowledge level of the group yourself.
+          Any songs that you list which are already to be found in your library will be imported into this set with all their
+          current settings intact.
+          Songs cannot use the following characters: ~, *, /, [, or ]
+        </p>
+        <textarea name="" id="" cols="30" rows="10" value={songList} onChange={handleSongListChange}></textarea>
+        <AddMultipleButtonsStyled>
+          <AddButton onClick={handleCancel}>Cancel</AddButton>
+          <AddButton onClick={handleAdd}>Add Songs</AddButton>
+        </AddMultipleButtonsStyled>
+      </AddMultipleStyled>
+    </Modal>
   )
 }
 
