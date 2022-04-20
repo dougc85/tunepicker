@@ -1,5 +1,4 @@
 import { React, useEffect, useState } from 'react';
-import './App.css';
 import PickController from './components/PickController/PickController';
 import { Routes, Route, useNavigate, useLocation } from 'react-router-dom';
 import Header from './components/Header/Header';
@@ -10,12 +9,12 @@ import Set from './components/Library/Set/Set';
 import Sets from './components/Library/Sets/Sets';
 import AllSongs from './components/Library/AllSongs/AllSongs';
 import Song from './components/Library/Song/Song';
-
 import { db, auth } from './firebaseConfig';
 import { onAuthStateChanged } from 'firebase/auth';
 import {
   doc, getDoc, onSnapshot,
 } from 'firebase/firestore';
+import GlobalStyles from './GlobalStyles';
 
 
 function App() {
@@ -102,6 +101,7 @@ function App() {
 
   return (
     <div className="App">
+      <GlobalStyles />
       <Routes>
         <Route path="/" element={<Header user={user} />}>
           <Route index element={<FrontPage user={user.email} />} />
