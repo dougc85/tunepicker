@@ -1,4 +1,6 @@
-.Nav {
+import styled from 'styled-components';
+
+export const NavStyled = styled.nav`
   height: 150px;
   background-color: white;
   position: absolute;
@@ -10,7 +12,7 @@
   padding: 1.5rem 0;
   z-index: 10;
 
-  &-links {
+  ul {
     list-style: none;
     font-size: 2rem;
     display: flex;
@@ -19,11 +21,11 @@
     height: 100%;
     box-sizing: content-box;
 
-    &-link {
+    li {
       position: relative;
     }
     
-    &-link:not(:last-child)::after {
+    li:not(:last-child)::after {
       content: "";
       border-top: 1px solid rgb(190, 190, 190);
       width: 70%;
@@ -33,4 +35,4 @@
       transform: translateX(-50%);
     }
   }
-}
+`

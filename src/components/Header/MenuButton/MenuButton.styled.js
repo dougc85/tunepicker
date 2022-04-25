@@ -1,4 +1,6 @@
-.MenuButton {
+import styled from 'styled-components';
+
+export const MenuButtonStyled = styled.button`
   height: 30px;
   width: 30px;
   position: absolute;
@@ -8,8 +10,10 @@
   display: flex;
   flex-direction: column;
   justify-content: space-evenly;
+  border: none;
 
-  &-line {
+  span {
     border-top: 2px solid rgb(134, 134, 134);
+    width: 100%;
   }
-}
+`
