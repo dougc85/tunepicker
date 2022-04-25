@@ -1,11 +1,11 @@
 import React from 'react';
-import './FrontPage.scss'
+import { FrontPageStyled } from './FrontPage.styled';
 
 function FrontPage(props) {
   return (
-    <div className="FrontPage">
+    <FrontPageStyled >
       {`Hello ${props.user}!`}
-    </div>
+    </FrontPageStyled>
   )
 }
 

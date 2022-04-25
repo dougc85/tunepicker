@@ -1,13 +1,13 @@
 import React from "react";
-import './MenuButton.scss';
+import { MenuButtonStyled } from "./MenuButton.styled";
 
 function MenuButton(props) {
   return (
-    <div className="MenuButton" onClick={props.toggleNav}>
-      <div className="MenuButton-line"></div>
-      <div className="MenuButton-line"></div>
-      <div className="MenuButton-line"></div>
-    </div>
+    <MenuButtonStyled onClick={props.toggleNav}>
+      <span />
+      <span />
+      <span />
+    </MenuButtonStyled>
   )
 }
 
