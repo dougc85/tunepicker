@@ -1,7 +1,7 @@
-import './AllSongs.scss';
 import { React } from 'react';
 import SongEntry from '../SongEntry/SongEntry';
 import Path from '../Path/Path';
+import { AllSongsStyled } from './AllSongs.styled';
 
 function AllSongs(props) {
 
@@ -26,7 +26,8 @@ function AllSongs(props) {
   // }, [user]);
 
   return (
-    <div className="AllSongs">
+
+    <AllSongsStyled>
       <Path heading="All Songs" pathType="All Songs" />
       {Object.keys(allSongs).map((songId) => {
         const songObj = allSongs[songId];
@@ -34,7 +35,7 @@ function AllSongs(props) {
           <SongEntry title={songObj.title} song={songObj} sortByDateAdded={false} key={songId} setCurrentSong={setCurrentSong} />
         )
       })}
-    </div>
+    </AllSongsStyled>
   )
 }
 

@@ -1,9 +1,11 @@
-.Library {
+import styled from "styled-components";
+
+export const LibraryStyled = styled.div`
   height: calc(100vh - 95px);
   display: flex;
   flex-direction: column;
   
-  & a {
+  a {
     display: block;
     height: 40%;
     background-color: blue;
@@ -20,4 +22,4 @@
       text-decoration: none;
     }
   }
-}
+`

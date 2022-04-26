@@ -1,11 +1,11 @@
-import './Path.scss';
 import { React } from 'react';
+import { PathStyled } from './Path.styled';
 
 function Path(props) {
 
   const { pathType, heading } = props;
 
-  const divider = <p className="Path-divider">/</p>;
+  const divider = <p>/</p>;
   const showSecondTier = (pathType === 'Library') ?
     false :
     true;
@@ -49,14 +49,14 @@ function Path(props) {
       songIcon;
 
     return (
-      <div className="Path">
+      <PathStyled>
         {libraryIcon}
         {showSecondTier && divider}
         {showSecondTier && book}
         {showLastTier && divider}
         {showLastTier && singleItem}
-        <p className="Path-heading">{heading}</p>
-      </div>
+        <h2>{heading}</h2>
+      </PathStyled>
     )
   }
   return (
