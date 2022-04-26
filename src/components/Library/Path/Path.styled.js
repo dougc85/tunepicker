@@ -1,14 +1,17 @@
-.Path {
+import styled from 'styled-components';
+
+export const PathStyled = styled.div`
   display: flex;
   align-items: center;
   padding: 1rem;
   font-size: 1.7rem;
 
-  &-divider {
+  p {
     font-weight: bold;
     margin-left: 3px;
   }
-  &-icon {
+
+  .Path-icon {
     width: 2rem;
     display: block;
 
@@ -29,7 +32,9 @@
       margin-left: 5px;
     }
   }
-  &-heading {
-    margin-left: 5px;
+  h2 {
+    font-size: 1.7rem;
+    margin-left: 6px;
+    font-weight: normal;
   }
-}
+`
