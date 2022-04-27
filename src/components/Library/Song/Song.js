@@ -212,12 +212,16 @@ function Song(props) {
       }
     }
 
-    saveSongData('sets', newSetsObject);
-
     for (let setItem of setArray) {
       let setName = setItem[0];
       let songInSet = setItem[1];
       let setId = setItem[2];
+
+      console.log(setName, 'setName');
+      console.log(songInSet, 'songinSet');
+      console.log(setId, 'setId');
+      console.log(song, 'song');
+      console.log(song.sets.hasOwnProperty(setId), 'song currently is in setID"s Set');
 
       if (songInSet && song.sets.hasOwnProperty(setId)) {
         continue;
@@ -226,7 +230,7 @@ function Song(props) {
         let setDoc = doc(db, 'users', user.uid, 'sets', setId);
 
         updateDoc(setDoc, {
-          allSongs: arrayUnion(song.id),
+          [`allSongs.${song.id}`]: null,
           [knowledgeArrays[song.knowledge][0]]: arrayUnion(song.id),
           [knowledgeArrays[song.knowledge][1]]: arrayUnion(song.id),
         })
@@ -237,12 +241,14 @@ function Song(props) {
         let setDoc = doc(db, 'users', user.uid, 'sets', setId);
 
         updateDoc(setDoc, {
-          allSongs: arrayRemove(song.title),
+          [`allSongs.${song.id}`]: deleteField(),
           [knowledgeArrays[song.knowledge][0]]: arrayRemove(song.id),
           [knowledgeArrays[song.knowledge][1]]: arrayRemove(song.id),
         });
       }
     }
+
+    saveSongData('sets', newSetsObject);
   }
 
   if (loading || !song) {
