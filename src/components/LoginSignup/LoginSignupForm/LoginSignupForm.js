@@ -1,6 +1,5 @@
-import { React, useState, useEffect } from 'react';
+import { React, useState, useReducer } from 'react';
 import './LoginSignupForm.scss';
-import useFormInput from '../../../hooks/useFormInput';
 import Password from '../../Password/Password';
 import { auth, db } from '../../../firebaseConfig';
 import {
@@ -14,24 +13,42 @@ import {
   updateDoc,
 } from 'firebase/firestore';
 
+const loginSignupReducer = (state, action) => {
+  if (action.type === 'HANDLE_INPUT') {
+    return {
+      ...state,
+      [action.field]: action.payload,
+      [`${action.form}Error`]: '',
+    }
+  }
+  if (action.type === 'SET_ERROR') {
+    return {
+      ...state,
+      [action.field]: action.payload,
+    }
+  }
+}
+
+const loginSignupInitialValues = {
+  email: '',
+  password: '',
+  isLoading: false,
+  loginError: '',
+  signupError: '',
+}
+
 function LoginSignupForm(props) {
 
   const { formType, formStyle, legend, submitMessage, switchAuth, setUser, switchMessage } = props;
 
-  const [email, handleEmailChange] = useFormInput('');
-  const [password, handlePasswordChange] = useFormInput('');
-  const [showPassword, setShowPassword] = useState(false);
-  const [loginError, setLoginError] = useState('');
-  const [signupError, setSignupError] = useState('');
+  const [state, dispatch] = useReducer(loginSignupReducer, loginSignupInitialValues);
 
-  useEffect(() => {
-    if (loginError) {
-      setLoginError('');
-    }
-    if (signupError) {
-      setSignupError('')
-    }
-  }, [email, password])
+
+  /////   !!! Add Loading component when waiting for network responses   !!!!!!   /////
+
+  const { email, password, isLoading, loginError, signupError } = state;
+
+  const [showPassword, setShowPassword] = useState(false);
 
   const errorMessage =
     (formType === 'login') ?
@@ -55,27 +72,28 @@ function LoginSignupForm(props) {
 
   function showLoginError(error) {
     if (error.message === "Firebase: Error (auth/wrong-password).") {
-      setLoginError('Invalid Password');
+      dispatch({ type: 'SET_ERROR', field: "loginError", payload: "Invalid Password", })
     } else if (error.message === "Firebase: Error (auth/user-not-found).")
-      setLoginError('User Not Found');
+      dispatch({ type: 'SET_ERROR', field: "loginError", payload: "User Not Found", })
     else {
-      setLoginError(error.message);
+      dispatch({ type: 'SET_ERROR', field: "loginError", payload: error.message, })
     }
   }
 
   function showSignupError(error) {
-    console.log(error.message, 'error message');
     if (error.message === "Firebase: Error (auth/invalid-email).") {
-      setSignupError('Invalid Email');
+      dispatch({ type: 'SET_ERROR', field: "signupError", payload: "Invalid Email", })
     } else if (error.message === "Firebase: Error (auth/email-already-in-use).") {
-      setSignupError('Email Already In Use');
+      dispatch({ type: 'SET_ERROR', field: "signupError", payload: 'Email Already In Use', })
+    } else {
+      dispatch({ type: 'SET_ERROR', field: "signupError", payload: error.message, })
     }
   }
 
   async function submitSignup(e) {
     e.preventDefault();
     if (password.length < 6) {
-      setSignupError('Password min of 6 characters');
+      dispatch({ type: 'SET_ERROR', field: "signupError", payload: 'Password min of 6 characters', })
       return;
     }
     try {
@@ -124,14 +142,23 @@ function LoginSignupForm(props) {
       submitLogin :
       submitSignup;
 
+  const handleChange = (event) => {
+    dispatch({
+      type: 'HANDLE_INPUT',
+      field: event.target.name,
+      payload: event.target.value,
+      form: formType,
+    })
+  }
+
   return (
     <div className={`LoginSignupForm LoginSignupForm-${formType}`} style={formStyle}>
       <legend className="LoginSignupForm-legend">{legend}</legend>
       <div className="LoginSignupForm-inputs">
-        <label htmlFor={`email-welcome-${formType}`}>email</label>
-        <input className="LoginSignupForm-email" onChange={handleEmailChange} value={email} type="text" name="email-welcome" id={`email-welcome-${formType}`} />
-        <label htmlFor={`password-welcome-${formType}`}>password</label>
-        <Password id={`password-welcome-${formType}`} handlePasswordChange={handlePasswordChange} password={password} showPassword={showPassword} toggleShowPassword={toggleShowPassword} />
+        <label htmlFor={`email-${formType}`}>email</label>
+        <input className="LoginSignupForm-email" onChange={handleChange} value={email} type="text" name="email" id={`email-${formType}`} />
+        <label htmlFor={`password-${formType}`}>password</label>
+        <Password id={`password-${formType}`} handleChange={handleChange} password={password} showPassword={showPassword} toggleShowPassword={toggleShowPassword} />
         {errorMessage && <p className="LoginSignupForm-error" >{`*${errorMessage}`}</p>}
       </div>
       <button onClick={submit} className={`LoginSignupForm-submit LoginSignupForm-submit-${formType}`}>{submitMessage}</button>
