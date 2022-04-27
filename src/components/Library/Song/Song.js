@@ -11,7 +11,6 @@ import Loading from '../../Loading/Loading';
 import EditConfirm from './EditConfirm/EditConfirm';
 
 function Song(props) {
-  console.log(props, 'props');
 
   const { song, loading, getSongData, setNames, user, setCurrentSong, allSongs } = props;
   const params = useParams();
@@ -83,7 +82,6 @@ function Song(props) {
 
   useEffect(() => {
     if (song) {
-      console.log(allSongs);
       setSongKey(song.songKey);
       setKnowledge(song.knowledge);
       setNotes(song.notes);
@@ -102,8 +100,6 @@ function Song(props) {
 
   useEffect(() => {
     if (song) {
-      console.log(params.setId, 'setId');
-      console.log(song, 'song');
       if (!song.sets.hasOwnProperty(params.setId)) {
         navigate(`/library/allsongs/${song.id}`);
       }
@@ -215,15 +211,8 @@ function Song(props) {
     }
 
     for (let setItem of setArray) {
-      let setName = setItem[0];
       let songInSet = setItem[1];
       let setId = setItem[2];
-
-      console.log(setName, 'setName');
-      console.log(songInSet, 'songinSet');
-      console.log(setId, 'setId');
-      console.log(song, 'song');
-      console.log(song.sets.hasOwnProperty(setId), 'song currently is in setID"s Set');
 
       if (songInSet && song.sets.hasOwnProperty(setId)) {
         continue;
