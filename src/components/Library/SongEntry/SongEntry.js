@@ -18,8 +18,8 @@ function SongEntry(props) {
 
   function handleClick() {
     setCurrentSong({ ...song });
-    if (params.setName) {
-      navigate(`/library/sets/${params.setName}/${id}`);
+    if (params.setId) {
+      navigate(`/library/sets/${params.setId}/${id}`);
     }
     else {
       navigate(`/library/allsongs/${id}`);
