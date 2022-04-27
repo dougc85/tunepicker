@@ -11,6 +11,7 @@ import Loading from '../../Loading/Loading';
 import EditConfirm from './EditConfirm/EditConfirm';
 
 function Song(props) {
+  console.log(props, 'props');
 
   const { song, loading, getSongData, setNames, user, setCurrentSong, allSongs } = props;
   const params = useParams();
@@ -62,10 +63,8 @@ function Song(props) {
     getSongData(params.songId);
   }
 
-  function capitalizeTitle() {
-    if (allSongs) {
-      return allSongs[params.songId].title.split(' ').map((word) => word[0].toUpperCase().concat(word.substring(1))).join(' ');
-    }
+  function capitalize(str) {
+    return str.split(' ').map((word) => word[0].toUpperCase().concat(word.substring(1))).join(' ');
   }
 
   useEffect(() => {
@@ -84,10 +83,11 @@ function Song(props) {
 
   useEffect(() => {
     if (song) {
+      console.log(allSongs);
       setSongKey(song.songKey);
       setKnowledge(song.knowledge);
       setNotes(song.notes);
-      setTitle(capitalizeTitle());
+      setTitle(capitalize(allSongs[params.songId].title));
 
       const setsList = Object.keys(setNames).map((setId) => {
         if (song.sets[setId]) {
@@ -98,15 +98,17 @@ function Song(props) {
       setSetArray(setsList)
     }
 
-  }, [song, setNames, setKnowledge, setNotes, setSongKey])
+  }, [song, setNames, setKnowledge, setNotes, setSongKey, setTitle, allSongs, params.songId])
 
   useEffect(() => {
     if (song) {
+      console.log(params.setId, 'setId');
+      console.log(song, 'song');
       if (!song.sets.hasOwnProperty(params.setId)) {
         navigate(`/library/allsongs/${song.id}`);
       }
     }
-  }, [song, params.setId])
+  }, [song, params.setId, navigate])
 
   function handleCheckboxChange(e) {
     setSetArray((oldSets) => {
@@ -259,13 +261,13 @@ function Song(props) {
 
   return (
     <div className="Song">
-      <Path heading={capitalizeTitle()} pathType={'Song'} />
+      <Path heading={capitalize(allSongs[params.songId].title)} pathType={'Song'} />
       <div className="Song-fields">
         <div className="Song-field Song-title">
           <label htmlFor="songTitle-songPage" className="Song-title-label Song-label">Title</label>
           <div className="Song-title-entry Song-entry">
             <input style={{ display: (showTitleEdit ? 'block' : 'none') }} id="songTitle-songPage" ref={titleInput} onChange={handleTitleChange} type="text" className="Song-title-entry-input Song-input" value={title}></input>
-            <p style={{ display: (showTitleEdit ? 'none' : 'block') }} className="Song-value Song-title-entry-value">{capitalizeTitle()}</p>
+            <p style={{ display: (showTitleEdit ? 'none' : 'block') }} className="Song-value Song-title-entry-value">{capitalize(allSongs[params.songId].title)}</p>
           </div>
           <EditConfirm field="title" show={setShowTitleEdit} focusInput={focusInput} disableEdit={disableEdit} setDisableEdit={setDisableEdit} saveData={saveTitleData} />
         </div>

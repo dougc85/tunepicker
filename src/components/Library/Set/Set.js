@@ -88,7 +88,7 @@ function Set(props) {
         </div>
       )}
       <Routes>
-        <Route path=":songTitle" element={<Song song={currentSong} loading={loading} getSongData={getSongData} setNames={setNames} user={user} allSongs={allSongs} setCurrentSong={setCurrentSong} />} />
+        <Route path=":songId" element={<Song song={currentSong} loading={loading} getSongData={getSongData} setNames={setNames} user={user} allSongs={allSongs} setCurrentSong={setCurrentSong} />} />
       </Routes>
     </div>
   )
