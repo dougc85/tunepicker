@@ -32,7 +32,7 @@ function Sets(props) {
   }
 
   return (
-    <div className="Sets">
+    <>
       <Path heading="Sets" pathType="Sets" />
       <ul className="Sets-sets">
         <div className="Sets-sets-header">
@@ -54,7 +54,7 @@ function Sets(props) {
         )}
       </ul>
       {showAddSet && <AddSet user={user} setShowAddSet={setShowAddSet} setNames={setNames} />}
-    </div >
+    </>
   )
 }
 

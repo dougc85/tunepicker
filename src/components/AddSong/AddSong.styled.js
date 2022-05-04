@@ -26,6 +26,7 @@ export const AddSongStyled = styled.form`
 
 export const InputGrouping = styled.div`
   display: flex;
+  position: relative;
   align-items: center;
   justify-content: space-evenly;
   width: ${({ width }) => width};
@@ -33,6 +34,14 @@ export const InputGrouping = styled.div`
 
 export const TitleInput = styled.input`
   width: 17rem;
+`;
+
+export const ErrorMessage = styled.p`
+  position: absolute;
+  top: 2.4rem;
+  left: 8.5rem;
+  font-size: 1.1rem;
+  color: red;
 `;
 
 export const KnowledgeField = styled.fieldset`

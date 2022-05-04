@@ -86,7 +86,7 @@ function App() {
   }, [userDoc, user.uid]);
 
   useEffect(() => {
-    if (pickerSet && loading) {
+    if (pickerSet) {
       setLoading(false);
     }
   }, [pickerSet]);

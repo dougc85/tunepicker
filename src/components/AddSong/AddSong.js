@@ -11,7 +11,7 @@ import {
 } from '../../firebaseConfig';
 import useFormInput from '../../hooks/useFormInput';
 import Modal from '../generics/Modal.styled';
-import { AddSongStyled, InputGrouping, TitleInput, KnowledgeField } from './AddSong.styled';
+import { AddSongStyled, InputGrouping, TitleInput, ErrorMessage, KnowledgeField } from './AddSong.styled';
 import AddButton from '../generics/AddButton.styled';
 
 function AddSong(props) {
@@ -30,6 +30,7 @@ function AddSong(props) {
   const [notes, handleNotesChange, resetNotes] = useFormInput('');
   const [knowledge, setKnowledge] = useState('know');
   const [disableForm, setDisableForm] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
 
   function handleCancel(e) {
     e.preventDefault();
@@ -41,11 +42,29 @@ function AddSong(props) {
 
   async function handleAdd(e) {
     e.preventDefault();
+
+    if (title === '') {
+      setErrorMessage('Field Required');
+      return;
+    }
+
+    const titleLower = title.toLowerCase();
+
+    if (titleLower.charAt(titleLower.length - 1) === '.' || titleLower[0] === '.') {
+      setDisableForm(true);
+      setErrorMessage("Can't start or end with '.'");
+      return;
+    }
+
+    if (title.includes('..')) {
+      setErrorMessage("Title Must Not Include '..'");
+      return;
+    }
+
     try {
       const userDoc = doc(db, 'users', user.uid);
       const setDoc = doc(userDoc, 'sets', set.id);
       const date = Date.now();
-      const titleLower = title.toLowerCase();
 
       const userFirebase = await getDoc(userDoc);
       const userDocData = userFirebase.data();
@@ -93,23 +112,25 @@ function AddSong(props) {
       console.log(error);
     }
 
-
-
   }
 
   function handleTitleChangeAndDuplicates(e) {
+
+    setErrorMessage('');
+
     const titleLower = e.target.value.toLowerCase();
+
     if (songNames[titleLower]) {
       const songId = songNames[titleLower];
       if (set.allSongs.hasOwnProperty(songId)) {
         setDisableForm(true);
-      } else {
-        setDisableForm(false);
+        handleTitleChange(e);
+        setErrorMessage('Song Already In Set');
+        return;
       }
-    } else {
-      setDisableForm(false);
     }
 
+    setDisableForm(false);
     handleTitleChange(e);
   }
 
@@ -131,6 +152,7 @@ function AddSong(props) {
         <InputGrouping width={"100%"}>
           <label htmlFor="song-title">Title:</label>
           <TitleInput onChange={handleTitleChangeAndDuplicates} value={title} id="song-title" type="text" name="song-title" autoComplete="off"></TitleInput>
+          {errorMessage && (<ErrorMessage>{`*${errorMessage}`}</ErrorMessage>)}
         </InputGrouping>
         <InputGrouping width={"70%"}>
           <label htmlFor="key" >Key:</label>
