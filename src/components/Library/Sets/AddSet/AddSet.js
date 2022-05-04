@@ -1,5 +1,6 @@
 import './AddSet.scss';
-import { React, useState } from 'react';
+import { React, useState, useContext } from 'react';
+import SubContext from '../../../../context/sub-context';
 import {
   addDoc, doc, collection, updateDoc,
 } from 'firebase/firestore';
@@ -8,7 +9,11 @@ import useFormInput from '../../../../hooks/useFormInput';
 
 function AddSet(props) {
 
-  const { user, setNames, setShowAddSet } = props;
+  const { user, userDoc } = useContext(SubContext);
+
+  const setNames = (userDoc) ? userDoc.setNames : undefined;
+
+  const { setShowAddSet } = props;
   const [disableForm, setDisableForm] = useState(false);
   const [title, handleTitleChange, resetTitle] = useFormInput('');
   const [showError, setShowError] = useState(false);

@@ -1,4 +1,5 @@
-import { React, useState, useEffect } from 'react';
+import { React, useState, useEffect, useContext } from 'react';
+import SubContext from '../../../context/sub-context';
 import { onSnapshot, doc } from 'firebase/firestore';
 import { db } from '../../../firebaseConfig';
 import { useParams, Routes, Route } from 'react-router-dom';
@@ -13,7 +14,12 @@ import { SetSongs, SetSongsHeader } from './SetSongs.styled';
 
 function Set(props) {
 
-  const { setNames, songNames, user, loading, showAlreadyInLibrary, setShowAlreadyInLibrary, setCurrentSong, currentSong, getSongData, allSongs } = props;
+  const { user, userDoc, loading } = useContext(SubContext);
+  const setNames = (userDoc) ? userDoc.setNames : undefined;
+  const songNames = (userDoc) ? userDoc.songNames : undefined;
+  const allSongs = (userDoc) ? userDoc.songs : undefined;
+
+  const { showAlreadyInLibrary, setShowAlreadyInLibrary, setCurrentSong, currentSong, getSongData } = props;
   const params = useParams();
 
   const [showAddSong, setShowAddSong] = useState(false);

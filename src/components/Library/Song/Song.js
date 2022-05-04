@@ -1,5 +1,6 @@
 import './Song.scss';
-import { React, useState, useEffect, useRef } from 'react';
+import React, { useState, useContext, useEffect, useRef } from 'react';
+import SubContext from '../../../context/sub-context';
 import { useParams, useNavigate } from 'react-router-dom';
 import {
   doc, updateDoc, deleteField, arrayUnion, arrayRemove,
@@ -12,7 +13,12 @@ import EditConfirm from './EditConfirm/EditConfirm';
 
 function Song(props) {
 
-  const { song, loading, getSongData, setNames, user, setCurrentSong, allSongs } = props;
+  const context = useContext(SubContext);
+  const { loading, userDoc, user } = context;
+  const setNames = (userDoc) ? userDoc.setNames : undefined;
+  const allSongs = (userDoc) ? userDoc.songs : undefined;
+
+  const { song, getSongData, setCurrentSong } = props;
   const params = useParams();
   const navigate = useNavigate();
 

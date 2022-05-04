@@ -5,7 +5,7 @@ import MenuButton from "./MenuButton/MenuButton";
 import Nav from './Nav/Nav';
 import { HeaderStyled } from "./Header.styled";
 
-function Header(props) {
+function Header() {
 
   const [showNav, setShowNav] = useState(false);
 

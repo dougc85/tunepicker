@@ -1,11 +1,17 @@
-import { React } from 'react';
+import React, { useContext } from 'react';
+import SubContext from '../../../context/sub-context';
 import SongEntry from '../SongEntry/SongEntry';
 import Path from '../Path/Path';
 import { AllSongsStyled } from './AllSongs.styled';
+import Loading from '../../Loading/Loading';
 
 function AllSongs(props) {
 
-  const { setCurrentSong, allSongs } = props;
+  const context = useContext(SubContext);
+  const { userDoc, loading } = context;
+  const allSongs = (userDoc) ? userDoc.songs : undefined;
+
+  const { setCurrentSong } = props;
 
 
   //vvvvvv  Unnecessary????  vvvvvv
@@ -24,6 +30,12 @@ function AllSongs(props) {
   //     }
   //   }
   // }, [user]);
+
+  if (loading) {
+    return (
+      <Loading />
+    )
+  }
 
   return (
 
