@@ -1,14 +1,16 @@
 import './Sets.scss';
-import { React, useState } from 'react';
+import { React, useState, useContext } from 'react';
+import SubContext from '../../../context/sub-context';
 import { useNavigate } from 'react-router-dom';
 
 import AddSet from './AddSet/AddSet';
 import Path from '../Path/Path';
 import Loading from '../../Loading/Loading';
 
-function Sets(props) {
+function Sets() {
 
-  const { user, loading, setNames } = props;
+  const { userDoc, loading } = useContext(SubContext);
+  const setNames = (userDoc) ? userDoc.setNames : undefined;
 
   const navigate = useNavigate();
   const [showAddSet, setShowAddSet] = useState(false);
@@ -19,10 +21,6 @@ function Sets(props) {
 
   function handleClick(setId) {
     navigate(`/library/sets/${setId}`)
-  }
-
-  if (!setNames) {
-    return (<div>Needs fixing</div>)
   }
 
   if (loading) {
@@ -53,7 +51,7 @@ function Sets(props) {
         }
         )}
       </ul>
-      {showAddSet && <AddSet user={user} setShowAddSet={setShowAddSet} setNames={setNames} />}
+      {showAddSet && <AddSet setShowAddSet={setShowAddSet} />}
     </>
   )
 }
