@@ -14,14 +14,18 @@ function EditConfirm(props) {
     setDisableEdit(true);
   }
 
-  function handleConfirmClick() {
+  async function handleConfirmClick() {
+    const possibleError = await saveData();
+    console.log(possibleError);
+    if (possibleError) {
+      console.log('inside error');
+      return;
+    }
     setShowConfirm(false);
     focusInput('');
     show(false);
     setDisableEdit(false);
-    if (saveData) {
-      saveData();
-    }
+
   }
 
   function empty() {
