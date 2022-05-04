@@ -1,10 +1,8 @@
 .Sets {
-  height: calc(100vh - 95px);
-  display: flex;
-  flex-direction: column;
-  
+
   &-sets {
     margin-top: 1.5rem;
+
     &-header {
       margin-left: 1rem;
       margin-bottom: 1rem;
@@ -37,6 +35,6 @@
       text-align: start;
       background-color: rgb(223, 223, 223);
     }
-    
+
   }
 }

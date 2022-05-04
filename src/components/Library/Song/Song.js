@@ -95,6 +95,7 @@ function Song(props) {
       }).sort();
       setSetArray(setsList)
     }
+    // else make the call to fetch the song data here and set the state from the call
 
   }, [song, setNames, setKnowledge, setNotes, setSongKey, setTitle, allSongs, params.songId])
 
