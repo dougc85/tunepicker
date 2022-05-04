@@ -23,6 +23,7 @@ function Song(props) {
   const [showNotesEdit, setShowNotesEdit] = useState(false);
   const [showSetsEdit, setShowSetsEdit] = useState(false);
   const [disableEdit, setDisableEdit] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
 
   const titleInput = useRef(null);
   const keyInput = useRef(null);
@@ -158,6 +159,21 @@ function Song(props) {
 
     const titleLower = title.toLowerCase();
 
+    if (title === '') {
+      setErrorMessage('Title Field Required');
+      return true;
+    }
+
+    if (titleLower.charAt(titleLower.length - 1) === '.' || titleLower[0] === '.') {
+      setErrorMessage("Can't start or end with '.'");
+      return true;
+    }
+
+    if (title.includes('..')) {
+      setErrorMessage("Title Must Not Include '..'");
+      return true;
+    }
+
     saveSongData('title', titleLower);
   }
 
@@ -243,6 +259,11 @@ function Song(props) {
     saveSongData('sets', newSetsObject);
   }
 
+  function handleTitleChangeAndError(e) {
+    setErrorMessage('');
+    handleTitleChange(e);
+  }
+
   if (loading || !song) {
     return (
       <Loading />
@@ -256,7 +277,8 @@ function Song(props) {
         <div className="Song-field Song-title">
           <label htmlFor="songTitle-songPage" className="Song-title-label Song-label">Title</label>
           <div className="Song-title-entry Song-entry">
-            <input style={{ display: (showTitleEdit ? 'block' : 'none') }} id="songTitle-songPage" ref={titleInput} onChange={handleTitleChange} type="text" className="Song-title-entry-input Song-input" value={title}></input>
+            <input autoComplete="off" style={{ display: (showTitleEdit ? 'block' : 'none') }} id="songTitle-songPage" ref={titleInput} onChange={handleTitleChangeAndError} type="text" className="Song-title-entry-input Song-input" value={title}></input>
+            {errorMessage && <p className="Song-title-entry-error">{errorMessage}</p>}
             <p style={{ display: (showTitleEdit ? 'none' : 'block') }} className="Song-value Song-title-entry-value">{capitalize(allSongs[params.songId].title)}</p>
           </div>
           <EditConfirm field="title" show={setShowTitleEdit} focusInput={focusInput} disableEdit={disableEdit} setDisableEdit={setDisableEdit} saveData={saveTitleData} />

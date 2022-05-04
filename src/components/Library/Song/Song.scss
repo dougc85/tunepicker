@@ -49,9 +49,23 @@
     padding-left: 15px;
   }
 
+  &-title-entry {
+    position: relative;
+
+    &-error {
+      position: absolute;
+      font-size: 1.2rem;
+      left: 1.3rem;
+      top: 2.9rem;
+      color: red;
+    }
+  }
+
+
+
   &-key-entry-input,
   &-knowledge-entry-input,
-  &-notes-entry-input  {
+  &-notes-entry-input {
     font-family: 'Nunito';
     transform: translateX(-5px);
   }
@@ -62,7 +76,7 @@
 
   &-knowledge-entry-value {
     align-items: center;
-    
+
     &-color {
       margin-left: 1rem;
       border: 1px solid rgb(97, 97, 97);
@@ -70,6 +84,7 @@
       width: 14px;
     }
   }
+
   &-notes {
 
     &-label {
@@ -87,11 +102,12 @@
         transform: translate(-6px, -6px);
         padding: 5px;
       }
-      
+
       &-value {
         white-space: pre-line;
         height: 7rem;
         overflow: scroll;
+
         &::after {
           position: absolute;
           top: 31px;
@@ -116,23 +132,26 @@
     &-entry {
       height: min-content;
       display: block;
+
       &-checkbox {
         list-style: none;
-  
+
         &-label {
           font-size: 1.5rem;
         }
+
         &-box {
           height: 1.5rem;
         }
       }
+
       &-value-set {
         margin-left: 1.5rem;
       }
     }
   }
 
-  
+
 
   &-delete {
     background-color: white;
