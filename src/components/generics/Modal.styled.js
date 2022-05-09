@@ -14,8 +14,9 @@ const Screen = styled.div`
 const Content = styled.div`
   position: fixed;
   width: 80%;
-  height: 80%;
-  top: 10%;
+  height: ${props => (props.contentHeight ? props.contentHeight : "80%")};
+  top: 50%;
+  transform: translateY(-50%);
   left: 10%;
   background-color: white;
   font-size: 2rem;
@@ -26,7 +27,7 @@ const Content = styled.div`
 
 function Modal(props) {
 
-  const { handleOutsideClick } = props;
+  const { handleOutsideClick, contentHeight } = props;
 
   return (
     <>
@@ -35,7 +36,7 @@ function Modal(props) {
         document.getElementById('screen-root')
       )}
       {ReactDOM.createPortal(
-        <Content>
+        <Content contentHeight={contentHeight}>
           {props.children}
         </Content>,
         document.getElementById('overlay-root')
