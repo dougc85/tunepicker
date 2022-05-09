@@ -19,7 +19,7 @@ function Set(props) {
   const songNames = (userDoc) ? userDoc.songNames : undefined;
   const allSongs = (userDoc) ? userDoc.songs : undefined;
 
-  const { showAlreadyInLibrary, setShowAlreadyInLibrary, setCurrentSong, currentSong, getSongData } = props;
+  const { showAlreadyInLibrary, setShowAlreadyInLibrary } = props;
   const params = useParams();
 
   const [showAddSong, setShowAddSong] = useState(false);
@@ -84,7 +84,7 @@ function Set(props) {
             {Object.keys(set.allSongs).map((songId) => {
               const song = allSongs[songId];
               return (
-                <SongEntry song={song} sortByDateAdded={false} key={songId} setCurrentSong={setCurrentSong} />
+                <SongEntry song={song} sortByDateAdded={false} key={songId} />
               )
             })}
           </SetSongs>
@@ -94,7 +94,7 @@ function Set(props) {
         </>
       )}
       <Routes>
-        <Route path=":songId" element={<Song song={currentSong} loading={loading} getSongData={getSongData} setNames={setNames} user={user} allSongs={allSongs} setCurrentSong={setCurrentSong} />} />
+        <Route path=":songId" element={<Song />} />
       </Routes>
     </>
   )

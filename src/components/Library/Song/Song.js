@@ -13,14 +13,20 @@ import EditConfirm from './EditConfirm/EditConfirm';
 
 function Song(props) {
 
+  // async function getSongData(id) {
+  //   const userFirebase = await getDoc(doc(db, 'users', user.uid));
+  //   const userData = userFirebase.data();
+  // }
+
   const context = useContext(SubContext);
   const { loading, userDoc, user } = context;
   const setNames = (userDoc) ? userDoc.setNames : undefined;
   const allSongs = (userDoc) ? userDoc.songs : undefined;
 
-  const { song, getSongData, setCurrentSong } = props;
   const params = useParams();
   const navigate = useNavigate();
+
+  const song = (allSongs) ? allSongs[params.songId] : undefined;
 
   //Hide/Show Inputs for fields
   const [showTitleEdit, setShowTitleEdit] = useState(false);
@@ -65,9 +71,9 @@ function Song(props) {
 
   const keys = ['C', 'Db', 'D', 'Eb', 'E', 'F', 'F#', 'G', 'Ab', 'A', 'Bb', 'B'];
 
-  if (!loading && !song) {
-    getSongData(params.songId);
-  }
+  // if (!loading && !song) {
+  //   getSongData(params.songId);
+  // }
 
   function capitalize(str) {
     return str.split(' ').map((word) => word[0].toUpperCase().concat(word.substring(1))).join(' ');
@@ -92,7 +98,7 @@ function Song(props) {
       setSongKey(song.songKey);
       setKnowledge(song.knowledge);
       setNotes(song.notes);
-      setTitle(capitalize(allSongs[params.songId].title));
+      setTitle(capitalize(song.title));
 
       const setsList = Object.keys(setNames).map((setId) => {
         if (song.sets[setId]) {
@@ -102,9 +108,8 @@ function Song(props) {
       }).sort();
       setSetArray(setsList)
     }
-    // else make the call to fetch the song data here and set the state from the call
 
-  }, [song, setNames, setKnowledge, setNotes, setSongKey, setTitle, allSongs, params.songId])
+  }, [song, setNames, setKnowledge, setNotes, setSongKey, setTitle])
 
   useEffect(() => {
     if (song) {
@@ -156,9 +161,6 @@ function Song(props) {
         [`songs.${song.id}.${fieldString}`]: inputData
       })
     }
-    setCurrentSong({
-      ...currentSong
-    });
   }
 
   async function saveTitleData() {

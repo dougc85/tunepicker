@@ -1,9 +1,12 @@
-import React from "react";
+import React, { useContext } from "react";
+import SubContext from "../../context/sub-context";
 import { useState } from "react";
 import './Welcome.scss';
 import LoginSignup from "../LoginSignup/LoginSignup";
 
-function Welcome(props) {
+function Welcome() {
+
+  const { setUser } = useContext(SubContext);
 
   const [buttonsStyle, setButtonsStyle] = useState({});
   const [authStyle, setAuthStyle] = useState({ transform: "translateX(50%)" });
@@ -62,7 +65,7 @@ function Welcome(props) {
           setLoginStyle={setLoginStyle}
           signupStyle={signupStyle}
           setSignupStyle={setSignupStyle}
-          setUser={props.setUser}
+          setUser={setUser}
         />
       </div>
     </div>

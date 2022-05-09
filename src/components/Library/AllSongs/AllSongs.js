@@ -5,31 +5,11 @@ import Path from '../Path/Path';
 import { AllSongsStyled } from './AllSongs.styled';
 import Loading from '../../Loading/Loading';
 
-function AllSongs(props) {
+function AllSongs() {
 
   const context = useContext(SubContext);
   const { userDoc, loading } = context;
   const allSongs = (userDoc) ? userDoc.songs : undefined;
-
-  const { setCurrentSong } = props;
-
-
-  //vvvvvv  Unnecessary????  vvvvvv
-  // useEffect(() => {
-  //   if (!user) {
-  //     return;
-  //   }
-
-  //   const unsubscribeSongs = onSnapshot(doc(db, 'users', user.uid), (doc) => {
-  //     setSongs(doc.data().songs);
-  //   })
-
-  //   return () => {
-  //     if (unsubscribeSongs) {
-  //       unsubscribeSongs();
-  //     }
-  //   }
-  // }, [user]);
 
   if (loading) {
     return (
@@ -44,7 +24,7 @@ function AllSongs(props) {
       {Object.keys(allSongs).map((songId) => {
         const songObj = allSongs[songId];
         return (
-          <SongEntry title={songObj.title} song={songObj} sortByDateAdded={false} key={songId} setCurrentSong={setCurrentSong} />
+          <SongEntry title={songObj.title} song={songObj} sortByDateAdded={false} key={songId} />
         )
       })}
     </AllSongsStyled>
