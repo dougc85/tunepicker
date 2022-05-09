@@ -1,4 +1,3 @@
-import './AddSet.scss';
 import { React, useState, useContext } from 'react';
 import SubContext from '../../../../context/sub-context';
 import {
@@ -6,6 +5,10 @@ import {
 } from 'firebase/firestore';
 import { db } from '../../../../firebaseConfig';
 import useFormInput from '../../../../hooks/useFormInput';
+import Modal from '../../../generics/Modal.styled';
+import { AddSetStyled, InputGrouping, ErrorMessage } from './AddSet.styled';
+import AddButton from '../../../generics/AddButton.styled';
+import { TitleInput } from '../../../AddSong/AddSong.styled';
 
 function AddSet(props) {
 
@@ -75,23 +78,22 @@ function AddSet(props) {
   }
 
   return (
-    <div className="AddSet">
-      <div onClick={handleCancel} className="AddSet-screen"></div>
-      <form action="" className="AddSet-form">
-        <legend className="AddSet-form-heading">
+    <Modal handleOutsideClick={handleCancel} contentHeight="15rem">
+      <AddSetStyled>
+        <legend>
           Add Set
         </legend>
-        <div className="AddSet-form-title">
-          <label className="AddSet-form-title-label" htmlFor="set-title">Title:</label>
-          <input required className="AddSet-form-title-input" onChange={handleTitleChangeAndDuplicates} value={title} id="set-title" type="text" name="set-title" autoComplete="off"></input>
-          {showError && <p className="AddSet-form-title-error">{errorMessage}</p>}
-        </div>
-        <div className="AddSet-form-buttons">
-          <button onClick={handleCancel} className="AddSet-form-cancel">Cancel</button>
-          <button disabled={disableForm} onClick={handleAdd} className="AddSet-form-add">Add</button>
-        </div>
-      </form>
-    </div>
+        <InputGrouping width="100%">
+          <label htmlFor="set-title">Title:</label>
+          <TitleInput required onChange={handleTitleChangeAndDuplicates} value={title} id="set-title" type="text" name="set-title" autoComplete="off"></TitleInput>
+          {showError && <ErrorMessage>{errorMessage}</ErrorMessage>}
+        </InputGrouping>
+        <InputGrouping width="80%">
+          <AddButton onClick={handleCancel}>Cancel</AddButton>
+          <AddButton disabled={disableForm} onClick={handleAdd}>Add</AddButton>
+        </InputGrouping>
+      </AddSetStyled>
+    </Modal>
   )
 }
 

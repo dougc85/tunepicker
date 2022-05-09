@@ -1,8 +1,7 @@
-import './Sets.scss';
 import { React, useState, useContext } from 'react';
 import SubContext from '../../../context/sub-context';
 import { useNavigate } from 'react-router-dom';
-
+import { SetsStyled, SetsHeader } from './Sets.styled';
 import AddSet from './AddSet/AddSet';
 import Path from '../Path/Path';
 import Loading from '../../Loading/Loading';
@@ -32,11 +31,11 @@ function Sets() {
   return (
     <>
       <Path heading="Sets" pathType="Sets" />
-      <ul className="Sets-sets">
-        <div className="Sets-sets-header">
-          <h2 className="Sets-sets-header-heading">Sets</h2>
-          <button onClick={handleAddButton} className="Sets-sets-header-add">Add a Set</button>
-        </div>
+      <SetsHeader>
+        <h2>Sets</h2>
+        <button onClick={handleAddButton}>Add a Set</button>
+      </SetsHeader>
+      <SetsStyled>
         {Object.keys(setNames).sort((id1, id2) => {
           if (setNames[id1] < setNames[id2]) {
             return -1;
@@ -44,13 +43,13 @@ function Sets() {
           return 1;
         }).map((setId) => {
           return (
-            <li onClick={() => { handleClick(setId) }} className="Sets-sets-set" key={setId}>
+            <li onClick={() => { handleClick(setId) }} key={setId}>
               {setNames[setId]}
             </li>
           )
         }
         )}
-      </ul>
+      </SetsStyled>
       {showAddSet && <AddSet setShowAddSet={setShowAddSet} />}
     </>
   )

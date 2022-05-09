@@ -1,4 +1,4 @@
-import { React, useState, useContext } from 'react';
+import { React, useState } from 'react';
 import PickController from './components/PickController/PickController';
 import { Routes, Route } from 'react-router-dom';
 import Header from './components/Header/Header';
@@ -9,11 +9,6 @@ import Set from './components/Library/Set/Set';
 import Sets from './components/Library/Sets/Sets';
 import AllSongs from './components/Library/AllSongs/AllSongs';
 import Song from './components/Library/Song/Song';
-import { db } from './firebaseConfig';
-import SubContext from './context/sub-context';
-import {
-  doc, getDoc
-} from 'firebase/firestore';
 import GlobalStyles from './GlobalStyles';
 
 
