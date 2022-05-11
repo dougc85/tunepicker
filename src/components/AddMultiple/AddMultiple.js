@@ -20,7 +20,9 @@ function AddMultiple(props) {
 
 
   function handleCancel(e) {
-    e.preventDefault();
+    if (e) {
+      e.preventDefault();
+    }
     resetSongList();
     setShowAddMultiple(false);
   }
