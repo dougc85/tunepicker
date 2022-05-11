@@ -23,6 +23,14 @@
     margin-bottom: -1rem;
   }
 
+  &-inputs {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    margin-bottom: 1.5rem;
+    position: relative;
+  }
+
   &-email {
     width: 100%;
     font-size: 2rem;
@@ -38,10 +46,11 @@
   }
 
   &-error {
-    font-size: 2rem;
+    position: absolute;
+    font-size: 1.5rem;
     color: red;
-    padding-left: .5rem;
-    margin-top: .3rem;
+    bottom: -2.3rem;
+    left: .5rem;
   }
 
   &-submit {
@@ -50,7 +59,7 @@
     padding: 1rem;
     font-size: 2rem;
     display: block;
-    width: 13rem;
+    width: 16rem;
     align-self: center;
     border-radius: 3px;
 
