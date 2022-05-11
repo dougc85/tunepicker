@@ -146,25 +146,25 @@ function LoginSignupForm(props) {
   const handleChange = (event) => {
     dispatch({
       type: 'HANDLE_INPUT',
-      field: event.target.name,
+      field: event.target.dataset.field,
       payload: event.target.value,
       form: formType,
     })
   }
 
   return (
-    <div className={`LoginSignupForm LoginSignupForm-${formType}`} style={formStyle}>
+    <form className={`LoginSignupForm LoginSignupForm-${formType}`} style={formStyle}>
       <legend className="LoginSignupForm-legend">{legend}</legend>
       <div className="LoginSignupForm-inputs">
         <label htmlFor={`email-${formType}`}>email</label>
-        <input className="LoginSignupForm-email" onChange={handleChange} value={email} type="text" name="email" id={`email-${formType}`} />
+        <input className="LoginSignupForm-email" autoComplete={formType === 'login' ? 'username' : null} onChange={handleChange} value={email} type="text" name={`${formType}-email`} data-field="email" id={`email-${formType}`} />
         <label htmlFor={`password-${formType}`}>password</label>
-        <Password id={`password-${formType}`} handleChange={handleChange} password={password} showPassword={showPassword} toggleShowPassword={toggleShowPassword} />
+        <Password id={`password-${formType}`} formType={formType} handleChange={handleChange} password={password} showPassword={showPassword} toggleShowPassword={toggleShowPassword} />
         {errorMessage && <p className="LoginSignupForm-error" >{`*${errorMessage}`}</p>}
       </div>
       <button onClick={submit} className={`LoginSignupForm-submit LoginSignupForm-submit-${formType}`}>{submitMessage}</button>
       <button className="LoginSignupForm-switch" id={`switch-from-${formType}`} onClick={switchAuth}>{switchMessage}</button>
-    </div>
+    </form>
   )
 }
 

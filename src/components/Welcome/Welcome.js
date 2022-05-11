@@ -2,7 +2,7 @@ import React, { useContext } from "react";
 import SubContext from "../../context/sub-context";
 import { useState } from "react";
 import LoginSignup from "../LoginSignup/LoginSignup";
-import { WelcomeStyled, WelcomeButtons, WelcomeButton } from "./Welcome.styled";
+import { WelcomeStyled, WelcomeButtons, WelcomeButton, WelcomeBackground } from "./Welcome.styled";
 
 function Welcome() {
 
@@ -43,33 +43,34 @@ function Welcome() {
   }
 
   return (
-    <WelcomeStyled>
-      <h1>tunePicker</h1>
-      <p>
-        You're trying to decide what song to play next on your gig. Unfortunately, you can only ever
-        think of the same three tunes, even though you know hundreds. You need a tunePicker!
-      </p>
-      <div>
-        <WelcomeButtons leftStyle={buttonsStyle.left} transformStyle={buttonsStyle.transform}>
-          <WelcomeButton onClick={removeButtons} id="login">
-            Log In
-          </WelcomeButton>
-          <WelcomeButton onClick={removeButtons} id="signup">
-            Sign Up
-          </WelcomeButton>
-        </WelcomeButtons>
-        <LoginSignup
-          authStyle={authStyle}
-          setAuthStyle={setAuthStyle}
-          loginStyle={loginStyle}
-          setLoginStyle={setLoginStyle}
-          signupStyle={signupStyle}
-          setSignupStyle={setSignupStyle}
-          setUser={setUser}
-        />
-      </div>
-    </WelcomeStyled >
-
+    <WelcomeBackground>
+      <WelcomeStyled>
+        <h1>tunePicker</h1>
+        <p>
+          You're trying to decide what song to play next on your gig. Unfortunately, you can only ever
+          think of the same three tunes, even though you know hundreds. You need a tunePicker!
+        </p>
+        <div>
+          <WelcomeButtons leftStyle={buttonsStyle.left} transformStyle={buttonsStyle.transform}>
+            <WelcomeButton onClick={removeButtons} id="login">
+              Log In
+            </WelcomeButton>
+            <WelcomeButton onClick={removeButtons} id="signup">
+              Sign Up
+            </WelcomeButton>
+          </WelcomeButtons>
+          <LoginSignup
+            authStyle={authStyle}
+            setAuthStyle={setAuthStyle}
+            loginStyle={loginStyle}
+            setLoginStyle={setLoginStyle}
+            signupStyle={signupStyle}
+            setSignupStyle={setSignupStyle}
+            setUser={setUser}
+          />
+        </div>
+      </WelcomeStyled >
+    </WelcomeBackground>
   )
 }
 

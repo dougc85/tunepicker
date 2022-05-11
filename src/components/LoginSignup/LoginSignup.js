@@ -25,10 +25,10 @@ function LoginSignup(props) {
 
 
   return (
-    <form action="" className="LoginSignup" style={authStyle}>
+    <div action="" className="LoginSignup" style={authStyle}>
       <LoginSignupForm formStyle={loginStyle} legend="Log In" submitMessage="Enter" switchAuth={switchAuth} formType="login" switchMessage={"Need to create an account?"} />
       <LoginSignupForm formStyle={signupStyle} legend="Sign Up" submitMessage="Create Account" switchAuth={switchAuth} formType="signup" setUser={setUser} switchMessage={"Already Have An Account?"} />
-    </form>
+    </div>
   )
 }
 

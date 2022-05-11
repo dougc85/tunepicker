@@ -4,12 +4,10 @@ import { fonts } from '../../partials/variables.styled';
 export const WelcomeStyled = styled.div`
   padding: 0 2rem 0 2rem;
   box-sizing: border-box;
-  background-image: linear-gradient(to right, #cce9d8, #d5ecd8, #def0d9, #e8f3db, #f1f6dd, #f6f6de, #faf6df, #fef6e0, #fef4e0, #fef1e0, #fdefe1, #fcede1);
   height: ${window.innerHeight}px;
   display: flex;
   flex-direction: column;
   justify-content: space-evenly;
-  overflow: hidden;
 
 
   h1 {
@@ -24,7 +22,7 @@ export const WelcomeStyled = styled.div`
 
   > div {
     position: relative;
-    height: 30rem;
+    height: 33rem;
   }
 `
 
@@ -52,4 +50,10 @@ export const WelcomeButton = styled.button`
   margin: 0 auto;
   margin-bottom: ${({ id }) => id === 'login' ? '0' : '0'};
   width: 20rem;
+`
+
+export const WelcomeBackground = styled.div`
+  height: 100vh;
+  overflow: hidden;
+  background-image: linear-gradient(to right, #cce9d8, #d5ecd8, #def0d9, #e8f3db, #f1f6dd, #f6f6de, #faf6df, #fef6e0, #fef4e0, #fef1e0, #fdefe1, #fcede1);
 `
