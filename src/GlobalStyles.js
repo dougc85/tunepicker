@@ -23,6 +23,10 @@ const GlobalStyles = createGlobalStyle`
     overflow-x: hidden;
     height: 100vh;
   }
+
+  button {
+    color: black;
+  }
 `;
 
 export default GlobalStyles;
