@@ -3,7 +3,7 @@ import './LoginSignupForm.scss';
 import Password from '../../Password/Password';
 import { auth, db } from '../../../firebaseConfig';
 import {
-  signInWithEmailAndPassword, createUserWithEmailAndPassword
+  signInWithEmailAndPassword, createUserWithEmailAndPassword, sendEmailVerification
 } from 'firebase/auth';
 import {
   doc,
@@ -39,7 +39,7 @@ const loginSignupInitialValues = {
 
 function LoginSignupForm(props) {
 
-  const { formType, formStyle, legend, submitMessage, switchAuth, setUser, switchMessage } = props;
+  const { formType, formStyle, legend, submitMessage, switchAuth, switchMessage } = props;
 
   const [state, dispatch] = useReducer(loginSignupReducer, loginSignupInitialValues);
 
@@ -64,7 +64,7 @@ function LoginSignupForm(props) {
     e.preventDefault();
 
     try {
-      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      await signInWithEmailAndPassword(auth, email, password);
     } catch (error) {
       showLoginError(error);
     }
@@ -129,7 +129,8 @@ function LoginSignupForm(props) {
         },
       });
 
-      setUser(userCredential.user);
+      sendEmailVerification(auth.currentUser);
+
     }
     catch (error) {
       console.log(error);

@@ -5,6 +5,7 @@ import {
   doc, onSnapshot,
 } from 'firebase/firestore';
 import { useNavigate, useLocation } from 'react-router-dom';
+import VerifyEmail from '../components/VerifyEmail/VerifyEmail';
 
 const defaultContext = {
   user: undefined,
@@ -26,13 +27,12 @@ export const SubContextProvider = (props) => {
   const navigate = useNavigate();
   const location = useLocation();
 
-
   useEffect(() => {
 
     const unsubAuthChange = onAuthStateChanged(auth, currentUser => {
       if (currentUser) {
         setUser(currentUser);
-        if (location.pathname === '/welcome' || location.pathname === '/signup') {
+        if (location.pathname === '/welcome') {
           navigate('/');
         }
         else {
@@ -41,7 +41,7 @@ export const SubContextProvider = (props) => {
       }
       else {
         setUser('');
-        if (location.pathname !== '/signup') {
+        if (location.pathname !== '/welcome') {
           navigate('/welcome');
         }
       }
@@ -90,8 +90,6 @@ export const SubContextProvider = (props) => {
     }
   }, [pickerSet]);
 
-
-
   return (
     <SubContext.Provider
       value={{
@@ -101,6 +99,7 @@ export const SubContextProvider = (props) => {
         setPickerSet,
         loading,
       }}>
+      {user && !user.emailVerified && <VerifyEmail />}
       {props.children}
     </SubContext.Provider>
   )
