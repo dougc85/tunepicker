@@ -14,7 +14,7 @@ function AddSet(props) {
 
   const { user, userDoc } = useContext(SubContext);
 
-  const setNames = (userDoc) ? userDoc.setNames : undefined;
+  const { setNames } = userDoc;
 
   const { setShowAddSet } = props;
   const [disableForm, setDisableForm] = useState(false);

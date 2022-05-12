@@ -9,7 +9,7 @@ function AllSongs() {
 
   const context = useContext(SubContext);
   const { userDoc, loading } = context;
-  const allSongs = (userDoc) ? userDoc.songs : undefined;
+  const { songs: allSongs } = userDoc;
 
   if (loading) {
     return (

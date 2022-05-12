@@ -9,7 +9,7 @@ function PickController() {
 
   const context = useContext(SubContext);
   const { pickerSet, setPickerSet, loading, userDoc } = context;
-  const allSongs = (userDoc) ? userDoc.songs : undefined;
+  const allSongs = userDoc.songs;
 
   const ORANGE = 'hsl(26, 100%, 67%)';
   const YELLOW = 'hsl(54, 98%, 66%)';
