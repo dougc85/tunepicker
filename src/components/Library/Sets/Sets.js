@@ -9,7 +9,7 @@ import Loading from '../../Loading/Loading';
 function Sets() {
 
   const { userDoc, loading } = useContext(SubContext);
-  const setNames = (userDoc) ? userDoc.setNames : undefined;
+  const { setNames } = userDoc;
 
   const navigate = useNavigate();
   const [showAddSet, setShowAddSet] = useState(false);

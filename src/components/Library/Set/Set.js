@@ -15,9 +15,8 @@ import { SetSongs, SetSongsHeader } from './SetSongs.styled';
 function Set(props) {
 
   const { user, userDoc, loading } = useContext(SubContext);
-  const setNames = (userDoc) ? userDoc.setNames : undefined;
-  const songNames = (userDoc) ? userDoc.songNames : undefined;
-  const allSongs = (userDoc) ? userDoc.songs : undefined;
+
+  const { songNames, songs: allSongs } = userDoc;
 
   const { showAlreadyInLibrary, setShowAlreadyInLibrary } = props;
   const params = useParams();

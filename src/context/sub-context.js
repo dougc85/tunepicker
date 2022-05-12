@@ -21,7 +21,12 @@ const SubContext = React.createContext(defaultContext);
 export const SubContextProvider = (props) => {
 
   const [user, setUser] = useState('');
-  const [userDoc, setUserDoc] = useState(undefined);
+  const [userDoc, setUserDoc] = useState({
+    songs: undefined,
+    setNames: undefined,
+    songNames: undefined,
+    defaultSet: undefined,
+  });
   const [pickerSet, setPickerSet] = useState(undefined);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
@@ -69,7 +74,7 @@ export const SubContextProvider = (props) => {
   }, [user]);
 
   useEffect(() => {
-    if (!userDoc || !user.uid || !userDoc.defaultSet) {
+    if (!user.uid || !userDoc.defaultSet) {
       return;
     }
     const unsubscribeSetDoc = onSnapshot(doc(db, 'users', user.uid, 'sets', userDoc.defaultSet), (doc) => {
@@ -82,7 +87,7 @@ export const SubContextProvider = (props) => {
       }
     }
 
-  }, [userDoc, user.uid]);
+  }, [user.uid, userDoc.defaultSet]);
 
   useEffect(() => {
     if (pickerSet) {

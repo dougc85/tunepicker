@@ -20,8 +20,7 @@ function Song(props) {
 
   const context = useContext(SubContext);
   const { loading, userDoc, user } = context;
-  const setNames = (userDoc) ? userDoc.setNames : undefined;
-  const allSongs = (userDoc) ? userDoc.songs : undefined;
+  const { setNames, songs: allSongs } = userDoc;
 
   const params = useParams();
   const navigate = useNavigate();
