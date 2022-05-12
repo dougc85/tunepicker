@@ -1,6 +1,6 @@
 import { React, useState, useEffect, useContext } from 'react';
 import SubContext from '../../../context/sub-context';
-import { onSnapshot, doc } from 'firebase/firestore';
+import { onSnapshot, doc, updateDoc } from 'firebase/firestore';
 import { db } from '../../../firebaseConfig';
 import { useParams, Routes, Route } from 'react-router-dom';
 import AddSong from '../../AddSong/AddSong';
@@ -32,6 +32,18 @@ function Set(props) {
 
   function handleAddMultipleButton(e) {
     setShowAddMultiple(true);
+  }
+
+  async function setAsPicker(e) {
+    try {
+      const userDocRef = doc(db, 'users', user.uid);
+      await updateDoc(userDocRef, {
+        pickerSet: set.id,
+      })
+    }
+    catch (error) {
+      console.log(error.message);
+    }
   }
 
   useEffect(() => {
@@ -78,6 +90,7 @@ function Set(props) {
               <h2>Songs</h2>
               <button onClick={handleAddButton}>Add a Song</button>
               <button onClick={handleAddMultipleButton} >Add Multiple Songs</button>
+              <button onClick={setAsPicker} >Set as Picker Set</button>
             </SetSongsHeader>
 
             {Object.keys(set.allSongs).map((songId) => {

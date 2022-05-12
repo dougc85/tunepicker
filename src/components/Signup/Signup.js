@@ -52,7 +52,7 @@ function Signup(props) {
         defaultSet,
       );
       await updateDoc(userDoc, {
-        defaultSet: newSetDoc.id,
+        pickerSet: newSetDoc.id,
         setNames: {
           [newSetDoc.id]: "First Set",
         },

@@ -25,7 +25,7 @@ export const SubContextProvider = (props) => {
     songs: undefined,
     setNames: undefined,
     songNames: undefined,
-    defaultSet: undefined,
+    pickerSet: undefined,
   });
   const [pickerSet, setPickerSet] = useState(undefined);
   const [loading, setLoading] = useState(true);
@@ -74,11 +74,11 @@ export const SubContextProvider = (props) => {
   }, [user]);
 
   useEffect(() => {
-    if (!user.uid || !userDoc.defaultSet) {
+    if (!user.uid || !userDoc.pickerSet) {
       return;
     }
-    const unsubscribeSetDoc = onSnapshot(doc(db, 'users', user.uid, 'sets', userDoc.defaultSet), (doc) => {
-      setPickerSet({ ...doc.data(), id: userDoc.defaultSet });
+    const unsubscribeSetDoc = onSnapshot(doc(db, 'users', user.uid, 'sets', userDoc.pickerSet), (doc) => {
+      setPickerSet({ ...doc.data(), id: userDoc.pickerSet });
     });
 
     return () => {
@@ -87,7 +87,7 @@ export const SubContextProvider = (props) => {
       }
     }
 
-  }, [user.uid, userDoc.defaultSet]);
+  }, [user.uid, userDoc.pickerSet]);
 
   useEffect(() => {
     if (pickerSet) {
