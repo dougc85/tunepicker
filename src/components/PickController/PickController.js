@@ -30,7 +30,7 @@ function PickController() {
   const [showNoSongs, setShowNoSongs] = useState(false);
 
   useEffect(() => {
-    if (pickerSet) {
+    if (!loading) {
 
       if (Object.keys(pickerSet.allSongs).length === 0) {
         setShowNoSongs(true);
@@ -47,6 +47,8 @@ function PickController() {
   }, [loading]);
 
   useEffect(() => {
+    console.log('in use effect??');
+    console.log(initialList, 'initialList');
     if (initialList) {
       pickTune(initialList);
     }
@@ -150,6 +152,8 @@ function PickController() {
       (listToPickFrom === 'med') ?
         { list: pickerSet.currentMedium, name: 'currentMedium' } :
         { list: pickerSet.currentKnow, name: 'currentKnow' };
+
+    console.log(current, 'current');
     const choicePosition = Math.floor(Math.random() * current.list.length);
     const choice = current.list[choicePosition];
 
