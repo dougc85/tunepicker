@@ -9,6 +9,7 @@ function Nav(props) {
   const { toggleNav } = props;
 
   function handleLogOut() {
+    toggleNav();
     signOut(auth).then(() => {
 
     })
