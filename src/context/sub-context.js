@@ -55,7 +55,7 @@ export const SubContextProvider = (props) => {
     return () => {
       unsubAuthChange();
     }
-  }, [location.pathname, navigate]);
+  }, []);
 
   useEffect(() => {
 
