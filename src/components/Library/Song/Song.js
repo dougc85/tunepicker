@@ -117,7 +117,7 @@ function Song(props) {
         navigate(`/library/allsongs/${song.id}`);
       }
     }
-  }, [song, params.setId, navigate])
+  }, [song, params.setId, navigate, location.pathname])
 
   function handleCheckboxChange(e) {
     setSetArray((oldSets) => {
