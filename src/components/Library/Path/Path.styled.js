@@ -11,6 +11,12 @@ export const PathStyled = styled.div`
     margin-left: 3px;
   }
 
+  button {
+    display: block;
+    background-color: white;
+    border: none;
+  }
+
   .Path-icon {
     width: 2rem;
     display: block;
