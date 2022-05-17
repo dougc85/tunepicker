@@ -1,5 +1,6 @@
 import { React } from 'react';
 import { PathStyled } from './Path.styled';
+import { useNavigate } from 'react-router-dom';
 
 function Path(props) {
 
@@ -13,17 +14,36 @@ function Path(props) {
     true :
     false;
 
+  const navigate = useNavigate();
+
+  function toLibrary() {
+    navigate(`/library/`)
+  }
+
+  function toSets() {
+    navigate(`/library/sets`);
+  }
+
+  function toAllSongs() {
+    navigate(`/library/allsongs`);
+  }
+
   function pathGenerator() {
 
     const libraryIcon =
-      <svg className="Path-icon Path-icon-library" viewBox="0 0 24 24">
-        <path fill="currentColor" d="M9 3V18H12V3H9M12 5L16 18L19 17L15 4L12 5M5 5V18H8V5H5M3 19V21H21V19H3Z" />
-      </svg>
+      <button onClick={toLibrary}>
+        <svg className="Path-icon Path-icon-library" viewBox="0 0 24 24">
+          <path fill="currentColor" d="M9 3V18H12V3H9M12 5L16 18L19 17L15 4L12 5M5 5V18H8V5H5M3 19V21H21V19H3Z" />
+        </svg>
+      </button>
 
     const setsIcon =
-      <svg className="Path-icon Path-icon-book" viewBox="0 0 24 24">
-        <path fill="currentColor" d="M18,22A2,2 0 0,0 20,20V4C20,2.89 19.1,2 18,2H12V9L9.5,7.5L7,9V2H6A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H18Z" />
-      </svg>;
+      <button onClick={toSets}>
+        <svg className="Path-icon Path-icon-book" viewBox="0 0 24 24">
+          <path fill="currentColor" d="M18,22A2,2 0 0,0 20,20V4C20,2.89 19.1,2 18,2H12V9L9.5,7.5L7,9V2H6A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H18Z" />
+        </svg>
+      </button>
+
 
     const setIcon =
       <svg className="Path-icon Path-icon-doc" viewBox="0 0 24 24">
@@ -31,9 +51,12 @@ function Path(props) {
       </svg>;
 
     const allSongsIcon =
-      <svg className="Path-icon Path-icon-book Path-icon-book-music" viewBox="0 0 24 24">
-        <path fill="currentColor" d="M13 20.5C13 21.03 13.09 21.53 13.26 22H6C4.89 22 4 21.11 4 20V4C4 2.9 4.89 2 6 2H7V9L9.5 7.5L12 9V2H18C19.1 2 20 2.89 20 4V11H16.5V16.11C14.5 16.57 13 18.36 13 20.5M20 13H18.5V18.21C18.19 18.07 17.86 18 17.5 18C16.12 18 15 19.12 15 20.5S16.12 23 17.5 23 20 21.88 20 20.5V15H22V13H20Z" />
-      </svg>
+      <button onClick={toAllSongs}>
+        <svg className="Path-icon Path-icon-book Path-icon-book-music" viewBox="0 0 24 24">
+          <path fill="currentColor" d="M13 20.5C13 21.03 13.09 21.53 13.26 22H6C4.89 22 4 21.11 4 20V4C4 2.9 4.89 2 6 2H7V9L9.5 7.5L12 9V2H18C19.1 2 20 2.89 20 4V11H16.5V16.11C14.5 16.57 13 18.36 13 20.5M20 13H18.5V18.21C18.19 18.07 17.86 18 17.5 18C16.12 18 15 19.12 15 20.5S16.12 23 17.5 23 20 21.88 20 20.5V15H22V13H20Z" />
+        </svg>
+      </button>
+
 
     const songIcon =
       <svg className="Path-icon Path-icon-music" viewBox="0 0 24 24">

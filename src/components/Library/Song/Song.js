@@ -1,7 +1,7 @@
 import './Song.scss';
 import React, { useState, useContext, useEffect, useRef } from 'react';
 import SubContext from '../../../context/sub-context';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import {
   doc, updateDoc, deleteField, arrayUnion, arrayRemove,
 } from 'firebase/firestore';
@@ -24,6 +24,7 @@ function Song(props) {
 
   const params = useParams();
   const navigate = useNavigate();
+  const location = useLocation();
 
   const song = (allSongs) ? allSongs[params.songId] : undefined;
 
@@ -112,7 +113,7 @@ function Song(props) {
 
   useEffect(() => {
     if (song) {
-      if (!song.sets.hasOwnProperty(params.setId)) {
+      if (!song.sets.hasOwnProperty(params.setId) && location.pathname.slice(9, 17) !== 'allsongs') {
         navigate(`/library/allsongs/${song.id}`);
       }
     }
