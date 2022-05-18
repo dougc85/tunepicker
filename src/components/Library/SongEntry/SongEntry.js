@@ -25,9 +25,9 @@ function SongEntry(props) {
   }
 
   return (
-    <div onClick={handleClick} className="SongEntry" style={{ backgroundColor: bgColor }}>
+    <li onClick={handleClick} className="SongEntry" style={{ backgroundColor: bgColor }}>
       <p className="SongEntry-title">{titleCapitalized}</p>
-    </div>
+    </li>
   )
 }
 
