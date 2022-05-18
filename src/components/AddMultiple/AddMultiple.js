@@ -139,7 +139,7 @@ function AddMultiple(props) {
             add a list of songs to any number of sets as well as allowing you to set the knowledge level of the group yourself.
             Any songs that you list which are already to be found in your library will be imported into this set with all their
             current settings intact.
-            Songs cannot use the following characters: ~, *, /, [, or ]
+            Songs cannot use the following characters: <span>~ * / [ ]</span>
           </p>
           <textarea name="" id="" cols="30" rows="10" value={songList} onChange={handleSongListChange}></textarea>
           <AddMultipleButtonsStyled>

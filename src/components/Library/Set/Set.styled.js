@@ -3,6 +3,15 @@ import styled from 'styled-components';
 export const SetStyled = styled.div`
   margin-top: 1.5rem;
 
+  >p {
+    font-size: 1.5rem;
+    color: #5a5a5a;
+    text-align: start;
+    margin-left: 1.5rem;
+    margin-top: -1rem;
+    margin-bottom: 1rem;
+  }
+
   h3 {
     margin-left: 1rem;
     margin-bottom: 1rem;

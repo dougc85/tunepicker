@@ -14,17 +14,17 @@ const LibraryMenuStyled = styled.div`
   }
 
   ul {
-    height: 15rem;
+    height: ${({ menuLength }) => `calc(${menuLength}*5rem)`};
     background-color: white;
     position: absolute;
     left: -3rem;
     top: 3rem;
-    width: 15rem;
+    width: 18rem;
     box-shadow: -2px 10px 10px rgba(0,0,0,.2);
     padding: 1.5rem .5rem;
-    z-index: 10;
+    z-index: 150;
     list-style: none;
-    font-size: 1.2rem;
+    font-size: 1.5rem;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -40,39 +40,53 @@ const LibraryMenuStyled = styled.div`
       border-top: 1px solid rgb(190, 190, 190);
       width: 70%;
       position: absolute;
-      bottom: -.8rem;
+      bottom: -1.6rem;
       left: 50%;
       transform: translateX(-50%);
     }
   }
 `
 
+const Screen = styled.div`
+  position: fixed;
+  height: 100vh;
+  width: 100vw;
+  top: 0;
+  left: 0;
+  background-color: #0000001f;
+  z-index: 100;
+`
+
 function LibraryMenu(props) {
 
-  const [showMenu, setShowMenu] = useState(true);
+  const [showMenu, setShowMenu] = useState(false);
 
   function handleClick() {
     setShowMenu((old) => !old);
   }
 
   return (
-    <LibraryMenuStyled>
+    <LibraryMenuStyled menuLength={props.items.length}>
       <button>
         <svg onClick={handleClick} viewBox="0 0 24 24">
           <path fill="currentColor" d="M12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22A10,10 0 0,1 2,12A10,10 0 0,1 12,2M12,4A8,8 0 0,0 4,12A8,8 0 0,0 12,20A8,8 0 0,0 20,12A8,8 0 0,0 12,4M12,10.5A1.5,1.5 0 0,1 13.5,12A1.5,1.5 0 0,1 12,13.5A1.5,1.5 0 0,1 10.5,12A1.5,1.5 0 0,1 12,10.5M7.5,10.5A1.5,1.5 0 0,1 9,12A1.5,1.5 0 0,1 7.5,13.5A1.5,1.5 0 0,1 6,12A1.5,1.5 0 0,1 7.5,10.5M16.5,10.5A1.5,1.5 0 0,1 18,12A1.5,1.5 0 0,1 16.5,13.5A1.5,1.5 0 0,1 15,12A1.5,1.5 0 0,1 16.5,10.5Z" />
         </svg>
       </button>
       {showMenu && (
-        <ul>
-          {props.items.map(item => (
-            <li key={item.text} onClick={() => {
-              setShowMenu(false);
-              item.func();
-            }}>
-              {item.text}
-            </li>
-          ))}
-        </ul>)}
+        <>
+          <Screen onClick={() => { setShowMenu(false) }} />
+          <ul>
+            {props.items.map(item => (
+              <li key={item.text} onClick={() => {
+                setShowMenu(false);
+                item.func();
+              }}>
+                {item.text}
+              </li>
+            ))}
+          </ul>
+        </>
+      )}
     </LibraryMenuStyled>
   )
 }
