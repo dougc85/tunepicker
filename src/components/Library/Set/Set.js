@@ -10,7 +10,8 @@ import Loading from '../../Loading/Loading';
 import AlreadyInLibrary from '../../AlreadyInLibrary/AlreadyInLibrary';
 import Path from '../Path/Path';
 import Song from '../Song/Song';
-import { SetSongs, SetSongsHeader } from './SetSongs.styled';
+import { SetStyled, SetHeader, SetSongsHeader } from './Set.styled';
+import LibraryMenu from '../../../components/generics/LibraryMenu.styled';
 
 function Set(props) {
 
@@ -85,21 +86,28 @@ function Set(props) {
       {renderSet && (
         <>
           <Path heading={set.setName} pathType="Set" />
-          <SetSongs>
-            <SetSongsHeader>
-              <h2>Songs</h2>
-              <button onClick={handleAddButton}>Add a Song</button>
-              <button onClick={handleAddMultipleButton} >Add Multiple Songs</button>
-              <button onClick={setAsPicker} >Set as Picker Set</button>
-            </SetSongsHeader>
-
-            {Object.keys(set.allSongs).map((songId) => {
-              const song = allSongs[songId];
-              return (
-                <SongEntry song={song} sortByDateAdded={false} key={songId} />
-              )
-            })}
-          </SetSongs>
+          <SetStyled>
+            <SetHeader>
+              <h2>{set.setName}</h2>
+              <LibraryMenu
+                items={[
+                  { text: 'Set As PickerSet', func: setAsPicker },
+                  { text: 'Add New Song', func: handleAddButton },
+                  { text: 'Add Multiple New Songs', func: handleAddMultipleButton },
+                  { text: 'Add Songs From Your Library', func: () => { } },
+                ]}
+              />
+            </SetHeader>
+            <h3>Songs</h3>
+            <ul>
+              {Object.keys(set.allSongs).map((songId) => {
+                const song = allSongs[songId];
+                return (
+                  <SongEntry song={song} sortByDateAdded={false} key={songId} />
+                )
+              })}
+            </ul>
+          </SetStyled>
           {showAddSong && <AddSong set={set} songNames={songNames} setShowAddSong={setShowAddSong} user={user} setShowAlreadyInLibrary={setShowAlreadyInLibrary} setSongConsidered={setSongConsidered} />}
           {showAddMultiple && <AddMultiple set={set} setShowAddMultiple={setShowAddMultiple} songNames={songNames} user={user} allSongs={allSongs} />}
           {showAlreadyInLibrary && <AlreadyInLibrary songConsidered={songConsidered} set={set} />}

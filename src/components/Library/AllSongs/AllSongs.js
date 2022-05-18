@@ -21,12 +21,14 @@ function AllSongs() {
 
     <AllSongsStyled>
       <Path heading="All Songs" pathType="All Songs" />
-      {Object.keys(allSongs).map((songId) => {
-        const songObj = allSongs[songId];
-        return (
-          <SongEntry title={songObj.title} song={songObj} sortByDateAdded={false} key={songId} />
-        )
-      })}
+      <ul>
+        {Object.keys(allSongs).map((songId) => {
+          const songObj = allSongs[songId];
+          return (
+            <SongEntry title={songObj.title} song={songObj} sortByDateAdded={false} key={songId} />
+          )
+        })}
+      </ul>
     </AllSongsStyled>
   )
 }

@@ -1,6 +1,8 @@
 .SongEntry {
-    padding: 1rem;
-    border-bottom: .5px solid rgb(10, 10, 10);
+  padding: 1rem;
+  border-bottom: .5px solid rgb(10, 10, 10);
+  list-style: none;
+
   &-title {
     font-size: 2rem;
     text-align: start;
