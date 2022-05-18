@@ -16,6 +16,11 @@ export const AddMultipleStyled = styled.form`
 
   p {
     font-size: 1rem;
+    span {
+      display: block;
+      letter-spacing: 7px;
+      font-weight: bold;
+    }
   }
 
   textarea {

@@ -15,7 +15,7 @@ import LibraryMenu from '../../../components/generics/LibraryMenu.styled';
 
 function Set(props) {
 
-  const { user, userDoc, loading } = useContext(SubContext);
+  const { user, userDoc, loading, pickerSet } = useContext(SubContext);
 
   const { songNames, songs: allSongs } = userDoc;
 
@@ -81,6 +81,19 @@ function Set(props) {
     )
   }
 
+  const libraryMenuItems = (set.setName === pickerSet.setName) ?
+    [
+      { text: 'Add New Song', func: handleAddButton },
+      { text: 'Add Multiple New Songs', func: handleAddMultipleButton },
+      { text: 'Add Songs From Your Library', func: () => { } },
+    ] :
+    [
+      { text: 'Set As PickerSet', func: setAsPicker },
+      { text: 'Add New Song', func: handleAddButton },
+      { text: 'Add Multiple New Songs', func: handleAddMultipleButton },
+      { text: 'Add Songs From Your Library', func: () => { } },
+    ]
+
   return (
     <>
       {renderSet && (
@@ -90,14 +103,14 @@ function Set(props) {
             <SetHeader>
               <h2>{set.setName}</h2>
               <LibraryMenu
-                items={[
-                  { text: 'Set As PickerSet', func: setAsPicker },
-                  { text: 'Add New Song', func: handleAddButton },
-                  { text: 'Add Multiple New Songs', func: handleAddMultipleButton },
-                  { text: 'Add Songs From Your Library', func: () => { } },
-                ]}
+                items={libraryMenuItems}
               />
             </SetHeader>
+            {(set.setName === pickerSet.setName) && (
+              <p>
+                * Currently Selected in the Tune Picker
+              </p>
+            )}
             <h3>Songs</h3>
             <ul>
               {Object.keys(set.allSongs).map((songId) => {
