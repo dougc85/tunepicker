@@ -10,15 +10,16 @@ import Loading from '../../Loading/Loading';
 import AlreadyInLibrary from '../../AlreadyInLibrary/AlreadyInLibrary';
 import Path from '../Path/Path';
 import Song from '../Song/Song';
-import { SetStyled, SetHeader, SetSongsHeader } from './Set.styled';
+import { SetStyled, SetHeader } from './Set.styled';
 import LibraryMenu from '../../../components/generics/LibraryMenu.styled';
 import DeleteSet from './DeleteSet/DeleteSet';
+import CannotDelete from './Cannot Delete/CannotDelete';
 
 function Set(props) {
 
   const { user, userDoc, loading, pickerSet } = useContext(SubContext);
 
-  const { songNames, songs: allSongs } = userDoc;
+  const { setNames, songNames, songs: allSongs } = userDoc;
 
   const { showAlreadyInLibrary, setShowAlreadyInLibrary } = props;
   const params = useParams();
@@ -26,6 +27,7 @@ function Set(props) {
   const [showAddSong, setShowAddSong] = useState(false);
   const [showAddMultiple, setShowAddMultiple] = useState(false);
   const [showDeleteSet, setShowDeleteSet] = useState(false);
+  const [showCannotDelete, setShowCannotDelete] = useState(false);
   const [songConsidered, setSongConsidered] = useState('');
   const [set, setSet] = useState(undefined);
 
@@ -38,7 +40,12 @@ function Set(props) {
   }
 
   function handleDeleteButton(e) {
-    setShowDeleteSet(true);
+
+    if (Object.keys(setNames).length <= 1) {
+      setShowCannotDelete(true);
+    } else {
+      setShowDeleteSet(true);
+    }
   }
 
   async function setAsPicker(e) {
@@ -132,6 +139,7 @@ function Set(props) {
           {showAddSong && <AddSong set={set} songNames={songNames} setShowAddSong={setShowAddSong} user={user} setShowAlreadyInLibrary={setShowAlreadyInLibrary} setSongConsidered={setSongConsidered} />}
           {showAddMultiple && <AddMultiple set={set} setShowAddMultiple={setShowAddMultiple} songNames={songNames} user={user} allSongs={allSongs} />}
           {showDeleteSet && <DeleteSet setShowDeleteSet={setShowDeleteSet} />}
+          {showCannotDelete && <CannotDelete setShowCannotDelete={setShowCannotDelete} />}
           {showAlreadyInLibrary && <AlreadyInLibrary songConsidered={songConsidered} set={set} />}
         </>
       )}
