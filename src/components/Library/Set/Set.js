@@ -12,6 +12,7 @@ import Path from '../Path/Path';
 import Song from '../Song/Song';
 import { SetStyled, SetHeader, SetSongsHeader } from './Set.styled';
 import LibraryMenu from '../../../components/generics/LibraryMenu.styled';
+import DeleteSet from './DeleteSet/DeleteSet';
 
 function Set(props) {
 
@@ -24,6 +25,7 @@ function Set(props) {
 
   const [showAddSong, setShowAddSong] = useState(false);
   const [showAddMultiple, setShowAddMultiple] = useState(false);
+  const [showDeleteSet, setShowDeleteSet] = useState(false);
   const [songConsidered, setSongConsidered] = useState('');
   const [set, setSet] = useState(undefined);
 
@@ -33,6 +35,10 @@ function Set(props) {
 
   function handleAddMultipleButton(e) {
     setShowAddMultiple(true);
+  }
+
+  function handleDeleteButton(e) {
+    setShowDeleteSet(true);
   }
 
   async function setAsPicker(e) {
@@ -86,12 +92,14 @@ function Set(props) {
       { text: 'Add New Song', func: handleAddButton },
       { text: 'Add Multiple New Songs', func: handleAddMultipleButton },
       { text: 'Add Songs From Your Library', func: () => { } },
+      { text: 'Delete Set', func: handleDeleteButton },
     ] :
     [
       { text: 'Set As PickerSet', func: setAsPicker },
       { text: 'Add New Song', func: handleAddButton },
       { text: 'Add Multiple New Songs', func: handleAddMultipleButton },
       { text: 'Add Songs From Your Library', func: () => { } },
+      { text: 'Delete Set', func: handleDeleteButton },
     ]
 
   return (
@@ -123,6 +131,7 @@ function Set(props) {
           </SetStyled>
           {showAddSong && <AddSong set={set} songNames={songNames} setShowAddSong={setShowAddSong} user={user} setShowAlreadyInLibrary={setShowAlreadyInLibrary} setSongConsidered={setSongConsidered} />}
           {showAddMultiple && <AddMultiple set={set} setShowAddMultiple={setShowAddMultiple} songNames={songNames} user={user} allSongs={allSongs} />}
+          {showDeleteSet && <DeleteSet setShowDeleteSet={setShowDeleteSet} />}
           {showAlreadyInLibrary && <AlreadyInLibrary songConsidered={songConsidered} set={set} />}
         </>
       )}
