@@ -17,15 +17,19 @@ function DeleteSet(props) {
     setShowDeleteSet(false);
   }
 
+  function handleDeleteAndRemoveButton(e) {
+    setShowFirstModal(false);
+    setShowSecondModal(true);
+  }
+
   function handleDeleteAndKeep(e) {
     hideDeleteSet(e);
 
 
   }
 
-  function handleDeleteAndRemoveButton(e) {
-    setShowFirstModal(false);
-    setShowSecondModal(true);
+  function handleDeleteAndRemove(e) {
+    hideDeleteSet(e);
   }
 
   if (showFirstModal) {
@@ -54,7 +58,7 @@ function DeleteSet(props) {
             </p>
             <div>
               <AddButton onClick={hideDeleteSet}>Cancel</AddButton>
-              <AddButton>Confirm</AddButton>
+              <AddButton onClick={handleDeleteAndRemove}>Confirm</AddButton>
             </div>
           </LowerContent>
         </ConfirmRemoveSongs>
