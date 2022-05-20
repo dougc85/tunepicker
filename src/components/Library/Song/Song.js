@@ -10,6 +10,7 @@ import useFormInput from '../../../hooks/useFormInput';
 import Path from '../Path/Path';
 import Loading from '../../Loading/Loading';
 import EditConfirm from './EditConfirm/EditConfirm';
+import DeleteSong from './DeleteSong/DeleteSong';
 
 function Song(props) {
 
@@ -36,6 +37,7 @@ function Song(props) {
   const [showSetsEdit, setShowSetsEdit] = useState(false);
   const [disableEdit, setDisableEdit] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
+  const [showDeleteSong, setShowDeleteSong] = useState(false);
 
   const titleInput = useRef(null);
   const keyInput = useRef(null);
@@ -278,6 +280,10 @@ function Song(props) {
     )
   }
 
+  function handleDeleteButton() {
+    setShowDeleteSong(true);
+  }
+
   return (
     <div className="Song">
       <Path heading={capitalize(allSongs[params.songId].title)} pathType={'Song'} />
@@ -359,8 +365,9 @@ function Song(props) {
           </div>
           <EditConfirm show={setShowSetsEdit} focusInput={focusInput} field="sets" disableEdit={disableEdit} setDisableEdit={setDisableEdit} saveData={saveSetsData} />
         </div>
-        <button className="Song-delete">Delete Song</button>
+        <button onClick={handleDeleteButton} className="Song-delete">Delete Song</button>
       </div>
+      {showDeleteSong && <DeleteSong song={song} knowledgeArrays={knowledgeArrays} setShowDeleteSong={setShowDeleteSong} />}
     </div>
   )
 }
