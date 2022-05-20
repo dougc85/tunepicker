@@ -51,6 +51,12 @@ export const LowerContent = styled.div`
   
   p {
     margin: 1rem 0;
+
+    span {
+      font-size: 1.3rem;
+      display: block;
+      margin-top: 1rem;
+    }
   }
 
   >div {

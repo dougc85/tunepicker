@@ -4,6 +4,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 
 function SongEntry(props) {
 
+  console.log(props.song);
   const { knowledge, createdAt, title, id } = props.song;
   const navigate = useNavigate();
   const params = useParams();
