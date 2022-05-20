@@ -13,7 +13,7 @@ import Song from '../Song/Song';
 import { SetStyled, SetHeader } from './Set.styled';
 import LibraryMenu from '../../../components/generics/LibraryMenu.styled';
 import DeleteSet from './DeleteSet/DeleteSet';
-import CannotDelete from './Cannot Delete/CannotDelete';
+import CannotDelete from './CannotDelete/CannotDelete';
 
 function Set(props) {
 
@@ -138,7 +138,7 @@ function Set(props) {
           </SetStyled>
           {showAddSong && <AddSong set={set} songNames={songNames} setShowAddSong={setShowAddSong} user={user} setShowAlreadyInLibrary={setShowAlreadyInLibrary} setSongConsidered={setSongConsidered} />}
           {showAddMultiple && <AddMultiple set={set} setShowAddMultiple={setShowAddMultiple} songNames={songNames} user={user} allSongs={allSongs} />}
-          {showDeleteSet && <DeleteSet setShowDeleteSet={setShowDeleteSet} />}
+          {showDeleteSet && <DeleteSet setShowDeleteSet={setShowDeleteSet} set={set} setNames={setNames} />}
           {showCannotDelete && <CannotDelete setShowCannotDelete={setShowCannotDelete} />}
           {showAlreadyInLibrary && <AlreadyInLibrary songConsidered={songConsidered} set={set} />}
         </>
