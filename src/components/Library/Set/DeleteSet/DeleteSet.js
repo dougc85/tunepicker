@@ -15,9 +15,10 @@ function DeleteSet(props) {
 
   const { id: setId, allSongs } = set;
 
-  const { user, pickerSet } = useContext(SubContext);
+  const { user, pickerSet, userDoc } = useContext(SubContext);
   const { uid } = user;
   const { id: pickerId } = pickerSet;
+  const { songs } = userDoc;
 
   const [showFirstModal, setShowFirstModal] = useState(true);
   const [showSecondModal, setShowSecondModal] = useState(false);
@@ -70,9 +71,44 @@ function DeleteSet(props) {
     navigate('/library/sets');
   }
 
-  async function deleteAndRemove(e) {
+  function deleteAndRemove(e) {
     hideDeleteSet(e);
-    deleteSetDoc();
+
+    let newPickerId = pickerId;
+    if (pickerId === setId) {
+      newPickerId = Object.keys(setNames).find((id) => id !== setId);
+    }
+
+    const newSongFields = {};
+
+
+
+    Object.keys(allSongs).forEach(songId => {
+
+      if (Object.keys(songs[songId].sets).length) {
+        newSongFields[`songs.${songId}.sets.${setId}`] = deleteField();
+      } else {
+        newSongFields[`songs.${songId}`] = deleteField();
+        newSongFields[`songNames.${songs[songId]['title']}`] = deleteField();
+      }
+    })
+
+    try {
+      updateDoc(doc(db, 'users', uid), {
+        ...newSongFields,
+        pickerSet: newPickerId,
+        [`setNames.${setId}`]: deleteField(),
+
+      });
+
+      deleteSetDoc();
+
+    }
+    catch (error) {
+      console.log(error);
+    }
+
+    navigate('/library/sets');
   }
 
   if (showFirstModal) {
@@ -92,12 +128,13 @@ function DeleteSet(props) {
 
   if (showSecondModal) {
     return (
-      <Modal handleOutsideClick={hideDeleteSet} contentHeight={'15rem'}>
+      <Modal handleOutsideClick={hideDeleteSet} contentHeight={'20rem'}>
         <ConfirmRemoveSongs>
           <h3>Confirm Remove Songs</h3>
           <LowerContent>
             <p>
-              Are you sure you want to delete all the songs in this set from your Library?
+              Are you sure you want to delete the songs in this set from your Library?
+              <span>{`** Note that only songs that are ONLY from this set (i.e., not in other sets) will be deleted`}</span>
             </p>
             <div>
               <AddButton onClick={hideDeleteSet}>Cancel</AddButton>
