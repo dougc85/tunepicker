@@ -7,7 +7,6 @@ import AddSong from '../../AddSong/AddSong';
 import AddMultiple from '../../AddMultiple/AddMultiple';
 import SongEntry from '../SongEntry/SongEntry';
 import Loading from '../../Loading/Loading';
-import AlreadyInLibrary from '../../AlreadyInLibrary/AlreadyInLibrary';
 import Path from '../Path/Path';
 import Song from '../Song/Song';
 import { SetStyled, SetHeader } from './Set.styled';
@@ -21,14 +20,12 @@ function Set(props) {
 
   const { setNames, songNames, songs: allSongs } = userDoc;
 
-  const { showAlreadyInLibrary, setShowAlreadyInLibrary } = props;
   const params = useParams();
 
   const [showAddSong, setShowAddSong] = useState(false);
   const [showAddMultiple, setShowAddMultiple] = useState(false);
   const [showDeleteSet, setShowDeleteSet] = useState(false);
   const [showCannotDelete, setShowCannotDelete] = useState(false);
-  const [songConsidered, setSongConsidered] = useState('');
   const [set, setSet] = useState(undefined);
 
   function handleAddButton(e) {
@@ -136,11 +133,10 @@ function Set(props) {
               })}
             </ul>
           </SetStyled>
-          {showAddSong && <AddSong set={set} songNames={songNames} setShowAddSong={setShowAddSong} user={user} setShowAlreadyInLibrary={setShowAlreadyInLibrary} setSongConsidered={setSongConsidered} />}
+          {showAddSong && <AddSong set={set} songNames={songNames} setShowAddSong={setShowAddSong} user={user} />}
           {showAddMultiple && <AddMultiple set={set} setShowAddMultiple={setShowAddMultiple} songNames={songNames} user={user} allSongs={allSongs} />}
           {showDeleteSet && <DeleteSet setShowDeleteSet={setShowDeleteSet} set={set} setNames={setNames} />}
           {showCannotDelete && <CannotDelete setShowCannotDelete={setShowCannotDelete} />}
-          {showAlreadyInLibrary && <AlreadyInLibrary songConsidered={songConsidered} set={set} />}
         </>
       )}
       <Routes>
