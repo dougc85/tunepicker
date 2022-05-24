@@ -3,7 +3,6 @@ import { v4 as uuid } from 'uuid';
 import {
   arrayUnion,
   doc,
-  getDoc,
   updateDoc,
 } from 'firebase/firestore';
 import {
@@ -13,10 +12,11 @@ import useFormInput from '../../hooks/useFormInput';
 import Modal from '../generics/Modal.styled';
 import { AddSongStyled, InputGrouping, TitleInput, ErrorMessage, KnowledgeField } from './AddSong.styled';
 import AddButton from '../generics/AddButton.styled';
+import AlreadyInLibrary from '../AlreadyInLibrary/AlreadyInLibrary';
 
 function AddSong(props) {
 
-  const { set, songNames, user, setShowAddSong, setShowAlreadyInLibrary, setSongConsidered } = props;
+  const { set, songNames, user, setShowAddSong } = props;
 
   const keys = ['C', 'Db', 'D', 'Eb', 'E', 'F', 'F#', 'G', 'Ab', 'A', 'Bb', 'B'];
   const knowledgeFields = {
@@ -31,6 +31,8 @@ function AddSong(props) {
   const [knowledge, setKnowledge] = useState('know');
   const [disableForm, setDisableForm] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
+  const [showAddForm, setShowAddForm] = useState(true);
+  const [showAlreadyInLibrary, setShowAlreadyInLibrary] = useState(false);
 
   function handleCancel(e) {
     e.preventDefault();
@@ -61,26 +63,18 @@ function AddSong(props) {
       return;
     }
 
+    //Need to learn how to query in order to refactor this
+    if (songNames[titleLower]) {
+      setShowAddForm(false);
+      setShowAlreadyInLibrary(true);
+
+      return;
+    }
+
     try {
       const userDoc = doc(db, 'users', user.uid);
       const setDoc = doc(userDoc, 'sets', set.id);
       const date = Date.now();
-
-      const userFirebase = await getDoc(userDoc);
-      const userDocData = userFirebase.data();
-
-      //Need to learn how to query in order to refactor this
-      if (userDocData.songs[titleLower]) {
-        setShowAddSong(false);
-        resetTitle();
-        resetSongKey();
-        resetNotes();
-        setKnowledge('know');
-        setShowAlreadyInLibrary(true);
-        setSongConsidered(titleLower);
-
-        //Return here???!?
-      }
 
       const songId = uuid();
 
@@ -145,64 +139,73 @@ function AddSong(props) {
 
   }
 
-  return (
-    <Modal handleOutsideClick={handleCancel} >
-      <AddSongStyled>
-        <legend>Add Song to '{set.setName}'</legend>
-        <InputGrouping width={"100%"}>
-          <label htmlFor="song-title">Title:</label>
-          <TitleInput onChange={handleTitleChangeAndDuplicates} value={title} id="song-title" type="text" name="song-title" autoComplete="off"></TitleInput>
-          {errorMessage && (<ErrorMessage>{`*${errorMessage}`}</ErrorMessage>)}
-        </InputGrouping>
-        <InputGrouping width={"70%"}>
-          <label htmlFor="key" >Key:</label>
-          <select disabled={disableForm} name="key" id="key" onChange={handleSongKeyChange} value={songKey} >
-            <option value="random" key="random">random</option>
-            {keys.map((key) => {
-              let keyModified = key;
-              if (key.length === 2) {
-                key[1] === "#" ? keyModified = key[0] + `\u266F` :
-                  keyModified = key[0] + `\u266D`;
-              }
-              return (
-                <option value={key} key={key}>{keyModified}</option>
-              )
-            })}
-          </select>
-        </InputGrouping>
-        <KnowledgeField disabled={disableForm}>
-          <legend>How well do you know this tune?</legend>
-          <div>
-            <input id="knowNew" value="new" type="radio" name="knowledge" onChange={onRadioChange} checked={isChecked('new')} />
-            <label htmlFor="knowNew">
-              New
-              <span>Just learned; needs practice</span>
-            </label>
-          </div>
-          <div>
-            <input id="knowMed" value="med" type="radio" name="knowledge" onChange={onRadioChange} checked={isChecked('med')} />
-            <label htmlFor="knowMed">
-              Medium
-              <span>Know alright; should play it often to remember it</span>
-            </label>
-          </div>
-          <div>
-            <input id="knowKnow" value="know" type="radio" name="knowledge" onChange={onRadioChange} checked={isChecked('know')} />
-            <label htmlFor="knowKnow">
-              Know
-              <span>Know inside and out; can play it if it gets called a month from now</span>
-            </label>
-          </div>
-        </KnowledgeField>
-        <label htmlFor="song-notes" >Notes</label>
-        <textarea disabled={disableForm} value={notes} onChange={handleNotesChange}></textarea>
-        <InputGrouping width={"80%"}>
-          <AddButton onClick={handleCancel} >Cancel</AddButton>
-          <AddButton disabled={disableForm} onClick={handleAdd}>Add Song</AddButton>
-        </InputGrouping>
-      </AddSongStyled>
-    </Modal >
-  )
+  if (showAddForm) {
+    return (
+      <Modal handleOutsideClick={handleCancel} >
+        <AddSongStyled>
+          <legend>Add Song to '{set.setName}'</legend>
+          <InputGrouping width={"100%"}>
+            <label htmlFor="song-title">Title:</label>
+            <TitleInput onChange={handleTitleChangeAndDuplicates} value={title} id="song-title" type="text" name="song-title" autoComplete="off"></TitleInput>
+            {errorMessage && (<ErrorMessage>{`*${errorMessage}`}</ErrorMessage>)}
+          </InputGrouping>
+          <InputGrouping width={"70%"}>
+            <label htmlFor="key" >Key:</label>
+            <select disabled={disableForm} name="key" id="key" onChange={handleSongKeyChange} value={songKey} >
+              <option value="random" key="random">random</option>
+              {keys.map((key) => {
+                let keyModified = key;
+                if (key.length === 2) {
+                  key[1] === "#" ? keyModified = key[0] + `\u266F` :
+                    keyModified = key[0] + `\u266D`;
+                }
+                return (
+                  <option value={key} key={key}>{keyModified}</option>
+                )
+              })}
+            </select>
+          </InputGrouping>
+          <KnowledgeField disabled={disableForm}>
+            <legend>How well do you know this tune?</legend>
+            <div>
+              <input id="knowNew" value="new" type="radio" name="knowledge" onChange={onRadioChange} checked={isChecked('new')} />
+              <label htmlFor="knowNew">
+                New
+                <span>Just learned; needs practice</span>
+              </label>
+            </div>
+            <div>
+              <input id="knowMed" value="med" type="radio" name="knowledge" onChange={onRadioChange} checked={isChecked('med')} />
+              <label htmlFor="knowMed">
+                Medium
+                <span>Know alright; should play it often to remember it</span>
+              </label>
+            </div>
+            <div>
+              <input id="knowKnow" value="know" type="radio" name="knowledge" onChange={onRadioChange} checked={isChecked('know')} />
+              <label htmlFor="knowKnow">
+                Know
+                <span>Know inside and out; can play it if it gets called a month from now</span>
+              </label>
+            </div>
+          </KnowledgeField>
+          <label htmlFor="song-notes" >Notes</label>
+          <textarea disabled={disableForm} value={notes} onChange={handleNotesChange}></textarea>
+          <InputGrouping width={"80%"}>
+            <AddButton onClick={handleCancel} >Cancel</AddButton>
+            <AddButton disabled={disableForm} onClick={handleAdd}>Add Song</AddButton>
+          </InputGrouping>
+        </AddSongStyled>
+      </Modal >
+    )
+  }
+
+  if (showAlreadyInLibrary) {
+    return (
+      <AlreadyInLibrary setShowAddSong={setShowAddSong} title={title} knowledge={knowledge} knowledgeFields={knowledgeFields} set={set} />
+    )
+  }
+
 }
 
 export default AddSong;
