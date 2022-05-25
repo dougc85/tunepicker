@@ -1,12 +1,21 @@
 import styled from 'styled-components';
+import { libraryColor } from '../../../partials/variables.styled';
+
+const { light, lighter } = libraryColor;
 
 export const SetsStyled = styled.ul`
   li {
     padding: 1rem;
-    border-bottom: .5px solid rgb(10, 10, 10);
     font-size: 2rem;
     text-align: start;
-    background-color: rgb(223, 223, 223);
+
+    &:nth-child(2n-1) {
+      background-color: ${light};
+    }
+
+    &:nth-child(2n) {
+      background-color: ${lighter};
+    }
   }
 `;
 

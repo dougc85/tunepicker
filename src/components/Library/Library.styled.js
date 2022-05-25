@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { libraryColor } from "../../partials/variables.styled";
 
 export const LibraryStyled = styled.div`
   height: calc(100vh - 95px);
@@ -8,7 +9,7 @@ export const LibraryStyled = styled.div`
   a {
     display: block;
     height: 40%;
-    background-color: blue;
+    background-color: ${libraryColor.base};
     display: flex;
     justify-content: center;
     align-items: center;
