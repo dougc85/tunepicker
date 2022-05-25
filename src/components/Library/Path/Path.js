@@ -1,10 +1,16 @@
 import { React } from 'react';
 import { PathStyled } from './Path.styled';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation, useParams } from 'react-router-dom';
 
 function Path(props) {
 
   const { pathType, heading } = props;
+
+  const navigate = useNavigate();
+  const location = useLocation();
+  const params = useParams();
+
+  const isAllSongs = (location.pathname.slice(9, 17) === 'allsongs') ? true : false;
 
   const divider = <p>/</p>;
   const showSecondTier = (pathType === 'Library') ?
@@ -13,8 +19,7 @@ function Path(props) {
   const showLastTier = (pathType === 'Set' || pathType === 'Song') ?
     true :
     false;
-
-  const navigate = useNavigate();
+  const showExtraSetTier = (!isAllSongs && pathType === 'Song') ? true : false;
 
   function toLibrary() {
     navigate(`/library/`)
@@ -22,6 +27,10 @@ function Path(props) {
 
   function toSets() {
     navigate(`/library/sets`);
+  }
+
+  function toSet() {
+    navigate(`/library/sets/${params.setId}`)
   }
 
   function toAllSongs() {
@@ -44,11 +53,13 @@ function Path(props) {
         </svg>
       </button>
 
-
     const setIcon =
-      <svg className="Path-icon Path-icon-doc" viewBox="0 0 24 24">
-        <path fill="currentColor" d="M5,3C3.89,3 3,3.89 3,5V19C3,20.11 3.89,21 5,21H19C20.11,21 21,20.11 21,19V5C21,3.89 20.11,3 19,3H5M5,5H19V19H5V5M7,7V9H17V7H7M7,11V13H17V11H7M7,15V17H14V15H7Z" />
-      </svg>;
+      <button onClick={toSet}>
+        <svg className="Path-icon Path-icon-doc" viewBox="0 0 24 24">
+          <path fill="currentColor" d="M5,3C3.89,3 3,3.89 3,5V19C3,20.11 3.89,21 5,21H19C20.11,21 21,20.11 21,19V5C21,3.89 20.11,3 19,3H5M5,5H19V19H5V5M7,7V9H17V7H7M7,11V13H17V11H7M7,15V17H14V15H7Z" />
+        </svg>
+      </button>;
+
 
     const allSongsIcon =
       <button onClick={toAllSongs}>
@@ -63,9 +74,9 @@ function Path(props) {
         <path fill="currentColor" d="M21,3V15.5A3.5,3.5 0 0,1 17.5,19A3.5,3.5 0 0,1 14,15.5A3.5,3.5 0 0,1 17.5,12C18.04,12 18.55,12.12 19,12.34V6.47L9,8.6V17.5A3.5,3.5 0 0,1 5.5,21A3.5,3.5 0 0,1 2,17.5A3.5,3.5 0 0,1 5.5,14C6.04,14 6.55,14.12 7,14.34V6L21,3Z" />
       </svg>
 
-    const book = (pathType === 'Sets' || pathType === 'Set') ?
-      setsIcon :
-      allSongsIcon;
+    const book = isAllSongs ?
+      allSongsIcon :
+      setsIcon;
 
     const singleItem = (pathType === 'Set') ?
       setIcon :
@@ -76,6 +87,8 @@ function Path(props) {
         {libraryIcon}
         {showSecondTier && divider}
         {showSecondTier && book}
+        {showExtraSetTier && divider}
+        {showExtraSetTier && setIcon}
         {showLastTier && divider}
         {showLastTier && singleItem}
         <h2>{heading}</h2>
