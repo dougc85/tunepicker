@@ -16,6 +16,11 @@ export const SetsStyled = styled.ul`
     &:nth-child(2n) {
       background-color: ${lighter};
     }
+
+    &:last-child {
+      margin-top: 4.2rem;
+      background-color: #dddddd;
+    }
   }
 `;
 

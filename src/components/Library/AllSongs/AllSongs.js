@@ -11,8 +11,6 @@ function AllSongs() {
   const { userDoc, loading } = context;
   const { songs: allSongs } = userDoc;
 
-  console.log(allSongs, 'allSongs');
-
   if (loading) {
     return (
       <Loading />
