@@ -62,17 +62,17 @@ function AddSet(props) {
           collection(db, 'users', user.uid, 'sets'),
           newSet,
         );
+
         await updateDoc(
           doc(db, 'users', user.uid),
           {
             [`setNames.${newSetDoc.id}`]: title,
           });
-
         resetTitle();
         setShowAddSet(false);
       }
       catch (error) {
-        console.log(error);
+        console.log(error.message);
       }
     }
   }

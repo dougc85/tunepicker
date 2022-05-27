@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { db, auth } from '../firebaseConfig';
-import { onAuthStateChanged } from 'firebase/auth';
+import { onAuthStateChanged, getIdToken } from 'firebase/auth';
 import {
-  doc, onSnapshot,
+  doc, onSnapshot, updateDoc
 } from 'firebase/firestore';
 import { useNavigate, useLocation } from 'react-router-dom';
 import VerifyEmail from '../components/VerifyEmail/VerifyEmail';
@@ -26,16 +26,32 @@ export const SubContextProvider = (props) => {
     setNames: undefined,
     songNames: undefined,
     pickerSet: undefined,
+    tunesIWantToLearn: undefined,
+    notVerifiedToken: 0,
   });
   const [pickerSet, setPickerSet] = useState(undefined);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
   const location = useLocation();
+  const [newToken, setNewToken] = useState(0);
 
   useEffect(() => {
 
-    const unsubAuthChange = onAuthStateChanged(auth, currentUser => {
+    const unsubAuthChange = onAuthStateChanged(auth, async (currentUser) => {
       if (currentUser) {
+        const token = await getIdToken(currentUser);
+        setNewToken(token);
+        if (!currentUser.emailVerified) {
+          const userDocRef = doc(db, 'users', currentUser.uid);
+          try {
+            await updateDoc(userDocRef, {
+              notVerifiedToken: token,
+            })
+          } catch (error) {
+            console.log(error.message);
+          }
+
+        }
         setUser(currentUser);
         if (location.pathname === '/welcome') {
           navigate('/');
@@ -95,6 +111,8 @@ export const SubContextProvider = (props) => {
     }
   }, [pickerSet]);
 
+  const tokenVerified = (newToken === userDoc.notVerifiedToken || newToken === 0 || userDoc.notVerifiedToken === 0) ? false : true;
+
   return (
     <SubContext.Provider
       value={{
@@ -104,7 +122,7 @@ export const SubContextProvider = (props) => {
         setPickerSet,
         loading,
       }}>
-      {user && !user.emailVerified && <VerifyEmail />}
+      {user && !tokenVerified && <VerifyEmail />}
       {props.children}
     </SubContext.Provider>
   )
