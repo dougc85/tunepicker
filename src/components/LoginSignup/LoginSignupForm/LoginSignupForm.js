@@ -104,10 +104,12 @@ function LoginSignupForm(props) {
           songs: {},
           songNames: {},
           email: userCredential.user.email,
+          tunesIWantToLearn: [],
+          notVerifiedToken: 0,
         }
       );
-      const userDoc = doc(db, 'users', userCredential.user.uid);
-      const setsRef = collection(userDoc, 'sets');
+      const userDocRef = doc(db, 'users', userCredential.user.uid);
+      const setsRef = collection(userDocRef, 'sets');
       const defaultSet = {
         setName: "First Set",
         fullKnow: [],
@@ -122,7 +124,7 @@ function LoginSignupForm(props) {
         setsRef,
         defaultSet,
       );
-      await updateDoc(userDoc, {
+      await updateDoc(userDocRef, {
         pickerSet: newSetDoc.id,
         setNames: {
           [newSetDoc.id]: "First Set",

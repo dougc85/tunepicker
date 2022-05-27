@@ -54,18 +54,16 @@ function DeleteSet(props) {
     })
 
     try {
+      deleteSetDoc();
       updateDoc(doc(db, 'users', uid), {
         ...newSongFields,
         pickerSet: newPickerId,
         [`setNames.${setId}`]: deleteField(),
 
       });
-
-      deleteSetDoc();
-
     }
     catch (error) {
-      console.log(error);
+      console.log(error.message);
     }
 
     navigate('/library/sets');
@@ -82,7 +80,6 @@ function DeleteSet(props) {
     const newSongFields = {};
 
 
-
     Object.keys(allSongs).forEach(songId => {
 
       if (Object.keys(songs[songId].sets).length) {
@@ -94,18 +91,16 @@ function DeleteSet(props) {
     })
 
     try {
+      deleteSetDoc();
       updateDoc(doc(db, 'users', uid), {
         ...newSongFields,
         pickerSet: newPickerId,
         [`setNames.${setId}`]: deleteField(),
 
       });
-
-      deleteSetDoc();
-
     }
     catch (error) {
-      console.log(error);
+      console.log(error.message);
     }
 
     navigate('/library/sets');
