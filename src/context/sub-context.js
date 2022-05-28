@@ -122,7 +122,7 @@ export const SubContextProvider = (props) => {
         setPickerSet,
         loading,
       }}>
-      {user && !tokenVerified && <VerifyEmail />}
+      {user && !loading && !tokenVerified && <VerifyEmail />}
       {props.children}
     </SubContext.Provider>
   )
