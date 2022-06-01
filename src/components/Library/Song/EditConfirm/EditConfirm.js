@@ -1,5 +1,5 @@
-import './EditConfirm.scss';
 import { React, useState } from 'react';
+import { EditConfirmStyled, EditButton, ConfirmButton } from './EditConfirmStyled';
 
 function EditConfirm(props) {
 
@@ -33,10 +33,10 @@ function EditConfirm(props) {
   }
 
   return (
-    <div className="EditConfirm">
-      {!showConfirm && <button style={disableEdit ? { color: 'rgb(173, 173, 173)', borderColor: 'rgb(173, 173, 173)' } : {}} onClick={disableEdit ? empty : handleEditClick} className="EditConfirm-edit">edit</button>}
-      {showConfirm && <button className="EditConfirm-confirm" onTouchStart={empty} onClick={handleConfirmClick}>Confirm</button>}
-    </div>
+    <EditConfirmStyled >
+      {!showConfirm && <EditButton disableEdit={disableEdit} onClick={disableEdit ? empty : handleEditClick} >edit</EditButton>}
+      {showConfirm && <ConfirmButton onTouchStart={empty} onClick={handleConfirmClick}>Confirm</ConfirmButton>}
+    </EditConfirmStyled>
   )
 }
 
