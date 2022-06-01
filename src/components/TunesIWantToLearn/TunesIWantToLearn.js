@@ -1,9 +1,8 @@
 import React, { useContext } from 'react';
-import SubContext from '../../../context/sub-context';
+import SubContext from '../../context/sub-context';
 import { TunesIWantToLearnStyled, Header } from "./TunesIWantToLearn.styled";
-import Path from '../Path/Path';
-import LibraryMenu from '../../generics/LibraryMenu.styled';
-import Loading from '../../Loading/Loading';
+import LibraryMenu from '../generics/LibraryMenu.styled';
+import Loading from '../Loading/Loading';
 
 function TunesIWantToLearn() {
 
@@ -30,9 +29,7 @@ function TunesIWantToLearn() {
 
   return (
     <>
-      <Path heading={"Tunes I Want To Learn"} pathType="Set" />
       <TunesIWantToLearnStyled>
-
         <Header>
           <h2>{"Tunes I Want To Learn"}</h2>
           <LibraryMenu

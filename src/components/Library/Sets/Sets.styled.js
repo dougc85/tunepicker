@@ -16,16 +16,11 @@ export const SetsStyled = styled.ul`
     &:nth-child(2n) {
       background-color: ${lighter};
     }
-
-    &:last-child {
-      margin-top: -23rem;
-      background-color: #dddddd;
-    }
   }
 `;
 
 export const SetsHeader = styled.div`
-  margin-top: 11.5rem;
+  margin-top: 1.5rem;
   margin-left: 1rem;
   margin-bottom: 1rem;
   display: flex;

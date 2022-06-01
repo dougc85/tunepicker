@@ -49,7 +49,6 @@ function Sets() {
           )
         }
         )}
-        <li onClick={() => { handleClick('tunesiwanttolearn') }} key={'tunesiwanttolearn'} >Tunes I Want To Learn</li>
       </SetsStyled>
       {showAddSet && <AddSet setShowAddSet={setShowAddSet} />}
     </>
