@@ -7,7 +7,7 @@ import FrontPage from './components/FrontPage/FrontPage';
 import Library from './components/Library/Library';
 import Set from './components/Library/Set/Set';
 import Sets from './components/Library/Sets/Sets';
-import TunesIWantToLearn from './components/Library/TunesIWantToLearn/TunesIWantToLearn';
+import TunesIWantToLearn from './components/TunesIWantToLearn/TunesIWantToLearn';
 import AllSongs from './components/Library/AllSongs/AllSongs';
 import Song from './components/Library/Song/Song';
 import GlobalStyles from './GlobalStyles';
@@ -29,8 +29,8 @@ function App() {
           <Route path="/library/allsongs" element={<AllSongs />} />
           <Route path="/library/allsongs/:songId" element={<Song />} />
           <Route path="/library/sets" element={<Sets />} />
-          <Route path="/library/sets/tunesiwanttolearn" element={<TunesIWantToLearn />} />
           <Route path="/library/sets/:setId/*" element={<Set setShowAlreadyInLibrary={setShowAlreadyInLibrary} showAlreadyInLibrary={showAlreadyInLibrary} />} />
+          <Route path="/tunesiwanttolearn" element={<TunesIWantToLearn />} />
         </Route>
         <Route path="/welcome" element={<Welcome />} />
       </Routes>
