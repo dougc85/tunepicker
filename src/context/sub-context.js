@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { db, auth } from '../firebaseConfig';
 import { onAuthStateChanged, getIdToken } from 'firebase/auth';
 import {
-  doc, onSnapshot, updateDoc
+  doc, onSnapshot, updateDoc, setDoc
 } from 'firebase/firestore';
 import { useNavigate, useLocation } from 'react-router-dom';
 import VerifyEmail from '../components/VerifyEmail/VerifyEmail';
@@ -44,9 +44,9 @@ export const SubContextProvider = (props) => {
         if (!currentUser.emailVerified) {
           const userDocRef = doc(db, 'users', currentUser.uid);
           try {
-            await updateDoc(userDocRef, {
+            await setDoc(userDocRef, {
               notVerifiedToken: token,
-            })
+            }, { merge: true })
           } catch (error) {
             console.log(error.message);
           }
@@ -111,7 +111,7 @@ export const SubContextProvider = (props) => {
     }
   }, [pickerSet]);
 
-  const tokenVerified = (newToken === userDoc.notVerifiedToken || newToken === 0 || userDoc.notVerifiedToken === 0) ? false : true;
+  const tokenVerified = (newToken === userDoc.notVerifiedToken || newToken === 0 || userDoc.notVerifiedToken === undefined || userDoc.notVerifiedToken === 0) ? false : true;
 
   return (
     <SubContext.Provider

@@ -104,8 +104,7 @@ function LoginSignupForm(props) {
           songs: {},
           songNames: {},
           email: userCredential.user.email,
-          tunesIWantToLearn: [],
-          notVerifiedToken: 0,
+          tunesIWantToLearn: {},
         }
       );
       const userDocRef = doc(db, 'users', userCredential.user.uid);
