@@ -6,6 +6,8 @@ import Loading from '../Loading/Loading';
 import AddMultiple from '../AddMultiple/AddMultiple';
 import { doc, updateDoc, deleteField } from 'firebase/firestore';
 import { db } from '../../firebaseConfig';
+import AddSongToWantToLearn from './AddSongToWantToLearn';
+import Path from '../Library/Path/Path';
 
 function TunesIWantToLearn() {
 
@@ -53,6 +55,7 @@ function TunesIWantToLearn() {
 
   return (
     <>
+      <Path heading={'Tunes I Want To Learn'} pathType="tunesIWantToLearn" />
       <TunesIWantToLearnStyled>
         <Header>
           <h2>{"Tunes I Want To Learn"}</h2>
@@ -74,6 +77,7 @@ function TunesIWantToLearn() {
           )}
         </TunesStyled>
       </TunesIWantToLearnStyled>
+      {showAddSong && <AddSongToWantToLearn setShowAddSong={setShowAddSong} user={user} userDoc={userDoc} tuneNames={tuneNames} />}
       {showAddMultiple && <AddMultiple setShowAddMultiple={setShowAddMultiple} songNames={userDoc.tunesIWantToLearn} user={user} calling="tunesIWantToLearn" />}
     </>
   )
