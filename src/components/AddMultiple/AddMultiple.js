@@ -9,7 +9,7 @@ import { AddMultipleStyled, AddMultipleButtonsStyled, TitleErrorsStyled } from '
 
 function AddMultiple(props) {
 
-  const { set, setShowAddMultiple, songNames, user, allSongs } = props;
+  const { set, setShowAddMultiple, songNames, user, allSongs, calling } = props;
 
   const [songList, handleSongListChange, resetSongList] = useFormInput('');
 
@@ -60,62 +60,76 @@ function AddMultiple(props) {
       }
     })
 
-    const newSongsObj = {};
-    const oldSongsObj = {};
+    if (calling === 'set') {
+      const newSongsObj = {};
+      const oldSongsObj = {};
 
-    const newSongsInSet = {};
+      const newSongsInSet = {};
 
-    const songIdsForSetlists = [];
+      const songIdsForSetlists = [];
 
-    allNewSongs.forEach((songName) => {
-      const songId = uuid();
-      const date = Date.now();
-      newSongsObj[`songs.${songId}`] = {
-        createdAt: date,
-        title: songName,
-        notes: '',
-        songKey: 'random',
-        knowledge: 'new',
-        sets: {
-          [set.id]: set.setName
-        },
-        id: songId,
-      }
-      newSongsObj[`songNames.${songName}`] = songId;
+      allNewSongs.forEach((songName) => {
+        const songId = uuid();
+        const date = Date.now();
+        newSongsObj[`songs.${songId}`] = {
+          createdAt: date,
+          title: songName,
+          notes: '',
+          songKey: 'random',
+          knowledge: 'new',
+          sets: {
+            [set.id]: set.setName
+          },
+          id: songId,
+        }
+        newSongsObj[`songNames.${songName}`] = songId;
 
-      newSongsInSet[`allSongs.${songId}`] = null;
-      songIdsForSetlists.push(songId);
-    })
-
-    allOldSongs.forEach((songName) => {
-      const songId = songNames[songName];
-      const oldSongObj = allSongs[songId];
-      oldSongObj["sets"][set.id] = set.setName;
-      oldSongsObj[`songs.${songId}`] = oldSongObj;
-
-      if (!set.allSongs.hasOwnProperty(songId)) {
         newSongsInSet[`allSongs.${songId}`] = null;
         songIdsForSetlists.push(songId);
-      }
-    })
+      })
 
-    //update userDoc
+      allOldSongs.forEach((songName) => {
+        const songId = songNames[songName];
+        const oldSongObj = allSongs[songId];
+        oldSongObj["sets"][set.id] = set.setName;
+        oldSongsObj[`songs.${songId}`] = oldSongObj;
 
-    const userDoc = doc(db, 'users', user.uid);
-    updateDoc(userDoc, {
-      ...newSongsObj,
-      ...oldSongsObj,
-    })
+        if (!set.allSongs.hasOwnProperty(songId)) {
+          newSongsInSet[`allSongs.${songId}`] = null;
+          songIdsForSetlists.push(songId);
+        }
+      })
 
-    //Update Set doc
+      //update userDoc
 
-    newSongsInSet[`currentNew`] = arrayUnion(...songIdsForSetlists);
-    newSongsInSet[`fullNew`] = arrayUnion(...songIdsForSetlists);
+      const userDoc = doc(db, 'users', user.uid);
+      updateDoc(userDoc, {
+        ...newSongsObj,
+        ...oldSongsObj,
+      })
 
-    const setDoc = doc(db, 'users', user.uid, 'sets', set.id);
-    updateDoc(setDoc, {
-      ...newSongsInSet,
-    })
+      //Update Set doc
+
+      newSongsInSet[`currentNew`] = arrayUnion(...songIdsForSetlists);
+      newSongsInSet[`fullNew`] = arrayUnion(...songIdsForSetlists);
+
+      const setDoc = doc(db, 'users', user.uid, 'sets', set.id);
+      updateDoc(setDoc, {
+        ...newSongsInSet,
+      })
+    } else if (calling === 'tunesIWantToLearn') {
+
+      const newSongsObj = {};
+
+      allNewSongs.forEach(songName => {
+        newSongsObj[`tunesIWantToLearn.${songName}`] = null;
+      })
+
+      const userDoc = doc(db, 'users', user.uid);
+      updateDoc(userDoc, {
+        ...newSongsObj,
+      })
+    }
 
     if (notAdded.length === 0) {
       handleCancel();
@@ -126,19 +140,25 @@ function AddMultiple(props) {
     }
   }
 
+  const configObj =
+    (calling === 'set') ?
+      {
+        heading: `Add Multiple Songs to ${set.setName}`,
+        instructions: "Add multiple songs at once by pasting (or typing out) a list of songs into the text box below. Make sure you strike the return/enter key after each song. Songs will be entered into this set and default to the 'New' knowledge level.  Also, all will be entered such that your preference for their key will be 'random'. Later updates will provide the ability to add a list of songs to any number of sets as well as allowing you to set the knowledge level of the group yourself. Any songs that you list which are already to be found in your library will be imported into this set with all their current settings intact."
+
+      } :
+      {
+        heading: "Add Multiple Songs",
+        instructions: "Add multiple songs at once by pasting (or typing out) a list of songs into the text box below. Make sure you strike the return/enter key after each song."
+      }
+
   if (showMain) {
     return (
       <Modal handleOutsideClick={handleCancel} >
         <AddMultipleStyled>
-          <legend>Add Multiple Songs to '{set.setName}'</legend>
+          <legend>{configObj.heading}</legend>
           <p>
-            Add multiple songs at once by pasting (or typing out) a list of songs into the text box below.
-            Make sure you strike the return/enter key after each song. Songs will be entered into this set and default
-            to the 'New' knowledge level.  Also, all will be entered such that your preference for their key will be 'random'.
-            Later updates will provide the ability to
-            add a list of songs to any number of sets as well as allowing you to set the knowledge level of the group yourself.
-            Any songs that you list which are already to be found in your library will be imported into this set with all their
-            current settings intact.
+            {configObj.instructions}
             Songs cannot use the following characters: <span>~ * / [ ]</span>
           </p>
           <textarea name="" id="" cols="30" rows="10" value={songList} onChange={handleSongListChange}></textarea>
@@ -162,7 +182,7 @@ function AddMultiple(props) {
           </p>
           <ul>
             {titleErrors.map(title => (
-              <li>{title}</li>
+              <li key={title}>{title}</li>
             ))}
           </ul>
           <AddMultipleButtonsStyled>
