@@ -23,6 +23,13 @@ export const NavStyled = styled.nav`
 
     li {
       position: relative;
+
+      a {
+        :visited, :active, :link {
+          text-decoration: none;
+          color: black;
+        }
+      }
     }
     
     li:not(:last-child)::after {

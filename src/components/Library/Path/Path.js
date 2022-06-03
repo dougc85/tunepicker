@@ -37,6 +37,10 @@ function Path(props) {
     navigate(`/library/allsongs`);
   }
 
+  function doNothing() {
+
+  }
+
   function pathGenerator() {
 
     const libraryIcon =
@@ -54,7 +58,7 @@ function Path(props) {
       </button>
 
     const setIcon =
-      <button onClick={toSet}>
+      <button onClick={pathType === 'tunesIWantToLearn' ? doNothing : toSet}>
         <svg className="Path-icon Path-icon-doc" viewBox="0 0 24 24">
           <path fill="currentColor" d="M5,3C3.89,3 3,3.89 3,5V19C3,20.11 3.89,21 5,21H19C20.11,21 21,20.11 21,19V5C21,3.89 20.11,3 19,3H5M5,5H19V19H5V5M7,7V9H17V7H7M7,11V13H17V11H7M7,15V17H14V15H7Z" />
         </svg>
@@ -81,6 +85,17 @@ function Path(props) {
     const singleItem = (pathType === 'Set') ?
       setIcon :
       songIcon;
+
+    if (pathType === 'tunesIWantToLearn') {
+      return (
+        <PathStyled>
+          <svg className="Path-icon" viewBox="0 0 24 24">
+            <path fill="currentColor" d="M5,3C3.89,3 3,3.89 3,5V19C3,20.11 3.89,21 5,21H19C20.11,21 21,20.11 21,19V5C21,3.89 20.11,3 19,3H5M5,5H19V19H5V5M7,7V9H17V7H7M7,11V13H17V11H7M7,15V17H14V15H7Z" />
+          </svg>
+          <h2>{heading}</h2>
+        </PathStyled>
+      )
+    }
 
     return (
       <PathStyled>
