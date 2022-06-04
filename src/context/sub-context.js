@@ -11,9 +11,8 @@ const defaultContext = {
   user: undefined,
   setUser: undefined,
   userDoc: undefined,
-  pickerSet: undefined,
-  setPickerSet: undefined,
   loading: undefined,
+  setLoading: undefined,
 }
 
 const SubContext = React.createContext(defaultContext);
@@ -25,11 +24,11 @@ export const SubContextProvider = (props) => {
     songs: undefined,
     setNames: undefined,
     songNames: undefined,
-    pickerSet: undefined,
     tunesIWantToLearn: undefined,
     notVerifiedToken: 0,
+    pickerSet: undefined,
   });
-  const [pickerSet, setPickerSet] = useState(undefined);
+
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
   const location = useLocation();
@@ -90,26 +89,10 @@ export const SubContextProvider = (props) => {
   }, [user]);
 
   useEffect(() => {
-    if (!user.uid || !userDoc.pickerSet) {
-      return;
-    }
-    const unsubscribeSetDoc = onSnapshot(doc(db, 'users', user.uid, 'sets', userDoc.pickerSet), (doc) => {
-      setPickerSet({ ...doc.data(), id: userDoc.pickerSet });
-    });
-
-    return () => {
-      if (unsubscribeSetDoc) {
-        unsubscribeSetDoc();
-      }
-    }
-
-  }, [user.uid, userDoc.pickerSet]);
-
-  useEffect(() => {
-    if (pickerSet) {
+    if (userDoc.songs) {
       setLoading(false);
     }
-  }, [pickerSet]);
+  }, [userDoc.songs]);
 
   const tokenVerified = (newToken === userDoc.notVerifiedToken || newToken === 0 || userDoc.notVerifiedToken === undefined || userDoc.notVerifiedToken === 0) ? false : true;
 
@@ -118,9 +101,8 @@ export const SubContextProvider = (props) => {
       value={{
         user,
         userDoc,
-        pickerSet,
-        setPickerSet,
         loading,
+        setLoading
       }}>
       {user && !loading && !tokenVerified && <VerifyEmail />}
       {props.children}

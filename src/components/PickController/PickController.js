@@ -1,15 +1,38 @@
 import React from "react";
-import { useState, useEffect, useContext } from "react";
+import { useState, useEffect, useContext, useReducer } from "react";
 import SubContext from "../../context/sub-context";
 import './PickController.scss';
 import MoveControlsPopup from "./MoveControlsPopup/MoveControlsPopup";
 import Loading from "../Loading/Loading";
+import { onSnapshot, doc } from 'firebase/firestore';
+import { db } from '../../firebaseConfig'
+
+const pickerReducer = (state, action) => {
+  if (action.type === 'SET_PICKERS') {
+    return {
+      pickerSet: action.payload,
+      mutablePickerSet: action.payload,
+    }
+  }
+  if (action.type === 'SET_MUTABLE') {
+    return {
+      ...state,
+      mutablePickerSet: action.payload,
+    }
+  }
+}
+
+const pickerInitialValues = {
+  pickerSet: undefined,
+  mutablePickerSet: undefined,
+}
 
 function PickController() {
 
   const context = useContext(SubContext);
-  const { pickerSet, setPickerSet, loading, userDoc } = context;
+  const { user, loading, setLoading, userDoc } = context;
   const allSongs = userDoc.songs;
+
 
   const ORANGE = 'hsl(26, 100%, 67%)';
   const YELLOW = 'hsl(54, 98%, 66%)';
@@ -18,7 +41,8 @@ function PickController() {
   // const [newList, setNewList] = useListModifier([...tuneData.newList]);
   // const [medList, setMedList] = useListModifier([...tuneData.medList]);
   // const [knowList, setKnowList] = useListModifier([...tuneData.knowList]);
-  const [initialList, setInitialList] = useState('');
+
+
   const [currentList, setCurrentList] = useState('');
   const [oldList, setOldList] = useState('');
   const [choices, setChoices] = useState(['new', 'new', 'new', 'med', 'med', 'know']);
@@ -26,55 +50,69 @@ function PickController() {
   const [key, setKey] = useState('');
   const [tune, setTune] = useState('');
   const [triggerListKey, setTriggerListKey] = useState(false);
-
   const [showNoSongs, setShowNoSongs] = useState(false);
 
+  const [state, dispatch] = useReducer(pickerReducer, pickerInitialValues);
+  const { pickerSet, mutablePickerSet } = state;
+
   useEffect(() => {
-    if (!loading) {
+    if (!user.uid || !userDoc.pickerSet) {
+      return;
+    }
+    const unsubscribeSetDoc = onSnapshot(doc(db, 'users', user.uid, 'sets', userDoc.pickerSet), (firebaseDoc) => {
+
+      const newPickerSet = { ...firebaseDoc.data(), id: userDoc.pickerSet };
+      dispatch({ type: 'SET_PICKERS', payload: newPickerSet });
+    });
+
+    return () => {
+      if (unsubscribeSetDoc) {
+        unsubscribeSetDoc();
+      }
+    }
+
+  }, [user.uid, userDoc.pickerSet]);
+
+  useEffect(() => {
+    if (!loading && pickerSet) {
 
       if (Object.keys(pickerSet.allSongs).length === 0) {
         setShowNoSongs(true);
         return;
       }
       if (pickerSet.currentNew.length !== 0) {
-        setInitialList('new');
+        pickTune('new');
       } else if (pickerSet.currentMedium.length !== 0) {
-        setInitialList('med');
+        pickTune('med');
       } else {
-        setInitialList('know');
+        pickTune('know');
       }
     }
-  }, [loading]);
-
-  useEffect(() => {
-    if (initialList) {
-      pickTune(initialList);
-    }
-  }, [initialList])
+  }, [loading, pickerSet]);
 
   function pickList(choices) {
     let choicesTemp = choices;
 
-    if (pickerSet.currentNew.length === 0 && pickerSet.currentMedium.length === 0) {
-      if (pickerSet.currentKnow.length === 0) {
-        if (pickerSet.fullKnow.length === 0) {
-          const updatedSet = { ...pickerSet };
-          updatedSet.currentNew = [...pickerSet.fullNew];
-          updatedSet.currentMedium = [...pickerSet.fullMedium];
+    if (mutablePickerSet.currentNew.length === 0 && mutablePickerSet.currentMedium.length === 0) {
+      if (mutablePickerSet.currentKnow.length === 0) {
+        if (mutablePickerSet.fullKnow.length === 0) {
+          const updatedSet = { ...mutablePickerSet };
+          updatedSet.currentNew = [...mutablePickerSet.fullNew];
+          updatedSet.currentMedium = [...mutablePickerSet.fullMedium];
           setOldList(currentList);
-          if (pickerSet.fullNew.length > 0) {
+          if (mutablePickerSet.fullNew.length > 0) {
             setCurrentList('new');
           } else {
             setCurrentList('med');
           }
-          setPickerSet(updatedSet);
+          dispatch({ type: 'SET_MUTABLE', payload: updatedSet });
           return;
         }
-        const updatedSet = { ...pickerSet };
-        updatedSet.currentKnow = [...pickerSet.fullKnow];
+        const updatedSet = { ...mutablePickerSet };
+        updatedSet.currentKnow = [...mutablePickerSet.fullKnow];
         setOldList(currentList);
         setCurrentList('know');
-        setPickerSet(updatedSet);
+        dispatch({ type: 'SET_MUTABLE', payload: updatedSet });
         return;
       }
       setOldList(currentList);
@@ -93,7 +131,7 @@ function PickController() {
 
     switch (choice) {
       case 'new':
-        if (pickerSet.currentNew.length === 0) {
+        if (mutablePickerSet.currentNew.length === 0) {
           return pickList(choicesTemp);
         }
         setChoices(choicesTemp);
@@ -101,7 +139,7 @@ function PickController() {
         setCurrentList('new');
         return;
       case 'med':
-        if (pickerSet.currentMedium.length === 0) {
+        if (mutablePickerSet.currentMedium.length === 0) {
           return pickList(choicesTemp);
         }
         setChoices(choicesTemp);
@@ -109,20 +147,20 @@ function PickController() {
         setCurrentList('med');
         return;
       case 'know':
-        if (pickerSet.currentKnow.length === 0) {
+        if (mutablePickerSet.currentKnow.length === 0) {
           //If there are no songs marked 'know' but there are songs in the other knowledge categories
-          if (pickerSet.fullKnow.length === 0) {
+          if (mutablePickerSet.fullKnow.length === 0) {
             return pickList(choicesTemp);
           }
 
           //If user is done with 'new' and 'med' and needs to recycle 'know'ç
-          if (pickerSet.currentNew.length === 0 && pickerSet.currentMedium.length === 0) {
+          if (mutablePickerSet.currentNew.length === 0 && mutablePickerSet.currentMedium.length === 0) {
             setChoices(choicesTemp);
             setOldList(currentList);
             setCurrentList('know');
-            const updatedSet = { ...pickerSet };
-            updatedSet.currentKnow = pickerSet.fullKnow;
-            setPickerSet(updatedSet);
+            const updatedSet = { ...mutablePickerSet };
+            updatedSet.currentKnow = mutablePickerSet.fullKnow;
+            dispatch({ type: 'SET_MUTABLE', payload: updatedSet });
             return;
           }
           //If there are still 'new' and 'med' songs to be picked from current
@@ -138,18 +176,18 @@ function PickController() {
   }
 
   function setCurrentKnowledge(currentKnowledgeArray, newArray) {
-    const updatedSet = { ...pickerSet };
+    const updatedSet = { ...mutablePickerSet };
     updatedSet[currentKnowledgeArray] = newArray;
-    setPickerSet(updatedSet);
+    dispatch({ type: 'SET_MUTABLE', payload: updatedSet });
   }
 
   function pickTune(listToPickFrom) {
 
     const current = (listToPickFrom === 'new') ?
-      { list: pickerSet.currentNew, name: 'currentNew' } :
+      { list: mutablePickerSet.currentNew, name: 'currentNew' } :
       (listToPickFrom === 'med') ?
-        { list: pickerSet.currentMedium, name: 'currentMedium' } :
-        { list: pickerSet.currentKnow, name: 'currentKnow' };
+        { list: mutablePickerSet.currentMedium, name: 'currentMedium' } :
+        { list: mutablePickerSet.currentKnow, name: 'currentKnow' };
 
     const choicePosition = Math.floor(Math.random() * current.list.length);
     const choice = current.list[choicePosition];
@@ -209,7 +247,7 @@ function PickController() {
       ORANGE) :
     'white';
 
-  if (loading) {
+  if (loading || !mutablePickerSet) {
     return (
       <Loading />
     )
