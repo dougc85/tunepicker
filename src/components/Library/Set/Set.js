@@ -16,9 +16,9 @@ import CannotDelete from './CannotDelete/CannotDelete';
 
 function Set(props) {
 
-  const { user, userDoc, loading, pickerSet } = useContext(SubContext);
+  const { user, userDoc, loading } = useContext(SubContext);
 
-  const { setNames, songNames, songs: allSongs } = userDoc;
+  const { setNames, songNames, songs: allSongs, pickerSetId } = userDoc;
 
   const params = useParams();
 
@@ -91,7 +91,7 @@ function Set(props) {
     )
   }
 
-  const libraryMenuItems = (set.setName === pickerSet.setName) ?
+  const libraryMenuItems = (set.id === pickerSetId) ?
     [
       { text: 'Add New Song', func: handleAddButton },
       { text: 'Add Multiple New Songs', func: handleAddMultipleButton },
@@ -118,7 +118,7 @@ function Set(props) {
                 items={libraryMenuItems}
               />
             </SetHeader>
-            {(set.setName === pickerSet.setName) && (
+            {(set.id === pickerSetId) && (
               <p>
                 * Currently Selected in the Tune Picker
               </p>
