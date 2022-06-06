@@ -18,7 +18,7 @@ function Set(props) {
 
   const { user, userDoc, loading } = useContext(SubContext);
 
-  const { setNames, songNames, songs: allSongs, pickerSetId } = userDoc;
+  const { setNames, songNames, songs: allSongs, pickerSet: pickerSetId } = userDoc;
 
   const params = useParams();
 
@@ -106,6 +106,8 @@ function Set(props) {
       { text: 'Delete Set', func: handleDeleteButton },
     ]
 
+  console.log(set.id, 'set.id');
+  console.log(pickerSetId, 'pickerSetId');
   return (
     <>
       {renderSet && (
