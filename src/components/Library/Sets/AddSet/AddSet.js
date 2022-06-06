@@ -50,12 +50,12 @@ function AddSet(props) {
       try {
         const newSet = {
           setName: title,
-          fullKnow: [],
-          currentKnow: [],
-          fullNew: [],
-          currentNew: [],
-          fullMedium: [],
-          currentMedium: [],
+          fullKnow: {},
+          currentKnow: {},
+          fullNew: {},
+          currentNew: {},
+          fullMedium: {},
+          currentMedium: {},
           allSongs: {},
         };
         const newSetDoc = await addDoc(

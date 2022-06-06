@@ -58,8 +58,8 @@ function DeleteSong(props) {
 
       updateDoc(setDocRef, {
         [`allSongs.${song.id}`]: deleteField(),
-        [knowledgeArrays[song.knowledge][0]]: arrayRemove(song.id),
-        [knowledgeArrays[song.knowledge][1]]: arrayRemove(song.id),
+        [`${knowledgeArrays[song.knowledge][0]}.${song.id}`]: deleteField(),
+        [`${knowledgeArrays[song.knowledge][1]}.${song.id}`]: deleteField(),
       });
     }
     catch (error) {

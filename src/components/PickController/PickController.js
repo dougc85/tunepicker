@@ -4,7 +4,7 @@ import SubContext from "../../context/sub-context";
 import './PickController.scss';
 import MoveControlsPopup from "./MoveControlsPopup/MoveControlsPopup";
 import Loading from "../Loading/Loading";
-import { onSnapshot, doc, arrayRemove } from 'firebase/firestore';
+import { onSnapshot, doc } from 'firebase/firestore';
 import { db } from '../../firebaseConfig'
 
 const pickerReducer = (state, action) => {
@@ -115,14 +115,14 @@ function PickController() {
   function pickList(choices) {
     let choicesTemp = choices;
 
-    if (mutablePickerSet.currentNew.length === 0 && mutablePickerSet.currentMedium.length === 0) {
-      if (mutablePickerSet.currentKnow.length === 0) {
-        if (mutablePickerSet.fullKnow.length === 0) {
+    if (Object.keys(mutablePickerSet.currentNew).length === 0 && Object.keys(mutablePickerSet.currentMedium).length === 0) {
+      if (Object.keys(mutablePickerSet.currentKnow).length === 0) {
+        if (Object.keys(mutablePickerSet.fullKnow).length === 0) {
           const updatedSet = { ...mutablePickerSet };
-          updatedSet.currentNew = [...mutablePickerSet.fullNew];
-          updatedSet.currentMedium = [...mutablePickerSet.fullMedium];
+          updatedSet.currentNew = { ...mutablePickerSet.fullNew };
+          updatedSet.currentMedium = { ...mutablePickerSet.fullMedium };
           setOldList(currentList);
-          if (mutablePickerSet.fullNew.length > 0) {
+          if (Object.keys(mutablePickerSet.fullNew).length > 0) {
             setCurrentList('new');
           } else {
             setCurrentList('med');
@@ -131,7 +131,7 @@ function PickController() {
           return;
         }
         const updatedSet = { ...mutablePickerSet };
-        updatedSet.currentKnow = [...mutablePickerSet.fullKnow];
+        updatedSet.currentKnow = { ...mutablePickerSet.fullKnow };
         setOldList(currentList);
         setCurrentList('know');
         dispatch({ type: 'SET_MUTABLE', payload: updatedSet });
@@ -153,7 +153,7 @@ function PickController() {
 
     switch (choice) {
       case 'new':
-        if (mutablePickerSet.currentNew.length === 0) {
+        if (Object.keys(mutablePickerSet.currentNew).length === 0) {
           return pickList(choicesTemp);
         }
         setChoices(choicesTemp);
@@ -161,7 +161,7 @@ function PickController() {
         setCurrentList('new');
         return;
       case 'med':
-        if (mutablePickerSet.currentMedium.length === 0) {
+        if (Object.keys(mutablePickerSet.currentMedium).length === 0) {
           return pickList(choicesTemp);
         }
         setChoices(choicesTemp);
@@ -169,19 +169,19 @@ function PickController() {
         setCurrentList('med');
         return;
       case 'know':
-        if (mutablePickerSet.currentKnow.length === 0) {
+        if (Object.keys(mutablePickerSet.currentKnow).length === 0) {
           //If there are no songs marked 'know' but there are songs in the other knowledge categories
-          if (mutablePickerSet.fullKnow.length === 0) {
+          if (Object.keys(mutablePickerSet.fullKnow).length === 0) {
             return pickList(choicesTemp);
           }
 
           //If user is done with 'new' and 'med' and needs to recycle 'know'ç
-          if (mutablePickerSet.currentNew.length === 0 && mutablePickerSet.currentMedium.length === 0) {
+          if (Object.keys(mutablePickerSet.currentNew).length === 0 && Object.keys(mutablePickerSet.currentMedium).length === 0) {
             setChoices(choicesTemp);
             setOldList(currentList);
             setCurrentList('know');
             const updatedSet = { ...mutablePickerSet };
-            updatedSet.currentKnow = mutablePickerSet.fullKnow;
+            updatedSet.currentKnow = { ...mutablePickerSet.fullKnow };
             dispatch({ type: 'SET_MUTABLE', payload: updatedSet });
             return;
           }
@@ -218,11 +218,12 @@ function PickController() {
           { list: mutablePickerSet.currentMedium, name: 'currentMedium' } :
           { list: mutablePickerSet.currentKnow, name: 'currentKnow' };
 
-      choicePosition = Math.floor(Math.random() * current.list.length);
-      choice = current.list[choicePosition];
+      const tempTunesArray = [...Object.keys(current.list)];
+      choicePosition = Math.floor(Math.random() * tempTunesArray.length);
+      choice = tempTunesArray[choicePosition];
 
-      updatedList = [...current.list];
-      updatedList.splice(choicePosition, 1);
+      updatedList = { ...current.list };
+      delete updatedList[choicePosition];
     } else if (actionObject.action === 'RESELECT') {
       choice = tune;  //This is a song ID
 

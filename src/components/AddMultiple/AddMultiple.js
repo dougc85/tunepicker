@@ -110,8 +110,10 @@ function AddMultiple(props) {
 
       //Update Set doc
 
-      newSongsInSet[`currentNew`] = arrayUnion(...songIdsForSetlists);
-      newSongsInSet[`fullNew`] = arrayUnion(...songIdsForSetlists);
+      songIdsForSetlists.forEach((songId) => {
+        newSongsInSet[`currentNew.${songId}`] = null;
+        newSongsInSet[`fullNew.${songId}`] = null;
+      });
 
       const setDoc = doc(db, 'users', user.uid, 'sets', set.id);
       updateDoc(setDoc, {

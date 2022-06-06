@@ -111,12 +111,12 @@ function LoginSignupForm(props) {
       const setsRef = collection(userDocRef, 'sets');
       const defaultSet = {
         setName: "First Set",
-        fullKnow: [],
-        currentKnow: [],
-        fullNew: [],
-        currentNew: [],
-        fullMedium: [],
-        currentMedium: [],
+        fullKnow: {},
+        currentKnow: {},
+        fullNew: {},
+        currentNew: {},
+        fullMedium: {},
+        currentMedium: {},
         allSongs: {},
       };
       const newSetDoc = await addDoc(

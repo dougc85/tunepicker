@@ -12,7 +12,6 @@ import EditConfirm from './EditConfirm/EditConfirm';
 import DeleteSong from './DeleteSong/DeleteSong';
 import {
   SongStyled,
-  SongEntryStyled,
   TitleEntryStyled,
   TitleError,
   KeyEntryStyled,
@@ -24,7 +23,6 @@ import {
   SetsEntryStyled,
   SetsCheckbox,
 } from './Song.styled';
-import AddButton from '../../generics/AddButton.styled';
 
 function Song(props) {
 
@@ -213,13 +211,13 @@ function Song(props) {
     }
 
     for (let set in song.sets) {
-      const setDoc = doc(db, 'users', user.uid, 'sets', set);
+      const setDocRef = doc(db, 'users', user.uid, 'sets', set);
 
-      updateDoc(setDoc, {
-        [knowledgeArrays[song.knowledge][0]]: arrayRemove(song.id),
-        [knowledgeArrays[song.knowledge][1]]: arrayRemove(song.id),
-        [knowledgeArrays[knowledge][0]]: arrayUnion(song.id),
-        [knowledgeArrays[knowledge][1]]: arrayUnion(song.id),
+      updateDoc(setDocRef, {
+        [`${knowledgeArrays[song.knowledge][0]}.${song.id}`]: deleteField(),
+        [`${knowledgeArrays[song.knowledge][1]}.${song.id}`]: deleteField(),
+        [`${knowledgeArrays[knowledge][0]}.${song.id}`]: null,
+        [`${knowledgeArrays[knowledge][1]}.${song.id}`]: null,
       });
     }
   }
@@ -259,24 +257,34 @@ function Song(props) {
         continue;
       } else if (songInSet && !song.sets.hasOwnProperty(setId)) {
         //add the song to that set in the database
-        let setDoc = doc(db, 'users', user.uid, 'sets', setId);
+        let setDocRef = doc(db, 'users', user.uid, 'sets', setId);
 
-        updateDoc(setDoc, {
-          [`allSongs.${song.id}`]: null,
-          [knowledgeArrays[song.knowledge][0]]: arrayUnion(song.id),
-          [knowledgeArrays[song.knowledge][1]]: arrayUnion(song.id),
-        })
+        try {
+          updateDoc(setDocRef, {
+            [`allSongs.${song.id}`]: null,
+            [`${knowledgeArrays[song.knowledge][0]}.${song.id}`]: null,
+            [`${knowledgeArrays[song.knowledge][1]}.${song.id}`]: null,
+          })
+        } catch (error) {
+          console.log(error.message);
+        }
+
       } else if (!songInSet && !song.sets.hasOwnProperty(setId)) {
         continue;
       } else {
         //delete the song from that set in the database
-        let setDoc = doc(db, 'users', user.uid, 'sets', setId);
+        let setDocRef = doc(db, 'users', user.uid, 'sets', setId);
 
-        updateDoc(setDoc, {
-          [`allSongs.${song.id}`]: deleteField(),
-          [knowledgeArrays[song.knowledge][0]]: arrayRemove(song.id),
-          [knowledgeArrays[song.knowledge][1]]: arrayRemove(song.id),
-        });
+        try {
+          updateDoc(setDocRef, {
+            [`allSongs.${song.id}`]: deleteField(),
+            [`${knowledgeArrays[song.knowledge][0]}.${song.id}`]: deleteField(),
+            [`${knowledgeArrays[song.knowledge][1]}.${song.id}`]: deleteField(),
+          });
+        } catch (error) {
+          console.log(error.message);
+        }
+
       }
     }
 
