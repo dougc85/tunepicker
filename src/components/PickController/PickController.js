@@ -4,7 +4,7 @@ import SubContext from "../../context/sub-context";
 import './PickController.scss';
 import MoveControlsPopup from "./MoveControlsPopup/MoveControlsPopup";
 import Loading from "../Loading/Loading";
-import { onSnapshot, doc } from 'firebase/firestore';
+import { onSnapshot, doc, arrayRemove } from 'firebase/firestore';
 import { db } from '../../firebaseConfig'
 
 const pickerReducer = (state, action) => {
@@ -80,12 +80,34 @@ function PickController() {
         setShowNoSongs(true);
         return;
       }
-      if (pickerSet.currentNew.length !== 0) {
-        pickTune('new');
+
+      if (tune) {
+
+        pickTune({
+          action: 'RESELECT',
+        })
+
+
+        //!!!!DO THIS!!!!!!
+        //Reload the already picked tune into the picker and dispatch to alter the mutablePickerSet appropriately
+        //!!!!!Don't forget, when making changes to the database, update the USERDOC FIRST, THEN the set doc
+
+
+      } else if (pickerSet.currentNew.length !== 0) {
+        pickTune({
+          action: 'NEW_TUNE',
+          knowledge: 'new'
+        });
       } else if (pickerSet.currentMedium.length !== 0) {
-        pickTune('med');
+        pickTune({
+          action: 'NEW_TUNE',
+          knowledge: 'med'
+        });
       } else {
-        pickTune('know');
+        pickTune({
+          action: 'NEW_TUNE',
+          knowledge: 'know'
+        });
       }
     }
   }, [loading, pickerSet]);
@@ -181,19 +203,34 @@ function PickController() {
     dispatch({ type: 'SET_MUTABLE', payload: updatedSet });
   }
 
-  function pickTune(listToPickFrom) {
+  function pickTune(actionObject) {
 
-    const current = (listToPickFrom === 'new') ?
-      { list: mutablePickerSet.currentNew, name: 'currentNew' } :
-      (listToPickFrom === 'med') ?
-        { list: mutablePickerSet.currentMedium, name: 'currentMedium' } :
-        { list: mutablePickerSet.currentKnow, name: 'currentKnow' };
+    let current;
+    let choice;
+    let choicePosition;
+    let updatedList;
 
-    const choicePosition = Math.floor(Math.random() * current.list.length);
-    const choice = current.list[choicePosition];
+    if (actionObject.action === 'NEW_TUNE') {
 
-    const updatedList = [...current.list];
-    updatedList.splice(choicePosition, 1);
+      current = (actionObject.knowledge === 'new') ?
+        { list: mutablePickerSet.currentNew, name: 'currentNew' } :
+        (actionObject.knowledge === 'med') ?
+          { list: mutablePickerSet.currentMedium, name: 'currentMedium' } :
+          { list: mutablePickerSet.currentKnow, name: 'currentKnow' };
+
+      choicePosition = Math.floor(Math.random() * current.list.length);
+      choice = current.list[choicePosition];
+
+      updatedList = [...current.list];
+      updatedList.splice(choicePosition, 1);
+    } else if (actionObject.action === 'RESELECT') {
+      choice = tune;  //This is a song ID
+
+
+
+
+    }
+
     setCurrentKnowledge(current.name, updatedList);
     setTune(choice);
     setTriggerListKey((old) => !old);
@@ -217,7 +254,10 @@ function PickController() {
   }
 
   function nextHandler() {
-    pickTune(currentList);
+    pickTune({
+      action: 'NEW_TUNE',
+      knowledge: currentList
+    });
   }
 
   function capitalizeTitle(title) {
