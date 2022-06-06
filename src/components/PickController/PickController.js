@@ -181,7 +181,7 @@ function PickController() {
             setOldList(currentList);
             setCurrentList('know');
             const updatedSet = { ...mutablePickerSet };
-            updatedSet.currentKnow = mutablePickerSet.fullKnow;
+            updatedSet.currentKnow = [...mutablePickerSet.fullKnow];
             dispatch({ type: 'SET_MUTABLE', payload: updatedSet });
             return;
           }
