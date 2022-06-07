@@ -106,8 +106,6 @@ function Set(props) {
       { text: 'Delete Set', func: handleDeleteButton },
     ]
 
-  console.log(set.id, 'set.id');
-  console.log(pickerSetId, 'pickerSetId');
   return (
     <>
       {renderSet && (

@@ -203,13 +203,19 @@ function PickController() {
     }
   }
 
-  function setCurrentKnowledge(currentKnowledgeArray, newArray) {
+  function setCurrentKnowledge(currentKnowledgeArray, newArray, forSkip) {
     const updatedSet = { ...mutablePickerSet };
     updatedSet[currentKnowledgeArray] = newArray;
+    //Added this forSkip code to deal with async nature of setting state
+    if (forSkip) {
+      if (updatedSet[knowledgeArrays[forSkip.oldList][0]].indexOf(forSkip.tune) === -1) {
+        updatedSet[knowledgeArrays[forSkip.oldList][0]].push(forSkip.tune);
+      }
+    }
     dispatch({ type: 'SET_MUTABLE', payload: updatedSet });
   }
 
-  function pickTune(actionObject) {
+  function pickTune(actionObject, forSkip) {
 
     let current;
     let choice;
@@ -230,7 +236,7 @@ function PickController() {
       updatedList = [...current.list];
       updatedList.splice(choicePosition, 1);
 
-      setCurrentKnowledge(current.name, updatedList);
+      setCurrentKnowledge(current.name, updatedList, forSkip);
       setTune(choice);
     } else if (actionObject.action === 'RESELECT') {
       choice = tune;
@@ -262,6 +268,18 @@ function PickController() {
       knowledge: currentList
     });
   }
+
+  function skipHandler() {
+
+    pickTune({
+      action: 'NEW_TUNE',
+      knowledge: currentList
+    }, {
+      oldList: allSongs[tune].knowledge,
+      tune: tune,
+    });
+  }
+
 
   function raiseKnowledge() {
     changeKnowledge('raise');
@@ -346,18 +364,24 @@ function PickController() {
     )
   }
 
+  const displayedKey = (allSongs && tune) ?
+    (allSongs[tune].songKey === 'random' ? key : allSongs[tune].songKey) :
+    null;
+
+  console.log(mutablePickerSet, 'mutablePickerSet');
+
   return (
     <div className="PickController" style={{ backgroundColor: listColor }}>
       <div className="tune-wrapper">
         <p className="tune-name" style={{ fontSize: tuneFontSize }}>{allSongs[tune] && capitalizeTitle(allSongs[tune].title)}</p>
       </div>
 
-      <p className="key">{key}</p>
+      <p className="key">{displayedKey}</p>
 
       <button className="next-button" onClick={nextHandler} >NEXT</button>
 
       <div className="small-buttons-wrapper">
-        <button className="skip-button small-btn">SKIP</button>
+        <button className="skip-button small-btn" onClick={skipHandler}>SKIP</button>
         <button className="raise-button small-btn" onClick={raiseKnowledge} >&uarr;</button>
         <button className="lower-button small-btn" onClick={lowerKnowledge}>&darr;</button>
       </div>
