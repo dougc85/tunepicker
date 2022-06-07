@@ -16,8 +16,6 @@ function DeleteSong(props) {
   const location = useLocation();
   const path = location.pathname;
 
-  console.log();
-
   const setId =
     (path.slice(9, 17) === 'allsongs') ?
       null :
