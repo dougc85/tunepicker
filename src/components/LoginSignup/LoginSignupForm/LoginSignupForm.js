@@ -105,7 +105,8 @@ function LoginSignupForm(props) {
           songNames: {},
           email: userCredential.user.email,
           tunesIWantToLearn: {},
-        }
+        },
+        { merge: true },
       );
       const userDocRef = doc(db, 'users', userCredential.user.uid);
       const setsRef = collection(userDocRef, 'sets');
