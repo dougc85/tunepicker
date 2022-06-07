@@ -4,7 +4,7 @@ import SubContext from "../../context/sub-context";
 import './PickController.scss';
 import MoveControlsPopup from "./MoveControlsPopup/MoveControlsPopup";
 import Loading from "../Loading/Loading";
-import { onSnapshot, doc, arrayRemove, arrayUnion, updateDoc } from 'firebase/firestore';
+import { onSnapshot, doc, arrayRemove, arrayUnion, updateDoc, setDoc } from 'firebase/firestore';
 import { db } from '../../firebaseConfig'
 
 const pickerReducer = (state, action) => {
@@ -229,26 +229,13 @@ function PickController() {
 
       updatedList = [...current.list];
       updatedList.splice(choicePosition, 1);
+
+      setCurrentKnowledge(current.name, updatedList);
+      setTune(choice);
     } else if (actionObject.action === 'RESELECT') {
-      choice = tune;  //This is a song ID
-      const tuneKnowledge = allSongs[choice].knowledge;
-      const knowledgeName =
-        (tuneKnowledge === 'new') ? 'currentNew' :
-          (tuneKnowledge === 'med') ? 'currentMedium' :
-            'currentKnow';
-      current = {
-        list: mutablePickerSet[knowledgeName],
-        name: knowledgeName,
-      }
-      choicePosition = current.list.indexOf(choice);
-      updatedList = [...current.list];
-      if (choicePosition !== -1) {
-        updatedList.splice(choicePosition, 1);
-      }
+      choice = tune;
     }
 
-    setCurrentKnowledge(current.name, updatedList);
-    setTune(choice);
     setTriggerListKey((old) => !old);
     return choice;
   }
@@ -277,13 +264,29 @@ function PickController() {
   }
 
   function raiseKnowledge() {
+    changeKnowledge('raise');
+  }
+
+  function lowerKnowledge() {
+    changeKnowledge('lower');
+  }
+
+  function changeKnowledge(direction) {
+
     const oldKnowledge = allSongs[tune].knowledge;
+    let newKnowledge;
 
-    if (oldKnowledge === 'know') {
-      return;
+    if (direction === 'raise') {
+      if (oldKnowledge === 'know') {
+        return;
+      }
+      newKnowledge = (oldKnowledge === 'new') ? 'med' : 'know';
+    } else if (direction === 'lower') {
+      if (oldKnowledge === 'new') {
+        return;
+      }
+      newKnowledge = (oldKnowledge === 'know') ? 'med' : 'new';
     }
-
-    const newKnowledge = (oldKnowledge === 'new') ? 'med' : 'know';
 
     const userDocRef = doc(db, 'users', user.uid);
     const setDocRef = doc(userDocRef, 'sets', userDoc.pickerSet);
@@ -292,13 +295,16 @@ function PickController() {
       [`songs.${tune}.knowledge`]: newKnowledge
     })
 
-    updateDoc(setDocRef, {
-      [knowledgeArrays[oldKnowledge][0]]: arrayRemove(tune),
-      [knowledgeArrays[oldKnowledge][1]]: arrayRemove(tune),
-      [knowledgeArrays[newKnowledge][0]]: arrayUnion(tune),
-      [knowledgeArrays[newKnowledge][1]]: arrayUnion(tune),
-    });
+    const oldCurrentIndex = mutablePickerSet[knowledgeArrays[oldKnowledge][0]].indexOf(tune);
+    const oldFullIndex = mutablePickerSet[knowledgeArrays[oldKnowledge][1]].indexOf(tune);
 
+    if (oldCurrentIndex !== -1) {
+      mutablePickerSet[knowledgeArrays[oldKnowledge][0]].splice(oldCurrentIndex, 1);
+    }
+    mutablePickerSet[knowledgeArrays[oldKnowledge][1]].splice(oldFullIndex, 1);
+    mutablePickerSet[knowledgeArrays[newKnowledge][1]].push(tune);
+
+    setDoc(setDocRef, mutablePickerSet);
   }
 
   function capitalizeTitle(title) {
@@ -353,7 +359,7 @@ function PickController() {
       <div className="small-buttons-wrapper">
         <button className="skip-button small-btn">SKIP</button>
         <button className="raise-button small-btn" onClick={raiseKnowledge} >&uarr;</button>
-        <button className="lower-button small-btn">&darr;</button>
+        <button className="lower-button small-btn" onClick={lowerKnowledge}>&darr;</button>
       </div>
       <MoveControlsPopup />
     </div>
