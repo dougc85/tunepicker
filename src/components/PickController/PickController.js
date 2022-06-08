@@ -4,8 +4,9 @@ import SubContext from "../../context/sub-context";
 import './PickController.scss';
 import MoveControlsPopup from "./MoveControlsPopup/MoveControlsPopup";
 import Loading from "../Loading/Loading";
-import { onSnapshot, doc, arrayRemove, arrayUnion, updateDoc, setDoc } from 'firebase/firestore';
+import { onSnapshot, doc, updateDoc, setDoc } from 'firebase/firestore';
 import { db } from '../../firebaseConfig'
+import LibraryMenu from '../generics/LibraryMenu.styled';
 
 const pickerReducer = (state, action) => {
   if (action.type === 'SET_PICKERS') {
@@ -20,11 +21,26 @@ const pickerReducer = (state, action) => {
       mutablePickerSet: action.payload,
     }
   }
+  if (action.type === 'RESET_PICKER') {
+    return {
+      ...state,
+      pickerSet: action.payload,
+      mutablePickerSet: action.payload,
+      tune: '',
+    }
+  }
+  if (action.type === 'SET_TUNE') {
+    return {
+      ...state,
+      tune: action.payload,
+    }
+  }
 }
 
 const pickerInitialValues = {
   pickerSet: undefined,
   mutablePickerSet: undefined,
+  tune: '',
 }
 
 function PickController() {
@@ -54,12 +70,14 @@ function PickController() {
   const [choices, setChoices] = useState(['new', 'new', 'new', 'med', 'med', 'know']);
   const [keys, setKeys] = useState(['A', 'Bb', 'B', 'C', 'Db', 'D', 'Eb', 'E', 'F', 'F#', 'G', 'Ab']);
   const [key, setKey] = useState('');
-  const [tune, setTune] = useState('');
   const [triggerListKey, setTriggerListKey] = useState(false);
   const [showNoSongs, setShowNoSongs] = useState(false);
 
   const [state, dispatch] = useReducer(pickerReducer, pickerInitialValues);
-  const { pickerSet, mutablePickerSet } = state;
+  const { pickerSet, mutablePickerSet, tune } = state;
+  const setTune = (newTune) => {
+    dispatch({ type: 'SET_TUNE', payload: newTune });
+  }
 
   useEffect(() => {
     if (!user.uid || !userDoc.pickerSet) {
@@ -88,7 +106,6 @@ function PickController() {
       }
 
       if (tune) {
-
         pickTune({
           action: 'RESELECT',
         })
@@ -325,6 +342,15 @@ function PickController() {
     setDoc(setDocRef, mutablePickerSet);
   }
 
+  function resetPicker() {
+    const updatedSet = { ...mutablePickerSet };
+    updatedSet.currentNew = pickerSet.fullNew;
+    updatedSet.currentMedium = pickerSet.fullMedium;
+    updatedSet.currentKnow = pickerSet.fullKnow;
+
+    dispatch({ type: 'RESET_PICKER', payload: updatedSet });
+  }
+
   function capitalizeTitle(title) {
     return title.split(' ').map((word) => word[0].toUpperCase().concat(word.substring(1))).join(' ');
   }
@@ -352,6 +378,10 @@ function PickController() {
       ORANGE) :
     'white';
 
+  const libraryMenuItems = [
+    { text: "Reset Picker", func: resetPicker },
+  ]
+
   if (loading || !mutablePickerSet) {
     return (
       <Loading />
@@ -368,10 +398,16 @@ function PickController() {
     (allSongs[tune].songKey === 'random' ? key : allSongs[tune].songKey) :
     null;
 
-  console.log(mutablePickerSet, 'mutablePickerSet');
-
   return (
     <div className="PickController" style={{ backgroundColor: listColor }}>
+      <div className="picker-info">
+        <p>Picking from:</p>
+        <p>{userDoc.setNames[userDoc.pickerSet]}</p>
+        <LibraryMenu
+          items={libraryMenuItems}
+        />
+      </div>
+
       <div className="tune-wrapper">
         <p className="tune-name" style={{ fontSize: tuneFontSize }}>{allSongs[tune] && capitalizeTitle(allSongs[tune].title)}</p>
       </div>
