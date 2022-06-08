@@ -7,10 +7,13 @@ const LibraryMenuStyled = styled.div`
 
   button {
     border: none;
-    background-color: white;
+    background-color: inherit;
     display: flex;
     align-items: center;
     color: rgb(162, 162, 162);
+    svg {
+      height: 24px;
+    }
   }
 
   ul {
