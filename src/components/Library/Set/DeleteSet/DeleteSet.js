@@ -96,7 +96,6 @@ function DeleteSet(props) {
         ...newSongFields,
         pickerSet: newPickerId,
         [`setNames.${setId}`]: deleteField(),
-
       });
     }
     catch (error) {
