@@ -4,7 +4,7 @@ import { db } from '../../../../firebaseConfig'
 import { DeleteSongStyled } from './DeleteSong.styled';
 import Modal from '../../../generics/Modal.styled';
 import AddButton from '../../../generics/AddButton.styled';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { doc, updateDoc, arrayRemove, deleteField } from 'firebase/firestore';
 
 function DeleteSong(props) {
@@ -14,16 +14,19 @@ function DeleteSong(props) {
 
   const navigate = useNavigate();
   const location = useLocation();
+  const params = useParams();
   const path = location.pathname;
 
+  const atAllSongs = path.slice(9, 17) === 'allsongs';
+
   const setId =
-    (path.slice(9, 17) === 'allsongs') ?
+    atAllSongs ?
       null :
       path.slice(14, (path.indexOf('/', 14)));
 
 
   const contentConfig =
-    (path.slice(9, 17) === 'allsongs') ?
+    atAllSongs ?
       {
         modalHeight: '17rem',
         showSetRemoval: false,
@@ -69,6 +72,37 @@ function DeleteSong(props) {
 
   function deleteFromLibrary(e) {
     hideDeleteSong(e)
+
+
+    let userDocRef = doc(db, 'users', user.uid);
+    const setIds = Object.keys(song.sets);
+    const setDocRefs = setIds.map((setId) => doc(db, 'users', user.uid, 'sets', setId));
+
+    try {
+      setDocRefs.forEach((setDocRef) => {
+        updateDoc(setDocRef, {
+          [`allSongs.${song.id}`]: deleteField(),
+          [knowledgeArrays[song.knowledge][0]]: arrayRemove(song.id),
+          [knowledgeArrays[song.knowledge][1]]: arrayRemove(song.id),
+        })
+      })
+
+      updateDoc(userDocRef, {
+        [`songs.${song.id}`]: deleteField(),
+        [`songNames.${song.title}`]: deleteField(),
+      });
+
+
+      if (atAllSongs) {
+        navigate('/library/allsongs');
+      } else {
+        navigate(`/library/sets/${params.setId}`);
+      }
+
+    }
+    catch (error) {
+      console.log(error.message);
+    }
   }
 
 

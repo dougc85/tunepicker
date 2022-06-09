@@ -11,6 +11,7 @@ import LibraryMenu from '../generics/LibraryMenu.styled';
 const pickerReducer = (state, action) => {
   if (action.type === 'SET_PICKERS') {
     return {
+      ...state,
       pickerSet: action.payload,
       mutablePickerSet: action.payload,
     }
@@ -109,6 +110,7 @@ function PickController() {
         pickTune({
           action: 'RESELECT',
         })
+        return;
 
 
         //!!!!DO THIS!!!!!!
@@ -116,7 +118,11 @@ function PickController() {
         //!!!!!Don't forget, when making changes to the database, update the USERDOC FIRST, THEN the set doc
 
 
-      } else if (pickerSet.currentNew.length !== 0) {
+      }
+
+
+
+      if (pickerSet.currentNew.length !== 0) {
         pickTune({
           action: 'NEW_TUNE',
           knowledge: 'new'
@@ -126,11 +132,13 @@ function PickController() {
           action: 'NEW_TUNE',
           knowledge: 'med'
         });
-      } else {
+      } else if (pickerSet.currentKnow.length !== 0) {
         pickTune({
           action: 'NEW_TUNE',
           knowledge: 'know'
         });
+      } else {
+        resetPicker();
       }
     }
   }, [loading, pickerSet]);
