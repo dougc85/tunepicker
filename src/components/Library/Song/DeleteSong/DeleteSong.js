@@ -41,9 +41,8 @@ function DeleteSong(props) {
   function hideDeleteSong(e) {
     if (e) {
       e.preventDefault();
-
-      setShowDeleteSong(false);
     }
+    setShowDeleteSong(false);
   }
 
   function removeFromSet(e) {
