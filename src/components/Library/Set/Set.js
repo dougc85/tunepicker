@@ -13,6 +13,7 @@ import { SetStyled, SetHeader } from './Set.styled';
 import LibraryMenu from '../../../components/generics/LibraryMenu.styled';
 import DeleteSet from './DeleteSet/DeleteSet';
 import CannotDelete from './CannotDelete/CannotDelete';
+import NotFound from '../../generics/NotFound.styled';
 
 function Set(props) {
 
@@ -26,6 +27,7 @@ function Set(props) {
   const [showAddMultiple, setShowAddMultiple] = useState(false);
   const [showDeleteSet, setShowDeleteSet] = useState(false);
   const [showCannotDelete, setShowCannotDelete] = useState(false);
+  const [showNotFound, setShowNotFound] = useState(false);
   const [set, setSet] = useState(undefined);
 
   function handleAddButton(e) {
@@ -65,10 +67,15 @@ function Set(props) {
     if (user) {
       try {
         unsubscribeSetSnapshot = onSnapshot(doc(db, 'users', user.uid, 'sets', params.setId), (doc) => {
-          setSet({
-            ...doc.data(),
-            id: params.setId,
-          });
+          const docData = doc.data();
+          if (docData) {
+            setSet({
+              ...doc.data(),
+              id: params.setId,
+            });
+          } else {
+            setShowNotFound(true);
+          }
         });
 
       } catch (err) {
@@ -84,6 +91,12 @@ function Set(props) {
   }, [user, params.setId])
 
   const renderSet = params['*'] ? false : true;
+
+  if (showNotFound) {
+    return (
+      <NotFound />
+    )
+  }
 
   if (loading || !set) {
     return (

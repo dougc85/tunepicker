@@ -66,7 +66,8 @@ function AddMultiple(props) {
 
       const newSongsInSet = {};
 
-      const songIdsForSetlists = [];
+      const newSongIdsForSetlists = [];
+      const oldSongIdsForSetlists = [];
 
       allNewSongs.forEach((songName) => {
         const songId = uuid();
@@ -76,7 +77,7 @@ function AddMultiple(props) {
           title: songName,
           notes: '',
           songKey: 'random',
-          knowledge: 'new',
+          knowledge: 'know',
           sets: {
             [set.id]: set.setName
           },
@@ -85,7 +86,7 @@ function AddMultiple(props) {
         newSongsObj[`songNames.${songName}`] = songId;
 
         newSongsInSet[`allSongs.${songId}`] = null;
-        songIdsForSetlists.push(songId);
+        newSongIdsForSetlists.push(songId);
       })
 
       allOldSongs.forEach((songName) => {
@@ -96,7 +97,7 @@ function AddMultiple(props) {
 
         if (!set.allSongs.hasOwnProperty(songId)) {
           newSongsInSet[`allSongs.${songId}`] = null;
-          songIdsForSetlists.push(songId);
+          oldSongIdsForSetlists.push(songId);
         }
       })
 
@@ -110,8 +111,27 @@ function AddMultiple(props) {
 
       //Update Set doc
 
-      newSongsInSet[`currentNew`] = arrayUnion(...songIdsForSetlists);
-      newSongsInSet[`fullNew`] = arrayUnion(...songIdsForSetlists);
+      let knowSongs = [];
+      let medSongs = [];
+      let newSongs = [];
+
+      oldSongIdsForSetlists.forEach(songId => {
+        if (allSongs[songId].knowledge === 'know') {
+          knowSongs.push(songId);
+        } else if (allSongs[songId].knowledge === 'med') {
+          medSongs.push(songId);
+        } else {
+          newSongs.push(songId);
+        }
+      });
+
+      newSongsInSet[`currentKnow`] = arrayUnion(...newSongIdsForSetlists, ...knowSongs);
+      newSongsInSet[`fullKnow`] = arrayUnion(...newSongIdsForSetlists, ...knowSongs);
+      newSongsInSet[`currentMedium`] = arrayUnion(...medSongs);
+      newSongsInSet[`fullMedium`] = arrayUnion(...medSongs);
+      newSongsInSet[`currentNew`] = arrayUnion(...newSongs);
+      newSongsInSet[`fullNew`] = arrayUnion(...newSongs);
+
 
       const setDoc = doc(db, 'users', user.uid, 'sets', set.id);
       updateDoc(setDoc, {
@@ -144,7 +164,7 @@ function AddMultiple(props) {
     (calling === 'set') ?
       {
         heading: `Add Multiple Songs to ${set.setName}`,
-        instructions: "Add multiple songs at once by pasting (or typing out) a list of songs into the text box below. Make sure you strike the return/enter key after each song. Songs will be entered into this set and default to the 'New' knowledge level.  Also, all will be entered such that your preference for their key will be 'random'. Later updates will provide the ability to add a list of songs to any number of sets as well as allowing you to set the knowledge level of the group yourself. Any songs that you list which are already to be found in your library will be imported into this set with all their current settings intact."
+        instructions: "Add multiple songs at once by pasting (or typing out) a list of songs into the text box below. Make sure you strike the return/enter key after each song. Songs will be entered into this set and default to the 'Know' knowledge level.  Also, all will be entered such that your preference for their key will be 'random'. Later updates will provide the ability to add a list of songs to any number of sets as well as allowing you to set the knowledge level of the group yourself. Any songs that you list which are already to be found in your library will be imported into this set with all their current settings intact."
 
       } :
       {
