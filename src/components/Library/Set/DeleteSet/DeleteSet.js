@@ -15,9 +15,9 @@ function DeleteSet(props) {
 
   const { id: setId, allSongs } = set;
 
-  const { user, pickerSet, userDoc } = useContext(SubContext);
+  const { user, userDoc } = useContext(SubContext);
   const { uid } = user;
-  const { id: pickerId } = pickerSet;
+  const { pickerSet: pickerId } = userDoc;
   const { songs } = userDoc;
 
   const [showFirstModal, setShowFirstModal] = useState(true);
