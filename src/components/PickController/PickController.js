@@ -7,6 +7,7 @@ import Loading from "../Loading/Loading";
 import { onSnapshot, doc, updateDoc, setDoc } from 'firebase/firestore';
 import { db } from '../../firebaseConfig'
 import LibraryMenu from '../generics/LibraryMenu.styled';
+import MoveDownAndOut from "./MoveDownAndOut/MoveDownAndOut";
 
 const pickerReducer = (state, action) => {
   if (action.type === 'SET_PICKERS') {
@@ -73,6 +74,7 @@ function PickController() {
   const [key, setKey] = useState('');
   const [triggerListKey, setTriggerListKey] = useState(false);
   const [showNoSongs, setShowNoSongs] = useState(false);
+  const [showMoveDownAndOut, setShowMoveDownAndOut] = useState(false);
 
   const [state, dispatch] = useReducer(pickerReducer, pickerInitialValues);
   const { pickerSet, mutablePickerSet, tune } = state;
@@ -326,6 +328,7 @@ function PickController() {
       newKnowledge = (oldKnowledge === 'new') ? 'med' : 'know';
     } else if (direction === 'lower') {
       if (oldKnowledge === 'new') {
+        setShowMoveDownAndOut(true);
         return;
       }
       newKnowledge = (oldKnowledge === 'know') ? 'med' : 'new';
@@ -359,7 +362,7 @@ function PickController() {
     dispatch({ type: 'RESET_PICKER', payload: updatedSet });
   }
 
-  function capitalizeTitle(title) {
+  function capitalize(title) {
     return title.split(' ').map((word) => word[0].toUpperCase().concat(word.substring(1))).join(' ');
   }
 
@@ -417,7 +420,7 @@ function PickController() {
       </div>
 
       <div className="tune-wrapper">
-        <p className="tune-name" style={{ fontSize: tuneFontSize }}>{allSongs[tune] && capitalizeTitle(allSongs[tune].title)}</p>
+        <p className="tune-name" style={{ fontSize: tuneFontSize }}>{allSongs[tune] && capitalize(allSongs[tune].title)}</p>
       </div>
 
       <p className="key">{displayedKey}</p>
@@ -429,6 +432,14 @@ function PickController() {
         <button className="raise-button small-btn" onClick={raiseKnowledge} >&uarr;</button>
         <button className="lower-button small-btn" onClick={lowerKnowledge}>&darr;</button>
       </div>
+      {showMoveDownAndOut &&
+        <MoveDownAndOut
+          setShowMoveDownAndOut={setShowMoveDownAndOut}
+          songId={tune}
+          title={allSongs[tune].title}
+          setTune={setTune}
+          capitalize={capitalize}
+          knowledgeArrays={knowledgeArrays} />}
       <MoveControlsPopup />
     </div>
   )
