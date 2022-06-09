@@ -82,7 +82,7 @@ function DeleteSet(props) {
 
     Object.keys(allSongs).forEach(songId => {
 
-      if (Object.keys(songs[songId].sets).length) {
+      if (Object.keys(songs[songId].sets).length > 1) {
         newSongFields[`songs.${songId}.sets.${setId}`] = deleteField();
       } else {
         newSongFields[`songs.${songId}`] = deleteField();
