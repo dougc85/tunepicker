@@ -1,31 +1,32 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import SubContext from '../../context/sub-context';
 import { FrontPageStyled, Checkbox, Separator } from './FrontPage.styled';
 import Loading from '../Loading/Loading';
 import { updateDoc, doc } from 'firebase/firestore';
 import { db } from '../../firebaseConfig';
+import { useNavigate } from 'react-router-dom';
 
 function FrontPage(props) {
 
-  const context = useContext(SubContext);
+  const navigate = useNavigate();
 
-  const { loading, user } = context;
+  const context = useContext(SubContext);
+  const { loading, user, userDoc } = context;
+
   const { email, uid } = user;
   const [skipWelcome, setSkipWelcome] = useState(false);
   const [showConfirmation, setShowConfirmation] = useState(false);
 
-  if (loading) {
-    return (
-      <Loading />
-    )
-  }
+  useEffect(() => {
+    if (userDoc.loginToPicker) {
+      navigate('/controller');
+    }
+  }, [userDoc.loginToPicker])
+
+
 
   function handleCheckboxChange(e) {
     const checked = e.target.checked;
-
-    console.log(e.target, 'e.target');
-
-    console.log(checked, 'checked');
 
     const userDocRef = doc(db, 'users', uid);
     setSkipWelcome(checked);
@@ -43,6 +44,12 @@ function FrontPage(props) {
       })
     }
 
+  }
+
+  if (loading || !user) {
+    return (
+      <Loading />
+    )
   }
 
   return (
