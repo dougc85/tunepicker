@@ -1,12 +1,12 @@
 import styled from 'styled-components';
 
 export const NavStyled = styled.nav`
-  height: 150px;
+  height: 230px;
   background-color: white;
   position: absolute;
   bottom: 0;
   right: 0;
-  width: 70%;
+  width: 230px;
   transform: translateY(100%);
   box-shadow: -2px 10px 10px rgba(0,0,0,.2);
   padding: 1.5rem 0;

@@ -105,6 +105,7 @@ function LoginSignupForm(props) {
           songNames: {},
           email: userCredential.user.email,
           tunesIWantToLearn: {},
+          loginToPicker: false,
         },
         { merge: true },
       );

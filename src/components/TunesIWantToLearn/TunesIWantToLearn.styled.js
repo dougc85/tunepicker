@@ -2,7 +2,6 @@ import styled from 'styled-components';
 
 export const TunesIWantToLearnStyled = styled.div`
   margin-top: 1.5rem;
-
 `
 
 export const Header = styled.div`

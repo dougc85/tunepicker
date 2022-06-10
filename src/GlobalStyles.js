@@ -19,6 +19,7 @@ const GlobalStyles = createGlobalStyle`
     box-sizing: border-box;
     text-align: center;
     position: relative;
+    z-index: -1;
     backface-visibility: hidden;
     overflow-x: hidden;
     height: 100vh;
