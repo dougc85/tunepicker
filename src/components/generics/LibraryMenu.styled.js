@@ -3,14 +3,13 @@ import React, { useState, useRef } from 'react';
 
 const LibraryMenuStyled = styled.div`
 
-  position: relative;
-
   button {
     border: none;
     background-color: inherit;
     display: flex;
     align-items: center;
     color: rgb(162, 162, 162);
+
     svg {
       height: 24px;
     }
@@ -23,7 +22,7 @@ const LibraryMenuStyled = styled.div`
     left: ${props => {
     return (props.repositionMenu ? '-14rem' : '-3rem')
   }};
-    top: 3rem;
+    top: 8px;
     width: 18rem;
     box-shadow: -2px 10px 10px rgba(0,0,0,.2);
     padding: 1.5rem .5rem;
@@ -62,6 +61,10 @@ const Screen = styled.div`
   z-index: 100;
 `
 
+const MenuWrapper = styled.div`
+  position: relative;
+  `
+
 function LibraryMenu(props) {
 
   const [showMenu, setShowMenu] = useState(false);
@@ -85,16 +88,19 @@ function LibraryMenu(props) {
       {showMenu && (
         <>
           <Screen onClick={() => { setShowMenu(false) }} />
-          <ul>
-            {props.items.map(item => (
-              <li key={item.text} onClick={() => {
-                setShowMenu(false);
-                item.func();
-              }}>
-                {item.text}
-              </li>
-            ))}
-          </ul>
+          <MenuWrapper>
+            <ul>
+              {props.items.map(item => (
+                <li key={item.text} onClick={() => {
+                  setShowMenu(false);
+                  item.func();
+                }}>
+                  {item.text}
+                </li>
+              ))}
+            </ul>
+          </MenuWrapper>
+
         </>
       )}
     </LibraryMenuStyled>

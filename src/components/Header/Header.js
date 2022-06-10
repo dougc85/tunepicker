@@ -3,7 +3,7 @@ import { useState } from "react";
 import { Outlet } from 'react-router-dom';
 import MenuButton from "./MenuButton/MenuButton";
 import Nav from './Nav/Nav';
-import { HeaderStyled } from "./Header.styled";
+import { HeaderStyled, SiteContent } from "./Header.styled";
 
 function Header() {
 
@@ -20,7 +20,10 @@ function Header() {
         {showNav && <Nav toggleNav={toggleNav} />}
         <MenuButton toggleNav={toggleNav} />
       </HeaderStyled>
-      <Outlet />
+      <SiteContent>
+        <Outlet />
+      </SiteContent>
+
     </>
   )
 }

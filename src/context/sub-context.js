@@ -27,6 +27,7 @@ export const SubContextProvider = (props) => {
     tunesIWantToLearn: undefined,
     notVerifiedToken: 0,
     pickerSet: undefined,
+    loginToPicker: undefined,
   });
 
   const [loading, setLoading] = useState(true);
