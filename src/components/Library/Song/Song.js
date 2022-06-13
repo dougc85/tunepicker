@@ -181,7 +181,7 @@ function Song(props) {
 
   async function saveTitleData() {
 
-    const titleLower = title.toLowerCase();
+    const titleLower = title.toLowerCase().trim();
 
     if (title === '') {
       setErrorMessage('Title Field Required');
