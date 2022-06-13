@@ -50,7 +50,7 @@ function AddSong(props) {
       return;
     }
 
-    const titleLower = title.toLowerCase();
+    const titleLower = title.toLowerCase().trim();
 
     if (titleLower.charAt(titleLower.length - 1) === '.' || titleLower[0] === '.') {
       setDisableForm(true);
