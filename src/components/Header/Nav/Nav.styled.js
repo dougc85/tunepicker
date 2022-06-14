@@ -43,3 +43,13 @@ export const NavStyled = styled.nav`
     }
   }
 `
+
+export const Screen = styled.div`
+position: fixed;
+height: 100vh;
+width: 100vw;
+top: 0;
+left: 0;
+background-color: #0000001f;
+z-index: 100;
+`
