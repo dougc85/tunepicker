@@ -24,7 +24,7 @@ function Nav(props) {
         <li onClick={toggleNav}><Link to='/controller'>Picker</Link></li>
         <li onClick={toggleNav}><Link to='/library'>Library</Link></li>
         <li onClick={toggleNav}><Link to='/tunesiwanttolearn'>Tunes To Learn</Link></li>
-        <li>Help</li>
+        <li onClick={toggleNav}><Link to='/help'>Help</Link></li>
         <li>Contact Us</li>
         <li onClick={handleLogOut}>Log Out</li>
       </ul>

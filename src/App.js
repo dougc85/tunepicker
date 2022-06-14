@@ -11,6 +11,7 @@ import TunesIWantToLearn from './components/TunesIWantToLearn/TunesIWantToLearn'
 import AllSongs from './components/Library/AllSongs/AllSongs';
 import Song from './components/Library/Song/Song';
 import GlobalStyles from './GlobalStyles';
+import Help from './components/Help/Help';
 
 
 function App() {
@@ -31,6 +32,7 @@ function App() {
           <Route path="/library/sets" element={<Sets />} />
           <Route path="/library/sets/:setId/*" element={<Set setShowAlreadyInLibrary={setShowAlreadyInLibrary} showAlreadyInLibrary={showAlreadyInLibrary} />} />
           <Route path="/tunesiwanttolearn" element={<TunesIWantToLearn />} />
+          <Route path="/help" element={<Help heading={"Help Center"} />} />
         </Route>
         <Route path="/welcome" element={<Welcome />} />
       </Routes>
