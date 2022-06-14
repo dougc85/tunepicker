@@ -45,11 +45,11 @@ export const NavStyled = styled.nav`
 `
 
 export const Screen = styled.div`
-position: fixed;
+position: absolute;
 height: 100vh;
 width: 100vw;
 top: 0;
 left: 0;
-background-color: #0000001f;
-z-index: 100;
+background-color: rgba(0, 0, 0, 0.05);
+z-index: -1;
 `
