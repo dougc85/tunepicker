@@ -20,5 +20,6 @@ export const libraryColor = {
 export const fonts = {
   appFont: "'Viaoda Libre', cursive",
   secondaryFont: "'Inconsolata', monospace",
+  mainFont: "'Nunito', sans-serif",
 }
 

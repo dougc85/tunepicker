@@ -14,6 +14,8 @@ import LibraryMenu from '../../../components/generics/LibraryMenu.styled';
 import DeleteSet from './DeleteSet/DeleteSet';
 import CannotDelete from './CannotDelete/CannotDelete';
 import NotFound from '../../generics/NotFound.styled';
+import SortBy from '../../generics/SortBy.styled';
+import useSongSort from '../../../hooks/useSongSort';
 
 function Set(props) {
 
@@ -29,6 +31,9 @@ function Set(props) {
   const [showCannotDelete, setShowCannotDelete] = useState(false);
   const [showNotFound, setShowNotFound] = useState(false);
   const [set, setSet] = useState(undefined);
+
+  const [state, dispatch] = useSongSort();
+  const { songsArray, sortedBy } = state;
 
   function handleAddButton(e) {
     setShowAddSong(true);
@@ -90,6 +95,19 @@ function Set(props) {
     }
   }, [user, params.setId])
 
+  useEffect(() => {
+    if (set && allSongs) {
+      const setSongsObject = {};
+
+      Object.keys(set.allSongs).forEach((songId) => {
+        setSongsObject[songId] = allSongs[songId];
+      })
+
+      dispatch({ sortMethod: "Title - Ascending", payload: setSongsObject });
+    }
+
+  }, [set, allSongs]);
+
   const renderSet = params['*'] ? false : true;
 
   if (showNotFound) {
@@ -119,6 +137,14 @@ function Set(props) {
       { text: 'Delete Set', func: handleDeleteButton },
     ]
 
+  const setSongsObject = {};
+
+  if (set && allSongs) {
+    Object.keys(set.allSongs).forEach((songId) => {
+      setSongsObject[songId] = allSongs[songId];
+    })
+  }
+
   return (
     <>
       {renderSet && (
@@ -137,11 +163,11 @@ function Set(props) {
               </p>
             )}
             <h3>Songs</h3>
+            <SortBy dispatch={dispatch} sortedBy={sortedBy} songList={setSongsObject} />
             <ul>
-              {Object.keys(set.allSongs).map((songId) => {
-                const song = allSongs[songId];
+              {songsArray.map((songObj) => {
                 return (
-                  <SongEntry song={song} sortByDateAdded={false} key={songId} />
+                  <SongEntry song={songObj} sortByDateAdded={false} key={songObj.id} />
                 )
               })}
             </ul>
