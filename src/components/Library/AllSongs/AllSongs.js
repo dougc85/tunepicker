@@ -4,28 +4,8 @@ import SongEntry from '../SongEntry/SongEntry';
 import Path from '../Path/Path';
 import { AllSongsStyled, AllSongsHeader } from './AllSongs.styled';
 import Loading from '../../Loading/Loading';
-
-const songsReducer = (state, action) => {
-  if (action.sortMethod === "Title - Ascending") {
-
-    const oldSongObject = { ...action.payload };
-    const oldSongArrayOfObjects = Object.keys(oldSongObject).map((songId) => oldSongObject[songId]);
-    console.log(oldSongArrayOfObjects, 'oldSongArrayOfObjects');
-    const newSongArray = oldSongArrayOfObjects.sort((a, b) => {
-      return a.title.localeCompare(b.title, undefined, { numeric: true });
-    })
-
-    return {
-      songsArray: newSongArray,
-      sortedBy: action.sortMethod,
-    }
-  }
-}
-
-const songsInitialValues = {
-  songsArray: undefined,
-  sortedBy: "Title - Ascending",
-}
+import useSongSort from '../../../hooks/useSongSort';
+import SortBy from '../../generics/SortBy.styled';
 
 function AllSongs() {
 
@@ -33,7 +13,7 @@ function AllSongs() {
   const { userDoc, loading } = context;
   const { songs: allSongs } = userDoc;
 
-  const [state, dispatch] = useReducer(songsReducer, songsInitialValues);
+  const [state, dispatch] = useSongSort();
   const { songsArray, sortedBy } = state;
 
 
@@ -50,29 +30,13 @@ function AllSongs() {
     )
   }
 
-  const sortOptions = [
-    "Title - Ascending",
-    "Title - Descending",
-    "Knowledge",
-    "Date Added",
-  ]
-
   return (
 
     <AllSongsStyled>
       <Path heading="All Songs" pathType="All Songs" />
       <AllSongsHeader>
         <h2>All Songs</h2>
-        <div>
-          <label htmlFor="allSongs-sorting">Sort By:</label>
-          <select id="allSongs-sorting" onChange={() => { }} value={sortedBy}>
-            {sortOptions.map((key) => {
-              return (
-                <option value={key} key={key}>{key}</option>
-              )
-            })}
-          </select>
-        </div>
+        <SortBy dispatch={dispatch} sortedBy={sortedBy} songList={allSongs} />
       </AllSongsHeader>
       <ul>
         {songsArray.map((songObj) => {
