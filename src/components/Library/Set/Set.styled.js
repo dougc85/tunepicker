@@ -38,6 +38,10 @@ export const SetHeader = styled.div`
     height: 24px;
     margin-left: 1rem;
   }
-  
+`
+
+export const SongHeader = styled.div`
+  display: flex;
+  align-items: center;
 `
 
