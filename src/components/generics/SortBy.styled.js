@@ -7,7 +7,10 @@ const SortByStyled = styled.div`
   flex-direction: column;
   align-items: start;
   margin-right: 1rem;
-  margin-top: -13px;
+  margin-top: ${props => {
+    console.log(props.marginTop);
+    return props.marginTop
+  }};
 
   label {
     font-weight: bold;
@@ -24,7 +27,7 @@ const SortByStyled = styled.div`
 
 function SortBy(props) {
 
-  const { dispatch, sortedBy, songList } = props;
+  const { dispatch, sortedBy, songList, marginTop } = props;
 
   const sortOptions = [
     "Title - Ascending",
@@ -49,7 +52,7 @@ function SortBy(props) {
   }
 
   return (
-    <SortByStyled>
+    <SortByStyled marginTop={marginTop}>
       <label htmlFor="sorting">Sort By:</label>
       <select id="sorting" onChange={handleSelectChange} value={sortedBy}>
         {sortOptions.map((key) => {

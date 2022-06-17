@@ -9,7 +9,7 @@ import SongEntry from '../SongEntry/SongEntry';
 import Loading from '../../Loading/Loading';
 import Path from '../Path/Path';
 import Song from '../Song/Song';
-import { SetStyled, SetHeader } from './Set.styled';
+import { SetStyled, SetHeader, SongHeader } from './Set.styled';
 import LibraryMenu from '../../../components/generics/LibraryMenu.styled';
 import DeleteSet from './DeleteSet/DeleteSet';
 import CannotDelete from './CannotDelete/CannotDelete';
@@ -116,7 +116,7 @@ function Set(props) {
     )
   }
 
-  if (loading || !set) {
+  if (loading || !set || !songsArray) {
     return (
       <Loading />
     )
@@ -162,8 +162,11 @@ function Set(props) {
                 * Currently Selected in the Tune Picker
               </p>
             )}
-            <h3>Songs</h3>
-            <SortBy dispatch={dispatch} sortedBy={sortedBy} songList={setSongsObject} />
+            <SongHeader>
+              <h3>Songs</h3>
+              <SortBy dispatch={dispatch} sortedBy={sortedBy} songList={setSongsObject} marginTop={"-22px"} />
+
+            </SongHeader>
             <ul>
               {songsArray.map((songObj) => {
                 return (

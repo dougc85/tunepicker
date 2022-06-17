@@ -36,7 +36,7 @@ function AllSongs() {
       <Path heading="All Songs" pathType="All Songs" />
       <AllSongsHeader>
         <h2>All Songs</h2>
-        <SortBy dispatch={dispatch} sortedBy={sortedBy} songList={allSongs} />
+        <SortBy dispatch={dispatch} sortedBy={sortedBy} songList={allSongs} marginTop={"-13px"} />
       </AllSongsHeader>
       <ul>
         {songsArray.map((songObj) => {
