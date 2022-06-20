@@ -1,5 +1,5 @@
 import React from "react";
-import { useState, useEffect, useContext, useReducer } from "react";
+import { useState, useEffect, useContext, useReducer, useRef } from "react";
 import SubContext from "../../context/sub-context";
 import './PickController.scss';
 import MoveControlsPopup from "./MoveControlsPopup/MoveControlsPopup";
@@ -78,9 +78,40 @@ function PickController() {
 
   const [state, dispatch] = useReducer(pickerReducer, pickerInitialValues);
   const { pickerSet, mutablePickerSet, tune } = state;
+  const mutableRef = useRef(mutablePickerSet);
   const setTune = (newTune) => {
     dispatch({ type: 'SET_TUNE', payload: newTune });
   }
+
+  useEffect(() => {
+    mutableRef.current = mutablePickerSet;
+  }, [mutablePickerSet]);
+  //Cleanup on dismount
+
+  useEffect(() => {
+
+    function writeToDB() {
+      const userDocRef = doc(db, 'users', user.uid);
+      const setDocRef = doc(userDocRef, 'sets', userDoc.pickerSet);
+      setDoc(setDocRef, mutableRef.current);
+    }
+
+    function handleVisibilityChange() {
+      if (document.visibilityState === 'hidden') {
+        writeToDB();
+      }
+    }
+
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+
+    return () => {
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+      if (user.uid && userDoc.pickerSet) {
+        writeToDB();
+      }
+    }
+  }, [user.uid, userDoc.pickerSet]);
+
 
   useEffect(() => {
     if (!user.uid || !userDoc.pickerSet) {
