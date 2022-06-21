@@ -313,7 +313,7 @@ function PickController() {
     let tempKeys = [...keys];
 
     if (tempKeys.length === 0) {
-      tempKeys = ['A', 'Bb', 'B', 'C', 'Db', 'D', 'Eb', 'E', 'F', 'F#', 'G', 'Ab'];
+      tempKeys = ['C', 'D\u266D', 'D', 'E\u266D', 'E', 'F', 'F\u266F', 'G', 'A\u266D', 'A', 'B\u266D', 'B'];
     }
 
     const choicePosition = Math.floor(Math.random() * tempKeys.length);
@@ -473,7 +473,7 @@ function PickController() {
 
   if (allSongs && tune) {
     if (allSongs[tune].songKey === 'random') {
-      displayedKey = key;
+      displayedKey = formatKey(key);
     } else {
       displayedKey = formatKey(allSongs[tune].songKey);
     }

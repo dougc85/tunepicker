@@ -79,7 +79,6 @@ export const SubContextProvider = (props) => {
       return;
     }
     const unsubscribeUserDoc = onSnapshot(doc(db, 'users', user.uid), (doc) => {
-      console.log(doc.data());
       setUserDoc({ ...doc.data(), uid: doc.id });
     })
 
