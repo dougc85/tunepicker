@@ -9,6 +9,7 @@ import { db } from '../../firebaseConfig'
 import LibraryMenu from '../generics/LibraryMenu.styled';
 import MoveDownAndOut from "./MoveDownAndOut/MoveDownAndOut";
 import EditTitle from "./EditTitle/EditTitle";
+import EditKey from "./EditKey/EditKey";
 
 const pickerReducer = (state, action) => {
   if (action.type === 'SET_PICKERS') {
@@ -71,7 +72,7 @@ function PickController() {
   const [currentList, setCurrentList] = useState('');
   const [oldList, setOldList] = useState('');
   const [choices, setChoices] = useState(['new', 'new', 'new', 'med', 'med', 'know']);
-  const [keys, setKeys] = useState(['A', 'Bb', 'B', 'C', 'Db', 'D', 'Eb', 'E', 'F', 'F#', 'G', 'Ab']);
+  const [keys, setKeys] = useState(['C', 'D\u266D', 'D', 'E\u266D', 'E', 'F', 'F\u266F', 'G', 'A\u266D', 'A', 'B\u266D', 'B']);
   const [key, setKey] = useState('');
   const [triggerListKey, setTriggerListKey] = useState(false);
   const [showNoSongs, setShowNoSongs] = useState(false);
@@ -409,7 +410,7 @@ function PickController() {
   }
 
   function editSongKey() {
-
+    setShowEditKey(true);
   }
 
   function removeSong() {
@@ -468,9 +469,32 @@ function PickController() {
     )
   }
 
-  const displayedKey = (allSongs && tune) ?
-    (allSongs[tune].songKey === 'random' ? key : allSongs[tune].songKey) :
-    null;
+  let displayedKey;
+
+  if (allSongs && tune) {
+    if (allSongs[tune].songKey === 'random') {
+      displayedKey = key;
+    } else {
+      displayedKey = formatKey(allSongs[tune].songKey);
+    }
+  } else {
+    displayedKey = null;
+  }
+
+  function formatKey(keyValue) {
+    if (keyValue.length === 1) {
+      return keyValue;
+    } else {
+      return (
+        <>
+          {`${keyValue[0]}`}
+          <sup>{keyValue[1]}</sup>
+        </>
+      )
+    }
+  }
+
+  console.log(displayedKey, 'displayedKey');
 
   return (
     <div className="PickController" style={{ backgroundColor: listColor }}>
@@ -510,6 +534,12 @@ function PickController() {
           songId={tune}
           title={allSongs[tune].title}
           capitalize={capitalize}
+        />}
+      {showEditKey &&
+        <EditKey
+          setShowEditKey={setShowEditKey}
+          songId={tune}
+          songKey={allSongs[tune].songKey}
         />}
       <MoveControlsPopup />
     </div>

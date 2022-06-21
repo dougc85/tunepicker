@@ -18,7 +18,7 @@ function AddSong(props) {
 
   const { set, songNames, user, setShowAddSong } = props;
 
-  const keys = ['C', 'Db', 'D', 'Eb', 'E', 'F', 'F#', 'G', 'Ab', 'A', 'Bb', 'B'];
+  const keys = ['C', 'D\u266D', 'D', 'E\u266D', 'E', 'F', 'F\u266F', 'G', 'A\u266D', 'A', 'B\u266D', 'B'];
   const knowledgeFields = {
     know: ["fullKnow", "currentKnow"],
     med: ["fullMedium", "currentMedium"],
@@ -154,13 +154,8 @@ function AddSong(props) {
             <select disabled={disableForm} name="key" id="key" onChange={handleSongKeyChange} value={songKey} >
               <option value="random" key="random">random</option>
               {keys.map((key) => {
-                let keyModified = key;
-                if (key.length === 2) {
-                  key[1] === "#" ? keyModified = key[0] + `\u266F` :
-                    keyModified = key[0] + `\u266D`;
-                }
                 return (
-                  <option value={key} key={key}>{keyModified}</option>
+                  <option value={key} key={key}>{key}</option>
                 )
               })}
             </select>
