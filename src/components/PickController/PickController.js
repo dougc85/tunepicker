@@ -8,6 +8,7 @@ import { onSnapshot, doc, updateDoc, setDoc } from 'firebase/firestore';
 import { db } from '../../firebaseConfig'
 import LibraryMenu from '../generics/LibraryMenu.styled';
 import MoveDownAndOut from "./MoveDownAndOut/MoveDownAndOut";
+import EditTitle from "./EditTitle/EditTitle";
 
 const pickerReducer = (state, action) => {
   if (action.type === 'SET_PICKERS') {
@@ -75,6 +76,8 @@ function PickController() {
   const [triggerListKey, setTriggerListKey] = useState(false);
   const [showNoSongs, setShowNoSongs] = useState(false);
   const [showMoveDownAndOut, setShowMoveDownAndOut] = useState(false);
+  const [showEditTitle, setShowEditTitle] = useState(false);
+  const [showEditKey, setShowEditKey] = useState(false);
 
   const [state, dispatch] = useReducer(pickerReducer, pickerInitialValues);
   const { pickerSet, mutablePickerSet, tune } = state;
@@ -393,6 +396,30 @@ function PickController() {
     dispatch({ type: 'RESET_PICKER', payload: updatedSet });
   }
 
+  function newGig() {
+    const updatedSet = { ...mutablePickerSet };
+    updatedSet.currentNew = pickerSet.fullNew;
+    updatedSet.currentMedium = pickerSet.fullMedium;
+
+    dispatch({ type: 'RESET_PICKER', payload: updatedSet });
+  }
+
+  function editSongTitle() {
+    setShowEditTitle(true);
+  }
+
+  function editSongKey() {
+
+  }
+
+  function removeSong() {
+
+  }
+
+  function deleteSong() {
+
+  }
+
   function capitalize(title) {
     return title.split(' ').map((word) => word[0].toUpperCase().concat(word.substring(1))).join(' ');
   }
@@ -421,7 +448,12 @@ function PickController() {
     'white';
 
   const libraryMenuItems = [
+    { text: "Start New Gig", func: newGig },
     { text: "Reset Picker", func: resetPicker },
+    { text: "Edit Song Title", func: editSongTitle },
+    { text: "Edit Song Key", func: editSongKey },
+    { text: "Remove Song From Set", func: removeSong },
+    { text: "Delete Song From Library", func: deleteSong },
   ]
 
   if (loading || !mutablePickerSet) {
@@ -470,7 +502,15 @@ function PickController() {
           title={allSongs[tune].title}
           setTune={setTune}
           capitalize={capitalize}
-          knowledgeArrays={knowledgeArrays} />}
+          knowledgeArrays={knowledgeArrays}
+        />}
+      {showEditTitle &&
+        <EditTitle
+          setShowEditTitle={setShowEditTitle}
+          songId={tune}
+          title={allSongs[tune].title}
+          capitalize={capitalize}
+        />}
       <MoveControlsPopup />
     </div>
   )
