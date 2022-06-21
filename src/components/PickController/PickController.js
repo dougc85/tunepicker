@@ -90,8 +90,9 @@ function PickController() {
   useEffect(() => {
     mutableRef.current = mutablePickerSet;
   }, [mutablePickerSet]);
-  //Cleanup on dismount
 
+
+  //Cleanup on dismount
   useEffect(() => {
 
     function writeToDB() {
@@ -125,6 +126,7 @@ function PickController() {
 
       const newPickerSet = { ...firebaseDoc.data(), id: userDoc.pickerSet };
       dispatch({ type: 'SET_PICKERS', payload: newPickerSet });
+      pickKey();
     });
 
     return () => {
@@ -147,6 +149,7 @@ function PickController() {
         pickTune({
           action: 'RESELECT',
         })
+        pickKey();
         return;
 
 
@@ -177,6 +180,7 @@ function PickController() {
       } else {
         resetPicker();
       }
+      pickKey();
     }
   }, [loading, pickerSet]);
 
@@ -329,6 +333,7 @@ function PickController() {
       action: 'NEW_TUNE',
       knowledge: currentList
     });
+    pickKey();
   }
 
   function skipHandler() {
@@ -428,7 +433,6 @@ function PickController() {
   useEffect(() => {
     if (tune !== '') {
       pickList(choices);
-      pickKey();
     }
   }, [triggerListKey]);
 
@@ -493,8 +497,6 @@ function PickController() {
       )
     }
   }
-
-  console.log(displayedKey, 'displayedKey');
 
   return (
     <div className="PickController" style={{ backgroundColor: listColor }}>
