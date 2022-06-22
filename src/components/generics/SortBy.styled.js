@@ -1,6 +1,5 @@
 import React from 'react';
 import styled from 'styled-components';
-import { fonts } from '../../partials/variables.styled';
 
 const SortByStyled = styled.div`
   display: flex;
@@ -8,7 +7,6 @@ const SortByStyled = styled.div`
   align-items: start;
   margin-right: 1rem;
   margin-top: ${props => {
-    console.log(props.marginTop);
     return props.marginTop
   }};
 

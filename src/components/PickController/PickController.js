@@ -11,6 +11,7 @@ import MoveDownAndOut from "./MoveDownAndOut/MoveDownAndOut";
 import EditTitle from "./EditTitle/EditTitle";
 import EditKey from "./EditKey/EditKey";
 import Path from "../Library/Path/Path";
+import DeleteSong from "../Library/Song/DeleteSong/DeleteSong";
 
 const pickerReducer = (state, action) => {
   if (action.type === 'SET_PICKERS') {
@@ -80,6 +81,7 @@ function PickController() {
   const [showMoveDownAndOut, setShowMoveDownAndOut] = useState(false);
   const [showEditTitle, setShowEditTitle] = useState(false);
   const [showEditKey, setShowEditKey] = useState(false);
+  const [showDeleteSong, setShowDeleteSong] = useState(false);
 
   const [state, dispatch] = useReducer(pickerReducer, pickerInitialValues);
   const { pickerSet, mutablePickerSet, tune } = state;
@@ -164,6 +166,28 @@ function PickController() {
 
   }, [user.uid, userDoc.pickerSet]);
 
+  function initialPick() {
+    if (pickerSet.currentNew.length !== 0) {
+      pickTune({
+        action: 'NEW_TUNE',
+        knowledge: 'new'
+      });
+    } else if (pickerSet.currentMedium.length !== 0) {
+      pickTune({
+        action: 'NEW_TUNE',
+        knowledge: 'med'
+      });
+    } else if (pickerSet.currentKnow.length !== 0) {
+      pickTune({
+        action: 'NEW_TUNE',
+        knowledge: 'know'
+      });
+    } else {
+      resetPicker();
+    }
+    pickKey();
+  }
+
   useEffect(() => {
     if (!loading && pickerSet) {
 
@@ -178,36 +202,9 @@ function PickController() {
         })
         pickKey();
         return;
-
-
-        //!!!!DO THIS!!!!!!
-        //Reload the already picked tune into the picker and dispatch to alter the mutablePickerSet appropriately
-        //!!!!!Don't forget, when making changes to the database, update the USERDOC FIRST, THEN the set doc
-
-
       }
 
-
-
-      if (pickerSet.currentNew.length !== 0) {
-        pickTune({
-          action: 'NEW_TUNE',
-          knowledge: 'new'
-        });
-      } else if (pickerSet.currentMedium.length !== 0) {
-        pickTune({
-          action: 'NEW_TUNE',
-          knowledge: 'med'
-        });
-      } else if (pickerSet.currentKnow.length !== 0) {
-        pickTune({
-          action: 'NEW_TUNE',
-          knowledge: 'know'
-        });
-      } else {
-        resetPicker();
-      }
-      pickKey();
+      initialPick();
     }
   }, [loading, pickerSet]);
 
@@ -450,7 +447,7 @@ function PickController() {
   }
 
   function deleteSong() {
-
+    setShowDeleteSong(true);
   }
 
   function capitalize(title) {
@@ -577,6 +574,19 @@ function PickController() {
           songId={tune}
           songKey={allSongs[tune].songKey}
         />}
+      {showDeleteSong &&
+        <DeleteSong
+          song={allSongs[tune]}
+          knowledgeArrays={{
+            know: ['currentKnow', 'fullKnow'],
+            med: ['currentMedium', 'fullMedium'],
+            new: ['currentNew', 'fullNew']
+          }}
+          setShowDeleteSong={setShowDeleteSong}
+          forPicker
+          initialPick={initialPick}
+        />
+      }
       <MoveControlsPopup />
     </div>
   )

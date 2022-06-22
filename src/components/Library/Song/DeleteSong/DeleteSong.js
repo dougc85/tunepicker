@@ -9,7 +9,7 @@ import { doc, updateDoc, arrayRemove, deleteField } from 'firebase/firestore';
 
 function DeleteSong(props) {
 
-  const { song, knowledgeArrays, setShowDeleteSong } = props;
+  const { song, knowledgeArrays, setShowDeleteSong, forPicker, initialPick } = props;
   const { user, userDoc } = useContext(SubContext);
 
   const navigate = useNavigate();
@@ -26,7 +26,7 @@ function DeleteSong(props) {
 
 
   const contentConfig =
-    atAllSongs ?
+    (atAllSongs || forPicker) ?
       {
         modalHeight: '17rem',
         showSetRemoval: false,
@@ -67,15 +67,15 @@ function DeleteSong(props) {
     }
 
     navigate(`/library/sets/${setId}`);
+
   }
 
   function deleteFromLibrary(e) {
     hideDeleteSong(e)
 
-
     let userDocRef = doc(db, 'users', user.uid);
     const setIds = Object.keys(song.sets);
-    const setDocRefs = setIds.map((setId) => doc(db, 'users', user.uid, 'sets', setId));
+    const setDocRefs = setIds.map((id) => doc(db, 'users', user.uid, 'sets', id));
 
     try {
       setDocRefs.forEach((setDocRef) => {
@@ -91,6 +91,10 @@ function DeleteSong(props) {
         [`songNames.${song.title}`]: deleteField(),
       });
 
+      if (forPicker) {
+        initialPick();
+        return;
+      }
 
       if (atAllSongs) {
         navigate('/library/allsongs');
