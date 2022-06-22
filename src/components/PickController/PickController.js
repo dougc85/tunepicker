@@ -82,6 +82,7 @@ function PickController() {
   const [showEditTitle, setShowEditTitle] = useState(false);
   const [showEditKey, setShowEditKey] = useState(false);
   const [showDeleteSong, setShowDeleteSong] = useState(false);
+  const [showRemoveSong, setShowRemoveSong] = useState(false);
 
   const [state, dispatch] = useReducer(pickerReducer, pickerInitialValues);
   const { pickerSet, mutablePickerSet, tune } = state;
@@ -443,7 +444,7 @@ function PickController() {
   }
 
   function removeSong() {
-
+    setShowRemoveSong(true);
   }
 
   function deleteSong() {
@@ -585,6 +586,20 @@ function PickController() {
           setShowDeleteSong={setShowDeleteSong}
           forPicker
           initialPick={initialPick}
+        />
+      }
+      {showRemoveSong &&
+        <DeleteSong
+          song={allSongs[tune]}
+          knowledgeArrays={{
+            know: ['currentKnow', 'fullKnow'],
+            med: ['currentMedium', 'fullMedium'],
+            new: ['currentNew', 'fullNew']
+          }}
+          setShowRemoveSong={setShowRemoveSong}
+          forPicker
+          removeOnly
+          dispatch={dispatch}
         />
       }
       <MoveControlsPopup />
