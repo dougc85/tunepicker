@@ -13,7 +13,9 @@ export const PathStyled = styled.div`
 
   button {
     display: block;
-    background-color: white;
+    background-color: ${props => {
+    return props.forPicker ? 'rgba(0, 0, 0, 0)' : 'white'
+  }};
     border: none;
   }
 

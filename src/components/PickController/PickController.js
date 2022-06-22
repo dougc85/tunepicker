@@ -10,6 +10,7 @@ import LibraryMenu from '../generics/LibraryMenu.styled';
 import MoveDownAndOut from "./MoveDownAndOut/MoveDownAndOut";
 import EditTitle from "./EditTitle/EditTitle";
 import EditKey from "./EditKey/EditKey";
+import Path from "../Library/Path/Path";
 
 const pickerReducer = (state, action) => {
   if (action.type === 'SET_PICKERS') {
@@ -148,7 +149,6 @@ function PickController() {
       const timestamp = currentDate.getTime();
 
       if ((timestamp - forRefresh.time) < 5000) {
-        console.log('here');
         const userDocRef = doc(db, 'users', user.uid);
         const setDocRef = doc(userDocRef, 'sets', userDoc.pickerSet);
         setDoc(setDocRef, forRefresh.set);
@@ -528,11 +528,18 @@ function PickController() {
   return (
     <div className="PickController" style={{ backgroundColor: listColor }}>
       <div className="picker-info">
-        <p>Picking from:</p>
-        <p>{userDoc.setNames[userDoc.pickerSet]}</p>
-        <LibraryMenu
-          items={libraryMenuItems}
-        />
+        <div className="picker-info-picking">
+          <p>Picking from:</p>
+          <Path heading={userDoc.setNames[userDoc.pickerSet]} pathType="Set" setId={userDoc.pickerSet} forPicker />
+        </div>
+        <div className="picker-info-menu">
+          <p>Menu</p>
+          <LibraryMenu
+            items={libraryMenuItems}
+            color="#3d3d3d"
+          />
+        </div>
+
       </div>
 
       <div className="tune-wrapper">

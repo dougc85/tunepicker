@@ -4,7 +4,7 @@ import { useNavigate, useLocation, useParams } from 'react-router-dom';
 
 function Path(props) {
 
-  const { pathType, heading } = props;
+  const { pathType, heading, setId, forPicker } = props;
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -30,7 +30,9 @@ function Path(props) {
   }
 
   function toSet() {
-    navigate(`/library/sets/${params.setId}`)
+    let setPath =
+      params.setId ? params.setId : setId;
+    navigate(`/library/sets/${setPath}`)
   }
 
   function toAllSongs() {
@@ -98,7 +100,7 @@ function Path(props) {
     }
 
     return (
-      <PathStyled>
+      <PathStyled forPicker={forPicker}>
         {libraryIcon}
         {showSecondTier && divider}
         {showSecondTier && book}
