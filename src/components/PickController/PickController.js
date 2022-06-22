@@ -99,6 +99,16 @@ function PickController() {
       const userDocRef = doc(db, 'users', user.uid);
       const setDocRef = doc(userDocRef, 'sets', userDoc.pickerSet);
       setDoc(setDocRef, mutableRef.current);
+
+      //Write to localStorage to ensure doc gets set, even on page refresh
+      const currentDate = new Date();
+      const timestamp = currentDate.getTime();
+
+      const refreshObject = {
+        time: timestamp,
+        set: mutableRef.current,
+      }
+      localStorage.setItem('forRefresh', JSON.stringify(refreshObject));
     }
 
     function handleVisibilityChange() {
@@ -128,6 +138,23 @@ function PickController() {
       dispatch({ type: 'SET_PICKERS', payload: newPickerSet });
       pickKey();
     });
+
+    let forRefresh = localStorage.getItem('forRefresh');
+    if (forRefresh) {
+
+      forRefresh = JSON.parse(forRefresh);
+
+      const currentDate = new Date();
+      const timestamp = currentDate.getTime();
+
+      if ((timestamp - forRefresh.time) < 5000) {
+        console.log('here');
+        const userDocRef = doc(db, 'users', user.uid);
+        const setDocRef = doc(userDocRef, 'sets', userDoc.pickerSet);
+        setDoc(setDocRef, forRefresh.set);
+      }
+      localStorage.clear();
+    }
 
     return () => {
       if (unsubscribeSetDoc) {
@@ -454,11 +481,11 @@ function PickController() {
 
   const libraryMenuItems = [
     { text: "Start New Gig", func: newGig },
-    { text: "Reset Picker", func: resetPicker },
     { text: "Edit Song Title", func: editSongTitle },
     { text: "Edit Song Key", func: editSongKey },
     { text: "Remove Song From Set", func: removeSong },
     { text: "Delete Song From Library", func: deleteSong },
+    { text: "Reset Picker", func: resetPicker },
   ]
 
   if (loading || !mutablePickerSet) {
