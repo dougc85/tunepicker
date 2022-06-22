@@ -28,7 +28,7 @@ const LibraryMenuStyled = styled.div`
     top: 8px;
     width: 18rem;
     box-shadow: -2px 10px 10px rgba(0,0,0,.2);
-    padding: 1.5rem .5rem;
+    padding: 1.5rem 1rem;
     z-index: 150;
     list-style: none;
     font-size: 1.5rem;
@@ -78,7 +78,7 @@ function LibraryMenu(props) {
   function handleClick() {
     setShowMenu((old) => !old);
     if ((libMenuRef.current.getBoundingClientRect().x + 50) > window.innerWidth) {
-      setRepositionMenu('-15.3rem');
+      setRepositionMenu('-15.8rem');
     } else if ((libMenuRef.current.getBoundingClientRect().x + 200) > window.innerWidth) {
       setRepositionMenu('-14rem');
     }

@@ -44,5 +44,9 @@ export const TunesStyled = styled.ul`
       transform: translateY(-50%);
       color: rgba(0,0,0, .4);
     }
+    span {
+      display: inline-block;
+      padding-right: 30px;
+    }
   }
 `;
