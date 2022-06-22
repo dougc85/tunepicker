@@ -9,7 +9,13 @@ import { doc, updateDoc, arrayRemove, deleteField } from 'firebase/firestore';
 
 function DeleteSong(props) {
 
-  const { song, knowledgeArrays, setShowDeleteSong, forPicker, initialPick } = props;
+  const { song, knowledgeArrays, setShowRemoveSong, forPicker, initialPick, removeOnly, dispatch } = props;
+  let { setShowDeleteSong } = props;
+
+  if (setShowRemoveSong) {
+    setShowDeleteSong = setShowRemoveSong;
+  }
+
   const { user, userDoc } = useContext(SubContext);
 
   const navigate = useNavigate();
@@ -22,17 +28,19 @@ function DeleteSong(props) {
   const setId =
     atAllSongs ?
       null :
-      path.slice(14, (path.indexOf('/', 14)));
+      forPicker ?
+        userDoc.pickerSet :
+        path.slice(14, (path.indexOf('/', 14)));
 
 
   const contentConfig =
-    (atAllSongs || forPicker) ?
+    (atAllSongs || (forPicker && !removeOnly)) ?
       {
         modalHeight: '17rem',
         showSetRemoval: false,
       } :
       {
-        modalHeight: '22rem',
+        modalHeight: (forPicker ? '14rem' : '22rem'),
         showSetRemoval: true,
         setName: userDoc.setNames[setId],
       }
@@ -66,8 +74,12 @@ function DeleteSong(props) {
       console.log(error);
     }
 
-    navigate(`/library/sets/${setId}`);
-
+    if (forPicker) {
+      dispatch({ type: 'SET_TUNE', payload: '' });
+      return;
+    } else {
+      navigate(`/library/sets/${setId}`);
+    }
   }
 
   function deleteFromLibrary(e) {
@@ -115,11 +127,11 @@ function DeleteSong(props) {
       <DeleteSongStyled>
         <h3>Delete Song</h3>
         <div>
-          {contentConfig.showSetRemoval && <AddButton onClick={removeFromSet}>Remove Song From {contentConfig.setName}</AddButton>}
-          <div>
+          {contentConfig.showSetRemoval && <AddButton onClick={removeFromSet}>Remove Song From '{contentConfig.setName}'</AddButton>}
+          {!removeOnly && <div>
             <AddButton onClick={deleteFromLibrary}>Delete Song From Library</AddButton>
             <p>**Note that this will also delete the song from ALL sets in which it may be found</p>
-          </div>
+          </div>}
           <AddButton onClick={hideDeleteSong}>Cancel</AddButton>
         </div>
 
