@@ -2,6 +2,7 @@ import { ContactStyled, ContactForm, FormElement, FormElementTextArea, FormEleme
 import React from 'react';
 import AddButton from '../generics/AddButton.styled';
 import useFormInput from '../../hooks/useFormInput';
+import { send } from 'emailjs-com';
 
 function Contact() {
 
@@ -9,8 +10,30 @@ function Contact() {
   const [subject, handleSubjectChange, resetSubject] = useFormInput('');
   const [message, handleMessageChange, resetMessage] = useFormInput('');
 
-  function handleSubmit(e) {
+  async function handleSubmit(e) {
     e.preventDefault();
+
+    const toSend = {
+      subject: subject,
+      message: message,
+      reply_to: email,
+    }
+
+    try {
+      await send(
+        'service_ry9nw6o',
+        'template_rgtfd6p',
+        toSend,
+        'pRo2AOTzC8blSvLC1',
+      )
+    }
+    catch (error) {
+      console.log(error.message);
+    }
+
+    resetEmail();
+    resetSubject();
+    resetMessage();
   }
 
   return (
@@ -19,15 +42,15 @@ function Contact() {
       <ContactForm>
         <FormElement>
           <label>Your Email</label>
-          <input value={email} onChange={handleEmailChange} />
+          <input value={email} type="email" required onChange={handleEmailChange} />
         </FormElement>
         <FormElement>
           <label>Subject</label>
-          <input value={subject} onChange={handleSubjectChange} autoComplete="off" />
+          <input value={subject} type="text" required onChange={handleSubjectChange} autoComplete="off" />
         </FormElement>
         <FormElementTextArea>
           <label>Message</label>
-          <textarea value={message} onChange={handleMessageChange}></textarea>
+          <textarea value={message} required onChange={handleMessageChange}></textarea>
         </FormElementTextArea>
         <FormElementButton>
           <AddButton onClick={handleSubmit}>Submit</AddButton>
