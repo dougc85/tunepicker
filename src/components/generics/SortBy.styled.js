@@ -28,6 +28,9 @@ const SortByStyled = styled.div`
     padding: 2px;
     font-size: 1.2rem;
     padding-right: 3.5rem;
+    color: #000000;
+    border: 1px solid #464646;
+    border-radius: 2px;
   }
 `
 
