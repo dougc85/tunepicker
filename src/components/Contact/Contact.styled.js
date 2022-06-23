@@ -2,7 +2,7 @@ import styled from 'styled-components';
 
 export const ContactStyled = styled.div`
   box-sizing: border-box;
-  font-size: 1.4rem;
+  font-size: 1.5rem;
   padding: 2rem;
   text-align: start;
   display: flex;
@@ -23,6 +23,14 @@ export const ContactForm = styled.form`
 
   label {
     display: block;
+    margin-left: 3px;
+
+    span {
+      font-size: .8em;
+      display: inline-block;
+      margin-left: 13px;
+      color: red;
+    }
   }
 `
 
