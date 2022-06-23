@@ -13,11 +13,21 @@ const SortByStyled = styled.div`
   label {
     font-weight: bold;
     font-size: 1.2rem;
+    color: #383838;
   }
 
   select {
     font-family: 'Nunito', sans-serif;
     font-weight: 500;
+    appearance: none;
+    background-color: transparent;
+    background-image: url('/images/downChevron.svg');
+    background-repeat: no-repeat;
+    background-position: right;
+    background-size: 30px;
+    padding: 2px;
+    font-size: 1.2rem;
+    padding-right: 3.5rem;
   }
 `
 
