@@ -9,7 +9,7 @@ export const SetStyled = styled.div`
     text-align: start;
     margin-left: 1.5rem;
     margin-top: -1rem;
-    margin-bottom: 1rem;
+    margin-bottom: 2.5rem;
   }
 
   h3 {
@@ -19,7 +19,6 @@ export const SetStyled = styled.div`
     font-weight: bold;
     font-size: 2rem;
     margin-right: auto;
-
     }
   
 `
