@@ -46,7 +46,7 @@ function AddSongToWantToLearn(props) {
         await updateDoc(
           doc(db, 'users', user.uid),
           {
-            [`tunesIWantToLearn.${title.toLowerCase()}`]: null,
+            [`tunesIWantToLearn.${title.toLowerCase().trim()}`]: null,
           });
         resetTitle();
         setShowAddSong(false);
