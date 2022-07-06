@@ -78,11 +78,14 @@
   font-size: 3rem;
 }
 
-.see-edits-button {
+.notes-button {
   display: inline-block;
   font-size: 1.8rem;
+  border: none;
   border-bottom: 1px solid black;
   margin-bottom: 2rem;
+  align-self: center;
+  background-color: inherit;
 }
 
 .popup-background {

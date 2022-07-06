@@ -1,4 +1,5 @@
 import React from 'react';
+import AddButton from '../../generics/AddButton.styled';
 import Modal from '../../generics/Modal.styled';
 import { NotesStyled } from './Notes.styled';
 
@@ -15,6 +16,12 @@ function Notes(props) {
   }
 
   function addWhitespace(str) {
+
+    if (!str) {
+      return (
+        <p>This song has no notes to display.</p>
+      )
+    }
 
     let elementArray = [];
     let newString = '';
@@ -38,6 +45,7 @@ function Notes(props) {
       <NotesStyled>
         <h3>Notes</h3>
         <p>{addWhitespace(notes)}</p>
+        <AddButton onClick={handleCancel}>Done</AddButton>
       </NotesStyled>
     </Modal>
   )
