@@ -12,6 +12,7 @@ import EditTitle from "./EditTitle/EditTitle";
 import EditKey from "./EditKey/EditKey";
 import Path from "../Library/Path/Path";
 import DeleteSong from "../Library/Song/DeleteSong/DeleteSong";
+import Notes from "./Notes/Notes";
 
 const pickerReducer = (state, action) => {
   if (action.type === 'SET_PICKERS') {
@@ -83,6 +84,7 @@ function PickController() {
   const [showEditKey, setShowEditKey] = useState(false);
   const [showDeleteSong, setShowDeleteSong] = useState(false);
   const [showRemoveSong, setShowRemoveSong] = useState(false);
+  const [showNotes, setShowNotes] = useState(false);
 
   const [state, dispatch] = useReducer(pickerReducer, pickerInitialValues);
   const { pickerSet, mutablePickerSet, tune } = state;
@@ -523,6 +525,10 @@ function PickController() {
     }
   }
 
+  function handleNotesClick() {
+    setShowNotes(true);
+  }
+
   return (
     <div className="PickController" style={{ backgroundColor: listColor }}>
       <div className="picker-info">
@@ -553,6 +559,7 @@ function PickController() {
         <button className="raise-button small-btn" onClick={raiseKnowledge} >&uarr;</button>
         <button className="lower-button small-btn" onClick={lowerKnowledge}>&darr;</button>
       </div>
+      <button onClick={handleNotesClick} className="notes-button">notes</button>
       {showMoveDownAndOut &&
         <MoveDownAndOut
           setShowMoveDownAndOut={setShowMoveDownAndOut}
@@ -600,6 +607,12 @@ function PickController() {
           forPicker
           removeOnly
           dispatch={dispatch}
+        />
+      }
+      {showNotes &&
+        <Notes
+          setShowNotes={setShowNotes}
+          notes={allSongs[tune].notes}
         />
       }
       <MoveControlsPopup />
