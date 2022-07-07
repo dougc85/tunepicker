@@ -6,7 +6,6 @@ export const NotesStyled = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  overflow: scroll;
 
   h3 {
     font-weight: bold;
@@ -20,6 +19,7 @@ export const NotesStyled = styled.div`
     text-align: start;
     font-size: 1.5rem;
     padding: 1rem;
+    overflow: scroll;
   }
 
   button {
