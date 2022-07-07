@@ -19,18 +19,22 @@ function Notes(props) {
 
     if (!str) {
       return (
-        <p>This song has no notes to display.</p>
+        'This song has no notes to display'
       )
     }
 
     let elementArray = [];
     let newString = '';
 
+    let counter = 0;
+
     for (const char of str) {
+
+      counter += 1;
 
       if (char === '\n') {
         elementArray.push(newString);
-        elementArray.push(<br />);
+        elementArray.push(<br key={counter} />);
         newString = '';
       } else {
         newString = newString.concat(char);
