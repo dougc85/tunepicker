@@ -3,14 +3,18 @@ import { Link } from 'react-router-dom';
 import { signOut } from 'firebase/auth';
 import { auth } from '../../../firebaseConfig';
 import { NavStyled, Screen } from './Nav.styled';
+import { useNavigate } from 'react-router-dom';
 
 
 function Nav(props) {
 
   const { toggleNav } = props;
 
+  const navigate = useNavigate();
+
   function handleLogOut() {
     toggleNav();
+    navigate('/welcome');
     signOut(auth).then(() => {
 
     })
