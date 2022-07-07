@@ -102,6 +102,7 @@ function PickController() {
   useEffect(() => {
 
     function writeToDB() {
+
       const userDocRef = doc(db, 'users', user.uid);
       const setDocRef = doc(userDocRef, 'sets', userDoc.pickerSet);
       setDoc(setDocRef, mutableRef.current);
@@ -145,19 +146,25 @@ function PickController() {
       pickKey();
     });
 
+
+    //On test to see if page has been reloaded within last 5 seconds; if so, save current pickerSet status to database
     let forRefresh = localStorage.getItem('forRefresh');
     if (forRefresh) {
 
       forRefresh = JSON.parse(forRefresh);
 
-      const currentDate = new Date();
-      const timestamp = currentDate.getTime();
+      if (forRefresh.set.setName === userDoc.setNames[userDoc.pickerSet]) {
 
-      if ((timestamp - forRefresh.time) < 5000) {
-        const userDocRef = doc(db, 'users', user.uid);
-        const setDocRef = doc(userDocRef, 'sets', userDoc.pickerSet);
-        setDoc(setDocRef, forRefresh.set);
+        const currentDate = new Date();
+        const timestamp = currentDate.getTime();
+
+        if ((timestamp - forRefresh.time) < 5000) {
+          const userDocRef = doc(db, 'users', user.uid);
+          const setDocRef = doc(userDocRef, 'sets', userDoc.pickerSet);
+          setDoc(setDocRef, forRefresh.set);
+        }
       }
+
       localStorage.clear();
     }
 
