@@ -4,10 +4,14 @@ import { VerifyEmailStyled, ButtonGroup } from './VerifyEmail.styled';
 import { signOut, sendEmailVerification } from 'firebase/auth';
 import { auth } from '../../firebaseConfig';
 import AddButton from '../generics/AddButton.styled';
+import { useNavigate } from 'react-router-dom';
 
 function VerifyEmail() {
 
+  const navigate = useNavigate();
+
   function handleLogOut() {
+    navigate('/welcome');
     signOut(auth).then(() => {
 
     })
