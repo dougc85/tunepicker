@@ -184,5 +184,6 @@ export const SetsCheckbox = styled.li`
 
   input {
     height: 1.5rem;
+    margin-right: 8px;
   }
 `
