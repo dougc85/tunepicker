@@ -360,8 +360,8 @@ function Song(props) {
               {setArray.map((set, idx) => {
                 return (
                   <SetsCheckbox key={`${set[2]}`}>
-                    <label htmlFor={`${set[2]}`} >{set[0]}</label>
                     <input id={`${set[2]}`} value={set[0]} checked={set[1]} onChange={handleCheckboxChange} type="checkbox" ref={idx === 0 ? setsInput : undefined}></input>
+                    <label htmlFor={`${set[2]}`} >{set[0]}</label>
                   </SetsCheckbox>
                 )
               })}
