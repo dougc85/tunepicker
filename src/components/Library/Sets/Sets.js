@@ -22,6 +22,10 @@ function Sets() {
     navigate(`/library/sets/${setId}`)
   }
 
+  function capitalize(title) {
+    return title.split(' ').map((word) => word[0].toUpperCase().concat(word.substring(1))).join(' ');
+  }
+
   if (loading) {
     return (
       <Loading />
@@ -44,7 +48,7 @@ function Sets() {
         }).map((setId) => {
           return (
             <li onClick={() => { handleClick(setId) }} key={setId}>
-              {setNames[setId]}
+              {capitalize(setNames[setId])}
             </li>
           )
         }

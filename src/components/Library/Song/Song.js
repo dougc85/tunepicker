@@ -12,7 +12,6 @@ import EditConfirm from './EditConfirm/EditConfirm';
 import DeleteSong from './DeleteSong/DeleteSong';
 import {
   SongStyled,
-  SongEntryStyled,
   TitleEntryStyled,
   TitleError,
   KeyEntryStyled,
@@ -24,7 +23,6 @@ import {
   SetsEntryStyled,
   SetsCheckbox,
 } from './Song.styled';
-import AddButton from '../../generics/AddButton.styled';
 
 function Song(props) {
 
@@ -361,14 +359,14 @@ function Song(props) {
                 return (
                   <SetsCheckbox key={`${set[2]}`}>
                     <input id={`${set[2]}`} value={set[0]} checked={set[1]} onChange={handleCheckboxChange} type="checkbox" ref={idx === 0 ? setsInput : undefined}></input>
-                    <label htmlFor={`${set[2]}`} >{set[0]}</label>
+                    <label htmlFor={`${set[2]}`} >{capitalize(set[0])}</label>
                   </SetsCheckbox>
                 )
               })}
             </ul>
             <ul style={{ display: (showSetsEdit ? 'none' : 'block') }}>
               {song.sets && Object.keys(song.sets).map((setId) => (
-                <li key={setId}>{song.sets[setId]}</li>
+                <li key={setId}>{capitalize(song.sets[setId])}</li>
               ))}
             </ul>
           </SetsEntryStyled>

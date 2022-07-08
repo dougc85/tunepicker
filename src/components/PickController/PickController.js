@@ -541,7 +541,7 @@ function PickController() {
       <div className="picker-info">
         <div className="picker-info-picking">
           <p>Picking from:</p>
-          <Path heading={userDoc.setNames[userDoc.pickerSet]} pathType="Set" setId={userDoc.pickerSet} forPicker />
+          <Path heading={capitalize(userDoc.setNames[userDoc.pickerSet])} pathType="Set" setId={userDoc.pickerSet} forPicker />
         </div>
         <div className="picker-info-menu">
           <p>Menu</p>
