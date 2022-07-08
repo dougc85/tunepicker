@@ -33,7 +33,7 @@ function Song(props) {
 
   const context = useContext(SubContext);
   const { loading, userDoc, user } = context;
-  const { setNames, songs: allSongs } = userDoc;
+  const { setNames, songs: allSongs, songNames } = userDoc;
 
   const params = useParams();
   const navigate = useNavigate();
@@ -195,6 +195,14 @@ function Song(props) {
       setErrorMessage("Title Must Not Include '..'");
       return true;
     }
+
+    if (song.title !== titleLower && songNames[titleLower]) {
+      setErrorMessage("Title already in use");
+      return true;
+    }
+
+    console.log(song.title, 'song.title');
+    console.log(titleLower, 'titleLower');
 
     saveSongData('title', titleLower);
   }
