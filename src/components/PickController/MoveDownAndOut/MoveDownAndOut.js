@@ -5,7 +5,6 @@ import Modal from '../../generics/Modal.styled';
 import AddButton from '../../generics/AddButton.styled';
 import {
   updateDoc,
-  setDoc,
   doc,
   deleteField,
   arrayRemove,

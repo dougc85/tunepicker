@@ -45,6 +45,9 @@ function DeleteSong(props) {
         setName: userDoc.setNames[setId],
       }
 
+  function capitalize(title) {
+    return title.split(' ').map((word) => word[0].toUpperCase().concat(word.substring(1))).join(' ');
+  }
 
   function hideDeleteSong(e) {
     if (e) {
@@ -127,7 +130,7 @@ function DeleteSong(props) {
       <DeleteSongStyled>
         <h3>Delete Song</h3>
         <div>
-          {contentConfig.showSetRemoval && <AddButton onClick={removeFromSet}>Remove Song From '{contentConfig.setName}'</AddButton>}
+          {contentConfig.showSetRemoval && <AddButton onClick={removeFromSet}>Remove song from '{capitalize(contentConfig.setName)}'</AddButton>}
           {!removeOnly && <div>
             <AddButton onClick={deleteFromLibrary}>Delete Song From Library</AddButton>
             <p>**Note that this will also delete the song from ALL sets in which it may be found</p>

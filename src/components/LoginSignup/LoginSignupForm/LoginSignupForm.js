@@ -112,7 +112,7 @@ function LoginSignupForm(props) {
       const userDocRef = doc(db, 'users', userCredential.user.uid);
       const setsRef = collection(userDocRef, 'sets');
       const defaultSet = {
-        setName: "First Set",
+        setName: "first set",
         fullKnow: [],
         currentKnow: [],
         fullNew: [],
@@ -128,7 +128,7 @@ function LoginSignupForm(props) {
       await updateDoc(userDocRef, {
         pickerSet: newSetDoc.id,
         setNames: {
-          [newSetDoc.id]: "First Set",
+          [newSetDoc.id]: "first set",
         },
       });
 

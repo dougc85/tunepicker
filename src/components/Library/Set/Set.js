@@ -16,6 +16,7 @@ import CannotDelete from './CannotDelete/CannotDelete';
 import NotFound from '../../generics/NotFound.styled';
 import SortBy from '../../generics/SortBy.styled';
 import useSongSort from '../../../hooks/useSongSort';
+import EditSetName from './EditSetName/EditSetName';
 
 function Set(props) {
 
@@ -30,6 +31,7 @@ function Set(props) {
   const [showDeleteSet, setShowDeleteSet] = useState(false);
   const [showCannotDelete, setShowCannotDelete] = useState(false);
   const [showNotFound, setShowNotFound] = useState(false);
+  const [showEditSetName, setShowEditSetName] = useState(false);
   const [set, setSet] = useState(undefined);
 
   const [state, dispatch] = useSongSort();
@@ -52,6 +54,10 @@ function Set(props) {
     }
   }
 
+  function capitalize(title) {
+    return title.split(' ').map((word) => word[0].toUpperCase().concat(word.substring(1))).join(' ');
+  }
+
   async function setAsPicker(e) {
     try {
       const userDocRef = doc(db, 'users', user.uid);
@@ -62,6 +68,10 @@ function Set(props) {
     catch (error) {
       console.log(error.message);
     }
+  }
+
+  function editSetName() {
+    setShowEditSetName(true);
   }
 
   useEffect(() => {
@@ -127,6 +137,7 @@ function Set(props) {
       { text: 'Add New Song', func: handleAddButton },
       { text: 'Add Multiple New Songs', func: handleAddMultipleButton },
       { text: 'Add Songs From Your Library', func: () => { } },
+      { text: 'Edit Set Name', func: editSetName },
       { text: 'Delete Set', func: handleDeleteButton },
     ] :
     [
@@ -134,6 +145,7 @@ function Set(props) {
       { text: 'Add New Song', func: handleAddButton },
       { text: 'Add Multiple New Songs', func: handleAddMultipleButton },
       { text: 'Add Songs From Your Library', func: () => { } },
+      { text: 'Edit Set Name', func: editSetName },
       { text: 'Delete Set', func: handleDeleteButton },
     ]
 
@@ -149,10 +161,10 @@ function Set(props) {
     <>
       {renderSet && (
         <>
-          <Path heading={set.setName} pathType="Set" />
+          <Path heading={capitalize(set.setName)} pathType="Set" />
           <SetStyled>
             <SetHeader>
-              <h2>{set.setName}</h2>
+              <h2>{capitalize(set.setName)}</h2>
               <LibraryMenu
                 items={libraryMenuItems}
               />
@@ -179,6 +191,7 @@ function Set(props) {
           {showAddMultiple && <AddMultiple set={set} setShowAddMultiple={setShowAddMultiple} songNames={songNames} user={user} allSongs={allSongs} calling="set" />}
           {showDeleteSet && <DeleteSet setShowDeleteSet={setShowDeleteSet} set={set} setNames={setNames} />}
           {showCannotDelete && <CannotDelete setShowCannotDelete={setShowCannotDelete} />}
+          {showEditSetName && <EditSetName setShowEditSetName={setShowEditSetName} oldTitle={set.setName} setNames={setNames} setId={set.id} user={user} />}
         </>
       )}
       <Routes>

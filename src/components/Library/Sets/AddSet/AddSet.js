@@ -47,9 +47,10 @@ function AddSet(props) {
       setErrorMessage('This field is required');
       setShowError(true);
     } else {
+      const titleLower = title.toLowerCase();
       try {
         const newSet = {
-          setName: title,
+          setName: titleLower,
           fullKnow: [],
           currentKnow: [],
           fullNew: [],
@@ -66,7 +67,7 @@ function AddSet(props) {
         await updateDoc(
           doc(db, 'users', user.uid),
           {
-            [`setNames.${newSetDoc.id}`]: title,
+            [`setNames.${newSetDoc.id}`]: titleLower,
           });
         resetTitle();
         setShowAddSet(false);
@@ -90,7 +91,7 @@ function AddSet(props) {
         </InputGrouping>
         <InputGrouping width="80%">
           <AddButton onClick={handleCancel}>Cancel</AddButton>
-          <AddButton disabled={disableForm} onClick={handleAdd}>Add</AddButton>
+          <AddButton disabled={disableForm} disable={disableForm} onClick={handleAdd}>Add</AddButton>
         </InputGrouping>
       </AddSetStyled>
     </Modal>
