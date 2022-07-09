@@ -6,6 +6,7 @@ import Modal from '../../../generics/Modal.styled';
 import AddButton from '../../../generics/AddButton.styled';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { doc, updateDoc, arrayRemove, deleteField } from 'firebase/firestore';
+import capitalize from '../../../../helperFunctions/capitalize';
 
 function DeleteSong(props) {
 
@@ -44,10 +45,6 @@ function DeleteSong(props) {
         showSetRemoval: true,
         setName: userDoc.setNames[setId],
       }
-
-  function capitalize(title) {
-    return title.split(' ').map((word) => word[0].toUpperCase().concat(word.substring(1))).join(' ');
-  }
 
   function hideDeleteSong(e) {
     if (e) {

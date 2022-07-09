@@ -17,6 +17,7 @@ import NotFound from '../../generics/NotFound.styled';
 import SortBy from '../../generics/SortBy.styled';
 import useSongSort from '../../../hooks/useSongSort';
 import EditSetName from './EditSetName/EditSetName';
+import capitalize from '../../../helperFunctions/capitalize';
 
 function Set(props) {
 
@@ -52,10 +53,6 @@ function Set(props) {
     } else {
       setShowDeleteSet(true);
     }
-  }
-
-  function capitalize(title) {
-    return title.split(' ').map((word) => word[0].toUpperCase().concat(word.substring(1))).join(' ');
   }
 
   async function setAsPicker(e) {

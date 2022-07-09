@@ -1,6 +1,7 @@
 import './SongEntry.scss';
 import { React } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
+import capitalize from '../../../helperFunctions/capitalize';
 
 function SongEntry(props) {
 
@@ -13,8 +14,6 @@ function SongEntry(props) {
       knowledge === 'med' ? 'hsl(54, 98%, 66%)' :
         'hsl(26, 100%, 67%)';
 
-  const titleCapitalized = title.split(' ').map((word) => word[0].toUpperCase().concat(word.substring(1))).join(' ');
-
   function handleClick() {
     if (params.setId) {
       navigate(`/library/sets/${params.setId}/${id}`);
@@ -26,7 +25,7 @@ function SongEntry(props) {
 
   return (
     <li onClick={handleClick} className="SongEntry" style={{ backgroundColor: bgColor }}>
-      <p className="SongEntry-title">{titleCapitalized}</p>
+      <p className="SongEntry-title">{capitalize(title)}</p>
     </li>
   )
 }

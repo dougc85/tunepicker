@@ -11,12 +11,13 @@ import {
 
 } from 'firebase/firestore';
 import { db } from '../../../firebaseConfig';
+import capitalize from '../../../helperFunctions/capitalize';
 
 function MoveDownAndOut(props) {
 
   const context = useContext(SubContext);
   const { user, userDoc } = context;
-  const { setShowMoveDownAndOut, songId, title, setTune, capitalize, knowledgeArrays } = props;
+  const { setShowMoveDownAndOut, songId, title, setTune, knowledgeArrays } = props;
   const song = userDoc.songs[songId];
 
   function hideMoveDownAndOut(e) {

@@ -5,6 +5,7 @@ import { SetsStyled, SetsHeader } from './Sets.styled';
 import AddSet from './AddSet/AddSet';
 import Path from '../Path/Path';
 import Loading from '../../Loading/Loading';
+import capitalize from '../../../helperFunctions/capitalize';
 
 function Sets() {
 
@@ -20,10 +21,6 @@ function Sets() {
 
   function handleClick(setId) {
     navigate(`/library/sets/${setId}`)
-  }
-
-  function capitalize(title) {
-    return title.split(' ').map((word) => word[0].toUpperCase().concat(word.substring(1))).join(' ');
   }
 
   if (loading) {

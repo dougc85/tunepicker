@@ -5,10 +5,11 @@ import AddButton from '../../generics/AddButton.styled';
 import SubContext from '../../../context/sub-context';
 import { db } from '../../../firebaseConfig';
 import { doc, updateDoc, deleteField } from 'firebase/firestore';
+import capitalize from '../../../helperFunctions/capitalize';
 
 function EditTitle(props) {
 
-  const { setShowEditTitle, songId, title, capitalize } = props;
+  const { setShowEditTitle, songId, title } = props;
 
   const context = useContext(SubContext);
   const { user, userDoc } = context;
