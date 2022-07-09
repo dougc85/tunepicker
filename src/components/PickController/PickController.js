@@ -114,6 +114,7 @@ function PickController() {
       const refreshObject = {
         time: timestamp,
         set: mutableRef.current,
+        user: user.uid,
       }
       localStorage.setItem('forRefresh', JSON.stringify(refreshObject));
     }
@@ -153,8 +154,7 @@ function PickController() {
 
       forRefresh = JSON.parse(forRefresh);
 
-      if (forRefresh.set.setName === userDoc.setNames[userDoc.pickerSet]) {
-
+      if (forRefresh.set.setName === userDoc.setNames[userDoc.pickerSet] && forRefresh.user === user.uid) {
         const currentDate = new Date();
         const timestamp = currentDate.getTime();
 
