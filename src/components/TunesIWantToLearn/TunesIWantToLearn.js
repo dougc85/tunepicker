@@ -8,6 +8,7 @@ import { doc, updateDoc, deleteField } from 'firebase/firestore';
 import { db } from '../../firebaseConfig';
 import AddSongToWantToLearn from './AddSongToWantToLearn';
 import Path from '../Library/Path/Path';
+import capitalize from '../../helperFunctions/capitalize';
 
 function TunesIWantToLearn() {
 
@@ -36,10 +37,6 @@ function TunesIWantToLearn() {
     } catch (error) {
       console.log(error.message);
     }
-  }
-
-  function capitalize(str) {
-    return str.split(' ').map((word) => word[0].toUpperCase().concat(word.substring(1))).join(' ');
   }
 
   const libraryMenuItems = [

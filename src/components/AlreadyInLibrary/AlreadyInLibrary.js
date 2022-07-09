@@ -5,6 +5,7 @@ import { db } from '../../firebaseConfig';
 import { doc, updateDoc, arrayUnion } from 'firebase/firestore';
 import SubContext from '../../context/sub-context';
 import { AlreadyInLibraryStyled } from './AlreadyInLibrary.styled';
+import capitalize from '../../helperFunctions/capitalize';
 
 
 function AlreadyInLibrary(props) {
@@ -14,10 +15,6 @@ function AlreadyInLibrary(props) {
 
   const { user, userDoc } = useContext(SubContext);
   const { songNames } = userDoc;
-
-  function capitalize(str) {
-    return str.split(' ').map((word) => word[0].toUpperCase().concat(word.substring(1))).join(' ');
-  }
 
   function handleCancel(e) {
     e.preventDefault();

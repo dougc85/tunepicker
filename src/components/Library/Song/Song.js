@@ -23,6 +23,7 @@ import {
   SetsEntryStyled,
   SetsCheckbox,
 } from './Song.styled';
+import capitalize from '../../../helperFunctions/capitalize';
 
 function Song(props) {
 
@@ -88,10 +89,6 @@ function Song(props) {
   // if (!loading && !song) {
   //   getSongData(params.songId);
   // }
-
-  function capitalize(str) {
-    return str.split(' ').map((word) => word[0].toUpperCase().concat(word.substring(1))).join(' ');
-  }
 
   useEffect(() => {
     if (focus) {

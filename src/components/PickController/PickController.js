@@ -13,6 +13,7 @@ import EditKey from "./EditKey/EditKey";
 import Path from "../Library/Path/Path";
 import DeleteSong from "../Library/Song/DeleteSong/DeleteSong";
 import Notes from "./Notes/Notes";
+import capitalize from "../../helperFunctions/capitalize";
 
 const pickerReducer = (state, action) => {
   if (action.type === 'SET_PICKERS') {
@@ -460,10 +461,6 @@ function PickController() {
     setShowDeleteSong(true);
   }
 
-  function capitalize(title) {
-    return title.split(' ').map((word) => word[0].toUpperCase().concat(word.substring(1))).join(' ');
-  }
-
   useEffect(() => {
     if (tune !== '') {
       pickList(choices);
@@ -573,7 +570,6 @@ function PickController() {
           songId={tune}
           title={allSongs[tune].title}
           setTune={setTune}
-          capitalize={capitalize}
           knowledgeArrays={knowledgeArrays}
         />}
       {showEditTitle &&
@@ -581,7 +577,6 @@ function PickController() {
           setShowEditTitle={setShowEditTitle}
           songId={tune}
           title={allSongs[tune].title}
-          capitalize={capitalize}
         />}
       {showEditKey &&
         <EditKey
