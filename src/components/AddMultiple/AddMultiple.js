@@ -43,20 +43,24 @@ function AddMultiple(props) {
       return songCharArray.join('');
     })
 
+    let songSet = new Set();
+    allSongsArray.forEach((songTitle) => {
+      songSet.add(songTitle.toLowerCase());
+    })
+
     const allNewSongs = [];
     const allOldSongs = [];
     const notAdded = [];
 
-    allSongsArray.forEach((songName) => {
-      const titleLower = songName.toLowerCase();
+    songSet.forEach((songName) => {
       if (songName.length === 0) {
 
-      } else if (titleLower[0] === '.' || titleLower[songName.length - 1] === '.' || titleLower.includes('..')) {
-        notAdded.push(titleLower);
-      } else if (songNames.hasOwnProperty(titleLower)) {
-        allOldSongs.push(titleLower);
+      } else if (songName[0] === '.' || songName[songName.length - 1] === '.' || songName.includes('..')) {
+        notAdded.push(songName);
+      } else if (songNames.hasOwnProperty(songName)) {
+        allOldSongs.push(songName);
       } else {
-        allNewSongs.push(titleLower);
+        allNewSongs.push(songName);
       }
     })
 
