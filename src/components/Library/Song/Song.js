@@ -179,29 +179,29 @@ function Song(props) {
 
   async function saveTitleData() {
 
-    const titleLower = title.toLowerCase().trim();
+    const newTitle = title.toLowerCase().trim();
 
-    if (title === '') {
+    if (newTitle === '') {
       setErrorMessage('Title Field Required');
       return true;
     }
 
-    if (titleLower.charAt(titleLower.length - 1) === '.' || titleLower[0] === '.') {
+    if (newTitle.charAt(newTitle.length - 1) === '.' || newTitle[0] === '.') {
       setErrorMessage("Can't start or end with '.'");
       return true;
     }
 
-    if (title.includes('..')) {
+    if (newTitle.includes('..')) {
       setErrorMessage("Title Must Not Include '..'");
       return true;
     }
 
-    if (song.title !== titleLower && songNames[titleLower]) {
+    if (song.title !== newTitle && songNames[newTitle]) {
       setErrorMessage("Title already in use");
       return true;
     }
 
-    saveSongData('title', titleLower);
+    saveSongData('title', newTitle);
   }
 
   async function saveKeyData() {

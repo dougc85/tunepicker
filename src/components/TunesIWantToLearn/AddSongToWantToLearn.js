@@ -35,10 +35,26 @@ function AddSongToWantToLearn(props) {
 
   async function handleAdd(e) {
     e.preventDefault();
-    if (title === '') {
+
+    const newTitle = title.toLowerCase().trim();
+
+    if (newTitle === '') {
       setErrorMessage('This field is required');
       setShowError(true);
-    } else if (tuneNames.hasOwnProperty(title)) {
+      return;
+    }
+    if (newTitle.charAt(newTitle.length - 1) === '.' || newTitle[0] === '.') {
+      setErrorMessage("Can't start or end with '.'");
+      setShowError(true);
+      return;
+    }
+    if (newTitle.includes('..')) {
+      setErrorMessage("Title Must Not Include '..'");
+      setShowError(true);
+      return;
+    }
+
+    if (tuneNames.hasOwnProperty(newTitle)) {
       handleCancel();
       return;
     } else {
@@ -46,7 +62,7 @@ function AddSongToWantToLearn(props) {
         await updateDoc(
           doc(db, 'users', user.uid),
           {
-            [`tunesIWantToLearn.${title.toLowerCase().trim()}`]: null,
+            [`tunesIWantToLearn.${newTitle}`]: null,
           });
         resetTitle();
         setShowAddSong(false);
