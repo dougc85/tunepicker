@@ -46,3 +46,11 @@ export const ButtonContainer = styled.div`
     margin: 0 .5rem;
   }
 `
+
+export const ErrorMessage = styled.p`
+  position: absolute;
+  top: 3.4rem;
+  left: 7.3rem;
+  font-size: 1.1rem;
+  color: red;
+`;
