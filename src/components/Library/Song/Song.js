@@ -201,9 +201,6 @@ function Song(props) {
       return true;
     }
 
-    console.log(song.title, 'song.title');
-    console.log(titleLower, 'titleLower');
-
     saveSongData('title', titleLower);
   }
 

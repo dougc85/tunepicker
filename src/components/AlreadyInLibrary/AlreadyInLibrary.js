@@ -4,6 +4,7 @@ import Modal from '../generics/Modal.styled';
 import { db } from '../../firebaseConfig';
 import { doc, updateDoc, arrayUnion } from 'firebase/firestore';
 import SubContext from '../../context/sub-context';
+import { AlreadyInLibraryStyled } from './AlreadyInLibrary.styled';
 
 
 function AlreadyInLibrary(props) {
@@ -12,7 +13,7 @@ function AlreadyInLibrary(props) {
   const { setName, id: setId } = set;
 
   const { user, userDoc } = useContext(SubContext);
-  const { songNames, songs } = userDoc;
+  const { songNames } = userDoc;
 
   function capitalize(str) {
     return str.split(' ').map((word) => word[0].toUpperCase().concat(word.substring(1))).join(' ');
@@ -48,11 +49,19 @@ function AlreadyInLibrary(props) {
   }
 
   return (
-    <Modal handleOutsideClick={handleCancel}>
-      {`${capitalize(title.toLowerCase())} is already in your library!!!`}
-      {`Would you like to add it to ${setName}???!`}
-      <AddButton onClick={handleCancel}>Cancel</AddButton>
-      <AddButton onClick={addToSet}>Add From Library</AddButton>
+    <Modal handleOutsideClick={handleCancel} contentHeight={'18rem'}>
+      <AlreadyInLibraryStyled>
+        <h3>Already In Library</h3>
+        <p>
+          {`The song '${capitalize(title.toLowerCase())}' is already in your library.`}
+          {` Would you like to add it to the set '${capitalize(setName)}'?`}
+        </p>
+        <div>
+          <AddButton onClick={handleCancel}>Cancel</AddButton>
+          <AddButton onClick={addToSet}>Add From Library</AddButton>
+        </div>
+      </AlreadyInLibraryStyled>
+
     </Modal>
   )
 }
