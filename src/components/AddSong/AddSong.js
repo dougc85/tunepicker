@@ -50,21 +50,21 @@ function AddSong(props) {
       return;
     }
 
-    const titleLower = title.toLowerCase().trim();
+    const newTitle = title.toLowerCase().trim();
 
-    if (titleLower.charAt(titleLower.length - 1) === '.' || titleLower[0] === '.') {
+    if (newTitle.charAt(newTitle.length - 1) === '.' || newTitle[0] === '.') {
       setDisableForm(true);
       setErrorMessage("Can't start or end with '.'");
       return;
     }
 
-    if (title.includes('..')) {
+    if (newTitle.includes('..')) {
       setErrorMessage("Title Must Not Include '..'");
       return;
     }
 
     //Need to learn how to query in order to refactor this
-    if (songNames[titleLower]) {
+    if (songNames[newTitle]) {
       setShowAddForm(false);
       setShowAlreadyInLibrary(true);
 
@@ -81,7 +81,7 @@ function AddSong(props) {
       updateDoc(userDoc, {
 
         [`songs.${songId}`]: {
-          title: titleLower,
+          title: newTitle,
           notes,
           songKey,
           knowledge,
@@ -89,7 +89,7 @@ function AddSong(props) {
           createdAt: date,
           id: songId,
         },
-        [`songNames.${titleLower}`]: songId,
+        [`songNames.${newTitle}`]: songId,
       });
       updateDoc(setDoc, {
         [`${knowledgeFields[knowledge][0]}`]: arrayUnion(songId),
