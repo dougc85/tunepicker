@@ -30,7 +30,13 @@ function EditSetName(props) {
     const enteredSetName = title.toLowerCase()
     const oldLowercase = oldTitle.toLowerCase();
 
-    console.log(enteredSetName, 'enteredSetName');
+    if (enteredSetName === '') {
+      setShowError(true);
+      setErrorMessage('Set name cannot be blank');
+      setDisableForm(true);
+      return;
+    }
+
 
     if (enteredSetName === oldLowercase) {
       handleCancel();
@@ -64,7 +70,7 @@ function EditSetName(props) {
       return (testSetName === enteredSetName && testSetName !== oldLowercase)
     })) {
       setShowError(true);
-      setErrorMessage('Another set has this name already')
+      setErrorMessage('Another set has this name already');
       setDisableForm(true);
     } else {
       setDisableForm(false);
