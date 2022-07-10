@@ -7,13 +7,14 @@ import {
   updateDoc, doc, collection,
 } from 'firebase/firestore';
 import { db } from '../../../../firebaseConfig';
+import capitalize from '../../../../helperFunctions/capitalize';
 
 function EditSetName(props) {
 
   const { setShowEditSetName, oldTitle, setNames, user, setId } = props;
 
   const [disableForm, setDisableForm] = useState(false);
-  const [title, handleTitleChange] = useFormInput(oldTitle);
+  const [title, handleTitleChange] = useFormInput(capitalize(oldTitle));
   const [showError, setShowError] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
 
