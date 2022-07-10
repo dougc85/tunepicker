@@ -18,6 +18,7 @@ import SortBy from '../../generics/SortBy.styled';
 import useSongSort from '../../../hooks/useSongSort';
 import EditSetName from './EditSetName/EditSetName';
 import capitalize from '../../../helperFunctions/capitalize';
+import AddFromLibrary from './AddFromLibrary/AddFromLibrary';
 
 function Set(props) {
 
@@ -33,6 +34,7 @@ function Set(props) {
   const [showCannotDelete, setShowCannotDelete] = useState(false);
   const [showNotFound, setShowNotFound] = useState(false);
   const [showEditSetName, setShowEditSetName] = useState(false);
+  const [showAddFromLibrary, setShowAddFromLibrary] = useState(false);
   const [set, setSet] = useState(undefined);
 
   const [state, dispatch] = useSongSort();
@@ -69,6 +71,10 @@ function Set(props) {
 
   function editSetName() {
     setShowEditSetName(true);
+  }
+
+  function addFromLibrary() {
+    setShowAddFromLibrary(true);
   }
 
   useEffect(() => {
@@ -133,7 +139,7 @@ function Set(props) {
     [
       { text: 'Add New Song', func: handleAddButton },
       { text: 'Add Multiple New Songs', func: handleAddMultipleButton },
-      { text: 'Add Songs From Your Library', func: () => { } },
+      { text: 'Add Songs From Your Library', func: addFromLibrary },
       { text: 'Edit Set Name', func: editSetName },
       { text: 'Delete Set', func: handleDeleteButton },
     ] :
@@ -141,7 +147,7 @@ function Set(props) {
       { text: 'Set As PickerSet', func: setAsPicker },
       { text: 'Add New Song', func: handleAddButton },
       { text: 'Add Multiple New Songs', func: handleAddMultipleButton },
-      { text: 'Add Songs From Your Library', func: () => { } },
+      { text: 'Add Songs From Your Library', func: addFromLibrary },
       { text: 'Edit Set Name', func: editSetName },
       { text: 'Delete Set', func: handleDeleteButton },
     ]
@@ -189,6 +195,7 @@ function Set(props) {
           {showDeleteSet && <DeleteSet setShowDeleteSet={setShowDeleteSet} set={set} setNames={setNames} />}
           {showCannotDelete && <CannotDelete setShowCannotDelete={setShowCannotDelete} />}
           {showEditSetName && <EditSetName setShowEditSetName={setShowEditSetName} oldTitle={set.setName} setNames={setNames} setId={set.id} user={user} />}
+          {showAddFromLibrary && <AddFromLibrary setShowAddFromLibrary={setShowAddFromLibrary} set={set} user={user} userDoc={userDoc} />}
         </>
       )}
       <Routes>
