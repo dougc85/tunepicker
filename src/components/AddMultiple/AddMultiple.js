@@ -83,7 +83,7 @@ function AddMultiple(props) {
           songKey: 'random',
           knowledge: 'know',
           sets: {
-            [set.id]: set.setName
+            [set.id]: null
           },
           id: songId,
         }
