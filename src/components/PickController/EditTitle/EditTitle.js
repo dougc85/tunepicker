@@ -67,11 +67,16 @@ function EditTitle(props) {
 
       const userDocRef = doc(db, 'users', user.uid);
 
-      updateDoc(userDocRef, {
-        [`songNames.${title}`]: deleteField(),
-        [`songNames.${newTitle}`]: songId,
-        [`songs.${songId}.title`]: newTitle,
-      })
+      try {
+        updateDoc(userDocRef, {
+          [`songNames.${title}`]: deleteField(),
+          [`songNames.${newTitle}`]: songId,
+          [`songs.${songId}.title`]: newTitle,
+        })
+      } catch (error) {
+        console.log(error.message);
+      }
+
     }
 
     hideEditTitle();

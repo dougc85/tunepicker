@@ -161,17 +161,22 @@ function Song(props) {
 
     currentSong[fieldString] = inputData;
 
-    if (fieldString === 'title') {
-      updateDoc(userDoc, {
-        [`songs.${song.id}.${fieldString}`]: inputData,
-        [`songNames.${song.title}`]: deleteField(),
-        [`songNames.${inputData}`]: song.id,
-      })
-    } else {
-      updateDoc(userDoc, {
-        [`songs.${song.id}.${fieldString}`]: inputData
-      })
+    try {
+      if (fieldString === 'title') {
+        updateDoc(userDoc, {
+          [`songs.${song.id}.${fieldString}`]: inputData,
+          [`songNames.${song.title}`]: deleteField(),
+          [`songNames.${inputData}`]: song.id,
+        })
+      } else {
+        updateDoc(userDoc, {
+          [`songs.${song.id}.${fieldString}`]: inputData
+        })
+      }
+    } catch (error) {
+      console.log(error.message);
     }
+
   }
 
   async function saveTitleData() {
@@ -215,12 +220,17 @@ function Song(props) {
     for (let set in song.sets) {
       const setDoc = doc(db, 'users', user.uid, 'sets', set);
 
-      updateDoc(setDoc, {
-        [knowledgeArrays[song.knowledge][0]]: arrayRemove(song.id),
-        [knowledgeArrays[song.knowledge][1]]: arrayRemove(song.id),
-        [knowledgeArrays[knowledge][0]]: arrayUnion(song.id),
-        [knowledgeArrays[knowledge][1]]: arrayUnion(song.id),
-      });
+      try {
+        updateDoc(setDoc, {
+          [knowledgeArrays[song.knowledge][0]]: arrayRemove(song.id),
+          [knowledgeArrays[song.knowledge][1]]: arrayRemove(song.id),
+          [knowledgeArrays[knowledge][0]]: arrayUnion(song.id),
+          [knowledgeArrays[knowledge][1]]: arrayUnion(song.id),
+        });
+      } catch (error) {
+        console.log(error.message);
+      }
+
     }
   }
 
@@ -251,34 +261,39 @@ function Song(props) {
       }
     }
 
-    for (let setItem of setArray) {
-      let songInSet = setItem[1];
-      let setId = setItem[2];
+    try {
+      for (let setItem of setArray) {
+        let songInSet = setItem[1];
+        let setId = setItem[2];
 
-      if (songInSet && song.sets.hasOwnProperty(setId)) {
-        continue;
-      } else if (songInSet && !song.sets.hasOwnProperty(setId)) {
-        //add the song to that set in the database
-        let setDoc = doc(db, 'users', user.uid, 'sets', setId);
+        if (songInSet && song.sets.hasOwnProperty(setId)) {
+          continue;
+        } else if (songInSet && !song.sets.hasOwnProperty(setId)) {
+          //add the song to that set in the database
+          let setDoc = doc(db, 'users', user.uid, 'sets', setId);
 
-        updateDoc(setDoc, {
-          [`allSongs.${song.id}`]: null,
-          [knowledgeArrays[song.knowledge][0]]: arrayUnion(song.id),
-          [knowledgeArrays[song.knowledge][1]]: arrayUnion(song.id),
-        })
-      } else if (!songInSet && !song.sets.hasOwnProperty(setId)) {
-        continue;
-      } else {
-        //delete the song from that set in the database
-        let setDoc = doc(db, 'users', user.uid, 'sets', setId);
+          updateDoc(setDoc, {
+            [`allSongs.${song.id}`]: null,
+            [knowledgeArrays[song.knowledge][0]]: arrayUnion(song.id),
+            [knowledgeArrays[song.knowledge][1]]: arrayUnion(song.id),
+          })
+        } else if (!songInSet && !song.sets.hasOwnProperty(setId)) {
+          continue;
+        } else {
+          //delete the song from that set in the database
+          let setDoc = doc(db, 'users', user.uid, 'sets', setId);
 
-        updateDoc(setDoc, {
-          [`allSongs.${song.id}`]: deleteField(),
-          [knowledgeArrays[song.knowledge][0]]: arrayRemove(song.id),
-          [knowledgeArrays[song.knowledge][1]]: arrayRemove(song.id),
-        });
+          updateDoc(setDoc, {
+            [`allSongs.${song.id}`]: deleteField(),
+            [knowledgeArrays[song.knowledge][0]]: arrayRemove(song.id),
+            [knowledgeArrays[song.knowledge][1]]: arrayRemove(song.id),
+          });
+        }
       }
+    } catch (error) {
+      console.log(error.message);
     }
+
 
     saveSongData('sets', newSetsObject);
   }

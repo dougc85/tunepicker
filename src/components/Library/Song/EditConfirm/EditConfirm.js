@@ -16,7 +16,6 @@ function EditConfirm(props) {
 
   async function handleConfirmClick() {
     const possibleError = await saveData();
-    console.log(possibleError);
     if (possibleError) {
       console.log('inside error');
       return;

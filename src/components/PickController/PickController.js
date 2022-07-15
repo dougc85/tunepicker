@@ -106,7 +106,12 @@ function PickController() {
 
       const userDocRef = doc(db, 'users', user.uid);
       const setDocRef = doc(userDocRef, 'sets', userDoc.pickerSet);
-      setDoc(setDocRef, mutableRef.current);
+      try {
+        setDoc(setDocRef, mutableRef.current);
+      } catch (error) {
+        console.log(error.message);
+      }
+
 
       //Write to localStorage to ensure doc gets set, even on page refresh
       const currentDate = new Date();
@@ -141,12 +146,20 @@ function PickController() {
     if (!user.uid || !userDoc.pickerSet) {
       return;
     }
-    const unsubscribeSetDoc = onSnapshot(doc(db, 'users', user.uid, 'sets', userDoc.pickerSet), (firebaseDoc) => {
 
-      const newPickerSet = { ...firebaseDoc.data(), id: userDoc.pickerSet };
-      dispatch({ type: 'SET_PICKERS', payload: newPickerSet });
-      pickKey();
-    });
+    let unsubscribeSetDoc;
+
+    try {
+      unsubscribeSetDoc = onSnapshot(doc(db, 'users', user.uid, 'sets', userDoc.pickerSet), (firebaseDoc) => {
+
+        const newPickerSet = { ...firebaseDoc.data(), id: userDoc.pickerSet };
+        dispatch({ type: 'SET_PICKERS', payload: newPickerSet });
+        pickKey();
+      });
+    } catch (error) {
+      console.log(error.message);
+    }
+
 
 
     //On test to see if page has been reloaded within last 5 seconds; if so, save current pickerSet status to database
@@ -162,7 +175,12 @@ function PickController() {
         if ((timestamp - forRefresh.time) < 5000) {
           const userDocRef = doc(db, 'users', user.uid);
           const setDocRef = doc(userDocRef, 'sets', userDoc.pickerSet);
-          setDoc(setDocRef, forRefresh.set);
+          try {
+            setDoc(setDocRef, forRefresh.set);
+          } catch (error) {
+            console.log(error.message);
+          }
+
         }
       }
 
@@ -412,20 +430,25 @@ function PickController() {
     const userDocRef = doc(db, 'users', user.uid);
     const setDocRef = doc(userDocRef, 'sets', userDoc.pickerSet);
 
-    updateDoc(userDocRef, {
-      [`songs.${tune}.knowledge`]: newKnowledge
-    })
+    try {
+      updateDoc(userDocRef, {
+        [`songs.${tune}.knowledge`]: newKnowledge
+      })
 
-    const oldCurrentIndex = mutablePickerSet[knowledgeArrays[oldKnowledge][0]].indexOf(tune);
-    const oldFullIndex = mutablePickerSet[knowledgeArrays[oldKnowledge][1]].indexOf(tune);
+      const oldCurrentIndex = mutablePickerSet[knowledgeArrays[oldKnowledge][0]].indexOf(tune);
+      const oldFullIndex = mutablePickerSet[knowledgeArrays[oldKnowledge][1]].indexOf(tune);
 
-    if (oldCurrentIndex !== -1) {
-      mutablePickerSet[knowledgeArrays[oldKnowledge][0]].splice(oldCurrentIndex, 1);
+      if (oldCurrentIndex !== -1) {
+        mutablePickerSet[knowledgeArrays[oldKnowledge][0]].splice(oldCurrentIndex, 1);
+      }
+      mutablePickerSet[knowledgeArrays[oldKnowledge][1]].splice(oldFullIndex, 1);
+      mutablePickerSet[knowledgeArrays[newKnowledge][1]].push(tune);
+
+      setDoc(setDocRef, mutablePickerSet);
+    } catch (error) {
+      console.log(error.message);
     }
-    mutablePickerSet[knowledgeArrays[oldKnowledge][1]].splice(oldFullIndex, 1);
-    mutablePickerSet[knowledgeArrays[newKnowledge][1]].push(tune);
 
-    setDoc(setDocRef, mutablePickerSet);
   }
 
   function resetPicker() {

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { db, auth } from '../firebaseConfig';
 import { onAuthStateChanged, getIdToken } from 'firebase/auth';
 import {
-  doc, onSnapshot, updateDoc, setDoc
+  doc, onSnapshot, setDoc
 } from 'firebase/firestore';
 import { useNavigate, useLocation } from 'react-router-dom';
 import VerifyEmail from '../components/VerifyEmail/VerifyEmail';
@@ -36,37 +36,44 @@ export const SubContextProvider = (props) => {
   const [newToken, setNewToken] = useState(0);
 
   useEffect(() => {
+    let unsubAuthChange;
 
-    const unsubAuthChange = onAuthStateChanged(auth, async (currentUser) => {
-      if (currentUser) {
-        const token = await getIdToken(currentUser);
-        setNewToken(token);
-        if (!currentUser.emailVerified) {
-          const userDocRef = doc(db, 'users', currentUser.uid);
-          try {
-            await setDoc(userDocRef, {
-              notVerifiedToken: token,
-            }, { merge: true })
-          } catch (error) {
-            console.log(error.message);
+    try {
+      unsubAuthChange = onAuthStateChanged(auth, async (currentUser) => {
+        if (currentUser) {
+          const token = await getIdToken(currentUser);
+          setNewToken(token);
+          if (!currentUser.emailVerified) {
+            const userDocRef = doc(db, 'users', currentUser.uid);
+            try {
+              await setDoc(userDocRef, {
+                notVerifiedToken: token,
+              }, { merge: true })
+            } catch (error) {
+              console.log(error.message);
+            }
+
           }
-
-        }
-        setUser(currentUser);
-        if (location.pathname === '/welcome') {
-          navigate('/');
+          setUser(currentUser);
+          if (location.pathname === '/welcome') {
+            navigate('/');
+          }
+          else {
+            navigate(location.pathname);
+          }
         }
         else {
-          navigate(location.pathname);
+          setUser('');
+          if (location.pathname !== '/welcome') {
+            navigate('/welcome');
+          }
         }
-      }
-      else {
-        setUser('');
-        if (location.pathname !== '/welcome') {
-          navigate('/welcome');
-        }
-      }
-    })
+      })
+    }
+    catch (error) {
+      console.log(error.message);
+    }
+
 
     return () => {
       unsubAuthChange();
@@ -78,9 +85,17 @@ export const SubContextProvider = (props) => {
     if (!user) {
       return;
     }
-    const unsubscribeUserDoc = onSnapshot(doc(db, 'users', user.uid), (doc) => {
-      setUserDoc({ ...doc.data(), uid: doc.id });
-    })
+
+    let unsubscribeUserDoc;
+
+    try {
+      unsubscribeUserDoc = onSnapshot(doc(db, 'users', user.uid), (doc) => {
+        setUserDoc({ ...doc.data(), uid: doc.id });
+      })
+    } catch (error) {
+      console.log(error.message);
+    }
+
 
     return () => {
       if (unsubscribeUserDoc) {
