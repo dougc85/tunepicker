@@ -10,14 +10,14 @@ function VerifyEmail() {
 
   const navigate = useNavigate();
 
-  function handleLogOut() {
+  async function handleLogOut() {
     navigate('/welcome');
-    signOut(auth).then(() => {
-
-    })
-      .catch((err) => {
-        console.log(err.message);
-      })
+    try {
+      signOut(auth)
+    }
+    catch (error) {
+      console.log(error.message);
+    }
   }
 
   return (

@@ -4,7 +4,7 @@ import Modal from '../../../generics/Modal.styled';
 import useFormInput from '../../../../hooks/useFormInput';
 import AddButton from '../../../generics/AddButton.styled';
 import {
-  updateDoc, doc, collection,
+  updateDoc, doc
 } from 'firebase/firestore';
 import { db } from '../../../../firebaseConfig';
 import capitalize from '../../../../helperFunctions/capitalize';

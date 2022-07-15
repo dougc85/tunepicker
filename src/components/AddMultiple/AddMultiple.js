@@ -108,10 +108,15 @@ function AddMultiple(props) {
       //update userDoc
 
       const userDocRef = doc(db, 'users', user.uid);
-      updateDoc(userDocRef, {
-        ...newSongsObj,
-        ...oldSongsObj,
-      })
+      try {
+        updateDoc(userDocRef, {
+          ...newSongsObj,
+          ...oldSongsObj,
+        })
+      } catch (error) {
+        console.log(error.message);
+      }
+
 
       //Update Set doc
 
@@ -138,9 +143,14 @@ function AddMultiple(props) {
 
 
       const setDocRef = doc(db, 'users', user.uid, 'sets', set.id);
-      updateDoc(setDocRef, {
-        ...newSongsInSet,
-      })
+      try {
+        updateDoc(setDocRef, {
+          ...newSongsInSet,
+        })
+      } catch (error) {
+        console.log(error.message);
+      }
+
     } else if (calling === 'tunesIWantToLearn') {
 
       const newSongsObj = {};
@@ -150,9 +160,14 @@ function AddMultiple(props) {
       })
 
       const userDocRef = doc(db, 'users', user.uid);
-      updateDoc(userDocRef, {
-        ...newSongsObj,
-      })
+      try {
+        updateDoc(userDocRef, {
+          ...newSongsObj,
+        })
+      } catch (error) {
+        console.log(error.message);
+      }
+
     }
 
     if (notAdded.length === 0) {

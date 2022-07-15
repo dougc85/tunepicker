@@ -31,20 +31,23 @@ function FrontPage(props) {
 
     const userDocRef = doc(db, 'users', uid);
     setSkipWelcome(checked);
-    if (checked) {
-      setShowConfirmation(true);
-      setTimeout(() => {
-        setShowConfirmation(false);
-      }, 2000);
-      updateDoc(userDocRef, {
-        loginToPicker: true,
-      })
-    } else {
-      updateDoc(userDocRef, {
-        loginToPicker: false,
-      })
+    try {
+      if (checked) {
+        setShowConfirmation(true);
+        setTimeout(() => {
+          setShowConfirmation(false);
+        }, 2000);
+        updateDoc(userDocRef, {
+          loginToPicker: true,
+        })
+      } else {
+        updateDoc(userDocRef, {
+          loginToPicker: false,
+        })
+      }
+    } catch (error) {
+      console.log(error.message);
     }
-
   }
 
   if (loading || !user) {

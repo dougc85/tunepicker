@@ -12,15 +12,15 @@ function Nav(props) {
 
   const navigate = useNavigate();
 
-  function handleLogOut() {
+  async function handleLogOut() {
     toggleNav();
     navigate('/welcome');
-    signOut(auth).then(() => {
-
-    })
-      .catch((err) => {
-        console.log(err.message);
-      })
+    try {
+      await signOut(auth)
+    }
+    catch (error) {
+      console.log(error.message);
+    }
   }
 
   return (

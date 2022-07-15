@@ -136,7 +136,7 @@ function LoginSignupForm(props) {
 
     }
     catch (error) {
-      console.log(error);
+      console.log(error.message);
       showSignupError(error);
     }
   }

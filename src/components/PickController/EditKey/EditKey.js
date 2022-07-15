@@ -35,9 +35,14 @@ function EditKey(props) {
     if (songKey !== keyVal) {
       const userDocRef = doc(db, 'users', user.uid);
 
-      updateDoc(userDocRef, {
-        [`songs.${songId}.songKey`]: keyVal,
-      })
+      try {
+        updateDoc(userDocRef, {
+          [`songs.${songId}.songKey`]: keyVal,
+        })
+      } catch (error) {
+        console.log(error.message);
+      }
+
     }
 
     hideEditKey();
