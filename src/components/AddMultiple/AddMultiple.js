@@ -107,8 +107,8 @@ function AddMultiple(props) {
 
       //update userDoc
 
-      const userDoc = doc(db, 'users', user.uid);
-      updateDoc(userDoc, {
+      const userDocRef = doc(db, 'users', user.uid);
+      updateDoc(userDocRef, {
         ...newSongsObj,
         ...oldSongsObj,
       })
@@ -137,8 +137,8 @@ function AddMultiple(props) {
       newSongsInSet[`fullNew`] = arrayUnion(...newSongs);
 
 
-      const setDoc = doc(db, 'users', user.uid, 'sets', set.id);
-      updateDoc(setDoc, {
+      const setDocRef = doc(db, 'users', user.uid, 'sets', set.id);
+      updateDoc(setDocRef, {
         ...newSongsInSet,
       })
     } else if (calling === 'tunesIWantToLearn') {
@@ -149,8 +149,8 @@ function AddMultiple(props) {
         newSongsObj[`tunesIWantToLearn.${songName}`] = null;
       })
 
-      const userDoc = doc(db, 'users', user.uid);
-      updateDoc(userDoc, {
+      const userDocRef = doc(db, 'users', user.uid);
+      updateDoc(userDocRef, {
         ...newSongsObj,
       })
     }

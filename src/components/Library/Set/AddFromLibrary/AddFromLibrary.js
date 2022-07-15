@@ -1,34 +1,95 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { AddFromLibraryStyled, ButtonContainer, EntryGrouping } from './AddFromLibrary.styled';
 import Modal from '../../../generics/Modal.styled'
 import capitalize from '../../../../helperFunctions/capitalize';
 import AddButton from '../../../generics/AddButton.styled';
 import LibraryEntry from './LibraryEntry/LibraryEntry';
 
+import { doc, getDoc, arrayUnion, updateDoc } from 'firebase/firestore';
+import { db } from '../../../../firebaseConfig';
+
 function AddFromLibrary(props) {
 
   const { setShowAddFromLibrary, set, user, userDoc } = props;
   const { setNames, songNames } = userDoc;
 
+  const [setsToAdd, setSetsToAdd] = useState({});
+  const [songsToAdd, setSongsToAdd] = useState({});
+
   function hideAddFromLibrary(e) {
     if (e) {
       e.preventDefault();
     }
-
     setShowAddFromLibrary(false);
   }
 
-  ;
   const newSongArray = Object.keys(songNames).sort((a, b) => {
     return a.localeCompare(b, undefined, { numeric: true });
   })
+
+  async function handleAdd() {
+    setShowAddFromLibrary(false);
+
+    const combinedSongs = new Set();
+
+    const firebasePromises = [];
+
+    try {
+      Object.keys(setsToAdd).forEach((setId => {
+        const setDocRef = doc(db, 'users', user.uid, 'sets', setId);
+
+        firebasePromises.push(getDoc(setDocRef));
+      }));
+
+      const firebaseDocs = await Promise.all(firebasePromises);
+
+      firebaseDocs.forEach((firebaseDoc) => {
+        const setData = firebaseDoc.data();
+        Object.keys(setData.allSongs).forEach((songId) => {
+          combinedSongs.add(songId);
+        })
+      })
+
+      for (const songId in songsToAdd) {
+        combinedSongs.add(songId);
+      }
+
+      const setToAdd = {};
+      const setInfo = {};
+      const forKnowledgeArrays = [];
+
+      combinedSongs.forEach((songId) => {
+        if (!set.allSongs.hasOwnProperty(songId)) {
+          setToAdd[`allSongs.${songId}`] = null;
+          forKnowledgeArrays.push(songId);
+          setInfo[`songs.${songId}.sets.${set.id}`] = null;
+        }
+      })
+
+      setToAdd[`fullKnow`] = arrayUnion(...forKnowledgeArrays);
+      setToAdd['currentKnow'] = arrayUnion(...forKnowledgeArrays);
+
+      const setDocRef = doc(db, 'users', user.uid, 'sets', set.id);
+      await updateDoc(setDocRef, {
+        ...setToAdd
+      });
+
+      const userDocRef = doc(db, 'users', user.uid);
+      await updateDoc(userDocRef, {
+        ...setInfo
+      });
+
+    } catch (error) {
+      console.log(error.message);
+    }
+  }
 
   return (
     <Modal handleOutsideClick={hideAddFromLibrary}>
       <AddFromLibraryStyled>
         <h3>Add Songs From Your Library</h3>
         <p>
-          Select from the lists below songs from your library that you would like to add to '{`${capitalize(set.setName)}`}'.
+          Select, from the lists below, songs that you would like to add to '{`${capitalize(set.setName)}`}'.
           <span>
             If you select a set, all songs from that set will be added to '{`${capitalize(set.setName)}`}'.
           </span>
@@ -38,7 +99,7 @@ function AddFromLibrary(props) {
         </p>
         <ButtonContainer>
           <AddButton onClick={hideAddFromLibrary}>Cancel</AddButton>
-          <AddButton>Submit</AddButton>
+          <AddButton onClick={handleAdd}>Submit</AddButton>
         </ButtonContainer>
         <EntryGrouping>
           <h4>Sets</h4>
@@ -50,7 +111,7 @@ function AddFromLibrary(props) {
               return 1;
             }).map((setId) => {
               return (
-                <LibraryEntry entryType='set' entryId={setId} entryTitle={capitalize(setNames[setId])} key={setId} />
+                <LibraryEntry entryType='set' entryId={setId} entryTitle={capitalize(setNames[setId])} key={setId} librarySetter={setSetsToAdd} />
               )
             })}
           </ul>
@@ -60,13 +121,11 @@ function AddFromLibrary(props) {
           <ul>
             {newSongArray.map((songName) => {
               return (
-                <LibraryEntry entryType='set' entryId={songNames[songName]} entryTitle={capitalize(songName)} key={songNames[songName]} />
+                <LibraryEntry entryType='song' entryId={songNames[songName]} entryTitle={capitalize(songName)} key={songNames[songName]} librarySetter={setSongsToAdd} />
               )
             })}
           </ul>
         </EntryGrouping>
-
-
       </AddFromLibraryStyled>
     </Modal>
 
