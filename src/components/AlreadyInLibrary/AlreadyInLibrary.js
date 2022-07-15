@@ -29,7 +29,7 @@ function AlreadyInLibrary(props) {
       const userDocRef = doc(db, 'users', user.uid);
       const setDocRef = doc(db, 'users', user.uid, 'sets', setId);
       updateDoc(userDocRef, {
-        [`songs.${songId}.sets.${setId}`]: setName,
+        [`songs.${songId}.sets.${setId}`]: null,
       })
 
       updateDoc(setDocRef, {

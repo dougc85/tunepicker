@@ -112,7 +112,7 @@ function Song(props) {
       setTitle(capitalize(song.title));
 
       const setsList = Object.keys(setNames).map((setId) => {
-        if (song.sets[setId]) {
+        if (song.sets.hasOwnProperty(setId)) {
           return [setNames[setId], true, setId];
         }
         return [setNames[setId], false, setId];
@@ -247,7 +247,7 @@ function Song(props) {
 
     for (let setItem of setArray) {
       if (setItem[1]) {
-        newSetsObject[setItem[2]] = setItem[0];
+        newSetsObject[setItem[2]] = null;
       }
     }
 
@@ -368,7 +368,7 @@ function Song(props) {
             </ul>
             <ul style={{ display: (showSetsEdit ? 'none' : 'block') }}>
               {song.sets && Object.keys(song.sets).map((setId) => (
-                <li key={setId}>{capitalize(song.sets[setId])}</li>
+                <li key={setId}>{capitalize(setNames[setId])}</li>
               ))}
             </ul>
           </SetsEntryStyled>

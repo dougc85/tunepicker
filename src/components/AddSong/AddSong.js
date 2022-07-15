@@ -85,7 +85,7 @@ function AddSong(props) {
           notes,
           songKey,
           knowledge,
-          sets: { [set.id]: set.setName },
+          sets: { [set.id]: null },
           createdAt: date,
           id: songId,
         },
