@@ -1,11 +1,13 @@
 import { doc, updateDoc, arrayUnion } from 'firebase/firestore';
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
+import SubContext from '../../context/sub-context';
 import { v4 as uuid } from 'uuid';
 import { db } from '../../firebaseConfig';
 import useFormInput from '../../hooks/useFormInput';
 import Modal from '../generics/Modal.styled';
 import AddButton from '../generics/AddButton.styled';
 import { AddMultipleStyled, AddMultipleButtonsStyled, TitleErrorsStyled } from './AddMultiple.styled';
+import Loading from '../Loading/Loading';
 
 function AddMultiple(props) {
 
@@ -16,6 +18,7 @@ function AddMultiple(props) {
   const [showMain, setShowMain] = useState(true);
   const [showTitleErrors, setShowTitleErrors] = useState(false);
   const [titleErrors, setTitleErrors] = useState([]);
+  const [loading, setLoading] = useState(false);
 
 
 
@@ -27,8 +30,20 @@ function AddMultiple(props) {
     setShowAddMultiple(false);
   }
 
-  function handleAdd(e) {
+  async function handleAdd(e) {
     e.preventDefault();
+
+    setLoading(true);
+
+    function timeout(ms) {
+      return new Promise(resolve => setTimeout(resolve, ms));
+    }
+    async function sleep(fn, ...args) {
+      await timeout(3000);
+      return fn(...args);
+    }
+
+    await sleep(() => { return });
 
     let allSongsArray = songList.split(/\r?\n/);
 
@@ -109,7 +124,7 @@ function AddMultiple(props) {
 
       const userDocRef = doc(db, 'users', user.uid);
       try {
-        updateDoc(userDocRef, {
+        await updateDoc(userDocRef, {
           ...newSongsObj,
           ...oldSongsObj,
         })
@@ -144,7 +159,7 @@ function AddMultiple(props) {
 
       const setDocRef = doc(db, 'users', user.uid, 'sets', set.id);
       try {
-        updateDoc(setDocRef, {
+        await updateDoc(setDocRef, {
           ...newSongsInSet,
         })
       } catch (error) {
@@ -161,7 +176,7 @@ function AddMultiple(props) {
 
       const userDocRef = doc(db, 'users', user.uid);
       try {
-        updateDoc(userDocRef, {
+        await updateDoc(userDocRef, {
           ...newSongsObj,
         })
       } catch (error) {
@@ -169,12 +184,13 @@ function AddMultiple(props) {
       }
 
     }
+    setLoading(false);
 
     if (notAdded.length === 0) {
       handleCancel();
     } else {
-      setShowMain(false);
       setShowTitleErrors(true);
+      setShowMain(false);
       setTitleErrors(notAdded);
     }
   }
@@ -194,18 +210,22 @@ function AddMultiple(props) {
   if (showMain) {
     return (
       <Modal handleOutsideClick={handleCancel} >
-        <AddMultipleStyled>
-          <legend>{configObj.heading}</legend>
-          <p>
-            {configObj.instructions}
-            Songs cannot use the following characters: <span>~ * / [ ]</span>
-          </p>
-          <textarea name="" id="" cols="30" rows="10" value={songList} onChange={handleSongListChange}></textarea>
-          <AddMultipleButtonsStyled>
-            <AddButton onClick={handleCancel}>Cancel</AddButton>
-            <AddButton onClick={handleAdd}>Add Songs</AddButton>
-          </AddMultipleButtonsStyled>
-        </AddMultipleStyled>
+        {
+          loading ?
+            <Loading /> :
+            (<AddMultipleStyled>
+              <legend>{configObj.heading}</legend>
+              <p>
+                {configObj.instructions}
+                Songs cannot use the following characters: <span>~ * / [ ]</span>
+              </p>
+              <textarea name="" id="" cols="30" rows="10" value={songList} onChange={handleSongListChange}></textarea>
+              <AddMultipleButtonsStyled>
+                <AddButton onClick={handleCancel}>Cancel</AddButton>
+                <AddButton onClick={handleAdd}>Add Songs</AddButton>
+              </AddMultipleButtonsStyled>
+            </AddMultipleStyled>)
+        }
       </Modal>
     )
   }
