@@ -35,16 +35,6 @@ function AddMultiple(props) {
 
     setLoading(true);
 
-    function timeout(ms) {
-      return new Promise(resolve => setTimeout(resolve, ms));
-    }
-    async function sleep(fn, ...args) {
-      await timeout(3000);
-      return fn(...args);
-    }
-
-    await sleep(() => { return });
-
     let allSongsArray = songList.split(/\r?\n/);
 
     allSongsArray = allSongsArray.map((songName) => {
@@ -124,44 +114,44 @@ function AddMultiple(props) {
 
       const userDocRef = doc(db, 'users', user.uid);
       try {
-        await updateDoc(userDocRef, {
+        const userDocPromise = updateDoc(userDocRef, {
           ...newSongsObj,
           ...oldSongsObj,
         })
-      } catch (error) {
-        console.log(error.message);
-      }
+
+        //Update Set doc
+
+        let knowSongs = [];
+        let medSongs = [];
+        let newSongs = [];
+
+        oldSongIdsForSetlists.forEach(songId => {
+          if (allSongs[songId].knowledge === 'know') {
+            knowSongs.push(songId);
+          } else if (allSongs[songId].knowledge === 'med') {
+            medSongs.push(songId);
+          } else {
+            newSongs.push(songId);
+          }
+        });
+
+        newSongsInSet[`currentKnow`] = arrayUnion(...newSongIdsForSetlists, ...knowSongs);
+        newSongsInSet[`fullKnow`] = arrayUnion(...newSongIdsForSetlists, ...knowSongs);
+        newSongsInSet[`currentMedium`] = arrayUnion(...medSongs);
+        newSongsInSet[`fullMedium`] = arrayUnion(...medSongs);
+        newSongsInSet[`currentNew`] = arrayUnion(...newSongs);
+        newSongsInSet[`fullNew`] = arrayUnion(...newSongs);
 
 
-      //Update Set doc
+        const setDocRef = doc(db, 'users', user.uid, 'sets', set.id);
 
-      let knowSongs = [];
-      let medSongs = [];
-      let newSongs = [];
-
-      oldSongIdsForSetlists.forEach(songId => {
-        if (allSongs[songId].knowledge === 'know') {
-          knowSongs.push(songId);
-        } else if (allSongs[songId].knowledge === 'med') {
-          medSongs.push(songId);
-        } else {
-          newSongs.push(songId);
-        }
-      });
-
-      newSongsInSet[`currentKnow`] = arrayUnion(...newSongIdsForSetlists, ...knowSongs);
-      newSongsInSet[`fullKnow`] = arrayUnion(...newSongIdsForSetlists, ...knowSongs);
-      newSongsInSet[`currentMedium`] = arrayUnion(...medSongs);
-      newSongsInSet[`fullMedium`] = arrayUnion(...medSongs);
-      newSongsInSet[`currentNew`] = arrayUnion(...newSongs);
-      newSongsInSet[`fullNew`] = arrayUnion(...newSongs);
-
-
-      const setDocRef = doc(db, 'users', user.uid, 'sets', set.id);
-      try {
-        await updateDoc(setDocRef, {
+        const setDocPromise = updateDoc(setDocRef, {
           ...newSongsInSet,
         })
+
+        const firebasePromises = [userDocPromise, setDocPromise];
+        await Promise.all(firebasePromises);
+
       } catch (error) {
         console.log(error.message);
       }
@@ -184,6 +174,7 @@ function AddMultiple(props) {
       }
 
     }
+
     setLoading(false);
 
     if (notAdded.length === 0) {

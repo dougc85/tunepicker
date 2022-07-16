@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import AddButton from '../generics/AddButton.styled';
 import useFormInput from '../../hooks/useFormInput';
 import { send } from 'emailjs-com';
+import Loading from '../Loading/Loading';
 
 function Contact() {
 
@@ -15,6 +16,7 @@ function Contact() {
   const [messageError, setMessageError] = useState('');
 
   const [finishedSend, setFinishedSend] = useState(false);
+  const [loading, setLoading] = useState(false);
 
 
   async function handleSubmit(e) {
@@ -44,6 +46,7 @@ function Contact() {
       return;
     }
 
+    setLoading(true);
 
     const toSend = {
       subject: subject,
@@ -58,15 +61,17 @@ function Contact() {
         toSend,
         'pRo2AOTzC8blSvLC1',
       )
+
+      resetEmail();
+      resetSubject();
+      resetMessage();
+      setFinishedSend(true);
     }
     catch (error) {
       console.log(error.message);
     }
 
-    resetEmail();
-    resetSubject();
-    resetMessage();
-    setFinishedSend(true);
+    setLoading(false);
   }
 
   function emailAndErrors(e) {
@@ -88,6 +93,10 @@ function Contact() {
       setMessageError('');
     }
     handleMessageChange(e);
+  }
+
+  if (loading) {
+    return <Loading />;
   }
 
   return (
