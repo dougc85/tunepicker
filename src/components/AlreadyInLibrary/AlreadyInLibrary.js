@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import AddButton from '../generics/AddButton.styled';
 import Modal from '../generics/Modal.styled';
 import { db } from '../../firebaseConfig';
@@ -6,6 +6,7 @@ import { doc, updateDoc, arrayUnion } from 'firebase/firestore';
 import SubContext from '../../context/sub-context';
 import { AlreadyInLibraryStyled } from './AlreadyInLibrary.styled';
 import capitalize from '../../helperFunctions/capitalize';
+import Loading from '../Loading/Loading';
 
 
 function AlreadyInLibrary(props) {
@@ -15,6 +16,7 @@ function AlreadyInLibrary(props) {
 
   const { user, userDoc } = useContext(SubContext);
   const { songNames } = userDoc;
+  const [loading, setLoading] = useState(false);
 
   function handleCancel(e) {
     e.preventDefault();
@@ -22,43 +24,52 @@ function AlreadyInLibrary(props) {
     setShowAddSong(false);
   }
 
-  function addToSet(e) {
+  async function addToSet(e) {
     try {
+      setLoading(true);
       const songId = songNames[title];
 
       const userDocRef = doc(db, 'users', user.uid);
       const setDocRef = doc(db, 'users', user.uid, 'sets', setId);
-      updateDoc(userDocRef, {
+
+      const userDocPromise = updateDoc(userDocRef, {
         [`songs.${songId}.sets.${setId}`]: null,
       })
 
-      updateDoc(setDocRef, {
+      const setDocPromise = updateDoc(setDocRef, {
         [`allSongs.${songId}`]: null,
         [knowledgeFields[knowledge][0]]: arrayUnion(songId),
         [knowledgeFields[knowledge][1]]: arrayUnion(songId),
       })
+
+      const firebasePromises = [userDocPromise, setDocPromise];
+      await Promise.all(firebasePromises);
     }
     catch (error) {
       console.log(error.message);
     }
 
+    setLoading(false);
     handleCancel(e);
   }
 
   return (
     <Modal handleOutsideClick={handleCancel} contentHeight={'18rem'}>
-      <AlreadyInLibraryStyled>
-        <h3>Already In Library</h3>
-        <p>
-          {`The song '${capitalize(title.toLowerCase())}' is already in your library.`}
-          {` Would you like to add it to the set '${capitalize(setName)}'?`}
-        </p>
-        <div>
-          <AddButton onClick={handleCancel}>Cancel</AddButton>
-          <AddButton onClick={addToSet}>Add From Library</AddButton>
-        </div>
-      </AlreadyInLibraryStyled>
-
+      {
+        loading ?
+          <Loading /> :
+          <AlreadyInLibraryStyled>
+            <h3>Already In Library</h3>
+            <p>
+              {`The song '${capitalize(title.toLowerCase())}' is already in your library.`}
+              {` Would you like to add it to the set '${capitalize(setName)}'?`}
+            </p>
+            <div>
+              <AddButton onClick={handleCancel}>Cancel</AddButton>
+              <AddButton onClick={addToSet}>Add From Library</AddButton>
+            </div>
+          </AlreadyInLibraryStyled>
+      }
     </Modal>
   )
 }
