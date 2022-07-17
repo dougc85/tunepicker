@@ -4,6 +4,7 @@ import Modal from '../../../generics/Modal.styled'
 import capitalize from '../../../../helperFunctions/capitalize';
 import AddButton from '../../../generics/AddButton.styled';
 import LibraryEntry from './LibraryEntry/LibraryEntry';
+import Loading from '../../../Loading/Loading';
 
 import { doc, getDoc, arrayUnion, updateDoc } from 'firebase/firestore';
 import { db } from '../../../../firebaseConfig';
@@ -15,6 +16,7 @@ function AddFromLibrary(props) {
 
   const [setsToAdd, setSetsToAdd] = useState({});
   const [songsToAdd, setSongsToAdd] = useState({});
+  const [loading, setLoading] = useState(false);
 
   function hideAddFromLibrary(e) {
     if (e) {
@@ -28,10 +30,10 @@ function AddFromLibrary(props) {
   })
 
   async function handleAdd() {
-    setShowAddFromLibrary(false);
+
+    setLoading(true);
 
     const combinedSongs = new Set();
-
     const firebasePromises = [];
 
     try {
@@ -82,51 +84,58 @@ function AddFromLibrary(props) {
     } catch (error) {
       console.log(error.message);
     }
+
+    setLoading(false);
+    setShowAddFromLibrary(false);
   }
 
   return (
     <Modal handleOutsideClick={hideAddFromLibrary}>
-      <AddFromLibraryStyled>
-        <h3>Add Songs From Your Library</h3>
-        <p>
-          Select, from the lists below, songs that you would like to add to '{`${capitalize(set.setName)}`}'.
-          <span>
-            If you select a set, all songs from that set will be added to '{`${capitalize(set.setName)}`}'.
-          </span>
-          <span>
-            Click 'Submit' when you are finished.
-          </span>
-        </p>
-        <ButtonContainer>
-          <AddButton onClick={hideAddFromLibrary}>Cancel</AddButton>
-          <AddButton onClick={handleAdd}>Submit</AddButton>
-        </ButtonContainer>
-        <EntryGrouping>
-          <h4>Sets</h4>
-          <ul>
-            {Object.keys(setNames).sort((id1, id2) => {
-              if (setNames[id1] < setNames[id2]) {
-                return -1;
-              }
-              return 1;
-            }).map((setId) => {
-              return (
-                <LibraryEntry entryType='set' entryId={setId} entryTitle={capitalize(setNames[setId])} key={setId} librarySetter={setSetsToAdd} />
-              )
-            })}
-          </ul>
-        </EntryGrouping>
-        <EntryGrouping>
-          <h4>All Songs</h4>
-          <ul>
-            {newSongArray.map((songName) => {
-              return (
-                <LibraryEntry entryType='song' entryId={songNames[songName]} entryTitle={capitalize(songName)} key={songNames[songName]} librarySetter={setSongsToAdd} />
-              )
-            })}
-          </ul>
-        </EntryGrouping>
-      </AddFromLibraryStyled>
+      {
+        loading ?
+          <Loading /> :
+          <AddFromLibraryStyled>
+            <h3>Add Songs From Your Library</h3>
+            <p>
+              Select, from the lists below, songs that you would like to add to '{`${capitalize(set.setName)}`}'.
+              <span>
+                If you select a set, all songs from that set will be added to '{`${capitalize(set.setName)}`}'.
+              </span>
+              <span>
+                Click 'Submit' when you are finished.
+              </span>
+            </p>
+            <ButtonContainer>
+              <AddButton onClick={hideAddFromLibrary}>Cancel</AddButton>
+              <AddButton onClick={handleAdd}>Submit</AddButton>
+            </ButtonContainer>
+            <EntryGrouping>
+              <h4>Sets</h4>
+              <ul>
+                {Object.keys(setNames).sort((id1, id2) => {
+                  if (setNames[id1] < setNames[id2]) {
+                    return -1;
+                  }
+                  return 1;
+                }).map((setId) => {
+                  return (
+                    <LibraryEntry entryType='set' entryId={setId} entryTitle={capitalize(setNames[setId])} key={setId} librarySetter={setSetsToAdd} />
+                  )
+                })}
+              </ul>
+            </EntryGrouping>
+            <EntryGrouping>
+              <h4>All Songs</h4>
+              <ul>
+                {newSongArray.map((songName) => {
+                  return (
+                    <LibraryEntry entryType='song' entryId={songNames[songName]} entryTitle={capitalize(songName)} key={songNames[songName]} librarySetter={setSongsToAdd} />
+                  )
+                })}
+              </ul>
+            </EntryGrouping>
+          </AddFromLibraryStyled>
+      }
     </Modal>
 
   )

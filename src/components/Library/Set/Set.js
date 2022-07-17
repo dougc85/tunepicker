@@ -22,7 +22,7 @@ import AddFromLibrary from './AddFromLibrary/AddFromLibrary';
 
 function Set(props) {
 
-  const { user, userDoc, loading } = useContext(SubContext);
+  const { user, userDoc, loading, setLoading } = useContext(SubContext);
 
   const { setNames, songNames, songs: allSongs, pickerSet: pickerSetId } = userDoc;
 
@@ -59,6 +59,7 @@ function Set(props) {
 
   async function setAsPicker(e) {
     try {
+      setLoading(true);
       const userDocRef = doc(db, 'users', user.uid);
       await updateDoc(userDocRef, {
         pickerSet: set.id,
@@ -67,6 +68,7 @@ function Set(props) {
     catch (error) {
       console.log(error.message);
     }
+    setLoading(false);
   }
 
   function editSetName() {
