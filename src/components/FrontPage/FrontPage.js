@@ -17,30 +17,37 @@ function FrontPage(props) {
   const { email, uid } = user;
   const [skipWelcome, setSkipWelcome] = useState(false);
   const [showConfirmation, setShowConfirmation] = useState(false);
+  const [justArrived, setJustArrived] = useState(false);
 
   useEffect(() => {
-    if (userDoc.loginToPicker) {
+    if (userDoc.loginToPicker & !justArrived) {
       navigate('/controller');
     }
   }, [userDoc.loginToPicker])
 
 
-
   function handleCheckboxChange(e) {
-    const checked = e.target.checked;
 
+    setJustArrived(true);
+
+    const checked = e.target.checked;
     const userDocRef = doc(db, 'users', uid);
     setSkipWelcome(checked);
+
     try {
       if (checked) {
         setShowConfirmation(true);
         setTimeout(() => {
           setShowConfirmation(false);
-        }, 2000);
+        }, 1300);
         updateDoc(userDocRef, {
           loginToPicker: true,
         })
       } else {
+        setShowConfirmation(true);
+        setTimeout(() => {
+          setShowConfirmation(false);
+        }, 1300);
         updateDoc(userDocRef, {
           loginToPicker: false,
         })
