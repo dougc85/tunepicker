@@ -2,7 +2,8 @@ import styled from 'styled-components';
 
 export const LoadingStyled = styled.div`
   position: relative;
-  padding-top: 25px;
+  padding-top: ${props => props.embedded ? '0px' : '25px'};
+  text-align: ${props => props.embedded ? 'start' : 'center'};
   p {
     margin-top: 1rem;
     font-size: 1.3rem;

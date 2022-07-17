@@ -9,7 +9,7 @@ import SongEntry from '../SongEntry/SongEntry';
 import Loading from '../../Loading/Loading';
 import Path from '../Path/Path';
 import Song from '../Song/Song';
-import { SetStyled, SetHeader, SongHeader } from './Set.styled';
+import { SetStyled, SetHeader, SongHeader, LoadingContainer } from './Set.styled';
 import LibraryMenu from '../../../components/generics/LibraryMenu.styled';
 import DeleteSet from './DeleteSet/DeleteSet';
 import CannotDelete from './CannotDelete/CannotDelete';
@@ -22,7 +22,7 @@ import AddFromLibrary from './AddFromLibrary/AddFromLibrary';
 
 function Set(props) {
 
-  const { user, userDoc, loading, setLoading } = useContext(SubContext);
+  const { user, userDoc, loading } = useContext(SubContext);
 
   const { setNames, songNames, songs: allSongs, pickerSet: pickerSetId } = userDoc;
 
@@ -36,6 +36,7 @@ function Set(props) {
   const [showEditSetName, setShowEditSetName] = useState(false);
   const [showAddFromLibrary, setShowAddFromLibrary] = useState(false);
   const [set, setSet] = useState(undefined);
+  const [localLoading, setLocalLoading] = useState(false);
 
   const [state, dispatch] = useSongSort();
   const { songsArray, sortedBy } = state;
@@ -59,7 +60,8 @@ function Set(props) {
 
   async function setAsPicker(e) {
     try {
-      setLoading(true);
+      setLocalLoading(true);
+
       const userDocRef = doc(db, 'users', user.uid);
       await updateDoc(userDocRef, {
         pickerSet: set.id,
@@ -68,7 +70,8 @@ function Set(props) {
     catch (error) {
       console.log(error.message);
     }
-    setLoading(false);
+
+    setLocalLoading(false);
   }
 
   function editSetName() {
@@ -174,11 +177,18 @@ function Set(props) {
                 items={libraryMenuItems}
               />
             </SetHeader>
-            {(set.id === pickerSetId) && (
-              <p>
-                * Currently Selected in the Tune Picker
-              </p>
-            )}
+            {
+              (set.id === pickerSetId) ? (
+                <p>
+                  * Currently Selected in the Tune Picker
+                </p>
+              ) :
+                localLoading ?
+                  <LoadingContainer>
+                    <Loading size={2} spinnerOnly embedded />
+                  </LoadingContainer>
+                  : null
+            }
             <SongHeader>
               <h3>Songs</h3>
               <SortBy dispatch={dispatch} sortedBy={sortedBy} songList={setSongsObject} marginTop={"-22px"} />

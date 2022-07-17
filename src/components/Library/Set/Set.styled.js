@@ -8,7 +8,6 @@ export const SetStyled = styled.div`
     color: #5a5a5a;
     text-align: start;
     margin-left: 1.5rem;
-    margin-top: -1rem;
     margin-bottom: 2.5rem;
   }
 
@@ -26,7 +25,6 @@ export const SetStyled = styled.div`
 export const SetHeader = styled.div`
   display: flex;
   align-items: center;
-  margin-bottom: 1.5rem;
 
   h2 {
       font-weight: bold;
@@ -42,5 +40,10 @@ export const SetHeader = styled.div`
 export const SongHeader = styled.div`
   display: flex;
   align-items: center;
+  margin-top: 1.5rem;
+`
+
+export const LoadingContainer = styled.div`
+  margin-left: 1rem;
 `
 
