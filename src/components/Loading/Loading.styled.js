@@ -1,14 +1,36 @@
 import styled from 'styled-components';
 
 export const LoadingStyled = styled.div`
+  position: relative;
+  padding-top: 25px;
+  p {
+    margin-top: 1rem;
+    font-size: 1.3rem;
+  }
+`
+
+export const Spinner = styled.div`
   color: official;
   display: inline-block;
   position: relative;
-  width: 80px;
-  height: 80px;
+  width: ${props => {
+    let modifier = 4;
+    if (props.size) { modifier = props.size }
+    return (modifier * 13.5) + 'px'
+  }};
+  height: ${props => {
+    let modifier = 4;
+    if (props.size) { modifier = props.size }
+    return (modifier * 13.5) + 'px'
+  }};
 
   div {
-    transform-origin: 40px 40px;
+    transform-origin: ${props => {
+    let modifier = 4;
+    if (props.size) { modifier = props.size }
+    const amount = (modifier * 6.5) + 'px';
+    return amount + ' ' + amount;
+  }};
     animation: lds-spinner 1.2s linear infinite;
   }
 
@@ -16,10 +38,26 @@ export const LoadingStyled = styled.div`
     content: " ";
     display: block;
     position: absolute;
-    top: 3px;
-    left: 37px;
-    width: 6px;
-    height: 18px;
+    top: ${props => {
+    let modifier = 4;
+    if (props.size) { modifier = props.size }
+    return (modifier * .5) + 'px'
+  }};
+    left: ${props => {
+    let modifier = 4;
+    if (props.size) { modifier = props.size }
+    return (modifier * 6) + 'px'
+  }};
+    width: ${props => {
+    let modifier = 4;
+    if (props.size) { modifier = props.size }
+    return (modifier * 1) + 'px'
+  }};
+    height: ${props => {
+    let modifier = 4;
+    if (props.size) { modifier = props.size }
+    return (modifier * 3) + 'px'
+  }};
     border-radius: 20%;
     background: #000;
   }
@@ -79,4 +117,4 @@ export const LoadingStyled = styled.div`
       opacity: 0;
     }
   }
-`
+` 
