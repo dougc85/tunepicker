@@ -1,11 +1,11 @@
-import './Loading';
 import { React } from 'react';
+import { LoadingStyled } from './Loading.styled';
 
 function Loading() {
   return (
-    <div className="Loading">
-      Loading
-    </div>
+    <LoadingStyled>
+      <div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+    </LoadingStyled>
   )
 }
 
