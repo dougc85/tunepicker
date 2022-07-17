@@ -7,12 +7,12 @@ import Loading from '../Loading/Loading';
 function Library() {
 
   return (
-    // <LibraryStyled>
-    //   <Path heading="Library" pathType="Library" />
-    //   <Link to={'/library/sets'}>Sets</Link>
-    //   <Link to={'/library/allsongs'}>All Songs</Link>
-    // </LibraryStyled>
-    <Loading />
+    <LibraryStyled>
+      <Path heading="Library" pathType="Library" />
+      <Link to={'/library/sets'}>Sets</Link>
+      <Link to={'/library/allsongs'}>All Songs</Link>
+    </LibraryStyled>
+    // <Loading />
   )
 }
 
