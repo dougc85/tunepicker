@@ -23,6 +23,7 @@ import {
   SetsEntryStyled,
   SetsCheckbox,
 } from './Song.styled';
+import LoadingContainer from './LoadingContainer/LoadingContainer';
 import capitalize from '../../../helperFunctions/capitalize';
 
 function Song(props) {
@@ -51,6 +52,11 @@ function Song(props) {
   const [disableEdit, setDisableEdit] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const [showDeleteSong, setShowDeleteSong] = useState(false);
+  const [titleLoading, setTitleLoading] = useState(false);
+  const [keyLoading, setKeyLoading] = useState(false);
+  const [knowledgeLoading, setKnowledgeLoading] = useState(false);
+  const [notesLoading, setNotesLoading] = useState(false);
+  const [setsLoading, setSetsLoading] = useState(false);
 
   const titleInput = useRef(null);
   const keyInput = useRef(null);
@@ -163,13 +169,13 @@ function Song(props) {
 
     try {
       if (fieldString === 'title') {
-        updateDoc(userDoc, {
+        await updateDoc(userDoc, {
           [`songs.${song.id}.${fieldString}`]: inputData,
           [`songNames.${song.title}`]: deleteField(),
           [`songNames.${inputData}`]: song.id,
         })
       } else {
-        updateDoc(userDoc, {
+        await updateDoc(userDoc, {
           [`songs.${song.id}.${fieldString}`]: inputData
         })
       }
@@ -203,25 +209,30 @@ function Song(props) {
       return true;
     }
 
+    setTitleLoading(true);
     saveSongData('title', newTitle);
+    setTitleLoading(false);
   }
 
   async function saveKeyData() {
+    setKeyLoading(true);
     saveSongData('songKey', songKey);
+    setKeyLoading(false);
   }
 
   async function saveKnowledgeData() {
-    saveSongData('knowledge', knowledge);
 
     if (knowledge === song.knowledge) {
       return;
     }
 
+    setKnowledgeLoading(true);
+
     for (let set in song.sets) {
       const setDoc = doc(db, 'users', user.uid, 'sets', set);
 
       try {
-        updateDoc(setDoc, {
+        await updateDoc(setDoc, {
           [knowledgeArrays[song.knowledge][0]]: arrayRemove(song.id),
           [knowledgeArrays[song.knowledge][1]]: arrayRemove(song.id),
           [knowledgeArrays[knowledge][0]]: arrayUnion(song.id),
@@ -231,11 +242,16 @@ function Song(props) {
         console.log(error.message);
       }
 
+      saveSongData('knowledge', knowledge);
+
+      setKnowledgeLoading(false);
     }
   }
 
   async function saveNotesData() {
+    setNotesLoading(true);
     saveSongData('notes', notes);
+    setNotesLoading(false);
   }
 
   async function saveSetsData() {
@@ -260,6 +276,8 @@ function Song(props) {
         newSetsObject[setItem[2]] = null;
       }
     }
+
+    setSetsLoading(true);
 
     try {
       for (let setItem of setArray) {
@@ -294,8 +312,8 @@ function Song(props) {
       console.log(error.message);
     }
 
-
     saveSongData('sets', newSetsObject);
+    setSetsLoading(false);
   }
 
   function handleTitleChangeAndError(e) {
@@ -318,7 +336,10 @@ function Song(props) {
       <Path heading={capitalize(allSongs[params.songId].title)} pathType={'Song'} />
       <SongStyled >
         <div>
-          <label htmlFor="songTitle-songPage">Title</label>
+          <div>
+            <label htmlFor="songTitle-songPage">Title</label>
+            {titleLoading && <LoadingContainer />}
+          </div>
           <TitleEntryStyled>
             <input autoComplete="off" style={{ display: (showTitleEdit ? 'block' : 'none') }} id="songTitle-songPage" ref={titleInput} onChange={handleTitleChangeAndError} type="text" value={title}></input>
             {errorMessage && <TitleError>{errorMessage}</TitleError>}
@@ -327,7 +348,10 @@ function Song(props) {
           <EditConfirm field="title" show={setShowTitleEdit} focusInput={focusInput} disableEdit={disableEdit} setDisableEdit={setDisableEdit} saveData={saveTitleData} />
         </div>
         <div>
-          <label htmlFor="songKey-songPage">Key</label>
+          <div>
+            <label htmlFor="songKey-songPage">Key</label>
+            {keyLoading && <LoadingContainer />}
+          </div>
           <KeyEntryStyled>
             <select style={{ display: (showKeyEdit ? 'block' : 'none') }} id="songKey-songPage" ref={keyInput} onChange={handleSongKeyChange} value={songKey}>
               <option value="random" key="random">random</option>
@@ -342,7 +366,10 @@ function Song(props) {
           <EditConfirm show={setShowKeyEdit} focusInput={focusInput} field="key" disableEdit={disableEdit} setDisableEdit={setDisableEdit} saveData={saveKeyData} />
         </div>
         <div>
-          <KnowledgeLabel htmlFor="songKnowledge-songPage"><span>How Well Do I Know This Tune?</span></KnowledgeLabel>
+          <div>
+            <KnowledgeLabel htmlFor="songKnowledge-songPage"><span>How Well Do I Know This Tune?</span></KnowledgeLabel>
+            {knowledgeLoading && <LoadingContainer knowledge />}
+          </div>
           <KnowledgeEntryStyled>
             <select style={{ display: (showKnowledgeEdit ? 'block' : 'none') }} id="songKnowledge-songPage" ref={knowledgeInput} onChange={handleKnowledgeChange} value={knowledge}>
               {Object.keys(knowledgeOptions).map((key) => {
@@ -356,12 +383,14 @@ function Song(props) {
               <p>{knowledgeOptions[song.knowledge]}</p>
               <div style={{ backgroundColor: bgColor }}></div>
             </div>
-
           </KnowledgeEntryStyled>
           <EditConfirm show={setShowKnowledgeEdit} focusInput={focusInput} field="knowledge" disableEdit={disableEdit} setDisableEdit={setDisableEdit} saveData={saveKnowledgeData} />
         </div>
         <div>
-          <NotesLabel htmlFor="songNotes-songPage">Notes</NotesLabel>
+          <div>
+            <NotesLabel htmlFor="songNotes-songPage">Notes</NotesLabel>
+            {notesLoading && <LoadingContainer />}
+          </div>
           <NotesEntryStyled>
             <textarea style={{ display: (showNotesEdit ? 'block' : 'none') }} id="songNotes-songPage" ref={notesInput} value={notes} onChange={handleNotesChange} ></textarea>
             <p style={{ display: (showNotesEdit ? 'none' : 'block') }}>{song.notes || 'none'}</p>
@@ -369,7 +398,10 @@ function Song(props) {
           <EditConfirm show={setShowNotesEdit} focusInput={focusInput} field="notes" disableEdit={disableEdit} setDisableEdit={setDisableEdit} saveData={saveNotesData} />
         </div>
         <div>
-          <SetsLabel>Sets</SetsLabel>
+          <div>
+            <SetsLabel>Sets</SetsLabel>
+            {setsLoading && <LoadingContainer sets />}
+          </div>
           <SetsEntryStyled>
             <ul style={{ display: (showSetsEdit ? 'block' : 'none') }}>
               {setArray.map((set, idx) => {

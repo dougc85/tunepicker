@@ -8,6 +8,7 @@ import {
 } from 'firebase/firestore';
 import { db } from '../../../../firebaseConfig';
 import capitalize from '../../../../helperFunctions/capitalize';
+import Loading from '../../../Loading/Loading';
 
 function EditSetName(props) {
 
@@ -17,6 +18,7 @@ function EditSetName(props) {
   const [title, handleTitleChange] = useFormInput(capitalize(oldTitle));
   const [showError, setShowError] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
+  const [loading, setLoading] = useState(false);
 
   function handleCancel(e) {
     if (e) {
@@ -26,7 +28,7 @@ function EditSetName(props) {
     setShowEditSetName(false);
   }
 
-  function handleSubmit(e) {
+  async function handleSubmit(e) {
     e.preventDefault();
     const enteredSetName = title.toLowerCase()
     const oldLowercase = oldTitle.toLowerCase();
@@ -42,20 +44,24 @@ function EditSetName(props) {
     if (enteredSetName === oldLowercase) {
       handleCancel();
     } else {
+      setLoading(true);
       const userDocRef = doc(db, 'users', user.uid);
       const setDocRef = doc(userDocRef, 'sets', setId);
 
       try {
-        updateDoc(userDocRef, {
+        const userPromise = updateDoc(userDocRef, {
           [`setNames.${setId}`]: enteredSetName
         })
-        updateDoc(setDocRef, {
+        const setPromise = updateDoc(setDocRef, {
           setName: enteredSetName
         })
+        await Promise.all([userPromise, setPromise]);
       }
       catch (error) {
         console.log(error.message);
       }
+
+      setLoading(false);
       handleCancel();
     }
   }
@@ -81,20 +87,22 @@ function EditSetName(props) {
 
   return (
     <Modal handleOutsideClick={handleCancel} contentHeight="15rem">
-      <EditSetNameStyled>
-        <legend>
-          Edit Set Name
-        </legend>
-        <InputGrouping width="100%">
-          <TitleInput required autoFocus onChange={handleTitleChangeAndDuplicates} value={title} id="edit-set-title-input" type="text" name="set-title" autoComplete="off"></TitleInput>
-          {showError && <ErrorMessage>{errorMessage}</ErrorMessage>}
-        </InputGrouping>
-        <InputGrouping width="80%">
-          <AddButton onClick={handleCancel}>Cancel</AddButton>
-          <AddButton disabled={disableForm} disable={disableForm} onClick={handleSubmit}>Submit</AddButton>
-        </InputGrouping>
+      {loading ? <Loading size={2} /> :
+        <EditSetNameStyled>
+          <legend>
+            Edit Set Name
+          </legend>
+          <InputGrouping width="100%">
+            <TitleInput required autoFocus onChange={handleTitleChangeAndDuplicates} value={title} id="edit-set-title-input" type="text" name="set-title" autoComplete="off"></TitleInput>
+            {showError && <ErrorMessage>{errorMessage}</ErrorMessage>}
+          </InputGrouping>
+          <InputGrouping width="80%">
+            <AddButton onClick={handleCancel}>Cancel</AddButton>
+            <AddButton disabled={disableForm} disable={disableForm} onClick={handleSubmit}>Submit</AddButton>
+          </InputGrouping>
 
-      </EditSetNameStyled>
+        </EditSetNameStyled>
+      }
     </Modal>
   )
 }

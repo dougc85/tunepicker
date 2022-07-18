@@ -9,6 +9,7 @@ import Modal from '../../../generics/Modal.styled';
 import { AddSetStyled, InputGrouping, ErrorMessage } from './AddSet.styled';
 import AddButton from '../../../generics/AddButton.styled';
 import { TitleInput } from '../../../AddSong/AddSong.styled';
+import Loading from '../../../Loading/Loading';
 
 function AddSet(props) {
 
@@ -21,6 +22,7 @@ function AddSet(props) {
   const [title, handleTitleChange, resetTitle] = useFormInput('');
   const [showError, setShowError] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
+  const [loading, setLoading] = useState(false);
 
   function handleCancel(e) {
     e.preventDefault();
@@ -47,6 +49,7 @@ function AddSet(props) {
       setErrorMessage('This field is required');
       setShowError(true);
     } else {
+      setLoading(true);
       const titleLower = title.toLowerCase();
       try {
         const newSet = {
@@ -69,31 +72,35 @@ function AddSet(props) {
           {
             [`setNames.${newSetDoc.id}`]: titleLower,
           });
-        resetTitle();
-        setShowAddSet(false);
       }
       catch (error) {
         console.log(error.message);
       }
+
+      resetTitle();
+      setShowAddSet(false);
+      setLoading(false);
     }
   }
 
   return (
     <Modal handleOutsideClick={handleCancel} contentHeight="15rem">
-      <AddSetStyled>
-        <legend>
-          Add Set
-        </legend>
-        <InputGrouping width="100%">
-          <label htmlFor="set-title">Title:</label>
-          <TitleInput required onChange={handleTitleChangeAndDuplicates} value={title} id="set-title" type="text" name="set-title" autoComplete="off"></TitleInput>
-          {showError && <ErrorMessage>{errorMessage}</ErrorMessage>}
-        </InputGrouping>
-        <InputGrouping width="80%">
-          <AddButton onClick={handleCancel}>Cancel</AddButton>
-          <AddButton disabled={disableForm} disable={disableForm} onClick={handleAdd}>Add</AddButton>
-        </InputGrouping>
-      </AddSetStyled>
+      {loading ? <Loading size={2} /> :
+        <AddSetStyled>
+          <legend>
+            Add Set
+          </legend>
+          <InputGrouping width="100%">
+            <label htmlFor="set-title">Title:</label>
+            <TitleInput required onChange={handleTitleChangeAndDuplicates} value={title} id="set-title" type="text" name="set-title" autoComplete="off"></TitleInput>
+            {showError && <ErrorMessage>{errorMessage}</ErrorMessage>}
+          </InputGrouping>
+          <InputGrouping width="80%">
+            <AddButton onClick={handleCancel}>Cancel</AddButton>
+            <AddButton disabled={disableForm} disable={disableForm} onClick={handleAdd}>Add</AddButton>
+          </InputGrouping>
+        </AddSetStyled>
+      }
     </Modal>
   )
 }
