@@ -89,6 +89,7 @@ export const KnowledgeLabel = styled.label`
   span {
     font-size: 1.8rem;
   }
+  position: relative;
 `
 
 export const KnowledgeEntryStyled = styled(SongEntryStyled)`
@@ -156,6 +157,7 @@ export const NotesEntryStyled = styled(SongEntryStyled)`
 
 export const SetsLabel = styled.fieldset`
   border: none;
+  position: relative;
 `
 
 export const SetsEntryStyled = styled(SongEntryStyled)`
