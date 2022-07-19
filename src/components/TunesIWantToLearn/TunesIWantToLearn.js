@@ -17,6 +17,7 @@ function TunesIWantToLearn() {
 
   const [showAddSong, setShowAddSong] = useState(false);
   const [showAddMultiple, setShowAddMultiple] = useState(false);
+  const [songsLoading, setSongsLoading] = useState({});
 
 
   function handleAddButton(e) {
@@ -28,7 +29,12 @@ function TunesIWantToLearn() {
   }
 
   async function deleteTune(e) {
-    const tuneName = e.target.parentElement.parentElement.textContent.toLowerCase();
+    setSongsLoading((oldObject) => {
+      const newObject = { ...oldObject };
+      newObject[e.target.dataset.name] = null;
+      return newObject;
+    })
+    const tuneName = e.target.dataset.name.toLowerCase();
     const userDocRef = doc(db, 'users', user.uid);
     try {
       await updateDoc(userDocRef, {
@@ -37,6 +43,13 @@ function TunesIWantToLearn() {
     } catch (error) {
       console.log(error.message);
     }
+    setSongsLoading((oldObject) => {
+      const newObject = { ...oldObject };
+      if (newObject.hasOwnProperty(e.target.dataset.name)) {
+        delete newObject[e.target.dataset.name];
+      }
+      return newObject;
+    })
   }
 
   const libraryMenuItems = [
@@ -65,9 +78,15 @@ function TunesIWantToLearn() {
             return (
               <li key={name}>
                 <span>{capitalize(name)}</span>
-                <svg viewBox="0 0 24 24" onClick={deleteTune}>
-                  <path fill="currentColor" d="M19,4H15.5L14.5,3H9.5L8.5,4H5V6H19M6,19A2,2 0 0,0 8,21H16A2,2 0 0,0 18,19V7H6V19Z" />
-                </svg>
+                <div>
+                  {songsLoading.hasOwnProperty(name) ?
+                    <Loading size={1} embedded spinnerOnly /> :
+                    <svg viewBox="0 0 24 24" >
+                      <path data-name={name} onClick={deleteTune} fill="currentColor" d="M19,4H15.5L14.5,3H9.5L8.5,4H5V6H19M6,19A2,2 0 0,0 8,21H16A2,2 0 0,0 18,19V7H6V19Z" />
+                    </svg>
+                  }
+                </div>
+
               </li>
             )
           }
