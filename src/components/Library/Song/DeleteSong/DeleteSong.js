@@ -5,7 +5,7 @@ import { DeleteSongStyled } from './DeleteSong.styled';
 import Modal from '../../../generics/Modal.styled';
 import AddButton from '../../../generics/AddButton.styled';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
-import { doc, updateDoc, arrayRemove, deleteField } from 'firebase/firestore';
+import { doc, arrayRemove, deleteField, writeBatch } from 'firebase/firestore';
 import capitalize from '../../../../helperFunctions/capitalize';
 
 function DeleteSong(props) {
@@ -63,17 +63,18 @@ function DeleteSong(props) {
     let setDocRef = doc(db, 'users', user.uid, 'sets', setId);
 
     try {
-      const userPromise = updateDoc(userDocRef, {
+      const batch = writeBatch(db);
+      batch.update(userDocRef, {
         [`songs.${song.id}.sets.${setId}`]: deleteField(),
       })
 
-      const setPromise = updateDoc(setDocRef, {
+      batch.update(setDocRef, {
         [`allSongs.${song.id}`]: deleteField(),
         [knowledgeArrays[song.knowledge][0]]: arrayRemove(song.id),
         [knowledgeArrays[song.knowledge][1]]: arrayRemove(song.id),
       });
 
-      await Promise.all([userPromise, setPromise]);
+      await batch.commit();
     }
     catch (error) {
       console.log(error);
@@ -100,23 +101,22 @@ function DeleteSong(props) {
     const setDocRefs = setIds.map((id) => doc(db, 'users', user.uid, 'sets', id));
 
     try {
-      const setPromises = [];
+      const batch = writeBatch(db);
 
       setDocRefs.forEach((setDocRef) => {
-        const setPromise = updateDoc(setDocRef, {
+        batch.update(setDocRef, {
           [`allSongs.${song.id}`]: deleteField(),
           [knowledgeArrays[song.knowledge][0]]: arrayRemove(song.id),
           [knowledgeArrays[song.knowledge][1]]: arrayRemove(song.id),
         })
-        setPromises.push(setPromise);
       })
 
-      const userPromise = updateDoc(userDocRef, {
+      batch.update(userDocRef, {
         [`songs.${song.id}`]: deleteField(),
         [`songNames.${song.title}`]: deleteField(),
       });
 
-      await Promise.all([userPromise, ...setPromises]);
+      await batch.commit();
 
 
       if (forPicker) {

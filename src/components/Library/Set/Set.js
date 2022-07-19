@@ -37,6 +37,7 @@ function Set(props) {
   const [showAddFromLibrary, setShowAddFromLibrary] = useState(false);
   const [set, setSet] = useState(undefined);
   const [localLoading, setLocalLoading] = useState(false);
+  const [loadingForRedirect, setLoadingForRedirect] = useState(false);
 
   const [state, dispatch] = useSongSort();
   const { songsArray, sortedBy } = state;
@@ -128,6 +129,12 @@ function Set(props) {
 
   const renderSet = params['*'] ? false : true;
 
+  if (loadingForRedirect) {
+    return (
+      <Loading />
+    )
+  }
+
   if (showNotFound) {
     return (
       <NotFound />
@@ -204,7 +211,7 @@ function Set(props) {
           </SetStyled>
           {showAddSong && <AddSong set={set} songNames={songNames} setShowAddSong={setShowAddSong} user={user} />}
           {showAddMultiple && <AddMultiple set={set} setShowAddMultiple={setShowAddMultiple} songNames={songNames} user={user} allSongs={allSongs} calling="set" />}
-          {showDeleteSet && <DeleteSet setShowDeleteSet={setShowDeleteSet} set={set} setNames={setNames} />}
+          {showDeleteSet && <DeleteSet setShowDeleteSet={setShowDeleteSet} set={set} setNames={setNames} setLoadingForRedirect={setLoadingForRedirect} />}
           {showCannotDelete && <CannotDelete setShowCannotDelete={setShowCannotDelete} />}
           {showEditSetName && <EditSetName setShowEditSetName={setShowEditSetName} oldTitle={set.setName} setNames={setNames} setId={set.id} user={user} />}
           {showAddFromLibrary && <AddFromLibrary setShowAddFromLibrary={setShowAddFromLibrary} set={set} user={user} userDoc={userDoc} />}

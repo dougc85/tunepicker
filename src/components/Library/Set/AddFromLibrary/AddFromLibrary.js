@@ -6,7 +6,7 @@ import AddButton from '../../../generics/AddButton.styled';
 import LibraryEntry from './LibraryEntry/LibraryEntry';
 import Loading from '../../../Loading/Loading';
 
-import { doc, getDoc, arrayUnion, updateDoc } from 'firebase/firestore';
+import { doc, arrayUnion, runTransaction } from 'firebase/firestore';
 import { db } from '../../../../firebaseConfig';
 
 function AddFromLibrary(props) {
@@ -37,50 +37,51 @@ function AddFromLibrary(props) {
     const firebasePromises = [];
 
     try {
-      Object.keys(setsToAdd).forEach((setId => {
-        const setDocRef = doc(db, 'users', user.uid, 'sets', setId);
+      await runTransaction(db, async (transaction) => {
+        Object.keys(setsToAdd).forEach((setId => {
+          const setDocRef = doc(db, 'users', user.uid, 'sets', setId);
 
-        firebasePromises.push(getDoc(setDocRef));
-      }));
+          firebasePromises.push(transaction.get(setDocRef));
+        }));
 
-      const firebaseDocs = await Promise.all(firebasePromises);
+        const firebaseDocs = await Promise.all(firebasePromises);
 
-      firebaseDocs.forEach((firebaseDoc) => {
-        const setData = firebaseDoc.data();
-        Object.keys(setData.allSongs).forEach((songId) => {
-          combinedSongs.add(songId);
+        firebaseDocs.forEach((firebaseDoc) => {
+          const setData = firebaseDoc.data();
+          Object.keys(setData.allSongs).forEach((songId) => {
+            combinedSongs.add(songId);
+          })
         })
-      })
 
-      for (const songId in songsToAdd) {
-        combinedSongs.add(songId);
-      }
-
-      const setToAdd = {};
-      const setInfo = {};
-      const forKnowledgeArrays = [];
-
-      combinedSongs.forEach((songId) => {
-        if (!set.allSongs.hasOwnProperty(songId)) {
-          setToAdd[`allSongs.${songId}`] = null;
-          forKnowledgeArrays.push(songId);
-          setInfo[`songs.${songId}.sets.${set.id}`] = null;
+        for (const songId in songsToAdd) {
+          combinedSongs.add(songId);
         }
+
+        const setToAdd = {};
+        const setInfo = {};
+        const forKnowledgeArrays = [];
+
+        combinedSongs.forEach((songId) => {
+          if (!set.allSongs.hasOwnProperty(songId)) {
+            setToAdd[`allSongs.${songId}`] = null;
+            forKnowledgeArrays.push(songId);
+            setInfo[`songs.${songId}.sets.${set.id}`] = null;
+          }
+        })
+
+        setToAdd[`fullKnow`] = arrayUnion(...forKnowledgeArrays);
+        setToAdd['currentKnow'] = arrayUnion(...forKnowledgeArrays);
+
+        const setDocRef = doc(db, 'users', user.uid, 'sets', set.id);
+        transaction.update(setDocRef, {
+          ...setToAdd
+        });
+
+        const userDocRef = doc(db, 'users', user.uid);
+        transaction.update(userDocRef, {
+          ...setInfo
+        });
       })
-
-      setToAdd[`fullKnow`] = arrayUnion(...forKnowledgeArrays);
-      setToAdd['currentKnow'] = arrayUnion(...forKnowledgeArrays);
-
-      const setDocRef = doc(db, 'users', user.uid, 'sets', set.id);
-      await updateDoc(setDocRef, {
-        ...setToAdd
-      });
-
-      const userDocRef = doc(db, 'users', user.uid);
-      await updateDoc(userDocRef, {
-        ...setInfo
-      });
-
     } catch (error) {
       console.log(error.message);
     }

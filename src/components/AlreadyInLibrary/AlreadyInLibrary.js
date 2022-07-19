@@ -2,7 +2,7 @@ import React, { useContext, useState } from 'react';
 import AddButton from '../generics/AddButton.styled';
 import Modal from '../generics/Modal.styled';
 import { db } from '../../firebaseConfig';
-import { doc, updateDoc, arrayUnion } from 'firebase/firestore';
+import { doc, writeBatch, arrayUnion } from 'firebase/firestore';
 import SubContext from '../../context/sub-context';
 import { AlreadyInLibraryStyled } from './AlreadyInLibrary.styled';
 import capitalize from '../../helperFunctions/capitalize';
@@ -29,21 +29,21 @@ function AlreadyInLibrary(props) {
       setLoading(true);
       const songId = songNames[title];
 
+      const batch = writeBatch(db);
       const userDocRef = doc(db, 'users', user.uid);
       const setDocRef = doc(db, 'users', user.uid, 'sets', setId);
 
-      const userDocPromise = updateDoc(userDocRef, {
+      batch.update(userDocRef, {
         [`songs.${songId}.sets.${setId}`]: null,
       })
 
-      const setDocPromise = updateDoc(setDocRef, {
+      batch.update(setDocRef, {
         [`allSongs.${songId}`]: null,
         [knowledgeFields[knowledge][0]]: arrayUnion(songId),
         [knowledgeFields[knowledge][1]]: arrayUnion(songId),
       })
 
-      const firebasePromises = [userDocPromise, setDocPromise];
-      await Promise.all(firebasePromises);
+      await batch.commit();
     }
     catch (error) {
       console.log(error.message);

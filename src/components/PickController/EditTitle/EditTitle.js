@@ -35,7 +35,7 @@ function EditTitle(props) {
     setTitleVal(e.target.value);
   }
 
-  function editTitle(e) {
+  async function editTitle(e) {
 
     e.preventDefault();
 
@@ -70,7 +70,8 @@ function EditTitle(props) {
       const userDocRef = doc(db, 'users', user.uid);
 
       try {
-        updateDoc(userDocRef, {
+        setLoading(true);
+        await updateDoc(userDocRef, {
           [`songNames.${title}`]: deleteField(),
           [`songNames.${newTitle}`]: songId,
           [`songs.${songId}.title`]: newTitle,
