@@ -60,8 +60,18 @@
     font-size: 2rem;
     display: block;
     width: 16rem;
-    align-self: center;
     border-radius: 3px;
+
+    &-container {
+      align-self: center;
+      position: relative;
+    }
+
+    &-loading {
+      position: absolute;
+      top: .4rem;
+      left: 17rem;
+    }
 
     &-signin {
       width: 14rem;

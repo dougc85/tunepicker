@@ -12,6 +12,7 @@ import {
   addDoc,
   updateDoc,
 } from 'firebase/firestore';
+import Loading from '../../Loading/Loading';
 
 const loginSignupReducer = (state, action) => {
   if (action.type === 'HANDLE_INPUT') {
@@ -32,7 +33,6 @@ const loginSignupReducer = (state, action) => {
 const loginSignupInitialValues = {
   email: '',
   password: '',
-  isLoading: false,
   loginError: '',
   signupError: '',
 }
@@ -46,9 +46,10 @@ function LoginSignupForm(props) {
 
   /////   !!! Add Loading component when waiting for network responses   !!!!!!   /////
 
-  const { email, password, isLoading, loginError, signupError } = state;
+  const { email, password, loginError, signupError } = state;
 
   const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const errorMessage =
     (formType === 'login') ?
@@ -64,8 +65,10 @@ function LoginSignupForm(props) {
     e.preventDefault();
 
     try {
+      setLoading(true);
       await signInWithEmailAndPassword(auth, email, password);
     } catch (error) {
+      setLoading(false);
       showLoginError(error);
     }
   }
@@ -97,6 +100,7 @@ function LoginSignupForm(props) {
       return;
     }
     try {
+      setLoading(true);
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       await setDoc(
         doc(db, 'users', userCredential.user.uid),
@@ -137,6 +141,7 @@ function LoginSignupForm(props) {
     }
     catch (error) {
       console.log(error.message);
+      setLoading(false);
       showSignupError(error);
     }
   }
@@ -165,7 +170,12 @@ function LoginSignupForm(props) {
         <Password id={`password-${formType}`} formType={formType} handleChange={handleChange} password={password} showPassword={showPassword} toggleShowPassword={toggleShowPassword} />
         {errorMessage && <p className="LoginSignupForm-error" >{`*${errorMessage}`}</p>}
       </div>
-      <button onClick={submit} className={`LoginSignupForm-submit LoginSignupForm-submit-${formType}`}>{submitMessage}</button>
+      <div className="LoginSignupForm-submit-container">
+        <button onClick={submit} className={`LoginSignupForm-submit LoginSignupForm-submit-${formType}`}>{submitMessage}</button>
+        <div className={'LoginSignupForm-submit-loading'}>
+          {loading && <Loading embedded spinnerOnly size={2} />}
+        </div>
+      </div>
       <button className="LoginSignupForm-switch" id={`switch-from-${formType}`} onClick={switchAuth}>{switchMessage}</button>
     </form>
   )
