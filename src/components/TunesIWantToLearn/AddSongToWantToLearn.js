@@ -5,6 +5,7 @@ import { doc, updateDoc } from 'firebase/firestore';
 import { db } from '../../firebaseConfig';
 import { AddSongToWantToLearnStyled, InputGrouping, TitleInput, ErrorMessage } from './AddSongToWantToLearn.styled';
 import AddButton from '../generics/AddButton.styled';
+import Loading from '../Loading/Loading';
 
 function AddSongToWantToLearn(props) {
 
@@ -13,8 +14,7 @@ function AddSongToWantToLearn(props) {
 
   const [showError, setShowError] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
-
-
+  const [loading, setLoading] = useState(false);
 
 
   function handleCancel(e) {
@@ -59,6 +59,7 @@ function AddSongToWantToLearn(props) {
       return;
     } else {
       try {
+        setLoading(true);
         await updateDoc(
           doc(db, 'users', user.uid),
           {
@@ -70,25 +71,30 @@ function AddSongToWantToLearn(props) {
       catch (error) {
         console.log(error.message);
       }
+
+      setLoading(true);
     }
   }
 
   return (
     <Modal handleOutsideClick={handleCancel} contentHeight="15rem">
-      <AddSongToWantToLearnStyled>
-        <legend>
-          Add Song
-        </legend>
-        <InputGrouping width="100%">
-          <label htmlFor="song-wantToLearn-title">Title:</label>
-          <TitleInput required onChange={handleTitleChangeAndErrorReset} value={title} id="song-wantToLearn-title" type="text" name="song-wantToLearn-title" autoComplete="off"></TitleInput>
-          {showError && <ErrorMessage>{errorMessage}</ErrorMessage>}
-        </InputGrouping>
-        <InputGrouping width="80%">
-          <AddButton onClick={handleCancel}>Cancel</AddButton>
-          <AddButton onClick={handleAdd}>Add</AddButton>
-        </InputGrouping>
-      </AddSongToWantToLearnStyled>
+      {loading ? <Loading size={2} /> :
+        <AddSongToWantToLearnStyled>
+          <legend>
+            Add Song
+          </legend>
+          <InputGrouping width="100%">
+            <label htmlFor="song-wantToLearn-title">Title:</label>
+            <TitleInput required onChange={handleTitleChangeAndErrorReset} value={title} id="song-wantToLearn-title" type="text" name="song-wantToLearn-title" autoComplete="off"></TitleInput>
+            {showError && <ErrorMessage>{errorMessage}</ErrorMessage>}
+          </InputGrouping>
+          <InputGrouping width="80%">
+            <AddButton onClick={handleCancel}>Cancel</AddButton>
+            <AddButton onClick={handleAdd}>Add</AddButton>
+          </InputGrouping>
+        </AddSongToWantToLearnStyled>
+      }
+
     </Modal>
   )
 }

@@ -595,6 +595,7 @@ function PickController() {
           title={allSongs[tune].title}
           setTune={setTune}
           knowledgeArrays={knowledgeArrays}
+          setLocalLoading={setLocalLoading}
         />}
       {showEditTitle &&
         <EditTitle
