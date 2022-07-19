@@ -15,7 +15,6 @@ function Loading(props) {
           loading
         </p> : null
       }
-
     </LoadingStyled>
   )
 }
