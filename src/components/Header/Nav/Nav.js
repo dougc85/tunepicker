@@ -27,7 +27,6 @@ function Nav(props) {
     <>
       <Screen onClick={toggleNav} />
       <NavStyled>
-
         <ul>
           <li onClick={toggleNav}><Link to='/controller'>Picker</Link></li>
           <li onClick={toggleNav}><Link to='/library'>Library</Link></li>

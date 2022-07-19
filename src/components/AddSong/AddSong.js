@@ -3,7 +3,7 @@ import { v4 as uuid } from 'uuid';
 import {
   arrayUnion,
   doc,
-  updateDoc,
+  writeBatch,
 } from 'firebase/firestore';
 import {
   db
@@ -75,13 +75,14 @@ function AddSong(props) {
     setLoading(true);
 
     try {
-      const userDoc = doc(db, 'users', user.uid);
-      const setDoc = doc(userDoc, 'sets', set.id);
+      const batch = writeBatch(db);
+      const userDocRef = doc(db, 'users', user.uid);
+      const setDocRef = doc(userDocRef, 'sets', set.id);
       const date = Date.now();
 
       const songId = uuid();
 
-      const userDocPromise = updateDoc(userDoc, {
+      batch.update(userDocRef, {
 
         [`songs.${songId}`]: {
           title: newTitle,
@@ -94,14 +95,13 @@ function AddSong(props) {
         },
         [`songNames.${newTitle}`]: songId,
       });
-      const setDocPromise = updateDoc(setDoc, {
+      batch.update(setDocRef, {
         [`${knowledgeFields[knowledge][0]}`]: arrayUnion(songId),
         [`${knowledgeFields[knowledge][1]}`]: arrayUnion(songId),
         [`allSongs.${songId}`]: null,
       })
 
-      const firebasePromises = [userDocPromise, setDocPromise];
-      await Promise.all(firebasePromises);
+      await batch.commit();
 
       resetTitle();
       resetSongKey();

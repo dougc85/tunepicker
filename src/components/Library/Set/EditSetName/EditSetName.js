@@ -4,7 +4,7 @@ import Modal from '../../../generics/Modal.styled';
 import useFormInput from '../../../../hooks/useFormInput';
 import AddButton from '../../../generics/AddButton.styled';
 import {
-  updateDoc, doc
+  doc, writeBatch
 } from 'firebase/firestore';
 import { db } from '../../../../firebaseConfig';
 import capitalize from '../../../../helperFunctions/capitalize';
@@ -49,13 +49,16 @@ function EditSetName(props) {
       const setDocRef = doc(userDocRef, 'sets', setId);
 
       try {
-        const userPromise = updateDoc(userDocRef, {
+        const batch = writeBatch(db);
+
+        batch.update(userDocRef, {
           [`setNames.${setId}`]: enteredSetName
         })
-        const setPromise = updateDoc(setDocRef, {
+        batch.update(setDocRef, {
           setName: enteredSetName
         })
-        await Promise.all([userPromise, setPromise]);
+
+        await batch.commit();
       }
       catch (error) {
         console.log(error.message);

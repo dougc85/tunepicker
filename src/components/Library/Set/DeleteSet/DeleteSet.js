@@ -4,14 +4,14 @@ import SubContext from '../../../../context/sub-context';
 import { ConfirmRemoveSongs, DeleteSetStyled, LowerContent } from './DeleteSet.styled';
 import Modal from '../../../generics/Modal.styled';
 import AddButton from '../../../generics/AddButton.styled';
-import { doc, deleteDoc, updateDoc, deleteField } from 'firebase/firestore';
+import { doc, deleteField, writeBatch } from 'firebase/firestore';
 import { db } from '../../../../firebaseConfig';
 
 function DeleteSet(props) {
 
   const navigate = useNavigate();
 
-  const { setShowDeleteSet, set, setNames } = props;
+  const { setShowDeleteSet, set, setNames, setLoadingForRedirect } = props;
 
   const { id: setId, allSongs } = set;
 
@@ -35,12 +35,9 @@ function DeleteSet(props) {
     setShowSecondModal(true);
   }
 
-  function deleteSetDoc() {
-    deleteDoc(doc(db, 'users', uid, 'sets', setId));
-  }
-
-  function deleteAndKeep(e) {
+  async function deleteAndKeep(e) {
     hideDeleteSet(e);
+    setLoadingForRedirect(true);
 
     let newPickerId = pickerId;
     if (pickerId === setId) {
@@ -54,23 +51,29 @@ function DeleteSet(props) {
     })
 
     try {
-      deleteSetDoc();
-      updateDoc(doc(db, 'users', uid), {
+      const batch = writeBatch(db);
+
+      batch.delete(doc(db, 'users', uid, 'sets', setId));
+      batch.update(doc(db, 'users', uid), {
         ...newSongFields,
         pickerSet: newPickerId,
         [`setNames.${setId}`]: deleteField(),
-
       });
+
+      await batch.commit();
+      navigate('/library/sets');
     }
     catch (error) {
       console.log(error.message);
+      setLoadingForRedirect(false);
     }
 
-    navigate('/library/sets');
+
   }
 
-  function deleteAndRemove(e) {
+  async function deleteAndRemove(e) {
     hideDeleteSet(e);
+    setLoadingForRedirect(true);
 
     let newPickerId = pickerId;
     if (pickerId === setId) {
@@ -91,18 +94,20 @@ function DeleteSet(props) {
     })
 
     try {
-      deleteSetDoc();
-      updateDoc(doc(db, 'users', uid), {
+      const batch = writeBatch(db);
+      batch.delete(doc(db, 'users', uid, 'sets', setId));
+      batch.update(doc(db, 'users', uid), {
         ...newSongFields,
         pickerSet: newPickerId,
         [`setNames.${setId}`]: deleteField(),
       });
+      await batch.commit();
+      navigate('/library/sets');
     }
     catch (error) {
       console.log(error.message);
+      setLoadingForRedirect(false);
     }
-
-    navigate('/library/sets');
   }
 
   if (showFirstModal) {

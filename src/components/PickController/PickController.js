@@ -4,7 +4,7 @@ import SubContext from "../../context/sub-context";
 import './PickController.scss';
 import MoveControlsPopup from "./MoveControlsPopup/MoveControlsPopup";
 import Loading from "../Loading/Loading";
-import { onSnapshot, doc, updateDoc, setDoc } from 'firebase/firestore';
+import { onSnapshot, doc, setDoc, writeBatch } from 'firebase/firestore';
 import { db } from '../../firebaseConfig'
 import LibraryMenu from '../generics/LibraryMenu.styled';
 import MoveDownAndOut from "./MoveDownAndOut/MoveDownAndOut";
@@ -410,7 +410,7 @@ function PickController() {
     changeKnowledge('lower');
   }
 
-  function changeKnowledge(direction) {
+  async function changeKnowledge(direction) {
 
     const oldKnowledge = allSongs[tune].knowledge;
     let newKnowledge;
@@ -432,7 +432,8 @@ function PickController() {
     const setDocRef = doc(userDocRef, 'sets', userDoc.pickerSet);
 
     try {
-      updateDoc(userDocRef, {
+      const batch = writeBatch(db);
+      batch.update(userDocRef, {
         [`songs.${tune}.knowledge`]: newKnowledge
       })
 
@@ -445,7 +446,9 @@ function PickController() {
       mutablePickerSet[knowledgeArrays[oldKnowledge][1]].splice(oldFullIndex, 1);
       mutablePickerSet[knowledgeArrays[newKnowledge][1]].push(tune);
 
-      setDoc(setDocRef, mutablePickerSet);
+      batch.set(setDocRef, mutablePickerSet);
+      await batch.commit();
+
     } catch (error) {
       console.log(error.message);
     }

@@ -2,7 +2,7 @@ import React, { useState, useContext, useEffect, useRef } from 'react';
 import SubContext from '../../../context/sub-context';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import {
-  doc, updateDoc, deleteField, arrayUnion, arrayRemove,
+  doc, updateDoc, deleteField, arrayUnion, arrayRemove, writeBatch
 } from 'firebase/firestore';
 import { db } from '../../../firebaseConfig';
 import useFormInput from '../../../hooks/useFormInput';
@@ -147,11 +147,13 @@ function Song(props) {
     })
   }
 
-  async function saveSongData(fieldString, inputData) {
+  async function saveSongData(fieldString, inputData, batch) {
 
     if (song[fieldString] === inputData) {
       return;
     }
+
+    console.log(batch, 'batch');
 
     const userDoc = doc(db, 'users', user.uid);
 
@@ -175,9 +177,15 @@ function Song(props) {
           [`songNames.${inputData}`]: song.id,
         })
       } else {
-        await updateDoc(userDoc, {
-          [`songs.${song.id}.${fieldString}`]: inputData
-        })
+        if (batch) {
+          batch.update(userDoc, {
+            [`songs.${song.id}.${fieldString}`]: inputData
+          })
+        } else {
+          await updateDoc(userDoc, {
+            [`songs.${song.id}.${fieldString}`]: inputData
+          })
+        }
       }
     } catch (error) {
       console.log(error.message);
@@ -228,11 +236,13 @@ function Song(props) {
 
     setKnowledgeLoading(true);
 
+    const batch = writeBatch(db);
+
     for (let set in song.sets) {
       const setDoc = doc(db, 'users', user.uid, 'sets', set);
 
       try {
-        await updateDoc(setDoc, {
+        batch.update(setDoc, {
           [knowledgeArrays[song.knowledge][0]]: arrayRemove(song.id),
           [knowledgeArrays[song.knowledge][1]]: arrayRemove(song.id),
           [knowledgeArrays[knowledge][0]]: arrayUnion(song.id),
@@ -242,8 +252,8 @@ function Song(props) {
         console.log(error.message);
       }
 
-      saveSongData('knowledge', knowledge);
-
+      saveSongData('knowledge', knowledge, batch);
+      await batch.commit();
       setKnowledgeLoading(false);
     }
   }
@@ -278,6 +288,7 @@ function Song(props) {
     }
 
     setSetsLoading(true);
+    const batch = writeBatch(db);
 
     try {
       for (let setItem of setArray) {
@@ -290,7 +301,7 @@ function Song(props) {
           //add the song to that set in the database
           let setDoc = doc(db, 'users', user.uid, 'sets', setId);
 
-          updateDoc(setDoc, {
+          batch.update(setDoc, {
             [`allSongs.${song.id}`]: null,
             [knowledgeArrays[song.knowledge][0]]: arrayUnion(song.id),
             [knowledgeArrays[song.knowledge][1]]: arrayUnion(song.id),
@@ -301,7 +312,7 @@ function Song(props) {
           //delete the song from that set in the database
           let setDoc = doc(db, 'users', user.uid, 'sets', setId);
 
-          updateDoc(setDoc, {
+          batch.update(setDoc, {
             [`allSongs.${song.id}`]: deleteField(),
             [knowledgeArrays[song.knowledge][0]]: arrayRemove(song.id),
             [knowledgeArrays[song.knowledge][1]]: arrayRemove(song.id),
@@ -312,7 +323,8 @@ function Song(props) {
       console.log(error.message);
     }
 
-    saveSongData('sets', newSetsObject);
+    saveSongData('sets', newSetsObject, batch);
+    await batch.commit();
     setSetsLoading(false);
   }
 

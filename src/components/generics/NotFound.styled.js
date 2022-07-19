@@ -13,7 +13,7 @@ function NotFound() {
   useEffect(() => {
     setTimeout(() => {
       navigate('/library');
-    }, 3000)
+    }, 2000)
   }, []);
 
   return (

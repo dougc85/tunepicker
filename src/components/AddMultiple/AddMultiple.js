@@ -1,6 +1,5 @@
-import { doc, updateDoc, arrayUnion } from 'firebase/firestore';
-import React, { useState, useContext } from 'react';
-import SubContext from '../../context/sub-context';
+import { doc, updateDoc, writeBatch, arrayUnion } from 'firebase/firestore';
+import React, { useState } from 'react';
 import { v4 as uuid } from 'uuid';
 import { db } from '../../firebaseConfig';
 import useFormInput from '../../hooks/useFormInput';
@@ -114,7 +113,9 @@ function AddMultiple(props) {
 
       const userDocRef = doc(db, 'users', user.uid);
       try {
-        const userDocPromise = updateDoc(userDocRef, {
+        const batch = writeBatch(db);
+
+        batch.update(userDocRef, {
           ...newSongsObj,
           ...oldSongsObj,
         })
@@ -145,12 +146,11 @@ function AddMultiple(props) {
 
         const setDocRef = doc(db, 'users', user.uid, 'sets', set.id);
 
-        const setDocPromise = updateDoc(setDocRef, {
+        batch.update(setDocRef, {
           ...newSongsInSet,
         })
 
-        const firebasePromises = [userDocPromise, setDocPromise];
-        await Promise.all(firebasePromises);
+        await batch.commit();
 
       } catch (error) {
         console.log(error.message);

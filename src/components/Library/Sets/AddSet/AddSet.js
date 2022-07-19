@@ -78,8 +78,8 @@ function AddSet(props) {
       }
 
       resetTitle();
-      setShowAddSet(false);
       setLoading(false);
+      setShowAddSet(false);
     }
   }
 

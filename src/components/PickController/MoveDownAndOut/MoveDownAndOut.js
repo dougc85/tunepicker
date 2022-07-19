@@ -8,7 +8,7 @@ import {
   doc,
   deleteField,
   arrayRemove,
-
+  writeBatch,
 } from 'firebase/firestore';
 import { db } from '../../../firebaseConfig';
 import capitalize from '../../../helperFunctions/capitalize';
@@ -38,24 +38,23 @@ function MoveDownAndOut(props) {
     const setDocRefs = setIds.map((setId) => doc(db, 'users', user.uid, 'sets', setId));
 
     try {
-      const userPromise = updateDoc(userDocRef, {
+      const batch = writeBatch(db);
+
+      batch.update(userDocRef, {
         [`songs.${song.id}`]: deleteField(),
         [`songNames.${song.title}`]: deleteField(),
         [`tunesIWantToLearn.${title}`]: null,
       });
 
-      const setPromises = [];
-
       setDocRefs.forEach((setDocRef) => {
-        const setPromise = updateDoc(setDocRef, {
+        batch.update(setDocRef, {
           [`allSongs.${song.id}`]: deleteField(),
           [knowledgeArrays[song.knowledge][0]]: arrayRemove(song.id),
           [knowledgeArrays[song.knowledge][1]]: arrayRemove(song.id),
         })
-        setPromises.push(setPromise);
       })
 
-      await Promise.all([userPromise, ...setPromises])
+      await batch.commit();
 
       setLocalLoading(false);
     }
