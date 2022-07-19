@@ -10,7 +10,7 @@ import capitalize from '../../../../helperFunctions/capitalize';
 
 function DeleteSong(props) {
 
-  const { song, knowledgeArrays, setShowRemoveSong, forPicker, initialPick, removeOnly, dispatch } = props;
+  const { song, knowledgeArrays, setShowRemoveSong, forPicker, initialPick, removeOnly, dispatch, setLocalLoading } = props;
   let { setShowDeleteSong } = props;
 
   if (setShowRemoveSong) {
@@ -53,22 +53,27 @@ function DeleteSong(props) {
     setShowDeleteSong(false);
   }
 
-  function removeFromSet(e) {
+  async function removeFromSet(e) {
     hideDeleteSong(e)
+    if (setLocalLoading) {
+      setLocalLoading(true);
+    }
 
     let userDocRef = doc(db, 'users', user.uid);
     let setDocRef = doc(db, 'users', user.uid, 'sets', setId);
 
     try {
-      updateDoc(userDocRef, {
+      const userPromise = updateDoc(userDocRef, {
         [`songs.${song.id}.sets.${setId}`]: deleteField(),
       })
 
-      updateDoc(setDocRef, {
+      const setPromise = updateDoc(setDocRef, {
         [`allSongs.${song.id}`]: deleteField(),
         [knowledgeArrays[song.knowledge][0]]: arrayRemove(song.id),
         [knowledgeArrays[song.knowledge][1]]: arrayRemove(song.id),
       });
+
+      await Promise.all([userPromise, setPromise]);
     }
     catch (error) {
       console.log(error);
@@ -76,35 +81,46 @@ function DeleteSong(props) {
 
     if (forPicker) {
       dispatch({ type: 'SET_TUNE', payload: '' });
+      setLocalLoading(false);
       return;
     } else {
       navigate(`/library/sets/${setId}`);
     }
   }
 
-  function deleteFromLibrary(e) {
+  async function deleteFromLibrary(e) {
     hideDeleteSong(e)
+    if (forPicker) {
+      setLocalLoading(true);
+      initialPick();
+    }
 
     let userDocRef = doc(db, 'users', user.uid);
     const setIds = Object.keys(song.sets);
     const setDocRefs = setIds.map((id) => doc(db, 'users', user.uid, 'sets', id));
 
     try {
+      const setPromises = [];
+
       setDocRefs.forEach((setDocRef) => {
-        updateDoc(setDocRef, {
+        const setPromise = updateDoc(setDocRef, {
           [`allSongs.${song.id}`]: deleteField(),
           [knowledgeArrays[song.knowledge][0]]: arrayRemove(song.id),
           [knowledgeArrays[song.knowledge][1]]: arrayRemove(song.id),
         })
+        setPromises.push(setPromise);
       })
 
-      updateDoc(userDocRef, {
+      const userPromise = updateDoc(userDocRef, {
         [`songs.${song.id}`]: deleteField(),
         [`songNames.${song.title}`]: deleteField(),
       });
 
+      await Promise.all([userPromise, ...setPromises]);
+
+
       if (forPicker) {
-        initialPick();
+        setLocalLoading(false);
         return;
       }
 
