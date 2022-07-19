@@ -6,6 +6,7 @@ import SubContext from '../../../context/sub-context';
 import { db } from '../../../firebaseConfig';
 import { doc, updateDoc, deleteField } from 'firebase/firestore';
 import capitalize from '../../../helperFunctions/capitalize';
+import Loading from '../../Loading/Loading';
 
 function EditTitle(props) {
 
@@ -17,6 +18,7 @@ function EditTitle(props) {
 
   const [errorMessage, setErrorMessage] = useState('');
   const [showError, setShowError] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const [titleVal, setTitleVal] = useState(capitalize(title));
 
@@ -76,28 +78,30 @@ function EditTitle(props) {
       } catch (error) {
         console.log(error.message);
       }
-
     }
 
+    setLoading(false);
     hideEditTitle();
   }
 
   return (
     <Modal handleOutsideClick={hideEditTitle} contentHeight={'14rem'}>
-      <EditTitleStyled>
-        <h3>Edit Title</h3>
-        <FormInputs>
-          <div>
-            <label htmlFor="edit-title">Title:</label>
-            <input value={titleVal} autoComplete="off" onChange={handleInput} id="edit-title" type="text" autoFocus name="edit-title" />
-            {showError && <ErrorMessage>{errorMessage}</ErrorMessage>}
-          </div>
-          <ButtonContainer>
-            <AddButton onClick={hideEditTitle}>Cancel</AddButton>
-            <AddButton onClick={editTitle}>Confirm</AddButton>
-          </ButtonContainer>
-        </FormInputs>
-      </EditTitleStyled>
+      {loading ? <Loading size={2} /> :
+        <EditTitleStyled >
+          <h3>Edit Title</h3>
+          <FormInputs>
+            <div>
+              <label htmlFor="edit-title">Title:</label>
+              <input value={titleVal} autoComplete="off" onChange={handleInput} id="edit-title" type="text" autoFocus name="edit-title" />
+              {showError && <ErrorMessage>{errorMessage}</ErrorMessage>}
+            </div>
+            <ButtonContainer>
+              <AddButton onClick={hideEditTitle}>Cancel</AddButton>
+              <AddButton onClick={editTitle}>Confirm</AddButton>
+            </ButtonContainer>
+          </FormInputs>
+        </EditTitleStyled>
+      }
     </Modal>
 
   )

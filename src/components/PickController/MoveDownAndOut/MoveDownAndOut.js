@@ -17,7 +17,7 @@ function MoveDownAndOut(props) {
 
   const context = useContext(SubContext);
   const { user, userDoc } = context;
-  const { setShowMoveDownAndOut, songId, title, setTune, knowledgeArrays } = props;
+  const { setShowMoveDownAndOut, songId, title, setTune, knowledgeArrays, setLocalLoading } = props;
   const song = userDoc.songs[songId];
 
   function hideMoveDownAndOut(e) {
@@ -27,9 +27,10 @@ function MoveDownAndOut(props) {
     setShowMoveDownAndOut(false);
   }
 
-  function handleMove(e) {
-
+  async function handleMove(e) {
     hideMoveDownAndOut(e);
+    setLocalLoading(true);
+
     setTune('');
 
     const userDocRef = doc(db, 'users', user.uid);
@@ -37,25 +38,31 @@ function MoveDownAndOut(props) {
     const setDocRefs = setIds.map((setId) => doc(db, 'users', user.uid, 'sets', setId));
 
     try {
-      updateDoc(userDocRef, {
+      const userPromise = updateDoc(userDocRef, {
         [`songs.${song.id}`]: deleteField(),
         [`songNames.${song.title}`]: deleteField(),
         [`tunesIWantToLearn.${title}`]: null,
       });
 
+      const setPromises = [];
+
       setDocRefs.forEach((setDocRef) => {
-        updateDoc(setDocRef, {
+        const setPromise = updateDoc(setDocRef, {
           [`allSongs.${song.id}`]: deleteField(),
           [knowledgeArrays[song.knowledge][0]]: arrayRemove(song.id),
           [knowledgeArrays[song.knowledge][1]]: arrayRemove(song.id),
         })
+        setPromises.push(setPromise);
       })
 
+      await Promise.all([userPromise, ...setPromises])
 
+      setLocalLoading(false);
     }
     catch (error) {
       console.log(error.message);
     }
+
 
   }
 
