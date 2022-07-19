@@ -86,6 +86,7 @@ function PickController() {
   const [showDeleteSong, setShowDeleteSong] = useState(false);
   const [showRemoveSong, setShowRemoveSong] = useState(false);
   const [showNotes, setShowNotes] = useState(false);
+  const [localLoading, setLocalLoading] = useState(false);
 
   const [state, dispatch] = useReducer(pickerReducer, pickerInitialValues);
   const { pickerSet, mutablePickerSet, tune } = state;
@@ -218,7 +219,7 @@ function PickController() {
   }
 
   useEffect(() => {
-    if (!loading && pickerSet) {
+    if (!loading && !localLoading && pickerSet) {
 
       if (Object.keys(pickerSet.allSongs).length === 0) {
         setShowNoSongs(true);
@@ -235,7 +236,7 @@ function PickController() {
 
       initialPick();
     }
-  }, [loading, pickerSet]);
+  }, [loading, localLoading, pickerSet]);
 
   function pickList(choices) {
     let choicesTemp = choices;
@@ -515,7 +516,7 @@ function PickController() {
     { text: "Reset Picker", func: resetPicker },
   ]
 
-  if (loading || !mutablePickerSet) {
+  if (loading || localLoading || !mutablePickerSet) {
     return (
       <Loading />
     )
@@ -618,6 +619,7 @@ function PickController() {
           setShowDeleteSong={setShowDeleteSong}
           forPicker
           initialPick={initialPick}
+          setLocalLoading={setLocalLoading}
         />
       }
       {showRemoveSong &&
@@ -632,6 +634,7 @@ function PickController() {
           forPicker
           removeOnly
           dispatch={dispatch}
+          setLocalLoading={setLocalLoading}
         />
       }
       {showNotes &&
