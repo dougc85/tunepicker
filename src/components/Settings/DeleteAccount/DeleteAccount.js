@@ -54,7 +54,7 @@ function DeleteAccount(props) {
     <>
       {
         showReauth ?
-          <Reauthenticate deleteAccount action={handleDelete} setShow={setShowDeleteAccount} message="delete your account" actionMessage="Confirm Delete" loading={loading} setLoading={setLoading} /> :
+          <Reauthenticate deleteAccount email={user.email} action={handleDelete} setShow={setShowDeleteAccount} message="delete your account" actionMessage="Confirm Delete" loading={loading} setLoading={setLoading} /> :
           <Modal handleOutsideClick={handleCancel} contentHeight={'20rem'}>
             <DeleteAccountStyled>
               <h3>Delete Account</h3>
