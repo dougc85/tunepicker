@@ -1,6 +1,5 @@
-import React, { useContext, useState } from 'react';
+import React, { useState } from 'react';
 import { ReauthenticateStyled, ButtonContainer, LoadingContainer, Error } from './Reauthenticate.styled';
-import SubContext from '../../../../context/sub-context';
 import Modal from '../../../generics/Modal.styled';
 import AddButton from '../../../generics/AddButton.styled';
 import { EmailAuthProvider, reauthenticateWithCredential, } from 'firebase/auth';
@@ -10,11 +9,7 @@ import Loading from '../../../Loading/Loading';
 
 function Reauthenticate(props) {
 
-  const { setShow, action, message, actionMessage, loading, setLoading, deleteAccount } = props;
-
-  const context = useContext(SubContext);
-  const { user } = context;
-  const { email } = user;
+  const { setShow, action, message, actionMessage, loading, setLoading, deleteAccount, email } = props;
 
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
