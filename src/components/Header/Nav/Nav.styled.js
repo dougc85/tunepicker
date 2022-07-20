@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 export const NavStyled = styled.nav`
-  height: 230px;
+  height: 280px;
   background-color: white;
   position: absolute;
   bottom: 0;

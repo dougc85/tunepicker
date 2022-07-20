@@ -13,6 +13,7 @@ import Song from './components/Library/Song/Song';
 import GlobalStyles from './GlobalStyles';
 import Help from './components/Help/Help';
 import Contact from './components/Contact/Contact';
+import Settings from './components/Settings/Settings';
 
 
 function App() {
@@ -33,6 +34,7 @@ function App() {
           <Route path="/library/sets/:setId/*" element={<Set setShowAlreadyInLibrary={setShowAlreadyInLibrary} showAlreadyInLibrary={showAlreadyInLibrary} />} />
           <Route path="/tunesiwanttolearn" element={<TunesIWantToLearn />} />
           <Route path="/help" element={<Help heading={"Help Center"} />} />
+          <Route path="/settings" element={<Settings />} />
           <Route path="/contact" element={<Contact />} />
         </Route>
         <Route path="/welcome" element={<Welcome />} />
