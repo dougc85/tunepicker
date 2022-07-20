@@ -66,7 +66,7 @@ function LoginSignupForm(props) {
 
     try {
       setLoading(true);
-      await signInWithEmailAndPassword(auth, email, password);
+      await signInWithEmailAndPassword(auth, email.trim().toLowerCase(), password);
     } catch (error) {
       setLoading(false);
       showLoginError(error);
@@ -101,7 +101,7 @@ function LoginSignupForm(props) {
     }
     try {
       setLoading(true);
-      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      const userCredential = await createUserWithEmailAndPassword(auth, email.trim().toLowerCase(), password);
       await setDoc(
         doc(db, 'users', userCredential.user.uid),
         {

@@ -39,7 +39,7 @@ function Settings() {
         <p>&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;</p>
       </div>
       <AddButton onClick={handleDeleteClick}>Delete Your Account</AddButton>
-      {showChangeEmail && <ChangeEmail setShowChangeEmail={setShowChangeEmail} />}
+      {showChangeEmail && <ChangeEmail setShowChangeEmail={setShowChangeEmail} oldEmail={user.email} />}
       {showDeleteAccount && <DeleteAccount setShowDeleteAccount={setShowDeleteAccount} />}
     </SettingsStyled>
   )
