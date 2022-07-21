@@ -8,6 +8,11 @@ const AddButton = styled.button`
   color: ${props => props.disable ? 'grey' : 'black'};
   border-radius: 5px;
   display: block;
+
+  :active {
+    background-color: black;
+    color: white;
+  }
 `
 
 export default AddButton;
