@@ -45,6 +45,7 @@ function AddSong(props) {
   }
 
   async function handleAdd(e) {
+    console.log('here');
     e.preventDefault();
 
     if (title === '') {
