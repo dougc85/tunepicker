@@ -29,6 +29,14 @@
     justify-content: space-between;
     margin-bottom: 1.5rem;
     position: relative;
+
+    p {
+      position: absolute;
+      font-size: 1.3rem;
+      color: red;
+      padding-left: 5px;
+      top: 6.9rem;
+    }
   }
 
   &-email {
@@ -61,6 +69,7 @@
     display: block;
     width: 16rem;
     border-radius: 3px;
+    font-family: Arial;
 
     &-container {
       align-self: center;
@@ -94,5 +103,30 @@
       text-decoration: none;
       border-bottom: 1px solid black;
     }
+  }
+
+  &-forgot-container {
+    display: inline-block;
+    position: relative;
+
+    >div {
+      position: absolute;
+      top: 2px;
+      right: -2.4rem;
+    }
+  }
+
+  &-forgot {
+
+    color: rgb(64, 64, 64);
+    text-decoration: none;
+    font-size: 1.1rem;
+    align-self: center;
+    background-color: transparent;
+    border: none;
+    border-bottom: 1px solid rgb(64, 64, 64);
+    font-family: Arial;
+    margin-left: 2rem;
+    transform: translateY(-2px);
   }
 }
