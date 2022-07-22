@@ -207,8 +207,8 @@ function LoginSignupForm(props) {
           {
             (formType === 'login') ?
               <div className={"LoginSignupForm-forgot-container"}>
-                <button className="LoginSignupForm-forgot" onClick={handleForgot}>forgot?</button>
-                <div>
+                <div className="LoginSignupForm-forgot" tabindex="0" role="button" onClick={handleForgot}>forgot?</div>
+                <div classNAme="LoginSignupForm-forgot-loading">
                   {passwordResetLoading && <Loading embedded spinnerOnly size={1} />}
                 </div>
               </div>
