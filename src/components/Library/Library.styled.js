@@ -2,7 +2,7 @@ import styled from "styled-components";
 import { libraryColor } from "../../partials/variables.styled";
 
 export const LibraryStyled = styled.div`
-  height: calc(100vh - 95px);
+  height: calc(${window.innerHeight}px - 95px);
   display: flex;
   flex-direction: column;
   
@@ -14,7 +14,7 @@ export const LibraryStyled = styled.div`
     justify-content: center;
     align-items: center;
     font-size: 6rem;
-    margin: 1rem;
+    margin: 1rem 2rem;
     border-radius: 10px;
     flex-grow: 1;
 

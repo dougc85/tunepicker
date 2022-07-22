@@ -8,10 +8,14 @@ const GlobalStyles = createGlobalStyle`
     margin: 0;
   }
 
-  html,
+  html {
+    font-size: 62.5%;
+    font-family: 'Nunito';
+  }
+
   input,
   textarea {
-    font-size: 62.5%;
+    font-size: max(62.5%, 16px);
     font-family: 'Nunito';
   }
 
