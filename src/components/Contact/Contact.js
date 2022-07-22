@@ -1,5 +1,6 @@
 import { ContactStyled, ContactForm, FormElement, FormElementTextArea, FormElementButton } from './Contact.styled';
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
+import SubContext from '../../context/sub-context';
 import AddButton from '../generics/AddButton.styled';
 import useFormInput from '../../hooks/useFormInput';
 import { send } from 'emailjs-com';
@@ -18,6 +19,7 @@ function Contact() {
   const [finishedSend, setFinishedSend] = useState(false);
   const [loading, setLoading] = useState(false);
 
+  const { handleNetworkError } = useContext(SubContext);
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -68,7 +70,7 @@ function Contact() {
       setFinishedSend(true);
     }
     catch (error) {
-      console.log(error.message);
+      handleNetworkError(error.message);
     }
 
     setLoading(false);

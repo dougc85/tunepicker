@@ -12,7 +12,7 @@ function FrontPage(props) {
   const navigate = useNavigate();
 
   const context = useContext(SubContext);
-  const { loading, user, userDoc } = context;
+  const { loading, user, userDoc, handleNetworkError } = context;
 
   const { email, uid } = user;
   const [skipWelcome, setSkipWelcome] = useState(false);
@@ -26,7 +26,7 @@ function FrontPage(props) {
   }, [userDoc.loginToPicker])
 
 
-  function handleCheckboxChange(e) {
+  async function handleCheckboxChange(e) {
 
     setJustArrived(true);
 
@@ -40,7 +40,7 @@ function FrontPage(props) {
         setTimeout(() => {
           setShowConfirmation(false);
         }, 1300);
-        updateDoc(userDocRef, {
+        await updateDoc(userDocRef, {
           loginToPicker: true,
         })
       } else {
@@ -48,12 +48,12 @@ function FrontPage(props) {
         setTimeout(() => {
           setShowConfirmation(false);
         }, 1300);
-        updateDoc(userDocRef, {
+        await updateDoc(userDocRef, {
           loginToPicker: false,
         })
       }
     } catch (error) {
-      console.log(error.message);
+      handleNetworkError(error.message);
     }
   }
 

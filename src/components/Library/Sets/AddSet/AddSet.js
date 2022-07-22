@@ -24,6 +24,8 @@ function AddSet(props) {
   const [errorMessage, setErrorMessage] = useState('');
   const [loading, setLoading] = useState(false);
 
+  const { handleNetworkError } = useContext(SubContext);
+
   function handleCancel(e) {
     e.preventDefault();
     resetTitle();
@@ -74,7 +76,7 @@ function AddSet(props) {
           });
       }
       catch (error) {
-        console.log(error.message);
+        handleNetworkError(error.message);
       }
 
       resetTitle();

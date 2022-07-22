@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
+import SubContext from '../../../../context/sub-context';
 import { ReauthenticateStyled, ButtonContainer, LoadingContainer, Error } from './Reauthenticate.styled';
 import Modal from '../../../generics/Modal.styled';
 import AddButton from '../../../generics/AddButton.styled';
@@ -13,6 +14,8 @@ function Reauthenticate(props) {
 
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+
+  const { handleNetworkError } = useContext(SubContext);
 
   function handleCancel(e) {
     if (e) {
@@ -50,6 +53,8 @@ function Reauthenticate(props) {
     catch (error) {
       if (error.message === "Firebase: Error (auth/wrong-password).") {
         setError('Invalid Password');
+      } else {
+        handleNetworkError(error.message);
       }
       setLoading(false);
     }

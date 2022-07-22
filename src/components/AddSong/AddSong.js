@@ -1,4 +1,5 @@
-import { React, useState } from 'react';
+import React, { useState, useContext } from 'react';
+import SubContext from '../../context/sub-context';
 import { v4 as uuid } from 'uuid';
 import {
   arrayUnion,
@@ -36,6 +37,8 @@ function AddSong(props) {
   const [showAlreadyInLibrary, setShowAlreadyInLibrary] = useState(false);
   const [loading, setLoading] = useState(false);
 
+  const { handleNetworkError } = useContext(SubContext);
+
   function handleCancel(e) {
     e.preventDefault();
     resetTitle();
@@ -45,7 +48,6 @@ function AddSong(props) {
   }
 
   async function handleAdd(e) {
-    console.log('here');
     e.preventDefault();
 
     if (title === '') {
@@ -110,7 +112,7 @@ function AddSong(props) {
       setKnowledge('know');
     }
     catch (error) {
-      console.log(error);
+      handleNetworkError(error.message);
     }
 
     setLoading(false);

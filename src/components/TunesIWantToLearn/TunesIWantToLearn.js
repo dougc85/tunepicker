@@ -12,7 +12,7 @@ import capitalize from '../../helperFunctions/capitalize';
 
 function TunesIWantToLearn() {
 
-  const { user, userDoc, loading } = useContext(SubContext);
+  const { user, userDoc, loading, handleNetworkError } = useContext(SubContext);
   const { tunesIWantToLearn: tuneNames } = userDoc;
 
   const [showAddSong, setShowAddSong] = useState(false);
@@ -41,7 +41,7 @@ function TunesIWantToLearn() {
         [`tunesIWantToLearn.${tuneName}`]: deleteField(),
       })
     } catch (error) {
-      console.log(error.message);
+      handleNetworkError(error.message);
     }
     setSongsLoading((oldObject) => {
       const newObject = { ...oldObject };

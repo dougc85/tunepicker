@@ -1,5 +1,6 @@
 import { doc, updateDoc, writeBatch, arrayUnion } from 'firebase/firestore';
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
+import SubContext from '../../context/sub-context';
 import { v4 as uuid } from 'uuid';
 import { db } from '../../firebaseConfig';
 import useFormInput from '../../hooks/useFormInput';
@@ -18,6 +19,8 @@ function AddMultiple(props) {
   const [showTitleErrors, setShowTitleErrors] = useState(false);
   const [titleErrors, setTitleErrors] = useState([]);
   const [loading, setLoading] = useState(false);
+
+  const { handleNetworkError } = useContext(SubContext);
 
 
 
@@ -153,7 +156,7 @@ function AddMultiple(props) {
         await batch.commit();
 
       } catch (error) {
-        console.log(error.message);
+        handleNetworkError(error.message);
       }
 
     } else if (calling === 'tunesIWantToLearn') {
@@ -170,7 +173,7 @@ function AddMultiple(props) {
           ...newSongsObj,
         })
       } catch (error) {
-        console.log(error.message);
+        handleNetworkError(error.message);
       }
 
     }

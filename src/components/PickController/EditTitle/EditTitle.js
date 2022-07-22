@@ -13,7 +13,7 @@ function EditTitle(props) {
   const { setShowEditTitle, songId, title } = props;
 
   const context = useContext(SubContext);
-  const { user, userDoc } = context;
+  const { user, userDoc, handleNetworkError } = context;
   const { songNames } = userDoc;
 
   const [errorMessage, setErrorMessage] = useState('');
@@ -77,7 +77,7 @@ function EditTitle(props) {
           [`songs.${songId}.title`]: newTitle,
         })
       } catch (error) {
-        console.log(error.message);
+        handleNetworkError(error.message);
       }
     }
 

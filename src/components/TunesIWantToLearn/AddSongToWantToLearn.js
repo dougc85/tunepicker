@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
+import SubContext from '../../context/sub-context';
 import Modal from '../generics/Modal.styled';
 import useFormInput from '../../hooks/useFormInput';
 import { doc, updateDoc } from 'firebase/firestore';
@@ -15,6 +16,8 @@ function AddSongToWantToLearn(props) {
   const [showError, setShowError] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const [loading, setLoading] = useState(false);
+
+  const { handleNetworkError } = useContext(SubContext);
 
 
   function handleCancel(e) {
@@ -69,7 +72,7 @@ function AddSongToWantToLearn(props) {
         setShowAddSong(false);
       }
       catch (error) {
-        console.log(error.message);
+        handleNetworkError(error.message);
       }
 
       setLoading(true);

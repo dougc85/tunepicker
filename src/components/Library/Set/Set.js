@@ -22,7 +22,7 @@ import AddFromLibrary from './AddFromLibrary/AddFromLibrary';
 
 function Set(props) {
 
-  const { user, userDoc, loading } = useContext(SubContext);
+  const { user, userDoc, loading, handleNetworkError } = useContext(SubContext);
 
   const { setNames, songNames, songs: allSongs, pickerSet: pickerSetId } = userDoc;
 
@@ -69,7 +69,7 @@ function Set(props) {
       })
     }
     catch (error) {
-      console.log(error.message);
+      handleNetworkError(error.message);
     }
 
     setLocalLoading(false);
@@ -102,8 +102,8 @@ function Set(props) {
           }
         });
 
-      } catch (err) {
-        console.log(err.message);
+      } catch (error) {
+        handleNetworkError(error.message);
       }
     }
 

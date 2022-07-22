@@ -16,7 +16,7 @@ function DeleteAccount(props) {
   const [loading, setLoading] = useState(false);
 
   const context = useContext(SubContext);
-  const { userDoc, user } = context;
+  const { userDoc, user, handleNetworkError } = context;
 
   const navigate = useNavigate();
 
@@ -45,7 +45,7 @@ function DeleteAccount(props) {
       navigate('/welcome');
     }
     catch (error) {
-      console.log(error.message);
+      handleNetworkError(error.message);
     }
 
   }
