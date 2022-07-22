@@ -3,7 +3,7 @@ import './LoginSignupForm.scss';
 import Password from '../../Password/Password';
 import { auth, db } from '../../../firebaseConfig';
 import {
-  signInWithEmailAndPassword, createUserWithEmailAndPassword, sendEmailVerification
+  signInWithEmailAndPassword, createUserWithEmailAndPassword, sendEmailVerification, sendPasswordResetEmail
 } from 'firebase/auth';
 import {
   doc,
@@ -13,6 +13,8 @@ import {
   updateDoc,
 } from 'firebase/firestore';
 import Loading from '../../Loading/Loading';
+import Instructions from './Instructions/Instructions';
+import PasswordReset from './PasswordReset/PasswordReset';
 
 const loginSignupReducer = (state, action) => {
   if (action.type === 'HANDLE_INPUT') {
@@ -43,13 +45,14 @@ function LoginSignupForm(props) {
 
   const [state, dispatch] = useReducer(loginSignupReducer, loginSignupInitialValues);
 
-
-  /////   !!! Add Loading component when waiting for network responses   !!!!!!   /////
-
   const { email, password, loginError, signupError } = state;
 
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [showInstructions, setShowInstructions] = useState(false);
+  const [showPasswordReset, setShowPasswordReset] = useState(false);
+  const [emailError, setEmailError] = useState('');
+  const [passwordResetLoading, setPasswordResetLoading] = useState(false);
 
   const errorMessage =
     (formType === 'login') ?
@@ -152,6 +155,8 @@ function LoginSignupForm(props) {
       submitSignup;
 
   const handleChange = (event) => {
+    setEmailError('');
+
     dispatch({
       type: 'HANDLE_INPUT',
       field: event.target.dataset.field,
@@ -160,13 +165,52 @@ function LoginSignupForm(props) {
     })
   }
 
+  async function handleForgot(e) {
+    e.preventDefault();
+
+    if (!email) {
+      setShowInstructions(true);
+    } else {
+      try {
+        if (email.includes('@')) {
+          setPasswordResetLoading(true);
+          await sendPasswordResetEmail(auth, email);
+          setShowPasswordReset(true);
+        } else {
+          throw new Error('Invalid Email');
+        }
+      }
+      catch (error) {
+        if (error.message === "Firebase: Error (auth/invalid-email)." || error.message === "Invalid Email") {
+          setEmailError('Invalid Email');
+        } else if (error.message === "Firebase: Error (auth/user-not-found).") {
+          setEmailError('Email Not Found')
+        }
+      }
+      setPasswordResetLoading(false);
+    }
+  }
+
   return (
     <form className={`LoginSignupForm LoginSignupForm-${formType}`} style={formStyle}>
       <legend className="LoginSignupForm-legend">{legend}</legend>
       <div className="LoginSignupForm-inputs">
         <label htmlFor={`email-${formType}`}>email</label>
         <input className="LoginSignupForm-email" autoComplete={formType === 'login' ? 'username' : null} onChange={handleChange} value={email} type="text" name={`${formType}-email`} data-field="email" id={`email-${formType}`} />
-        <label htmlFor={`password-${formType}`}>password</label>
+        {emailError && <p>{emailError}</p>}
+        <div>
+          <label htmlFor={`password-${formType}`}>password</label>
+          {
+            (formType === 'login') ?
+              <div className={"LoginSignupForm-forgot-container"}>
+                <button className="LoginSignupForm-forgot" onClick={handleForgot}>forgot?</button>
+                <div>
+                  {passwordResetLoading && <Loading embedded spinnerOnly size={1} />}
+                </div>
+              </div>
+              : null
+          }
+        </div>
         <Password id={`password-${formType}`} formType={formType} handleChange={handleChange} password={password} showPassword={showPassword} toggleShowPassword={toggleShowPassword} />
         {errorMessage && <p className="LoginSignupForm-error" >{`*${errorMessage}`}</p>}
       </div>
@@ -177,6 +221,8 @@ function LoginSignupForm(props) {
         </div>
       </div>
       <button className="LoginSignupForm-switch" id={`switch-from-${formType}`} onClick={switchAuth}>{switchMessage}</button>
+      {showInstructions && <Instructions setShowInstructions={setShowInstructions} />}
+      {showPasswordReset && <PasswordReset setShowPasswordReset={setShowPasswordReset} email={email} />}
     </form>
   )
 }
