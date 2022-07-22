@@ -108,25 +108,22 @@
   &-forgot-container {
     display: inline-block;
     position: relative;
-
-    >div {
-      position: absolute;
-      top: 2px;
-      right: -2.4rem;
-    }
   }
 
   &-forgot {
-
     color: rgb(64, 64, 64);
-    text-decoration: none;
     font-size: 1.1rem;
     align-self: center;
     background-color: transparent;
-    border: none;
     border-bottom: 1px solid rgb(64, 64, 64);
     font-family: Arial;
     margin-left: 2rem;
     transform: translateY(-2px);
+
+    &-loading {
+      position: absolute;
+      top: 2px;
+      right: -2.4rem;
+    }
   }
 }
