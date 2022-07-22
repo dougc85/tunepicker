@@ -6,6 +6,7 @@ import {
 } from 'firebase/firestore';
 import { useNavigate, useLocation } from 'react-router-dom';
 import VerifyEmail from '../components/VerifyEmail/VerifyEmail';
+import ErrorModal from '../components/generics/ErrorModal/ErrorModal';
 
 const defaultContext = {
   user: undefined,
@@ -13,6 +14,7 @@ const defaultContext = {
   userDoc: undefined,
   loading: undefined,
   setLoading: undefined,
+  handleNetworkError: undefined,
 }
 
 const SubContext = React.createContext(defaultContext);
@@ -34,6 +36,13 @@ export const SubContextProvider = (props) => {
   const navigate = useNavigate();
   const location = useLocation();
   const [newToken, setNewToken] = useState(0);
+  const [showErrorModal, setShowErrorModal] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
+
+  function handleNetworkError(message) {
+    setErrorMessage(message);
+    setShowErrorModal(true);
+  }
 
   useEffect(() => {
     let unsubAuthChange;
@@ -118,9 +127,11 @@ export const SubContextProvider = (props) => {
         user,
         userDoc,
         loading,
-        setLoading
+        setLoading,
+        handleNetworkError,
       }}>
       {user && !loading && !tokenVerified && <VerifyEmail />}
+      {showErrorModal && <ErrorModal handleOutsideClick={() => { setShowErrorModal(false) }} message={errorMessage} />}
       {props.children}
     </SubContext.Provider>
   )
