@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
+import SubContext from '../../context/sub-context';
 import Modal from '../generics/Modal.styled';
 import { VerifyEmailStyled, ButtonGroup, Error, Feedback } from './VerifyEmail.styled';
 import { signOut, sendEmailVerification } from 'firebase/auth';
@@ -13,13 +14,15 @@ function VerifyEmail() {
   const [emailError, setEmailError] = useState('');
   const [feedback, setFeedback] = useState('');
 
+  const { handleNetworkError } = useContext(SubContext);
+
   async function handleLogOut() {
     navigate('/welcome');
     try {
       signOut(auth)
     }
     catch (error) {
-      console.log(error.message);
+      handleNetworkError(error.message);
     }
   }
 
@@ -49,8 +52,9 @@ function VerifyEmail() {
         setTimeout(() => {
           setEmailError('');
         }, 3000)
+      } else {
+        handleNetworkError(error.message);
       }
-      console.log(error.message);
     }
 
   }

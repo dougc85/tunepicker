@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useContext } from 'react';
+import SubContext from '../../../context/sub-context';
 import { Link } from 'react-router-dom';
 import { signOut } from 'firebase/auth';
 import { auth } from '../../../firebaseConfig';
@@ -6,9 +7,12 @@ import { NavStyled, Screen } from './Nav.styled';
 import { useNavigate } from 'react-router-dom';
 
 
+
 function Nav(props) {
 
   const { toggleNav } = props;
+
+  const { handleNetworkError } = useContext(SubContext);
 
   const navigate = useNavigate();
 
@@ -19,7 +23,7 @@ function Nav(props) {
       await signOut(auth)
     }
     catch (error) {
-      console.log(error.message);
+      handleNetworkError(error.message);
     }
   }
 

@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
+import SubContext from '../../../../context/sub-context';
 import { AddFromLibraryStyled, ButtonContainer, EntryGrouping } from './AddFromLibrary.styled';
 import Modal from '../../../generics/Modal.styled'
 import capitalize from '../../../../helperFunctions/capitalize';
@@ -17,6 +18,8 @@ function AddFromLibrary(props) {
   const [setsToAdd, setSetsToAdd] = useState({});
   const [songsToAdd, setSongsToAdd] = useState({});
   const [loading, setLoading] = useState(false);
+
+  const [handleNetworkError] = useContext(SubContext);
 
   function hideAddFromLibrary(e) {
     if (e) {
@@ -83,7 +86,7 @@ function AddFromLibrary(props) {
         });
       })
     } catch (error) {
-      console.log(error.message);
+      handleNetworkError(error.message);
     }
 
     setLoading(false);

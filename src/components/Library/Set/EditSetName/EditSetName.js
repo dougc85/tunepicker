@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
+import SubContext from '../../../../context/sub-context';
 import { EditSetNameStyled, InputGrouping, TitleInput, ErrorMessage } from './EditSetName.styled';
 import Modal from '../../../generics/Modal.styled';
 import useFormInput from '../../../../hooks/useFormInput';
@@ -19,6 +20,8 @@ function EditSetName(props) {
   const [showError, setShowError] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const [loading, setLoading] = useState(false);
+
+  const { handleNetworkError } = useContext(SubContext);
 
   function handleCancel(e) {
     if (e) {
@@ -61,7 +64,7 @@ function EditSetName(props) {
         await batch.commit();
       }
       catch (error) {
-        console.log(error.message);
+        handleNetworkError(error.message);
       }
 
       setLoading(false);

@@ -34,7 +34,7 @@ function Song(props) {
   // }
 
   const context = useContext(SubContext);
-  const { loading, userDoc, user } = context;
+  const { loading, userDoc, user, handleNetworkError } = context;
   const { setNames, songs: allSongs, songNames } = userDoc;
 
   const params = useParams();
@@ -153,8 +153,6 @@ function Song(props) {
       return;
     }
 
-    console.log(batch, 'batch');
-
     const userDoc = doc(db, 'users', user.uid);
 
     const currentSong = {
@@ -188,7 +186,7 @@ function Song(props) {
         }
       }
     } catch (error) {
-      console.log(error.message);
+      handleNetworkError(error.message);
     }
 
   }
@@ -249,7 +247,7 @@ function Song(props) {
           [knowledgeArrays[knowledge][1]]: arrayUnion(song.id),
         });
       } catch (error) {
-        console.log(error.message);
+        handleNetworkError(error.message);
       }
 
       saveSongData('knowledge', knowledge, batch);
@@ -320,7 +318,7 @@ function Song(props) {
         }
       }
     } catch (error) {
-      console.log(error.message);
+      handleNetworkError(error.message);
     }
 
     saveSongData('sets', newSetsObject, batch);

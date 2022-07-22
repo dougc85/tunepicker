@@ -54,7 +54,7 @@ const pickerInitialValues = {
 function PickController() {
 
   const context = useContext(SubContext);
-  const { user, loading, setLoading, userDoc } = context;
+  const { user, loading, userDoc, handleNetworkError } = context;
   const allSongs = userDoc.songs;
 
 
@@ -110,7 +110,7 @@ function PickController() {
       try {
         setDoc(setDocRef, mutableRef.current);
       } catch (error) {
-        console.log(error.message);
+        handleNetworkError(error.message);
       }
 
 
@@ -158,7 +158,7 @@ function PickController() {
         pickKey();
       });
     } catch (error) {
-      console.log(error.message);
+      handleNetworkError(error.message);
     }
 
 
@@ -179,7 +179,7 @@ function PickController() {
           try {
             setDoc(setDocRef, forRefresh.set);
           } catch (error) {
-            console.log(error.message);
+            handleNetworkError(error.message);
           }
 
         }
@@ -319,7 +319,7 @@ function PickController() {
         setCurrentList('know');
         return;
       default:
-        console.log('error');
+        handleNetworkError("Picker coding error");
     }
   }
 
@@ -450,7 +450,7 @@ function PickController() {
       await batch.commit();
 
     } catch (error) {
-      console.log(error.message);
+      handleNetworkError(error.message);
     }
 
   }

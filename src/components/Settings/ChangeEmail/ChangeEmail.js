@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
+import SubContext from '../../../context/sub-context';
 import Modal from '../../generics/Modal.styled';
 import { ChangeEmailStyled, ButtonContainer, PasswordContainer, LoadingContainer, Error } from './ChangeEmail.styled';
 import AddButton from '../../generics/AddButton.styled';
@@ -14,6 +15,8 @@ function ChangeEmail(props) {
   const [passwordError, setPasswordError] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+
+  const { handleNetworkError } = useContext(SubContext);
 
   function handleCancel(e) {
     if (e) {
@@ -63,15 +66,14 @@ function ChangeEmail(props) {
     }
 
     catch (error) {
-      console.log(error.message);
       if (error.message === 'Firebase: Error (auth/invalid-email).') {
         setEmailError('Invalid Email');
-      }
-      if (error.message === 'Firebase: Error (auth/email-already-in-use).') {
+      } else if (error.message === 'Firebase: Error (auth/email-already-in-use).') {
         setEmailError('Email already in use');
-      }
-      if (error.message === "Firebase: Error (auth/wrong-password).") {
+      } else if (error.message === "Firebase: Error (auth/wrong-password).") {
         setPasswordError('Invalid Password');
+      } else {
+        handleNetworkError(error.message);
       }
       setLoading(false);
     }

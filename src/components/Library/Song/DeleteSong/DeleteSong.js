@@ -17,7 +17,7 @@ function DeleteSong(props) {
     setShowDeleteSong = setShowRemoveSong;
   }
 
-  const { user, userDoc } = useContext(SubContext);
+  const { user, userDoc, handleNetworkError } = useContext(SubContext);
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -77,7 +77,7 @@ function DeleteSong(props) {
       await batch.commit();
     }
     catch (error) {
-      console.log(error);
+      handleNetworkError(error.message);
     }
 
     if (forPicker) {
@@ -132,7 +132,7 @@ function DeleteSong(props) {
 
     }
     catch (error) {
-      console.log(error.message);
+      handleNetworkError(error.message);
     }
   }
 

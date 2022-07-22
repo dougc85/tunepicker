@@ -15,7 +15,7 @@ function DeleteSet(props) {
 
   const { id: setId, allSongs } = set;
 
-  const { user, userDoc } = useContext(SubContext);
+  const { user, userDoc, handleNetworkError } = useContext(SubContext);
   const { uid } = user;
   const { pickerSet: pickerId } = userDoc;
   const { songs } = userDoc;
@@ -64,8 +64,8 @@ function DeleteSet(props) {
       navigate('/library/sets');
     }
     catch (error) {
-      console.log(error.message);
       setLoadingForRedirect(false);
+      handleNetworkError(error.message);
     }
 
 
@@ -105,8 +105,8 @@ function DeleteSet(props) {
       navigate('/library/sets');
     }
     catch (error) {
-      console.log(error.message);
       setLoadingForRedirect(false);
+      handleNetworkError(error.message);
     }
   }
 

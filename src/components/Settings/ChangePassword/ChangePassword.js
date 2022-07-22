@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
+import SubContext from '../../../context/sub-context';
 import { ChangePasswordStyled, ButtonContainer, LoadingContainer, Error } from './ChangePassword.styled';
 import Modal from '../../generics/Modal.styled';
 import Loading from '../../Loading/Loading';
@@ -13,6 +14,8 @@ function ChangePassword(props) {
   const [newError, setNewError] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [oldPassword, setOldPassword] = useState('');
+
+  const { handleNetworkError } = useContext(SubContext);
 
   function handleCancel(e) {
     if (e) {
@@ -72,9 +75,10 @@ function ChangePassword(props) {
     }
 
     catch (error) {
-      console.log(error.message);
       if (error.message === "Firebase: Error (auth/wrong-password).") {
         setOldError('Invalid Password');
+      } else {
+        handleNetworkError(error.message);
       }
       setLoading(false);
     }

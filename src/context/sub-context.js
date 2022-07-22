@@ -59,7 +59,7 @@ export const SubContextProvider = (props) => {
                 notVerifiedToken: token,
               }, { merge: true })
             } catch (error) {
-              console.log(error.message);
+              handleNetworkError(error.message);
             }
 
           }
@@ -80,7 +80,7 @@ export const SubContextProvider = (props) => {
       })
     }
     catch (error) {
-      console.log(error.message);
+      handleNetworkError(error.message);
     }
 
 
@@ -102,7 +102,7 @@ export const SubContextProvider = (props) => {
         setUserDoc({ ...doc.data(), uid: doc.id });
       })
     } catch (error) {
-      console.log(error.message);
+      handleNetworkError(error.message);
     }
 
 

@@ -14,7 +14,7 @@ function AlreadyInLibrary(props) {
   const { title, set, setShowAddSong, knowledgeFields, knowledge } = props;
   const { setName, id: setId } = set;
 
-  const { user, userDoc } = useContext(SubContext);
+  const { user, userDoc, handleNetworkError } = useContext(SubContext);
   const { songNames } = userDoc;
   const [loading, setLoading] = useState(false);
 
@@ -46,7 +46,7 @@ function AlreadyInLibrary(props) {
       await batch.commit();
     }
     catch (error) {
-      console.log(error.message);
+      handleNetworkError(error.message);
     }
 
     setLoading(false);

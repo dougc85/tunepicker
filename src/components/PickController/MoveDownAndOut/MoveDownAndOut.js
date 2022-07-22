@@ -16,7 +16,7 @@ import capitalize from '../../../helperFunctions/capitalize';
 function MoveDownAndOut(props) {
 
   const context = useContext(SubContext);
-  const { user, userDoc } = context;
+  const { user, userDoc, handleNetworkError } = context;
   const { setShowMoveDownAndOut, songId, title, setTune, knowledgeArrays, setLocalLoading } = props;
   const song = userDoc.songs[songId];
 
@@ -59,7 +59,7 @@ function MoveDownAndOut(props) {
       setLocalLoading(false);
     }
     catch (error) {
-      console.log(error.message);
+      handleNetworkError(error.message);
     }
 
 

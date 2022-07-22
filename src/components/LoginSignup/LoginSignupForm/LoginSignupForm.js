@@ -1,4 +1,5 @@
-import { React, useState, useReducer } from 'react';
+import { React, useState, useReducer, useContext } from 'react';
+import SubContext from '../../../context/sub-context';
 import './LoginSignupForm.scss';
 import Password from '../../Password/Password';
 import { auth, db } from '../../../firebaseConfig';
@@ -54,6 +55,8 @@ function LoginSignupForm(props) {
   const [emailError, setEmailError] = useState('');
   const [passwordResetLoading, setPasswordResetLoading] = useState(false);
 
+  const { handleNetworkError } = useContext(SubContext);
+
   const errorMessage =
     (formType === 'login') ?
       loginError :
@@ -82,7 +85,7 @@ function LoginSignupForm(props) {
     } else if (error.message === "Firebase: Error (auth/user-not-found).")
       dispatch({ type: 'SET_ERROR', field: "loginError", payload: "User Not Found", })
     else {
-      dispatch({ type: 'SET_ERROR', field: "loginError", payload: error.message, })
+      handleNetworkError(error.message);
     }
   }
 
@@ -92,7 +95,7 @@ function LoginSignupForm(props) {
     } else if (error.message === "Firebase: Error (auth/email-already-in-use).") {
       dispatch({ type: 'SET_ERROR', field: "signupError", payload: 'Email Already In Use', })
     } else {
-      dispatch({ type: 'SET_ERROR', field: "signupError", payload: error.message, })
+      handleNetworkError(error.message);
     }
   }
 
@@ -143,7 +146,6 @@ function LoginSignupForm(props) {
 
     }
     catch (error) {
-      console.log(error.message);
       setLoading(false);
       showSignupError(error);
     }
@@ -185,6 +187,8 @@ function LoginSignupForm(props) {
           setEmailError('Invalid Email');
         } else if (error.message === "Firebase: Error (auth/user-not-found).") {
           setEmailError('Email Not Found')
+        } else {
+          handleNetworkError(error.message);
         }
       }
       setPasswordResetLoading(false);

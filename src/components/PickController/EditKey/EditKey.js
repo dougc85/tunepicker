@@ -12,7 +12,7 @@ function EditKey(props) {
   const { setShowEditKey, songId, songKey } = props;
 
   const context = useContext(SubContext);
-  const { user } = context;
+  const { user, handleNetworkError } = context;
 
   const [keyVal, setKeyVal] = useState(songKey);
   const [loading, setLoading] = useState(false);
@@ -44,7 +44,7 @@ function EditKey(props) {
         })
         setLoading(false);
       } catch (error) {
-        console.log(error.message);
+        handleNetworkError(error.message);
       }
 
     }
