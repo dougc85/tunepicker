@@ -1,6 +1,6 @@
 import { React, useState, useReducer, useContext } from 'react';
 import SubContext from '../../../context/sub-context';
-import './LoginSignupForm.scss';
+import { LoginSignupFormStyled, Inputs, EmailInput, SubmitContainer, ForgotContainer, EmailError, PasswordError } from './LoginSignupForm.styled';
 import Password from '../../Password/Password';
 import { auth, db } from '../../../firebaseConfig';
 import {
@@ -196,38 +196,38 @@ function LoginSignupForm(props) {
   }
 
   return (
-    <form className={`LoginSignupForm LoginSignupForm-${formType}`} style={formStyle}>
-      <legend className="LoginSignupForm-legend">{legend}</legend>
-      <div className="LoginSignupForm-inputs">
+    <LoginSignupFormStyled className={`LoginSignupForm LoginSignupForm-${formType}`} style={formStyle}>
+      <legend>{legend}</legend>
+      <Inputs>
         <label htmlFor={`email-${formType}`}>email</label>
-        <input className="LoginSignupForm-email" autoComplete={formType === 'login' ? 'username' : null} onChange={handleChange} value={email} type="text" name={`${formType}-email`} data-field="email" id={`email-${formType}`} />
-        {emailError && <p>{emailError}</p>}
+        <EmailInput autoComplete={formType === 'login' ? 'username' : null} onChange={handleChange} value={email} type="text" name={`${formType}-email`} data-field="email" id={`email-${formType}`} />
+        {emailError && <EmailError>{emailError}</EmailError>}
         <div>
           <label htmlFor={`password-${formType}`}>password</label>
           {
             (formType === 'login') ?
-              <div className={"LoginSignupForm-forgot-container"}>
-                <div className="LoginSignupForm-forgot" tabindex="0" role="button" onClick={handleForgot}>forgot?</div>
-                <div classNAme="LoginSignupForm-forgot-loading">
+              <ForgotContainer>
+                <p className="LoginSignupForm-forgot" tabIndex="0" role="button" onClick={handleForgot}>forgot?</p>
+                <div className="LoginSignupForm-forgot-loading">
                   {passwordResetLoading && <Loading embedded spinnerOnly size={1} />}
                 </div>
-              </div>
+              </ForgotContainer>
               : null
           }
         </div>
         <Password id={`password-${formType}`} formType={formType} handleChange={handleChange} password={password} showPassword={showPassword} toggleShowPassword={toggleShowPassword} />
-        {errorMessage && <p className="LoginSignupForm-error" >{`*${errorMessage}`}</p>}
-      </div>
-      <div className="LoginSignupForm-submit-container">
-        <button onClick={submit} className={`LoginSignupForm-submit LoginSignupForm-submit-${formType}`}>{submitMessage}</button>
-        <div className={'LoginSignupForm-submit-loading'}>
+        {errorMessage && <PasswordError>{`*${errorMessage}`}</PasswordError>}
+      </Inputs>
+      <SubmitContainer formType={formType}>
+        <button onClick={submit}>{submitMessage}</button>
+        <div>
           {loading && <Loading embedded spinnerOnly size={2} />}
         </div>
-      </div>
+      </SubmitContainer>
       <button className="LoginSignupForm-switch" id={`switch-from-${formType}`} onClick={switchAuth}>{switchMessage}</button>
       {showInstructions && <Instructions setShowInstructions={setShowInstructions} />}
       {showPasswordReset && <PasswordReset setShowPasswordReset={setShowPasswordReset} email={email} />}
-    </form>
+    </LoginSignupFormStyled>
   )
 }
 

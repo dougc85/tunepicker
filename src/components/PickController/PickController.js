@@ -2,7 +2,6 @@ import React from "react";
 import { useState, useEffect, useContext, useReducer, useRef } from "react";
 import SubContext from "../../context/sub-context";
 import './PickController.scss';
-import MoveControlsPopup from "./MoveControlsPopup/MoveControlsPopup";
 import Loading from "../Loading/Loading";
 import { onSnapshot, doc, setDoc, writeBatch } from 'firebase/firestore';
 import { db } from '../../firebaseConfig'
@@ -647,7 +646,6 @@ function PickController() {
           notes={allSongs[tune].notes}
         />
       }
-      <MoveControlsPopup />
     </div>
   )
 }

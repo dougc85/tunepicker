@@ -1,8 +1,10 @@
-.Password {
+import styled from 'styled-components';
+
+export const PasswordStyled = styled.div`
   width: 100%;
   position: relative;
 
-  &-input {
+  input {
     display: block;
     width: 100%;
     font-size: 2rem;
@@ -12,7 +14,7 @@
     box-sizing: border-box;
   }
 
-  &-eye-container {
+  >div {
     position: absolute;
     right: -.5rem;
     top: 50%;
@@ -21,12 +23,11 @@
     width: 5rem;
     display: flex;
     justify-content: center;
-  }
 
-  &-eye {
-    display: block;
-    width: 2rem;
-    color: rgb(82, 82, 82);
-
+    svg {
+      display: block;
+      width: 2rem;
+      color: rgb(82, 82, 82);
+    }
   }
-}
+`

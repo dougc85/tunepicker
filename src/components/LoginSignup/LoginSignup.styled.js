@@ -1,6 +1,6 @@
-@import '../../partials/variables';
+import styled from 'styled-components';
 
-.LoginSignup {
+export const LoginSignupStyled = styled.div`
   height: 100%;
   width: 100vw;
   padding-left: 4rem;
@@ -11,5 +11,4 @@
   left: 50%;
   transform: translateX(-50%);
   box-sizing: border-box;
-
-}
+`

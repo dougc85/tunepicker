@@ -1,12 +1,12 @@
 import { React } from 'react';
-import './Password.scss';
+import { PasswordStyled } from './Password.styled';
 
 function Password(props) {
 
   const { id, handleChange, password, showPassword, toggleShowPassword, formType } = props;
 
   return (
-    <div className="Password">
+    <PasswordStyled>
       <input autoComplete={formType === 'login' ? "current-password" : "new-password"} className="Password-input" name={`${formType}-password`} onChange={handleChange} data-field="password" value={password} type={`${showPassword ? "text" : "password"}`} id={id} />
       <div className="Password-eye-container" onClick={toggleShowPassword}>
         <svg className="Password-eye" viewBox="0 0 24 24">
@@ -14,7 +14,7 @@ function Password(props) {
         </svg>
       </div>
 
-    </div>
+    </PasswordStyled>
   )
 }
 

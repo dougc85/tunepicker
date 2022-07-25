@@ -1,4 +1,4 @@
-import './SongEntry.scss';
+import { SongEntryStyled } from './SongEntry.styled';
 import { React } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import capitalize from '../../../helperFunctions/capitalize';
@@ -24,9 +24,9 @@ function SongEntry(props) {
   }
 
   return (
-    <li onClick={handleClick} className="SongEntry" style={{ backgroundColor: bgColor }}>
+    <SongEntryStyled onClick={handleClick} style={{ backgroundColor: bgColor }}>
       <p className="SongEntry-title">{capitalize(title)}</p>
-    </li>
+    </SongEntryStyled>
   )
 }
 
