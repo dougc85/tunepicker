@@ -25,7 +25,7 @@ function LoginSignup(props) {
 
 
   return (
-    <LoginSignupStyled action="" className="LoginSignup" style={authStyle}>
+    <LoginSignupStyled action="" style={authStyle}>
       <LoginSignupForm formStyle={loginStyle} legend="Log In" submitMessage="Enter" switchAuth={switchAuth} formType="login" switchMessage={"Need to create an account?"} />
       <LoginSignupForm formStyle={signupStyle} legend="Sign Up" submitMessage="Create Account" switchAuth={switchAuth} formType="signup" setUser={setUser} switchMessage={"Already Have An Account?"} />
     </LoginSignupStyled>

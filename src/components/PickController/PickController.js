@@ -1,7 +1,7 @@
 import React from "react";
 import { useState, useEffect, useContext, useReducer, useRef } from "react";
 import SubContext from "../../context/sub-context";
-import './PickController.scss';
+import { PickControllerStyled, PickerInfo, PickingFrom, PickerMenu, TuneWrapper, SmallButtons, NextButton, NotesButton } from './PickController.styled';
 import Loading from "../Loading/Loading";
 import { onSnapshot, doc, setDoc, writeBatch } from 'firebase/firestore';
 import { db } from '../../firebaseConfig'
@@ -560,36 +560,34 @@ function PickController() {
   }
 
   return (
-    <div className="PickController" style={{ backgroundColor: listColor }}>
-      <div className="picker-info">
-        <div className="picker-info-picking">
+    <PickControllerStyled style={{ backgroundColor: listColor }}>
+      <PickerInfo>
+        <PickingFrom>
           <p>Picking from:</p>
           <Path heading={capitalize(userDoc.setNames[userDoc.pickerSet])} pathType="Set" setId={userDoc.pickerSet} forPicker />
-        </div>
-        <div className="picker-info-menu">
+        </PickingFrom>
+        <PickerMenu className="picker-info-menu">
           <p>Menu</p>
           <LibraryMenu
             items={libraryMenuItems}
             color="#3d3d3d"
           />
-        </div>
-
-      </div>
-
-      <div className="tune-wrapper">
+        </PickerMenu>
+      </PickerInfo>
+      <TuneWrapper className="tune-wrapper">
         <p className="tune-name" style={{ fontSize: tuneFontSize }}>{allSongs[tune] && capitalize(allSongs[tune].title)}</p>
-      </div>
+      </TuneWrapper>
 
       <p className="key">{displayedKey}</p>
 
-      <button className="next-button" onClick={nextHandler} >NEXT</button>
+      <NextButton className="next-button" onClick={nextHandler} >NEXT</NextButton>
 
-      <div className="small-buttons-wrapper">
+      <SmallButtons className="small-buttons-wrapper">
         <button className="skip-button small-btn" onClick={skipHandler}>SKIP</button>
         <button className="raise-button small-btn" onClick={raiseKnowledge} >&uarr;</button>
         <button className="lower-button small-btn" onClick={lowerKnowledge}>&darr;</button>
-      </div>
-      <button onClick={handleNotesClick} className="notes-button">notes</button>
+      </SmallButtons>
+      <NotesButton onClick={handleNotesClick} className="notes-button">notes</NotesButton>
       {showMoveDownAndOut &&
         <MoveDownAndOut
           setShowMoveDownAndOut={setShowMoveDownAndOut}
@@ -646,7 +644,7 @@ function PickController() {
           notes={allSongs[tune].notes}
         />
       }
-    </div>
+    </PickControllerStyled>
   )
 }
 
