@@ -1,7 +1,10 @@
 import React from "react";
 import { useState, useEffect, useContext, useReducer, useRef } from "react";
 import SubContext from "../../context/sub-context";
-import { PickControllerStyled, PickerInfo, PickingFrom, PickerMenu, TuneWrapper, SmallButtons, NextButton, NotesButton } from './PickController.styled';
+import {
+  PickControllerStyled, PickerInfo, PickingFrom, PickerMenu, TuneWrapper,
+  SmallButtons, NextButton, NotesButton, KeyWrapper, Background
+} from './PickController.styled';
 import Loading from "../Loading/Loading";
 import { onSnapshot, doc, setDoc, writeBatch } from 'firebase/firestore';
 import { db } from '../../firebaseConfig'
@@ -165,10 +168,8 @@ function PickController() {
     //On test to see if page has been reloaded within last 5 seconds; if so, save current pickerSet status to database
     let forRefresh = localStorage.getItem('forRefresh');
     if (forRefresh) {
-
       forRefresh = JSON.parse(forRefresh);
-
-      if (forRefresh.set.setName === userDoc.setNames[userDoc.pickerSet] && forRefresh.user === user.uid) {
+      if (forRefresh.set && (forRefresh.set.setName === userDoc.setNames[userDoc.pickerSet]) && forRefresh.user === user.uid) {
         const currentDate = new Date();
         const timestamp = currentDate.getTime();
 
@@ -497,13 +498,6 @@ function PickController() {
     allSongs[tune].title.length :
     21) : 21;
 
-  const tuneFontSize =
-    (tuneLength > 20) ? "4rem" :
-      (tuneLength > 9) ? "4.6rem" :
-        (tuneLength > 7) ? "5.3rem" :
-          (tuneLength > 5) ? "6.5rem" :
-            "7.5rem";
-
   const listColor = (allSongs && tune) ? ((allSongs[tune].knowledge === "know") ? EMERALD :
     (allSongs[tune].knowledge === "med") ? YELLOW :
       ORANGE) :
@@ -560,91 +554,95 @@ function PickController() {
   }
 
   return (
-    <PickControllerStyled style={{ backgroundColor: listColor }}>
-      <PickerInfo>
-        <PickingFrom>
-          <p>Picking from:</p>
-          <Path heading={capitalize(userDoc.setNames[userDoc.pickerSet])} pathType="Set" setId={userDoc.pickerSet} forPicker />
-        </PickingFrom>
-        <PickerMenu className="picker-info-menu">
-          <p>Menu</p>
-          <LibraryMenu
-            items={libraryMenuItems}
-            color="#3d3d3d"
+    <Background background={listColor}>
+      <PickControllerStyled>
+        <PickerInfo>
+          <PickingFrom>
+            <p>Picking from:</p>
+            <Path heading={capitalize(userDoc.setNames[userDoc.pickerSet])} pathType="Set" setId={userDoc.pickerSet} forPicker />
+          </PickingFrom>
+          <PickerMenu className="picker-info-menu">
+            <p>Menu</p>
+            <LibraryMenu
+              items={libraryMenuItems}
+              color="#3d3d3d"
+            />
+          </PickerMenu>
+        </PickerInfo>
+        <TuneWrapper className="tune-wrapper" length={tuneLength}>
+          <p className="tune-name">{allSongs[tune] && capitalize(allSongs[tune].title)}</p>
+        </TuneWrapper>
+        <KeyWrapper>
+          <p className="key">{displayedKey}</p>
+        </KeyWrapper>
+        <NextButton className="next-button" onClick={nextHandler} >
+          <button>NEXT</button>
+        </NextButton>
+
+        <SmallButtons className="small-buttons-wrapper">
+          <button className="skip-button small-btn" onClick={skipHandler}>SKIP</button>
+          <button className="raise-button small-btn" onClick={raiseKnowledge} >&uarr;</button>
+          <button className="lower-button small-btn" onClick={lowerKnowledge}>&darr;</button>
+        </SmallButtons>
+        <NotesButton onClick={handleNotesClick} className="notes-button">notes</NotesButton>
+        {showMoveDownAndOut &&
+          <MoveDownAndOut
+            setShowMoveDownAndOut={setShowMoveDownAndOut}
+            songId={tune}
+            title={allSongs[tune].title}
+            setTune={setTune}
+            knowledgeArrays={knowledgeArrays}
+            setLocalLoading={setLocalLoading}
+          />}
+        {showEditTitle &&
+          <EditTitle
+            setShowEditTitle={setShowEditTitle}
+            songId={tune}
+            title={allSongs[tune].title}
+          />}
+        {showEditKey &&
+          <EditKey
+            setShowEditKey={setShowEditKey}
+            songId={tune}
+            songKey={allSongs[tune].songKey}
+          />}
+        {showDeleteSong &&
+          <DeleteSong
+            song={allSongs[tune]}
+            knowledgeArrays={{
+              know: ['currentKnow', 'fullKnow'],
+              med: ['currentMedium', 'fullMedium'],
+              new: ['currentNew', 'fullNew']
+            }}
+            setShowDeleteSong={setShowDeleteSong}
+            forPicker
+            initialPick={initialPick}
+            setLocalLoading={setLocalLoading}
           />
-        </PickerMenu>
-      </PickerInfo>
-      <TuneWrapper className="tune-wrapper">
-        <p className="tune-name" style={{ fontSize: tuneFontSize }}>{allSongs[tune] && capitalize(allSongs[tune].title)}</p>
-      </TuneWrapper>
-
-      <p className="key">{displayedKey}</p>
-
-      <NextButton className="next-button" onClick={nextHandler} >NEXT</NextButton>
-
-      <SmallButtons className="small-buttons-wrapper">
-        <button className="skip-button small-btn" onClick={skipHandler}>SKIP</button>
-        <button className="raise-button small-btn" onClick={raiseKnowledge} >&uarr;</button>
-        <button className="lower-button small-btn" onClick={lowerKnowledge}>&darr;</button>
-      </SmallButtons>
-      <NotesButton onClick={handleNotesClick} className="notes-button">notes</NotesButton>
-      {showMoveDownAndOut &&
-        <MoveDownAndOut
-          setShowMoveDownAndOut={setShowMoveDownAndOut}
-          songId={tune}
-          title={allSongs[tune].title}
-          setTune={setTune}
-          knowledgeArrays={knowledgeArrays}
-          setLocalLoading={setLocalLoading}
-        />}
-      {showEditTitle &&
-        <EditTitle
-          setShowEditTitle={setShowEditTitle}
-          songId={tune}
-          title={allSongs[tune].title}
-        />}
-      {showEditKey &&
-        <EditKey
-          setShowEditKey={setShowEditKey}
-          songId={tune}
-          songKey={allSongs[tune].songKey}
-        />}
-      {showDeleteSong &&
-        <DeleteSong
-          song={allSongs[tune]}
-          knowledgeArrays={{
-            know: ['currentKnow', 'fullKnow'],
-            med: ['currentMedium', 'fullMedium'],
-            new: ['currentNew', 'fullNew']
-          }}
-          setShowDeleteSong={setShowDeleteSong}
-          forPicker
-          initialPick={initialPick}
-          setLocalLoading={setLocalLoading}
-        />
-      }
-      {showRemoveSong &&
-        <DeleteSong
-          song={allSongs[tune]}
-          knowledgeArrays={{
-            know: ['currentKnow', 'fullKnow'],
-            med: ['currentMedium', 'fullMedium'],
-            new: ['currentNew', 'fullNew']
-          }}
-          setShowRemoveSong={setShowRemoveSong}
-          forPicker
-          removeOnly
-          dispatch={dispatch}
-          setLocalLoading={setLocalLoading}
-        />
-      }
-      {showNotes &&
-        <Notes
-          setShowNotes={setShowNotes}
-          notes={allSongs[tune].notes}
-        />
-      }
-    </PickControllerStyled>
+        }
+        {showRemoveSong &&
+          <DeleteSong
+            song={allSongs[tune]}
+            knowledgeArrays={{
+              know: ['currentKnow', 'fullKnow'],
+              med: ['currentMedium', 'fullMedium'],
+              new: ['currentNew', 'fullNew']
+            }}
+            setShowRemoveSong={setShowRemoveSong}
+            forPicker
+            removeOnly
+            dispatch={dispatch}
+            setLocalLoading={setLocalLoading}
+          />
+        }
+        {showNotes &&
+          <Notes
+            setShowNotes={setShowNotes}
+            notes={allSongs[tune].notes}
+          />
+        }
+      </PickControllerStyled>
+    </Background>
   )
 }
 

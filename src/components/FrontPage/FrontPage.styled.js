@@ -4,6 +4,8 @@ export const Checkbox = styled.div`
   
   display: flex;
   align-items: center;
+  margin-left: 2rem;
+  padding-bottom: 2rem;
 
   label {
     margin-left: 1rem;
@@ -14,8 +16,8 @@ export const Checkbox = styled.div`
     font-size: 1.2rem;
   }
   input {
-    height: 12px;
-    width: auto;
+    min-height: 12px;
+    min-width: 12px;
     border: 1px solid red;
     flex: 0;
   }
