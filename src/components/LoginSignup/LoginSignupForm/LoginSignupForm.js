@@ -196,7 +196,7 @@ function LoginSignupForm(props) {
   }
 
   return (
-    <LoginSignupFormStyled className={`LoginSignupForm LoginSignupForm-${formType}`} style={formStyle}>
+    <LoginSignupFormStyled style={formStyle}>
       <legend>{legend}</legend>
       <Inputs>
         <label htmlFor={`email-${formType}`}>email</label>
@@ -207,8 +207,8 @@ function LoginSignupForm(props) {
           {
             (formType === 'login') ?
               <ForgotContainer>
-                <p className="LoginSignupForm-forgot" tabIndex="0" role="button" onClick={handleForgot}>forgot?</p>
-                <div className="LoginSignupForm-forgot-loading">
+                <p tabIndex="0" role="button" onClick={handleForgot}>forgot?</p>
+                <div>
                   {passwordResetLoading && <Loading embedded spinnerOnly size={1} />}
                 </div>
               </ForgotContainer>
@@ -224,7 +224,7 @@ function LoginSignupForm(props) {
           {loading && <Loading embedded spinnerOnly size={2} />}
         </div>
       </SubmitContainer>
-      <button className="LoginSignupForm-switch" id={`switch-from-${formType}`} onClick={switchAuth}>{switchMessage}</button>
+      <button id={`switch-from-${formType}`} onClick={switchAuth}>{switchMessage}</button>
       {showInstructions && <Instructions setShowInstructions={setShowInstructions} />}
       {showPasswordReset && <PasswordReset setShowPasswordReset={setShowPasswordReset} email={email} />}
     </LoginSignupFormStyled>

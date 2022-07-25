@@ -25,7 +25,7 @@ function SongEntry(props) {
 
   return (
     <SongEntryStyled onClick={handleClick} style={{ backgroundColor: bgColor }}>
-      <p className="SongEntry-title">{capitalize(title)}</p>
+      <p>{capitalize(title)}</p>
     </SongEntryStyled>
   )
 }
