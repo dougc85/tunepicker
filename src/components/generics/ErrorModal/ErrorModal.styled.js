@@ -13,7 +13,6 @@ export const Screen = styled.div`
 export const Content = styled.div`
   position: fixed;
   width: 80%;
-  height: fit-content;
   top: 50%;
   transform: translateY(-50%);
   left: 10%;
