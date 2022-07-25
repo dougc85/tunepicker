@@ -1,5 +1,5 @@
 import { React } from 'react';
-import './LoginSignup.scss';
+import { LoginSignupStyled } from './LoginSignup.styled';
 import LoginSignupForm from './LoginSignupForm/LoginSignupForm';
 
 function LoginSignup(props) {
@@ -25,10 +25,10 @@ function LoginSignup(props) {
 
 
   return (
-    <div action="" className="LoginSignup" style={authStyle}>
+    <LoginSignupStyled action="" className="LoginSignup" style={authStyle}>
       <LoginSignupForm formStyle={loginStyle} legend="Log In" submitMessage="Enter" switchAuth={switchAuth} formType="login" switchMessage={"Need to create an account?"} />
       <LoginSignupForm formStyle={signupStyle} legend="Sign Up" submitMessage="Create Account" switchAuth={switchAuth} formType="signup" setUser={setUser} switchMessage={"Already Have An Account?"} />
-    </div>
+    </LoginSignupStyled>
   )
 }
 
