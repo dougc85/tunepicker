@@ -17,12 +17,12 @@ export const AddMultipleStyled = styled.form`
   p {
     font-size: 1.4rem;
     text-align: start;
-    margin: 2rem 0;
+    margin: 1.5rem 0;
   }
 
   ul {
     font-size: 1.3rem;
-    margin: 0 2rem 1rem 2rem;
+    margin: 0 2rem .5rem 2rem;
 
     li {
       margin-bottom: .5rem;
