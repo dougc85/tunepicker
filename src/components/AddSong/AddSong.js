@@ -11,10 +11,11 @@ import {
 } from '../../firebaseConfig';
 import useFormInput from '../../hooks/useFormInput';
 import Modal from '../generics/Modal.styled';
-import { AddSongStyled, InputGrouping, TitleInput, ErrorMessage, KnowledgeField } from './AddSong.styled';
+import { AddSongStyled, InputGrouping, TitleInput, ErrorMessage, KnowledgeField, NotesField } from './AddSong.styled';
 import AddButton from '../generics/AddButton.styled';
 import AlreadyInLibrary from '../AlreadyInLibrary/AlreadyInLibrary';
 import Loading from '../Loading/Loading';
+import capitalize from '../../helperFunctions/capitalize';
 
 function AddSong(props) {
 
@@ -152,13 +153,13 @@ function AddSong(props) {
 
   if (showAddForm) {
     return (
-      <Modal handleOutsideClick={handleCancel} >
+      <Modal handleOutsideClick={handleCancel} contentHeight={"50rem"} flex>
         {
           loading ?
             <Loading /> :
             (
               <AddSongStyled>
-                <legend>Add Song to '{set.setName}'</legend>
+                <legend>Add Song to '{capitalize(set.setName)}'</legend>
                 <InputGrouping width={"100%"}>
                   <label htmlFor="song-title">Title:</label>
                   <TitleInput onChange={handleTitleChangeAndDuplicates} value={title} id="song-title" type="text" name="song-title" autoComplete="off"></TitleInput>
@@ -199,8 +200,10 @@ function AddSong(props) {
                     </label>
                   </div>
                 </KnowledgeField>
-                <label htmlFor="song-notes" >Notes</label>
-                <textarea disabled={disableForm} value={notes} onChange={handleNotesChange}></textarea>
+                <NotesField>
+                  <label htmlFor="song-notes" >Notes</label>
+                  <textarea disabled={disableForm} value={notes} onChange={handleNotesChange}></textarea>
+                </NotesField>
                 <InputGrouping width={"80%"}>
                   <AddButton onClick={handleCancel} >Cancel</AddButton>
                   <AddButton disabled={disableForm} onClick={handleAdd}>Add Song</AddButton>

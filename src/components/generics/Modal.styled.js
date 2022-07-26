@@ -14,7 +14,7 @@ const Screen = styled.div`
 const Content = styled.div`
   position: fixed;
   width: 80%;
-  height: ${props => (props.contentHeight ? props.contentHeight : "80%")};
+  height: ${props => (props.contentHeight ? props.contentHeight : "80vh")};
   top: 50%;
   transform: translateY(-50%);
   left: 10%;
@@ -24,11 +24,15 @@ const Content = styled.div`
   box-sizing: border-box;
   z-index: 102;
   overflow: scroll;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  display: ${props => props.flex ? 'flex' : 'block'};
 `;
 
 function Modal(props) {
 
-  const { handleOutsideClick, contentHeight } = props;
+  const { handleOutsideClick, contentHeight, flex } = props;
 
   return (
     <>
@@ -37,7 +41,7 @@ function Modal(props) {
         document.getElementById('screen-root')
       )}
       {ReactDOM.createPortal(
-        <Content contentHeight={contentHeight}>
+        <Content contentHeight={contentHeight} flex={flex}>
           {props.children}
         </Content>,
         document.getElementById('overlay-root')
