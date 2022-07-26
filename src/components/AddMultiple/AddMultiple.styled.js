@@ -15,7 +15,19 @@ export const AddMultipleStyled = styled.form`
   }
 
   p {
-    font-size: 1rem;
+    font-size: 1.4rem;
+    text-align: start;
+    margin: 2rem 0;
+  }
+
+  ul {
+    font-size: 1.3rem;
+    margin: 0 2rem 1rem 2rem;
+
+    li {
+      margin-bottom: .5rem;
+    }
+
     span {
       display: block;
       letter-spacing: 7px;
@@ -37,7 +49,7 @@ export const AddMultipleButtonsStyled = styled.div`
 
 export const TitleErrorsStyled = styled.div`
 
-height: 100%;
+  height: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;

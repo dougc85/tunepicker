@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 export const AddSongStyled = styled.form`
-  height: 100%;
+  flex: 1;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -16,11 +16,11 @@ export const AddSongStyled = styled.form`
 
   label {
       font-weight: bold;
+      font-size: 1.6rem;
     }
 
-  textarea {
-    width: 80%;
-    height: 8rem;
+  div {
+    flex-shrink: 1;
   }
 `;
 
@@ -29,7 +29,7 @@ export const InputGrouping = styled.div`
   position: relative;
   align-items: center;
   justify-content: space-evenly;
-  width: ${({ width }) => width};
+  width: ${(props) => props.width};
 `
 
 export const TitleInput = styled.input`
@@ -38,8 +38,8 @@ export const TitleInput = styled.input`
 
 export const ErrorMessage = styled.p`
   position: absolute;
-  top: 2.4rem;
-  left: 8.5rem;
+  top: 2.8rem;
+  left: 8.2rem;
   font-size: 1.1rem;
   color: red;
 `;
@@ -48,31 +48,49 @@ export const KnowledgeField = styled.fieldset`
   border: none;
 
   legend {
-        font-weight: bold;
-        font-size: 1.7rem;
-        transform: translateY(.5rem);
+    font-weight: bold;
+    font-size: 1.6rem;
+    transform: translateY(.5rem);
+    margin-bottom: .5rem;
   }
 
   & > div {
     display: flex;
     align-items: center;
-    margin-top: 1.2rem;
+    margin-top: .8rem;
   }
 
   input {
+    flex-shrink: 0;
+    flex-grow: 0;
     margin-right: 1.5rem;
+    display: block;
+    width: 15px;
   }
 
   label {
-    font-size: 1.8rem;
+    font-size: 1.6rem;
     display: block;
     text-align: left;
 
     span {
-      font-size: 1.4rem;
+      font-size: 1.3rem;
       display: block;
       font-weight: 400;
     }
   }
 `;
+
+export const NotesField = styled.div`
+
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  textarea {
+    margin-top: 1rem;
+    width: 80%;
+    height: 8rem;
+  }
+`
 

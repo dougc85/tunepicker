@@ -8,6 +8,7 @@ import Modal from '../generics/Modal.styled';
 import AddButton from '../generics/AddButton.styled';
 import { AddMultipleStyled, AddMultipleButtonsStyled, TitleErrorsStyled } from './AddMultiple.styled';
 import Loading from '../Loading/Loading';
+import capitalize from '../../helperFunctions/capitalize';
 
 function AddMultiple(props) {
 
@@ -192,13 +193,44 @@ function AddMultiple(props) {
   const configObj =
     (calling === 'set') ?
       {
-        heading: `Add Multiple Songs to ${set.setName}`,
-        instructions: "Add multiple songs at once by pasting (or typing out) a list of songs into the text box below. Make sure you strike the return/enter key after each song. Songs will be entered into this set and default to the 'Know' knowledge level.  Also, all will be entered such that your preference for their key will be 'random'. Later updates will provide the ability to add a list of songs to any number of sets as well as allowing you to set the knowledge level of the group yourself. Any songs that you list which are already to be found in your library will be imported into this set with all their current settings intact."
+        heading: `Add Multiple Songs to '${capitalize(set.setName)}'`,
+        instructions: (
+          <>
+            <p>
+              Add multiple songs at once by entering a list of songs into the text box below
+            </p>
+            <ul>
+              <li>
+                Strike the return/enter key after each song.
+              </li>
+              <li>
+                Any songs that you list which are already to be found in your library will be imported into this set with all their current settings intact
+              </li>
+              <li>
+                Songs cannot use the following characters: <span>~ * / [ ]</span>
+              </li>
+            </ul>
+          </>
+        )
 
       } :
       {
         heading: "Add Multiple Songs",
-        instructions: "Add multiple songs at once by pasting (or typing out) a list of songs into the text box below. Make sure you strike the return/enter key after each song."
+        instructions: (
+          <>
+            <p>
+              Add multiple songs at once by pasting (or typing out) a list of songs into the text box below
+            </p>
+            <ul>
+              <li>
+                Make sure you strike the return/enter key after each song
+              </li>
+              <li>
+
+              </li>
+            </ul>
+          </>
+        )
       }
 
   if (showMain) {
@@ -209,11 +241,8 @@ function AddMultiple(props) {
             <Loading /> :
             (<AddMultipleStyled>
               <legend>{configObj.heading}</legend>
-              <p>
-                {configObj.instructions}
-                Songs cannot use the following characters: <span>~ * / [ ]</span>
-              </p>
-              <textarea name="" id="" cols="30" rows="10" value={songList} onChange={handleSongListChange}></textarea>
+              {configObj.instructions}
+              <textarea name="" id="" cols="27" rows="6" value={songList} onChange={handleSongListChange}></textarea>
               <AddMultipleButtonsStyled>
                 <AddButton onClick={handleCancel}>Cancel</AddButton>
                 <AddButton onClick={handleAdd}>Add Songs</AddButton>
