@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import ReactDOM from 'react-dom';
+import React, { useEffect } from 'react';
 
 const Screen = styled.div`
   position: fixed;
@@ -33,6 +34,14 @@ const Content = styled.div`
 function Modal(props) {
 
   const { handleOutsideClick, contentHeight, flex } = props;
+
+  useEffect(() => {
+    document.body.style.overflow = 'hidden';
+
+    return () => {
+      document.body.style.overflow = 'unset';
+    }
+  }, []);
 
   return (
     <>

@@ -19,7 +19,7 @@ function AddFromLibrary(props) {
   const [songsToAdd, setSongsToAdd] = useState({});
   const [loading, setLoading] = useState(false);
 
-  const [handleNetworkError] = useContext(SubContext);
+  const { handleNetworkError } = useContext(SubContext);
 
   function hideAddFromLibrary(e) {
     if (e) {
