@@ -226,7 +226,7 @@ function AddMultiple(props) {
                 Make sure you strike the return/enter key after each song
               </li>
               <li>
-
+                Songs cannot use the following characters: <span>~ * / [ ]</span>
               </li>
             </ul>
           </>
@@ -242,7 +242,7 @@ function AddMultiple(props) {
             (<AddMultipleStyled>
               <legend>{configObj.heading}</legend>
               {configObj.instructions}
-              <textarea name="" id="" cols="27" rows="6" value={songList} onChange={handleSongListChange}></textarea>
+              <textarea name="" id="" cols="27" rows="5" value={songList} onChange={handleSongListChange}></textarea>
               <AddMultipleButtonsStyled>
                 <AddButton onClick={handleCancel}>Cancel</AddButton>
                 <AddButton onClick={handleAdd}>Add Songs</AddButton>
@@ -255,7 +255,7 @@ function AddMultiple(props) {
 
   if (showTitleErrors) {
     return (
-      <Modal handleOutsideClick={handleCancel} >
+      <Modal handleOutsideClick={handleCancel} contentHeight={"40rem"}>
         <TitleErrorsStyled>
           <h2>Errors Found</h2>
           <p>
