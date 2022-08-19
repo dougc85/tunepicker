@@ -33,7 +33,7 @@ function EditSetName(props) {
 
   async function handleSubmit(e) {
     e.preventDefault();
-    const enteredSetName = title.toLowerCase()
+    const enteredSetName = title.toLowerCase().trim();
     const oldLowercase = oldTitle.toLowerCase();
 
     if (enteredSetName === '') {
