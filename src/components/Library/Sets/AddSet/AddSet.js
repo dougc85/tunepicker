@@ -52,7 +52,7 @@ function AddSet(props) {
       setShowError(true);
     } else {
       setLoading(true);
-      const titleLower = title.toLowerCase();
+      const titleLower = title.toLowerCase().trim();
       try {
         const newSet = {
           setName: titleLower,
