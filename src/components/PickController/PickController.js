@@ -109,23 +109,26 @@ function PickController() {
 
       const userDocRef = doc(db, 'users', user.uid);
       const setDocRef = doc(userDocRef, 'sets', userDoc.pickerSet);
-      try {
-        setDoc(setDocRef, mutableRef.current);
-      } catch (error) {
-        handleNetworkError(error.message);
+
+      if (mutableRef.current) {
+        try {
+          setDoc(setDocRef, mutableRef.current);
+        } catch (error) {
+          handleNetworkError(error.message);
+        }
+
+
+        //Write to localStorage to ensure doc gets set, even on page refresh
+        const currentDate = new Date();
+        const timestamp = currentDate.getTime();
+
+        const refreshObject = {
+          time: timestamp,
+          set: mutableRef.current,
+          user: user.uid,
+        }
+        localStorage.setItem('forRefresh', JSON.stringify(refreshObject));
       }
-
-
-      //Write to localStorage to ensure doc gets set, even on page refresh
-      const currentDate = new Date();
-      const timestamp = currentDate.getTime();
-
-      const refreshObject = {
-        time: timestamp,
-        set: mutableRef.current,
-        user: user.uid,
-      }
-      localStorage.setItem('forRefresh', JSON.stringify(refreshObject));
     }
 
     function handleVisibilityChange() {
@@ -164,18 +167,22 @@ function PickController() {
     }
 
 
-
     //On test to see if page has been reloaded within last 5 seconds; if so, save current pickerSet status to database
     let forRefresh = localStorage.getItem('forRefresh');
+
     if (forRefresh) {
       forRefresh = JSON.parse(forRefresh);
       if (forRefresh.set && (forRefresh.set.setName === userDoc.setNames[userDoc.pickerSet]) && forRefresh.user === user.uid) {
+
         const currentDate = new Date();
         const timestamp = currentDate.getTime();
 
         if ((timestamp - forRefresh.time) < 5000) {
           const userDocRef = doc(db, 'users', user.uid);
           const setDocRef = doc(userDocRef, 'sets', userDoc.pickerSet);
+
+          console.log(forRefresh.set, 'forRefresh.set 1');
+
           try {
             setDoc(setDocRef, forRefresh.set);
           } catch (error) {
@@ -219,6 +226,8 @@ function PickController() {
   }
 
   useEffect(() => {
+    console.log(pickerSet, 'pickerSet');
+
     if (!loading && !localLoading && pickerSet) {
 
       if (Object.keys(pickerSet.allSongs).length === 0) {
@@ -445,6 +454,8 @@ function PickController() {
       }
       mutablePickerSet[knowledgeArrays[oldKnowledge][1]].splice(oldFullIndex, 1);
       mutablePickerSet[knowledgeArrays[newKnowledge][1]].push(tune);
+
+      console.log(mutablePickerSet, 'mutablePickerSet 2');
 
       batch.set(setDocRef, mutablePickerSet);
       await batch.commit();
