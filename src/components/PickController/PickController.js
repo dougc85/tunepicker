@@ -111,6 +111,7 @@ function PickController() {
       const setDocRef = doc(userDocRef, 'sets', userDoc.pickerSet);
 
       if (mutableRef.current) {
+
         try {
           setDoc(setDocRef, mutableRef.current);
         } catch (error) {
@@ -149,7 +150,7 @@ function PickController() {
 
 
   useEffect(() => {
-    if (!user.uid || !userDoc.pickerSet) {
+    if (!user.uid || !userDoc.pickerSet || (userDoc.uid !== user.uid)) {
       return;
     }
 
@@ -157,7 +158,6 @@ function PickController() {
 
     try {
       unsubscribeSetDoc = onSnapshot(doc(db, 'users', user.uid, 'sets', userDoc.pickerSet), (firebaseDoc) => {
-
         const newPickerSet = { ...firebaseDoc.data(), id: userDoc.pickerSet };
         dispatch({ type: 'SET_PICKERS', payload: newPickerSet });
         pickKey();
@@ -180,8 +180,6 @@ function PickController() {
         if ((timestamp - forRefresh.time) < 5000) {
           const userDocRef = doc(db, 'users', user.uid);
           const setDocRef = doc(userDocRef, 'sets', userDoc.pickerSet);
-
-          console.log(forRefresh.set, 'forRefresh.set 1');
 
           try {
             setDoc(setDocRef, forRefresh.set);
@@ -226,8 +224,6 @@ function PickController() {
   }
 
   useEffect(() => {
-    console.log(pickerSet, 'pickerSet');
-
     if (!loading && !localLoading && pickerSet) {
 
       if (Object.keys(pickerSet.allSongs).length === 0) {
@@ -262,6 +258,7 @@ function PickController() {
           } else {
             setCurrentList('med');
           }
+
           dispatch({ type: 'SET_MUTABLE', payload: updatedSet });
           return;
         }
@@ -341,6 +338,7 @@ function PickController() {
         updatedSet[knowledgeArrays[forSkip.oldList][0]].push(forSkip.tune);
       }
     }
+
     dispatch({ type: 'SET_MUTABLE', payload: updatedSet });
   }
 
@@ -454,8 +452,6 @@ function PickController() {
       }
       mutablePickerSet[knowledgeArrays[oldKnowledge][1]].splice(oldFullIndex, 1);
       mutablePickerSet[knowledgeArrays[newKnowledge][1]].push(tune);
-
-      console.log(mutablePickerSet, 'mutablePickerSet 2');
 
       batch.set(setDocRef, mutablePickerSet);
       await batch.commit();
