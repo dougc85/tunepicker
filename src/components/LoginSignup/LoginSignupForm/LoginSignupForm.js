@@ -142,7 +142,7 @@ function LoginSignupForm(props) {
         },
       });
 
-      sendEmailVerification(auth.currentUser);
+      sendEmailVerification(auth.currentUser, { url: 'http://tunepicker.app/email_auth' });
 
     }
     catch (error) {

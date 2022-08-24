@@ -21,9 +21,13 @@ export const VerifyEmailStyled = styled.div`
     text-align: start;
     margin-bottom: 2rem;
 
-    span {
+    >span {
       display: block;
-      font-weight: bold;
+      margin-top: 2rem;
+      
+      >span {
+        font-weight: bold;
+      }
     }
   }
 `

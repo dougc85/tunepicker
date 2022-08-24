@@ -15,6 +15,7 @@ const defaultContext = {
   loading: undefined,
   setLoading: undefined,
   handleNetworkError: undefined,
+  tokenVerified: undefined,
 }
 
 const SubContext = React.createContext(defaultContext);
@@ -129,8 +130,9 @@ export const SubContextProvider = (props) => {
         loading,
         setLoading,
         handleNetworkError,
+        tokenVerified,
       }}>
-      {user && !loading && !tokenVerified && <VerifyEmail />}
+      {user && !loading && !tokenVerified && (location.pathname !== '/email_auth') && <VerifyEmail />}
       {showErrorModal && <ErrorModal handleOutsideClick={() => { setShowErrorModal(false) }} message={errorMessage} />}
       {props.children}
     </SubContext.Provider>

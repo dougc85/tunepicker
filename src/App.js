@@ -1,4 +1,4 @@
-import { React, useState, useEffect } from 'react';
+import { React, useState } from 'react';
 import PickController from './components/PickController/PickController';
 import { Routes, Route } from 'react-router-dom';
 import Header from './components/Header/Header';
@@ -14,6 +14,7 @@ import GlobalStyles from './GlobalStyles';
 import Help from './components/Help/Help';
 import Contact from './components/Contact/Contact';
 import Settings from './components/Settings/Settings';
+import EmailAuth from './components/EmailAuth/EmailAuth';
 
 
 function App() {
@@ -24,6 +25,7 @@ function App() {
     <div className="App">
       <GlobalStyles />
       <Routes>
+        <Route path="/email_auth" element={<EmailAuth />} />
         <Route path="/" element={<Header />}>
           <Route index element={<FrontPage />} />
           <Route path="/controller" element={<PickController />} />

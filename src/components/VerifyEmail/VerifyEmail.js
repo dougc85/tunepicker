@@ -28,7 +28,7 @@ function VerifyEmail() {
 
   async function handleSendingEmail() {
     try {
-      await sendEmailVerification(auth.currentUser);
+      await sendEmailVerification(auth.currentUser, { url: 'http://tunepicker.app/email_auth' });
       if (emailError) {
         setEmailError('');
       }
@@ -63,8 +63,11 @@ function VerifyEmail() {
     <Modal handleOutsideClick={() => { }} contentHeight="auto">
       <VerifyEmailStyled>
         <h2>Email Verification</h2>
-        <p>An email has been sent to you containing a link to verify your email address and complete the sign-up process. After clicking the link in your email, return here, log out and log back in.  Thank you!
-          <span>*Check spam folder for the email</span>
+        <p>A verification email has been sent to you. Open it, click the link inside, and then click 'continue'
+          on the page it opens in your browser.
+          <span>If you don't see an email, <span>check your spam folder</span> and/or click the link below to send another one.  If you have any other problems, log out and then log back in.
+          </span>
+
         </p>
 
         <ButtonGroup>
