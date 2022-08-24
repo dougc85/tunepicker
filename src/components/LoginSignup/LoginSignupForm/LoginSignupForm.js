@@ -4,7 +4,7 @@ import { LoginSignupFormStyled, Inputs, EmailInput, SubmitContainer, ForgotConta
 import Password from '../../Password/Password';
 import { auth, db } from '../../../firebaseConfig';
 import {
-  signInWithEmailAndPassword, createUserWithEmailAndPassword, sendEmailVerification, sendPasswordResetEmail
+  signInWithEmailAndPassword, createUserWithEmailAndPassword, sendEmailVerification, sendPasswordResetEmail, updateProfile,
 } from 'firebase/auth';
 import {
   doc,
@@ -16,6 +16,7 @@ import {
 import Loading from '../../Loading/Loading';
 import Instructions from './Instructions/Instructions';
 import PasswordReset from './PasswordReset/PasswordReset';
+import capitalize from '../../../helperFunctions/capitalize';
 
 const loginSignupReducer = (state, action) => {
   if (action.type === 'HANDLE_INPUT') {
@@ -135,12 +136,18 @@ function LoginSignupForm(props) {
         setsRef,
         defaultSet,
       );
-      await updateDoc(userDocRef, {
+      const updateDocPromise = updateDoc(userDocRef, {
         pickerSet: newSetDoc.id,
         setNames: {
           [newSetDoc.id]: "first set",
         },
       });
+
+      const updateProfilePromise = updateProfile(userCredential.user, {
+        displayName: capitalize(email.slice(0, email.indexOf('@')).trim().toLowerCase()),
+      });
+
+      await Promise.all([updateDocPromise, updateProfilePromise]);
 
       sendEmailVerification(auth.currentUser, { url: 'http://tunepicker.app/email_auth' });
 
