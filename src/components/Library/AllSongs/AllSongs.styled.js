@@ -26,5 +26,8 @@ export const AllSongsHeader = styled.div`
 `
 
 export const SongsHeader = styled.div`
-
+  margin-top: .7rem;
+  margin-bottom: 1rem;
+  display: flex;
+  justify-content: flex-end;
 `
