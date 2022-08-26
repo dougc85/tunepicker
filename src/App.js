@@ -11,10 +11,12 @@ import TunesIWantToLearn from './components/TunesIWantToLearn/TunesIWantToLearn'
 import AllSongs from './components/Library/AllSongs/AllSongs';
 import Song from './components/Library/Song/Song';
 import GlobalStyles from './GlobalStyles';
-import Help from './components/Help/Help';
+import Docs from './components/Docs/Docs';
 import Contact from './components/Contact/Contact';
 import Settings from './components/Settings/Settings';
 import EmailAuth from './components/EmailAuth/EmailAuth';
+import Help from './components/Help/Help';
+import QuickStart from './components/QuickStart/QuickStart';
 
 
 function App() {
@@ -36,6 +38,8 @@ function App() {
           <Route path="/library/sets/:setId/*" element={<Set setShowAlreadyInLibrary={setShowAlreadyInLibrary} showAlreadyInLibrary={showAlreadyInLibrary} />} />
           <Route path="/tunesiwanttolearn" element={<TunesIWantToLearn />} />
           <Route path="/help" element={<Help heading={"Help Center"} />} />
+          <Route path="/help/docs" element={<Docs />} />
+          <Route path="/help/quickstart" element={<QuickStart />} />
           <Route path="/settings" element={<Settings />} />
           <Route path="/contact" element={<Contact />} />
         </Route>

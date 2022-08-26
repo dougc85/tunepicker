@@ -1,8 +1,8 @@
 import styled from 'styled-components';
 
-export const HelpPageStyled = styled.div`
+export const HelpStyled = styled.div`
   font-size: 1.4rem;
-  padding: 2rem;
+  padding: 2rem 2rem 0 2rem;
   text-align: start;
 
   >h2 {
@@ -11,31 +11,28 @@ export const HelpPageStyled = styled.div`
     margin-bottom: 2rem;
   }
 
-  h3 {
-    font-size: 2rem;
-    display: inline-block;
-  }
-
-  >p {
-    margin-bottom: 2rem;
-    
-    span {
-      display: block;
-      margin-top: 1rem;
-    }
-  }
-
   >ul {
-    margin-bottom: 2rem;
+    list-style-type: none;
 
-    li {
-      margin-left: 2rem;
+    li:not(:last-child) {
+      margin-bottom: 1rem;
     }
   }
-  svg {
-    height: 1em;
-    display: inline-block;
-    margin: 0 .3em;
-    transform: translateY(.1em);
+
+  >a {
+    display: block;
+
+    :active, :link, :visited, :hover {
+      text-decoration: none;
+      text-align: center;
+      background-color: #decaff;
+      color: black;
+      font-size: 4rem;
+      padding: 2rem;
+      border-radius: 10px;
+      width: 70%;
+      margin: 3rem auto;
+      margin-top: 3rem;
+    }
   }
 `
