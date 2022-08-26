@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import SubContext from '../../context/sub-context';
 import { v4 as uuid } from 'uuid';
 import {
@@ -11,7 +11,7 @@ import {
 } from '../../firebaseConfig';
 import useFormInput from '../../hooks/useFormInput';
 import Modal from '../generics/Modal.styled';
-import { AddSongStyled, InputGrouping, TitleInput, ErrorMessage, KnowledgeField, NotesField } from './AddSong.styled';
+import { AddSongStyled, InputGrouping, TitleInput, ErrorMessage, KnowledgeField, NotesField, SetsField, SetsCheckbox } from './AddSong.styled';
 import AddButton from '../generics/AddButton.styled';
 import AlreadyInLibrary from '../AlreadyInLibrary/AlreadyInLibrary';
 import Loading from '../Loading/Loading';
@@ -19,7 +19,7 @@ import capitalize from '../../helperFunctions/capitalize';
 
 function AddSong(props) {
 
-  const { set, songNames, user, setShowAddSong } = props;
+  const { set, songNames, user, setShowAddSong, allSongs, setNames } = props;
 
   const keys = ['C', 'D\u266D', 'D', 'E\u266D', 'E', 'F', 'F\u266F', 'G', 'A\u266D', 'A', 'B\u266D', 'B'];
   const knowledgeFields = {
@@ -37,8 +37,18 @@ function AddSong(props) {
   const [showAddForm, setShowAddForm] = useState(true);
   const [showAlreadyInLibrary, setShowAlreadyInLibrary] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [setArray, setSetArray] = useState([]);
 
   const { handleNetworkError } = useContext(SubContext);
+
+  useEffect(() => {
+    if (setNames) {
+      const setsList = Object.keys(setNames).map((setId) => {
+        return [setNames[setId], false, setId];
+      }).sort();
+      setSetArray(setsList)
+    }
+  }, [setNames])
 
   function handleCancel(e) {
     e.preventDefault();
@@ -69,10 +79,9 @@ function AddSong(props) {
       return;
     }
 
-    if (songNames[newTitle]) {
+    if (!allSongs && songNames[newTitle]) {
       setShowAddForm(false);
       setShowAlreadyInLibrary(true);
-
       return;
     }
 
@@ -81,29 +90,74 @@ function AddSong(props) {
     try {
       const batch = writeBatch(db);
       const userDocRef = doc(db, 'users', user.uid);
-      const setDocRef = doc(userDocRef, 'sets', set.id);
-      const date = Date.now();
+      let setDocRef;
+      const setDocRefArray = [];
+      let setIDs = [];
 
+      setArray.forEach((set) => {
+        if (set[1]) {
+          setIDs.push(set[2]);
+        }
+      })
+
+      if (allSongs) {
+        setIDs.forEach((setID) => {
+          setDocRefArray.push(doc(userDocRef, 'sets', setID));
+        })
+      } else {
+        setDocRef = doc(userDocRef, 'sets', set.id);
+      }
+
+      const date = Date.now();
       const songId = uuid();
 
-      batch.update(userDocRef, {
+      if (allSongs) {
+        const setsObject = {};
+        setIDs.forEach((setID) => {
+          setsObject[setID] = null;
+        })
+        batch.update(userDocRef, {
 
-        [`songs.${songId}`]: {
-          title: newTitle,
-          notes,
-          songKey,
-          knowledge,
-          sets: { [set.id]: null },
-          createdAt: date,
-          id: songId,
-        },
-        [`songNames.${newTitle}`]: songId,
-      });
-      batch.update(setDocRef, {
-        [`${knowledgeFields[knowledge][0]}`]: arrayUnion(songId),
-        [`${knowledgeFields[knowledge][1]}`]: arrayUnion(songId),
-        [`allSongs.${songId}`]: null,
-      })
+          [`songs.${songId}`]: {
+            title: newTitle,
+            notes,
+            songKey,
+            knowledge,
+            sets: setsObject,
+            createdAt: date,
+            id: songId,
+          },
+          [`songNames.${newTitle}`]: songId,
+        });
+
+        setDocRefArray.forEach((setDocRef) => {
+          batch.update(setDocRef, {
+            [`${knowledgeFields[knowledge][0]}`]: arrayUnion(songId),
+            [`${knowledgeFields[knowledge][1]}`]: arrayUnion(songId),
+            [`allSongs.${songId}`]: null,
+          })
+        })
+      } else {
+        batch.update(userDocRef, {
+
+          [`songs.${songId}`]: {
+            title: newTitle,
+            notes,
+            songKey,
+            knowledge,
+            sets: { [set.id]: null },
+            createdAt: date,
+            id: songId,
+          },
+          [`songNames.${newTitle}`]: songId,
+        });
+
+        batch.update(setDocRef, {
+          [`${knowledgeFields[knowledge][0]}`]: arrayUnion(songId),
+          [`${knowledgeFields[knowledge][1]}`]: arrayUnion(songId),
+          [`allSongs.${songId}`]: null,
+        })
+      }
 
       await batch.commit();
 
@@ -113,6 +167,7 @@ function AddSong(props) {
       setKnowledge('know');
     }
     catch (error) {
+      console.log(error);
       handleNetworkError(error.message);
     }
 
@@ -127,6 +182,14 @@ function AddSong(props) {
     const titleLower = e.target.value.toLowerCase();
 
     if (songNames[titleLower]) {
+
+      if (allSongs) {
+        setDisableForm(true);
+        handleTitleChange(e);
+        setErrorMessage('Song Already In Library');
+        return;
+      }
+
       const songId = songNames[titleLower];
       if (set.allSongs.hasOwnProperty(songId)) {
         setDisableForm(true);
@@ -151,15 +214,26 @@ function AddSong(props) {
 
   }
 
+  function handleCheckboxChange(e) {
+    setSetArray((oldSets) => {
+      return oldSets.map((set) => {
+        if (set[0] === e.target.value) {
+          return [set[0], !set[1], set[2]];
+        }
+        return set;
+      })
+    })
+  }
+
   if (showAddForm) {
     return (
-      <Modal handleOutsideClick={handleCancel} contentHeight={"50rem"} flex>
+      <Modal handleOutsideClick={handleCancel} contentHeight={"50rem"} flex={allSongs ? false : true}>
         {
           loading ?
             <Loading /> :
             (
-              <AddSongStyled>
-                <legend>Add Song to '{capitalize(set.setName)}'</legend>
+              <AddSongStyled allSongs={allSongs}>
+                <legend>{`Add Song${allSongs ? ' To Library' : ` to '${capitalize(set.setName)}'`}`}</legend>
                 <InputGrouping width={"100%"}>
                   <label htmlFor="song-title">Title:</label>
                   <TitleInput onChange={handleTitleChangeAndDuplicates} value={title} id="song-title" type="text" name="song-title" autoComplete="off"></TitleInput>
@@ -204,6 +278,21 @@ function AddSong(props) {
                   <label htmlFor="song-notes" >Notes</label>
                   <textarea disabled={disableForm} value={notes} onChange={handleNotesChange}></textarea>
                 </NotesField>
+                {allSongs &&
+                  <SetsField>
+                    <legend>Sets</legend>
+                    <ul>
+                      {setArray.map((set, idx) => {
+                        return (
+                          <SetsCheckbox key={`${set[2]}`}>
+                            <input id={`${set[2]}`} value={set[0]} checked={set[1]} onChange={handleCheckboxChange} type="checkbox"></input>
+                            <label htmlFor={`${set[2]}`} >{capitalize(set[0])}</label>
+                          </SetsCheckbox>
+                        )
+                      })}
+                    </ul>
+                  </SetsField>
+                }
                 <InputGrouping width={"80%"}>
                   <AddButton onClick={handleCancel} >Cancel</AddButton>
                   <AddButton disabled={disableForm} onClick={handleAdd}>Add Song</AddButton>

@@ -341,6 +341,11 @@ function Song(props) {
     setShowDeleteSong(true);
   }
 
+  Object.keys(song.sets).map((setId) => {
+    console.log(setNames, 'setNames');
+    console.log(setId, 'setId');
+  });
+
   return (
     <>
       <Path heading={capitalize(allSongs[params.songId].title)} pathType={'Song'} />

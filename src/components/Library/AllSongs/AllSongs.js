@@ -13,8 +13,8 @@ import AddMultiple from '../../AddMultiple/AddMultiple';
 function AllSongs() {
 
   const context = useContext(SubContext);
-  const { userDoc, loading } = context;
-  const { songs: allSongs } = userDoc;
+  const { userDoc, loading, user } = context;
+  const { songs: allSongs, songNames, setNames } = userDoc;
 
   const [state, dispatch] = useSongSort();
   const { songsArray, sortedBy } = state;
@@ -69,7 +69,7 @@ function AllSongs() {
           })}
         </ul>
       </AllSongsStyled>
-      {showAddSong && <AddSong />}
+      {showAddSong && <AddSong user={user} setShowAddSong={setShowAddSong} songNames={songNames} allSongs setNames={setNames} />}
       {showAddMultiple && <AddMultiple />}
     </>
   )

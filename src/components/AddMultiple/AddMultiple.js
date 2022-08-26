@@ -104,7 +104,7 @@ function AddMultiple(props) {
       allOldSongs.forEach((songName) => {
         const songId = songNames[songName];
         const oldSongObj = allSongs[songId];
-        oldSongObj["sets"][set.id] = set.setName;
+        oldSongObj["sets"][set.id] = null;
         oldSongsObj[`songs.${songId}`] = oldSongObj;
 
         if (!set.allSongs.hasOwnProperty(songId)) {
