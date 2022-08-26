@@ -7,6 +7,27 @@ export const AddMultipleStyled = styled.form`
   align-items: center;
   justify-content: space-between;
 
+  ${({ allSongs }) => {
+    if (allSongs) {
+      return `
+        display: block;
+        padding-bottom: 2rem;
+
+        >legend {
+          text-align: end;
+        }
+
+        >textarea, >fieldset {
+          margin-top: 2rem;
+        }
+
+        >fieldset {
+          margin-bottom: 1.5rem;
+        }
+      `
+    }
+  }}
+
   legend {
     font-weight: bold;
     font-size: 1.3rem;
@@ -45,6 +66,13 @@ export const AddMultipleButtonsStyled = styled.div`
   justify-content: space-evenly;
   width: 80%;
   margin: 0 auto;
+  ${({ allSongs }) => {
+    if (allSongs) {
+      return `
+        padding-bottom: 2rem;
+      `
+    }
+  }}
 `
 
 export const TitleErrorsStyled = styled.div`
@@ -78,4 +106,50 @@ export const TitleErrorsStyled = styled.div`
     margin-bottom: 2rem;
   }
 `
+
+export const SetsField = styled.fieldset`
+  width: 85%;
+  border: none;
+  position: relative;
+  height: min-content;
+  display: block;
+  position: static;
+
+  legend {
+    font-weight: bold;
+    font-size: 1.6rem;
+  }
+
+  li {
+    font-size: 1.7rem;
+  }
+
+  ul {
+    padding-left: 15px;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+
+    li:not(:last-child) {
+      margin-bottom: .5rem;
+    }
+  }
+`
+
+export const SetsCheckbox = styled.li`
+  list-style: none;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+
+  label {
+    font-size: 1.5rem;
+    font-weight: normal;
+  }
+
+  input {
+    height: 1.5rem;
+    margin-right: 8px;
+  }
+`
+
 

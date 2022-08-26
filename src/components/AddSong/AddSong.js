@@ -167,7 +167,6 @@ function AddSong(props) {
       setKnowledge('know');
     }
     catch (error) {
-      console.log(error);
       handleNetworkError(error.message);
     }
 

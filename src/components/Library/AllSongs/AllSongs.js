@@ -69,8 +69,12 @@ function AllSongs() {
           })}
         </ul>
       </AllSongsStyled>
-      {showAddSong && <AddSong user={user} setShowAddSong={setShowAddSong} songNames={songNames} allSongs setNames={setNames} />}
-      {showAddMultiple && <AddMultiple />}
+      {showAddSong &&
+        <AddSong user={user} setShowAddSong={setShowAddSong} songNames={songNames} allSongs setNames={setNames} />
+      }
+      {showAddMultiple &&
+        <AddMultiple calling={'allSongs'} setShowAddMultiple={setShowAddMultiple} songNames={songNames} user={user} allSongs={allSongs} setNames={setNames} />
+      }
     </>
   )
 }
