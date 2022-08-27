@@ -8,15 +8,16 @@ export const HeaderStyled = styled.header`
   left: 0;
   top: 0;
   width: 100vw;
+  height: 87.5px;
 
   h1 {
     font-family: ${fonts.appFont};
     border-bottom: 1px solid grey;
     text-align: center;
-    font-size: 4rem;
-    padding: 1.5rem 0;
+    font-size: 40px;
+    padding: 15px 0;
     background-color: #eee;
-    box-shadow: 0 .5rem 1.5rem rgba(70, 70, 70, 0.2);
+    box-shadow: 0 5px 15px rgba(70, 70, 70, 0.2);
   }
 `
 

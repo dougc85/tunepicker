@@ -28,6 +28,7 @@ function App() {
       <GlobalStyles />
       <Routes>
         <Route path="/email_auth" element={<EmailAuth />} />
+        <Route path="/help/quickstart" element={<QuickStart />} />
         <Route path="/" element={<Header />}>
           <Route index element={<FrontPage />} />
           <Route path="/controller" element={<PickController />} />
@@ -39,7 +40,6 @@ function App() {
           <Route path="/tunesiwanttolearn" element={<TunesIWantToLearn />} />
           <Route path="/help" element={<Help heading={"Help Center"} />} />
           <Route path="/help/docs" element={<Docs />} />
-          <Route path="/help/quickstart" element={<QuickStart />} />
           <Route path="/settings" element={<Settings />} />
           <Route path="/contact" element={<Contact />} />
         </Route>

@@ -5,9 +5,10 @@ import MenuButton from "./MenuButton/MenuButton";
 import Nav from './Nav/Nav';
 import { HeaderStyled, SiteContent } from "./Header.styled";
 
-function Header() {
+function Header(props) {
 
   const [showNav, setShowNav] = useState(false);
+  const { quick } = props;
 
   function toggleNav() {
     setShowNav((current) => !current);
@@ -21,7 +22,7 @@ function Header() {
         <MenuButton toggleNav={toggleNav} />
       </HeaderStyled>
       <SiteContent>
-        <Outlet />
+        {quick ? props.children : <Outlet />}
       </SiteContent>
 
     </>

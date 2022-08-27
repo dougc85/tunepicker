@@ -1,10 +1,11 @@
 import React from 'react';
 import { HelpStyled } from './Help.styled';
 import { Link } from 'react-router-dom';
+import QuickArrow from '../generics/QuickArrow.styled';
 
 function Help(props) {
 
-  const { heading } = props;
+  const { heading, quick } = props;
 
   return (
     <HelpStyled>
@@ -24,6 +25,7 @@ function Help(props) {
 
       <Link to='/help/quickstart'>Quick Start</Link>
       <Link to='/help/docs'>Docs</Link>
+
     </HelpStyled>
   )
 }

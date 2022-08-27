@@ -12,6 +12,7 @@ export const HelpStyled = styled.div`
   }
 
   >ul {
+    position: relative;
     list-style-type: none;
 
     li:not(:last-child) {
