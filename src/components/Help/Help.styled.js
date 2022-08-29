@@ -28,10 +28,10 @@ export const HelpStyled = styled.div`
       text-align: center;
       background-color: #decaff;
       color: black;
-      font-size: 4rem;
-      padding: 2rem;
+      font-size: 2.5rem;
+      padding: 1rem;
       border-radius: 10px;
-      width: 70%;
+      width: 50%;
       margin: 3rem auto;
       margin-top: 3rem;
     }

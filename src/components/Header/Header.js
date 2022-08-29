@@ -8,7 +8,7 @@ import { HeaderStyled, SiteContent } from "./Header.styled";
 function Header(props) {
 
   const [showNav, setShowNav] = useState(false);
-  const { quick } = props;
+  const { quick, quickForward, navAccess, navMenuArrow } = props;
 
   function toggleNav() {
     setShowNav((current) => !current);
@@ -19,11 +19,12 @@ function Header(props) {
       <HeaderStyled>
         <h1>tunePicker</h1>
         {showNav && <Nav toggleNav={toggleNav} />}
-        <MenuButton toggleNav={toggleNav} />
+        <MenuButton navAccess={navAccess} toggleNav={toggleNav} quickForward={quickForward} navMenuArrow={navMenuArrow} />
       </HeaderStyled>
       <SiteContent>
         {quick ? props.children : <Outlet />}
       </SiteContent>
+
 
     </>
   )

@@ -8,7 +8,6 @@ export const HeaderStyled = styled.header`
   left: 0;
   top: 0;
   width: 100vw;
-  height: 87.5px;
 
   h1 {
     font-family: ${fonts.appFont};

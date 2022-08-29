@@ -29,7 +29,7 @@ function App() {
       <Routes>
         <Route path="/email_auth" element={<EmailAuth />} />
         <Route path="/help/quickstart" element={<QuickStart />} />
-        <Route path="/" element={<Header />}>
+        <Route path="/" element={<Header navAccess={true} />}>
           <Route index element={<FrontPage />} />
           <Route path="/controller" element={<PickController />} />
           <Route path="/library" element={<Library />} />

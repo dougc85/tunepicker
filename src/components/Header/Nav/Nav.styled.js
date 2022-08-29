@@ -37,7 +37,7 @@ export const NavStyled = styled.nav`
       border-top: 1px solid rgb(190, 190, 190);
       width: 70%;
       position: absolute;
-      bottom: -.8rem;
+      bottom: -1rem;
       left: 50%;
       transform: translateX(-50%);
     }

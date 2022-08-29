@@ -1,11 +1,10 @@
 import React from 'react';
 import { HelpStyled } from './Help.styled';
 import { Link } from 'react-router-dom';
-import QuickArrow from '../generics/QuickArrow.styled';
 
 function Help(props) {
 
-  const { heading, quick } = props;
+  const { heading } = props;
 
   return (
     <HelpStyled>
