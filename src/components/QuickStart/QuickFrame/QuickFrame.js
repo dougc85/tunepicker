@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { QuickFrameStyled, MetaStyles } from './QuickFrame.styled';
 import { Link } from 'react-router-dom';
 import Header from '../../Header/Header';
 
 function QuickFrame(props) {
 
-  const { children, step, navAccess, navMenuArrow } = props;
+  const { children, step, navAccess, navMenuArrow, libraryArrow, quickForward, singleNavAllowed } = props;
 
   return (
     <MetaStyles>
@@ -13,6 +13,9 @@ function QuickFrame(props) {
         quick={step}
         navAccess={navAccess}
         navMenuArrow={navMenuArrow}
+        quickForward={quickForward}
+        singleNavAllowed={singleNavAllowed}
+        libraryArrow={libraryArrow}
       >
         <QuickFrameStyled>
           <Link to="/help">

@@ -9,17 +9,40 @@ export const NavStyled = styled.nav`
   width: 230px;
   transform: translateY(100%);
   box-shadow: -2px 10px 10px rgba(0,0,0,.2);
-  padding: 1.5rem 0;
+  padding: 15px 0;
   z-index: 10;
 
   ul {
     list-style: none;
-    font-size: 2rem;
+    font-size: 20px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     height: 100%;
     box-sizing: content-box;
+
+    ${({ singleNavAllowed }) => {
+    if (singleNavAllowed) {
+      console.log(singleNavAllowed, 'nav Allowed');
+      return (
+        `
+            >li {
+              pointer-events: none;
+            }
+            >li >a {
+              pointer-events: none;
+            }
+            li:nth-child(${singleNavAllowed}) {
+              pointer-events: auto;
+
+              >a {
+                pointer-events: none;
+              }
+            }
+          `
+      )
+    }
+  }}
 
     li {
       position: relative;
@@ -37,7 +60,7 @@ export const NavStyled = styled.nav`
       border-top: 1px solid rgb(190, 190, 190);
       width: 70%;
       position: absolute;
-      bottom: -1rem;
+      bottom: -10px;
       left: 50%;
       transform: translateX(-50%);
     }
