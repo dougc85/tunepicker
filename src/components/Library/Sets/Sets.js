@@ -7,15 +7,20 @@ import Path from '../Path/Path';
 import Loading from '../../Loading/Loading';
 import capitalize from '../../../helperFunctions/capitalize';
 
-function Sets() {
+function Sets(props) {
 
   const { userDoc, loading } = useContext(SubContext);
   const { setNames } = userDoc;
+
+  const { addArrow, quickForward, quick } = props;
 
   const navigate = useNavigate();
   const [showAddSet, setShowAddSet] = useState(false);
 
   function handleAddButton() {
+    if (quick === 4) {
+      quickForward();
+    }
     setShowAddSet(true);
   }
 
@@ -31,12 +36,15 @@ function Sets() {
 
   return (
     <>
-      <Path heading="Sets" pathType="Sets" />
+      <Path heading="Sets" pathType="Sets" disable={quickForward ? true : false} />
       <SetsHeader>
         <h2>Sets</h2>
-        <button onClick={handleAddButton}>Add a Set</button>
+        <button onClick={handleAddButton}>
+          Add a Set
+          {addArrow ? addArrow : null}
+        </button>
       </SetsHeader>
-      <SetsStyled>
+      <SetsStyled disable={(quick === 4) ? true : false}>
         {Object.keys(setNames).sort((id1, id2) => {
           if (setNames[id1] < setNames[id2]) {
             return -1;

@@ -17,6 +17,14 @@ export const SetsStyled = styled.ul`
       background-color: ${lighter};
     }
   }
+
+  ${({ disable }) => {
+    if (disable) {
+      return `
+        pointer-events: none;
+      `
+    }
+  }}
 `;
 
 export const SetsHeader = styled.div`
@@ -42,5 +50,6 @@ export const SetsHeader = styled.div`
     border-radius: 10px;
     display: block;
     margin-right: 2rem;
+    position: relative;
   }
 `

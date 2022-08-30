@@ -4,6 +4,7 @@ import QuickArrow from '../generics/QuickArrow.styled';
 import QuickFrame from './QuickFrame/QuickFrame';
 import { navItems } from '../../data/navItems';
 import Library from '../Library/Library';
+import Sets from '../Library/Sets/Sets';
 
 function QuickStart() {
 
@@ -91,6 +92,42 @@ function QuickStart() {
       <Library
         setsArrow={arrow}
         quickForward={quickForward}
+      />
+    )
+  }
+
+  if (step === 4) {
+    const textObject = {
+      text: "Let's make a new set of songs to use on our next gig",
+      bottom: '-80',
+      left: '-60',
+    }
+    const arrow = (
+      <QuickArrow rotation="125" height="150" top="0" left="-100" textObject={textObject} />
+    )
+    nextStep = (
+      <Sets
+        addArrow={arrow}
+        quickForward={quickForward}
+        quick={step}
+      />
+    )
+  }
+
+  if (step === 5) {
+    const textObject = {
+      text: "Bloop",
+      bottom: '-80',
+      left: '-60',
+    }
+    const arrow = (
+      <QuickArrow rotation="125" height="150" top="0" left="-100" textObject={textObject} />
+    )
+    nextStep = (
+      <Sets
+        addArrow={arrow}
+        quickForward={quickForward}
+        quick={step}
       />
     )
   }
