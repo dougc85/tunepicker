@@ -3,12 +3,11 @@ import { StepOne } from './QuickStart.styled';
 import QuickArrow from '../generics/QuickArrow.styled';
 import QuickFrame from './QuickFrame/QuickFrame';
 import { navItems } from '../../data/navItems';
+import Library from '../Library/Library';
 
 function QuickStart() {
 
   const [step, setStep] = useState(1);
-
-  console.log(step, 'step');
 
   let nextStep;
 
@@ -76,6 +75,23 @@ function QuickStart() {
       >
         {nextStep}
       </QuickFrame>
+    )
+  }
+
+  if (step === 3) {
+    const textObject = {
+      text: "Most of the time, we'll be using the 'Sets' folder, so let's go there",
+      bottom: '-100',
+      left: '-20',
+    }
+    const arrow = (
+      <QuickArrow rotation="90" height="200" bottom="-90" left="70" textObject={textObject} />
+    )
+    nextStep = (
+      <Library
+        setsArrow={arrow}
+        quickForward={quickForward}
+      />
     )
   }
 

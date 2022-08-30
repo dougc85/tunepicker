@@ -9,6 +9,7 @@ const QuickArrowStyled = styled.div`
   right: ${({ right }) => right ? (right + 'px') : 'auto'};
   bottom: ${({ bottom }) => bottom ? (bottom + 'px') : 'auto'};
   z-index: 1000;
+  pointer-events: none;
   ${({ devBorder }) => (devBorder ? 'border: 1px solid green;' : 'border: none;')}
 
   >svg {
@@ -29,7 +30,6 @@ const QuickArrowStyled = styled.div`
     border: 3px solid red;
     ${({ textObject }) => {
     if (textObject) {
-      console.log(textObject, 'text');
       return `
           top: ${textObject.top ? textObject.top + 'px' : 'auto'};
           bottom: ${textObject.bottom ? textObject.bottom + 'px' : 'auto'};

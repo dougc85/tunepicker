@@ -5,6 +5,13 @@ export const PathStyled = styled.div`
   align-items: center;
   padding: 1rem;
   font-size: 1.7rem;
+  ${({ disable }) => {
+    if (disable) {
+      return `
+        pointer-events: none;
+      `
+    }
+  }}
 
   p {
     font-weight: bold;

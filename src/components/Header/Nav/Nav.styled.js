@@ -23,7 +23,6 @@ export const NavStyled = styled.nav`
 
     ${({ singleNavAllowed }) => {
     if (singleNavAllowed) {
-      console.log(singleNavAllowed, 'nav Allowed');
       return (
         `
             >li {
