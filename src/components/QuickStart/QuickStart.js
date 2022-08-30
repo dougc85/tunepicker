@@ -86,8 +86,9 @@ function QuickStart() {
       left: '-20',
     }
     const arrow = (
-      <QuickArrow rotation="90" height="200" bottom="-90" left="70" textObject={textObject} />
+      <QuickArrow rotation="90" height="200" bottom="-90" center textObject={textObject} />
     )
+
     nextStep = (
       <Library
         setsArrow={arrow}
@@ -116,16 +117,16 @@ function QuickStart() {
 
   if (step === 5) {
     const textObject = {
-      text: "Bloop",
-      bottom: '-80',
+      text: "I use the app to play through jazz tunes, so I have a set called 'Jazz Standards'. Title your set something useful to you and click 'Add'.",
+      top: '-160',
       left: '-60',
     }
     const arrow = (
-      <QuickArrow rotation="125" height="150" top="0" left="-100" textObject={textObject} />
+      <QuickArrow rotation="-90" height="100" top="-90" left="0" center textObject={textObject} />
     )
     nextStep = (
       <Sets
-        addArrow={arrow}
+        titleArrow={arrow}
         quickForward={quickForward}
         quick={step}
       />

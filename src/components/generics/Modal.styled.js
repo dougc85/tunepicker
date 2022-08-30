@@ -24,7 +24,7 @@ const Content = styled.div`
   padding: 1.5rem;
   box-sizing: border-box;
   z-index: 102;
-  overflow: scroll;
+  overflow: ${({ allowOverflow }) => (allowOverflow ? 'visible' : 'scroll')};
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -33,7 +33,7 @@ const Content = styled.div`
 
 function Modal(props) {
 
-  const { handleOutsideClick, contentHeight, flex } = props;
+  const { handleOutsideClick, contentHeight, flex, allowOverflow } = props;
 
   useEffect(() => {
     document.body.style.overflow = 'hidden';
@@ -54,7 +54,7 @@ function Modal(props) {
         document.getElementById('screen-root')
       )}
       {ReactDOM.createPortal(
-        <Content contentHeight={contentHeight} flex={flex}>
+        <Content contentHeight={contentHeight} flex={flex} allowOverflow={allowOverflow}>
           {props.children}
         </Content>,
         document.getElementById('overlay-root')

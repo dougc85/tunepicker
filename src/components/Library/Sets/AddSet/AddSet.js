@@ -17,7 +17,7 @@ function AddSet(props) {
 
   const { setNames } = userDoc;
 
-  const { setShowAddSet } = props;
+  const { setShowAddSet, titleArrow, quickForward } = props;
   const [disableForm, setDisableForm] = useState(false);
   const [title, handleTitleChange, resetTitle] = useFormInput('');
   const [showError, setShowError] = useState(false);
@@ -28,6 +28,9 @@ function AddSet(props) {
 
   function handleCancel(e) {
     e.preventDefault();
+    if (titleArrow) {
+      return;
+    }
     resetTitle();
     setShowAddSet(false);
   }
@@ -82,23 +85,29 @@ function AddSet(props) {
       resetTitle();
       setLoading(false);
       setShowAddSet(false);
+      quickForward();
     }
   }
 
   return (
-    <Modal handleOutsideClick={handleCancel} contentHeight="15rem">
+    <Modal
+      handleOutsideClick={handleCancel}
+      contentHeight="15rem"
+      allowOverflow={titleArrow ? true : false}
+    >
       {loading ? <Loading size={2} /> :
         <AddSetStyled>
           <legend>
             Add Set
           </legend>
           <InputGrouping width="100%">
+            {titleArrow ? titleArrow : null}
             <label htmlFor="set-title">Title:</label>
             <TitleInput required onChange={handleTitleChangeAndDuplicates} value={title} id="set-title" type="text" name="set-title" autoComplete="off"></TitleInput>
             {showError && <ErrorMessage>{errorMessage}</ErrorMessage>}
           </InputGrouping>
           <InputGrouping width="80%">
-            <AddButton onClick={handleCancel}>Cancel</AddButton>
+            <AddButton onClick={handleCancel} disable={titleArrow ? true : false}>Cancel</AddButton>
             <AddButton disabled={disableForm} disable={disableForm} onClick={handleAdd}>Add</AddButton>
           </InputGrouping>
         </AddSetStyled>

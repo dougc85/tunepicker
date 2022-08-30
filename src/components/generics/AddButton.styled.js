@@ -13,6 +13,14 @@ const AddButton = styled.button`
     background-color: black;
     color: white;
   }
+
+  ${({ disable }) => {
+    if (disable) {
+      return `
+        pointer-events: none;
+      `
+    }
+  }}
 `
 
 export default AddButton;

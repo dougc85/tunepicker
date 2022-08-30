@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 
 const QuickArrowStyled = styled.div`
-  height: ${({ height }) => height ? (height + 'px') : (140 + 'px')};
+  height: ${({ height }) => height + 'px'};
   position: absolute;
   top: ${({ top }) => top ? (top + 'px') : 'auto'};
   left: ${({ left }) => left ? (left + 'px') : 'auto'};
@@ -10,10 +10,19 @@ const QuickArrowStyled = styled.div`
   bottom: ${({ bottom }) => bottom ? (bottom + 'px') : 'auto'};
   z-index: 1000;
   pointer-events: none;
+  ${({ center, height }) => {
+    console.log(height, "height");
+    if (center) {
+      return `
+        left: calc(50% - ${height}px/2);
+      `
+    }
+  }}
+  
   ${({ devBorder }) => (devBorder ? 'border: 1px solid green;' : 'border: none;')}
 
   >svg {
-    height: ${({ height }) => height ? (height + 'px') : (140 + 'px')};
+    height: ${({ height }) => height + 'px'};
     transform: rotate(${({ rotation }) => rotation ? (rotation + 'deg') : (0 + 'deg')});
     color: red;
   }
@@ -43,11 +52,11 @@ const QuickArrowStyled = styled.div`
 
 function QuickArrow(props) {
 
-  const { rotation, height, top, left, right, bottom, textObject, devBorder } = props;
+  const { rotation, height, top, left, right, bottom, textObject, devBorder, center } = props;
 
   return (
     <QuickArrowStyled
-      height={height}
+      height={height || 140}
       top={top}
       left={left}
       right={right}
@@ -55,6 +64,7 @@ function QuickArrow(props) {
       rotation={rotation}
       devBorder={devBorder}
       textObject={textObject}
+      center={center}
     >
 
       <svg viewBox="0 0 24 24" >

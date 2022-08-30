@@ -12,7 +12,7 @@ function Sets(props) {
   const { userDoc, loading } = useContext(SubContext);
   const { setNames } = userDoc;
 
-  const { addArrow, quickForward, quick } = props;
+  const { addArrow, titleArrow, quickForward, quick } = props;
 
   const navigate = useNavigate();
   const [showAddSet, setShowAddSet] = useState(false);
@@ -59,7 +59,7 @@ function Sets(props) {
         }
         )}
       </SetsStyled>
-      {showAddSet && <AddSet setShowAddSet={setShowAddSet} />}
+      {showAddSet && <AddSet setShowAddSet={setShowAddSet} titleArrow={titleArrow} quickForward={quickForward} />}
     </>
   )
 }
