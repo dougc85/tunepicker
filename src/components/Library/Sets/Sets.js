@@ -1,7 +1,7 @@
 import { React, useState, useContext } from 'react';
 import SubContext from '../../../context/sub-context';
 import { useNavigate } from 'react-router-dom';
-import { SetsStyled, SetsHeader } from './Sets.styled';
+import { SetStyled, SetsHeader } from './Sets.styled';
 import AddSet from './AddSet/AddSet';
 import Path from '../Path/Path';
 import Loading from '../../Loading/Loading';
@@ -12,12 +12,15 @@ function Sets(props) {
   const { userDoc, loading } = useContext(SubContext);
   const { setNames } = userDoc;
 
-  const { addArrow, titleArrow, quickForward, quick } = props;
+  const { addArrow, titleArrow, setArrow, quickForward, quick, rememberSetName, createdSetName, rememberSetId } = props;
 
   const navigate = useNavigate();
   const [showAddSet, setShowAddSet] = useState(false);
 
   function handleAddButton() {
+    if (quick === 6) {
+      return;
+    }
     if (quick === 4) {
       quickForward();
     }
@@ -44,22 +47,43 @@ function Sets(props) {
           {addArrow ? addArrow : null}
         </button>
       </SetsHeader>
-      <SetsStyled disable={(quick === 4) ? true : false}>
+      <ul>
         {Object.keys(setNames).sort((id1, id2) => {
           if (setNames[id1] < setNames[id2]) {
             return -1;
           }
           return 1;
         }).map((setId) => {
-          return (
-            <li onClick={() => { handleClick(setId) }} key={setId}>
-              {capitalize(setNames[setId])}
-            </li>
-          )
+          if (setNames[setId] === createdSetName) {
+            return (
+              <SetStyled
+                onClick={() => {
+                  rememberSetId(setId);
+                  quickForward();
+                }}
+                key={setId}
+              >
+                {capitalize(setNames[setId])}
+                {setArrow}
+              </SetStyled>
+            )
+          } else {
+            return (
+              <SetStyled onClick={() => { handleClick(setId) }} key={setId} disable={(quick === 4 || quick === 6) ? true : false}>
+                {capitalize(setNames[setId])}
+              </SetStyled>
+            )
+          }
         }
         )}
-      </SetsStyled>
-      {showAddSet && <AddSet setShowAddSet={setShowAddSet} titleArrow={titleArrow} quickForward={quickForward} />}
+      </ul>
+      {showAddSet &&
+        <AddSet
+          setShowAddSet={setShowAddSet}
+          titleArrow={titleArrow}
+          quickForward={quickForward}
+          rememberSetName={rememberSetName}
+        />}
     </>
   )
 }

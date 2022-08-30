@@ -9,6 +9,8 @@ import Sets from '../Library/Sets/Sets';
 function QuickStart() {
 
   const [step, setStep] = useState(1);
+  const [createdSetName, rememberSetName] = useState(undefined);
+  const [createdSetId, rememberSetId] = useState(undefined);
 
   let nextStep;
 
@@ -129,6 +131,27 @@ function QuickStart() {
         titleArrow={arrow}
         quickForward={quickForward}
         quick={step}
+        rememberSetName={rememberSetName}
+      />
+    )
+  }
+
+  if (step === 6) {
+    const textObject = {
+      text: "Now let's click on the set we just created",
+      top: '100',
+      left: '-60',
+    }
+    const arrow = (
+      <QuickArrow rotation="90" height="100" bottom="-70" left="0" center textObject={textObject} />
+    )
+    nextStep = (
+      <Sets
+        setArrow={arrow}
+        quickForward={quickForward}
+        quick={step}
+        createdSetName={createdSetName}
+        rememberSetId={rememberSetId}
       />
     )
   }

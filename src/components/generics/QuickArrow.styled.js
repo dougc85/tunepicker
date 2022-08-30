@@ -11,7 +11,6 @@ const QuickArrowStyled = styled.div`
   z-index: 1000;
   pointer-events: none;
   ${({ center, height }) => {
-    console.log(height, "height");
     if (center) {
       return `
         left: calc(50% - ${height}px/2);

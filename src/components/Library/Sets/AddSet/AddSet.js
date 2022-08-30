@@ -17,7 +17,8 @@ function AddSet(props) {
 
   const { setNames } = userDoc;
 
-  const { setShowAddSet, titleArrow, quickForward } = props;
+  const { setShowAddSet, titleArrow, quickForward, rememberSetName } = props;
+
   const [disableForm, setDisableForm] = useState(false);
   const [title, handleTitleChange, resetTitle] = useFormInput('');
   const [showError, setShowError] = useState(false);
@@ -85,6 +86,7 @@ function AddSet(props) {
       resetTitle();
       setLoading(false);
       setShowAddSet(false);
+      rememberSetName(titleLower);
       quickForward();
     }
   }

@@ -3,19 +3,19 @@ import { libraryColor } from '../../../partials/variables.styled';
 
 const { light, lighter } = libraryColor;
 
-export const SetsStyled = styled.ul`
-  li {
-    padding: 1rem;
-    font-size: 2rem;
-    text-align: start;
+export const SetStyled = styled.li`
 
-    &:nth-child(2n-1) {
-      background-color: ${light};
-    }
+  padding: 1rem;
+  font-size: 2rem;
+  text-align: start;
+  position: relative;
 
-    &:nth-child(2n) {
-      background-color: ${lighter};
-    }
+  &:nth-child(2n-1) {
+    background-color: ${light};
+  }
+
+  &:nth-child(2n) {
+    background-color: ${lighter};
   }
 
   ${({ disable }) => {
