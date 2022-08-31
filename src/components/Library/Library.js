@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import Path from './Path/Path';
-import { LibraryStyled } from './Library.styled';
+import { LibraryStyled, QuickStartSets } from './Library.styled';
 
 function Library(props) {
 
@@ -11,10 +11,10 @@ function Library(props) {
     <LibraryStyled disableAllSongs={quickForward ? true : false}>
       <Path heading="Library" pathType="Library" disable={quickForward ? true : false} />
       {quickForward ? (
-        <p onClick={quickForward}>
+        <QuickStartSets onClick={quickForward}>
           Sets
           {setsArrow ? setsArrow : null}
-        </p>
+        </QuickStartSets>
       ) : (
         <Link to={'/library/sets'}>
           Sets

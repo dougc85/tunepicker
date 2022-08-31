@@ -1,13 +1,38 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import styled from 'styled-components';
 
 const QuickArrowStyled = styled.div`
   height: ${({ height }) => height + 'px'};
   position: absolute;
-  top: ${({ top }) => top ? (top + 'px') : 'auto'};
-  left: ${({ left }) => left ? (left + 'px') : 'auto'};
-  right: ${({ right }) => right ? (right + 'px') : 'auto'};
-  bottom: ${({ bottom }) => bottom ? (bottom + 'px') : 'auto'};
+  top: ${({ top }) => {
+    if (top) {
+      return top + 'px';
+    } else {
+      return 'auto';
+    }
+  }};
+  bottom: ${({ bottom }) => {
+    if (bottom) {
+      return bottom + 'px';
+    } else {
+      return 'auto';
+    }
+  }};
+  left: ${({ left }) => {
+    if (left) {
+      return left + 'px';
+    } else {
+      return 'auto';
+    }
+  }};
+  right: ${({ right }) => {
+    if (right) {
+      return right + 'px';
+    } else {
+      return 'auto';
+    }
+  }};
+
   z-index: 1000;
   pointer-events: none;
   ${({ center, height }) => {
@@ -22,11 +47,12 @@ const QuickArrowStyled = styled.div`
 
   >svg {
     height: ${({ height }) => height + 'px'};
-    transform: rotate(${({ rotation }) => rotation ? (rotation + 'deg') : (0 + 'deg')});
+    transform: rotate(${({ rotation }) => rotation + 'deg'});
     color: red;
   }
 
   >p {
+    display: block;
     width: max-content;
     max-width: 180px;
     position: absolute;
@@ -60,7 +86,7 @@ function QuickArrow(props) {
       left={left}
       right={right}
       bottom={bottom}
-      rotation={rotation}
+      rotation={rotation || 0}
       devBorder={devBorder}
       textObject={textObject}
       center={center}
@@ -70,7 +96,7 @@ function QuickArrow(props) {
         <path fill="currentColor" d="M10.05 16.94V12.94H18.97L19 10.93H10.05V6.94L5.05 11.94Z" />
       </svg>
       {textObject && (
-        <p textObject={textObject}>
+        <p>
           {textObject ? textObject.text : null}
         </p>
       )}

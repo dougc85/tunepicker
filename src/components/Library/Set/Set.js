@@ -23,6 +23,7 @@ import AddFromLibrary from './AddFromLibrary/AddFromLibrary';
 function Set(props) {
 
   const { user, userDoc, loading, handleNetworkError } = useContext(SubContext);
+  const { quickStartId, menuArrow, quickForward, quick } = props;
 
   const { setNames, songNames, songs: allSongs, pickerSet: pickerSetId } = userDoc;
 
@@ -89,13 +90,16 @@ function Set(props) {
     let unsubscribeSetSnapshot;
 
     if (user) {
+
+      const firstRenderSetId = quickStartId ? quickStartId : params.setId;
+
       try {
-        unsubscribeSetSnapshot = onSnapshot(doc(db, 'users', user.uid, 'sets', params.setId), (doc) => {
+        unsubscribeSetSnapshot = onSnapshot(doc(db, 'users', user.uid, 'sets', firstRenderSetId), (doc) => {
           const docData = doc.data();
           if (docData) {
             setSet({
               ...doc.data(),
-              id: params.setId,
+              id: firstRenderSetId,
             });
           } else {
             setShowNotFound(true);
@@ -112,7 +116,7 @@ function Set(props) {
         unsubscribeSetSnapshot();
       }
     }
-  }, [user, params.setId])
+  }, [user, params.setId, quickStartId])
 
   useEffect(() => {
     if (set && allSongs) {
@@ -176,13 +180,17 @@ function Set(props) {
     <>
       {renderSet && (
         <>
-          <Path heading={capitalize(set.setName)} pathType="Set" />
+          <Path heading={capitalize(set.setName)} pathType="Set" disable={quickForward ? true : false} />
           <SetStyled>
             <SetHeader>
               <h2>{capitalize(set.setName)}</h2>
               <LibraryMenu
                 items={libraryMenuItems}
-              />
+                quickForward={quickForward}
+                quick={quick}
+              >
+                {menuArrow ? menuArrow : null}
+              </LibraryMenu>
             </SetHeader>
             {
               (set.id === pickerSetId) ? (
@@ -198,7 +206,13 @@ function Set(props) {
             }
             <SongHeader>
               <h3>Songs</h3>
-              <SortBy dispatch={dispatch} sortedBy={sortedBy} songList={setSongsObject} marginTop={"-22px"} />
+              <SortBy
+                dispatch={dispatch}
+                sortedBy={sortedBy}
+                songList={setSongsObject}
+                marginTop={"-22px"}
+                disable={quickForward ? true : false}
+              />
 
             </SongHeader>
             <ul>
@@ -216,7 +230,8 @@ function Set(props) {
           {showEditSetName && <EditSetName setShowEditSetName={setShowEditSetName} oldTitle={set.setName} setNames={setNames} setId={set.id} user={user} />}
           {showAddFromLibrary && <AddFromLibrary setShowAddFromLibrary={setShowAddFromLibrary} set={set} user={user} userDoc={userDoc} />}
         </>
-      )}
+      )
+      }
       <Routes>
         <Route path=":songId" element={<Song />} />
       </Routes>

@@ -28,7 +28,7 @@ function App() {
       <GlobalStyles />
       <Routes>
         <Route path="/email_auth" element={<EmailAuth />} />
-        <Route path="/help/quickstart" element={<QuickStart />} />
+        <Route path="/help/quickstart/*" element={<QuickStart />} />
         <Route path="/" element={<Header navAccess={true} />}>
           <Route index element={<FrontPage />} />
           <Route path="/controller" element={<PickController />} />

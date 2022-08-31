@@ -1,6 +1,26 @@
 import styled from "styled-components";
 import { libraryColor } from "../../partials/variables.styled";
 
+const anchorStyles = `
+  display: block;
+  height: 40%;
+  background-color: ${libraryColor.base};
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 6rem;
+  margin: 1rem 2rem;
+  border-radius: 10px;
+  flex-grow: 1;
+  position: relative;
+  color: white;
+
+  &:link, &:visited {
+    color: white;
+    text-decoration: none;
+  }
+`
+
 export const LibraryStyled = styled.div`
   height: calc(${window.innerHeight}px - 95px);
   display: flex;
@@ -16,23 +36,11 @@ export const LibraryStyled = styled.div`
     }
   }}
   
-  >a, >p {
-    display: block;
-    height: 40%;
-    background-color: ${libraryColor.base};
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 6rem;
-    margin: 1rem 2rem;
-    border-radius: 10px;
-    flex-grow: 1;
-    position: relative;
-    color: white;
-
-    &:link, &:visited {
-      color: white;
-      text-decoration: none;
-    }
+  >a {
+    ${anchorStyles}
   }
+`
+
+export const QuickStartSets = styled.div`
+  ${anchorStyles}
 `

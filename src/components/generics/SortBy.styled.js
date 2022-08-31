@@ -38,7 +38,7 @@ const SortByStyled = styled.div`
 
 function SortBy(props) {
 
-  const { dispatch, sortedBy, songList, marginTop } = props;
+  const { dispatch, sortedBy, songList, marginTop, disable } = props;
 
   const sortOptions = [
     "Title - Ascending",
@@ -65,7 +65,7 @@ function SortBy(props) {
   return (
     <SortByStyled marginTop={marginTop}>
       <label htmlFor="sorting">Sort By:</label>
-      <select id="sorting" onChange={handleSelectChange} value={sortedBy}>
+      <select id="sorting" onChange={handleSelectChange} value={sortedBy} disabled={disable}>
         {sortOptions.map((key) => {
           return (
             <option value={key} key={key}>{key}</option>

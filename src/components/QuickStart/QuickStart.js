@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 import { StepOne } from './QuickStart.styled';
 import QuickArrow from '../generics/QuickArrow.styled';
+
 import QuickFrame from './QuickFrame/QuickFrame';
 import { navItems } from '../../data/navItems';
 import Library from '../Library/Library';
 import Sets from '../Library/Sets/Sets';
+import Set from '../Library/Set/Set';
 
 function QuickStart() {
 
@@ -152,6 +154,45 @@ function QuickStart() {
         quick={step}
         createdSetName={createdSetName}
         rememberSetId={rememberSetId}
+      />
+    )
+  }
+
+  if (step === 7) {
+    const text = "We need to add some songs, so let's open up this set's menu";
+    const textObject = (createdSetName.length < 9) ? {
+      text,
+      top: '80',
+      left: '-25',
+    } : (createdSetName.length < 15) ? {
+      text,
+      top: '80',
+      left: '-100',
+    } :
+      {
+        text,
+        top: '95',
+        left: '-130',
+      };
+
+    const top = (createdSetName.length < 9) ? "10" : (createdSetName.length < 15) ? "10" : "5";
+    const bottom = (createdSetName.length < 9) ? "auto" : (createdSetName.length < 15) ? "0" : "0";
+    const left = (createdSetName.length < 9) ? "-13" : (createdSetName.length < 15) ? "-35" : "-70";
+    const right = (createdSetName.length < 9) ? "auto" : (createdSetName.length < 15) ? "0" : "0";
+
+    const rotation = (createdSetName.length < 9) ? "65" : (createdSetName.length < 15) ? "100" : "120";
+
+    const height = createdSetName.length < 15 ? "80" : "110";
+
+    const arrow = (
+      <QuickArrow rotation={rotation} height={height} top={top} bottom={bottom} left={left} right={right} textObject={textObject} />
+    )
+    nextStep = (
+      <Set
+        menuArrow={arrow}
+        quickForward={quickForward}
+        quick={step}
+        quickStartId={createdSetId}
       />
     )
   }
