@@ -228,11 +228,10 @@ function Set(props) {
             </SongHeader>
             <ul>
               {songsArray.map((songObj) => {
-                if (quick === 13) {
+                if (quick === 13 || quick === 14) {
                   return (
                     <>
-                      <SongEntry song={songObj} sortByDateAdded={false} key={songObj.id} disable={true} />
-                      {tuneArrow}
+                      <SongEntry song={songObj} sortByDateAdded={false} key={songObj.id} disable={true} tuneArrow={tuneArrow} />
                     </>
                   )
                 }

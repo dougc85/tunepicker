@@ -5,7 +5,7 @@ import capitalize from '../../../helperFunctions/capitalize';
 
 function SongEntry(props) {
 
-  const { song, disable } = props;
+  const { song, tuneArrow, disable } = props;
   const { knowledge, title, id } = song;
   const navigate = useNavigate();
   const params = useParams();
@@ -30,6 +30,7 @@ function SongEntry(props) {
   return (
     <SongEntryStyled onClick={handleClick} style={{ backgroundColor: bgColor }}>
       <p>{capitalize(title)}</p>
+      {tuneArrow ? tuneArrow : null}
     </SongEntryStyled>
   )
 }

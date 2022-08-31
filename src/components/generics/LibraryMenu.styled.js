@@ -93,7 +93,7 @@ function LibraryMenu(props) {
     } else if ((libMenuRef.current.getBoundingClientRect().x + 200) > window.innerWidth) {
       setRepositionMenu('-14rem');
     }
-    if (quick === 7) {
+    if (quick === 7 || quick === 14) {
       quickForward();
     }
   }
