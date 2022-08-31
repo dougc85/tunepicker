@@ -23,7 +23,7 @@ import AddFromLibrary from './AddFromLibrary/AddFromLibrary';
 function Set(props) {
 
   const { user, userDoc, loading, handleNetworkError } = useContext(SubContext);
-  const { quickStartId, menuArrow, quickForward, quick, addSongArrow } = props;
+  const { quickStartId, menuArrow, quickForward, quick, addSongArrow, songTitleArrow, keyArrow } = props;
 
   const { setNames, songNames, songs: allSongs, pickerSet: pickerSetId } = userDoc;
 
@@ -224,7 +224,7 @@ function Set(props) {
               })}
             </ul>
           </SetStyled>
-          {showAddSong && <AddSong set={set} songNames={songNames} setShowAddSong={setShowAddSong} user={user} />}
+          {showAddSong && <AddSong set={set} songNames={songNames} setShowAddSong={setShowAddSong} user={user} songTitleArrow={songTitleArrow} keyArrow={keyArrow} quick={quick} />}
           {showAddMultiple && <AddMultiple set={set} setShowAddMultiple={setShowAddMultiple} songNames={songNames} user={user} allSongs={allSongs} calling="set" />}
           {showDeleteSet && <DeleteSet setShowDeleteSet={setShowDeleteSet} set={set} setNames={setNames} setLoadingForRedirect={setLoadingForRedirect} />}
           {showCannotDelete && <CannotDelete setShowCannotDelete={setShowCannotDelete} />}

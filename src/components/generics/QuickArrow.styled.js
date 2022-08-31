@@ -72,6 +72,22 @@ const QuickArrowStyled = styled.div`
         `
     }
   }}
+
+  >button {
+    text-transform: uppercase;
+    border: 2px solid red;
+    background-color: inherit;
+    padding: 1rem;
+    color: white;
+    margin-top: 1rem;
+
+    :active {
+      background-color: white;
+      color: inherit;
+    }
+
+    pointer-events: auto;
+  }
   }
 `
 

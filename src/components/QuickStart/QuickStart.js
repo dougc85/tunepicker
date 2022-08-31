@@ -28,6 +28,12 @@ function QuickStart() {
     }
   }
 
+  function preventRefresh(e) {
+    e.stopPropagation();
+    e.nativeEvent.stopImmediatePropagation();
+    e.preventDefault();
+  }
+
   if (step === 1) {
 
     const arrow = (
@@ -212,6 +218,71 @@ function QuickStart() {
     nextStep = (
       <Set
         addSongArrow={arrow}
+        quickForward={quickForward}
+        quick={step}
+        quickStartId={createdSetId}
+      />
+    )
+  }
+
+  if (step === 9) {
+
+    function handleClick(e) {
+      preventRefresh(e);
+      quickForward();
+    }
+
+    const textObject = {
+      text: (
+        <>
+          Enter the title of a song you know
+          <button onClick={handleClick}>Then click here</button>
+        </>
+      ),
+      top: '130',
+      left: '-40',
+    }
+
+    const arrow = (
+      <QuickArrow rotation="90" top="0" center textObject={textObject} />
+    )
+
+    nextStep = (
+      <Set
+        songTitleArrow={arrow}
+        quickForward={quickForward}
+        quick={step}
+        quickStartId={createdSetId}
+      />
+    )
+  }
+
+  if (step === 10) {
+
+    function handleClick(e) {
+      preventRefresh(e);
+      quickForward();
+    }
+
+    const textObject = {
+      text: (
+        <>
+          Set the key here.  If you leave it set to 'random', tunePicker will
+          encourage you to play the song in randomly selected keys.
+          <button onclick={handleClick}>click here</button>
+        </>
+      ),
+      top: '130',
+      left: '-40',
+    }
+
+    const arrow = (
+      <QuickArrow rotation="90" top="1" center textObject={textObject} />
+    )
+
+    nextStep = (
+      <Set
+        keyArrow={arrow}
         quickForward={quickForward}
         quick={step}
         quickStartId={createdSetId}

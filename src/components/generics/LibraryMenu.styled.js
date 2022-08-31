@@ -133,7 +133,7 @@ function LibraryMenu(props) {
                     )
                   } else {
                     return (
-                      <li>{item.text}</li>
+                      <li key={item.text}>{item.text}</li>
                     )
                   }
                 } else {

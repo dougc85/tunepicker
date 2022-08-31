@@ -19,7 +19,7 @@ import capitalize from '../../helperFunctions/capitalize';
 
 function AddSong(props) {
 
-  const { set, songNames, user, setShowAddSong, allSongs, setNames } = props;
+  const { set, songNames, user, setShowAddSong, allSongs, setNames, quick, songTitleArrow, keyArrow } = props;
 
   const keys = ['C', 'D\u266D', 'D', 'E\u266D', 'E', 'F', 'F\u266F', 'G', 'A\u266D', 'A', 'B\u266D', 'B'];
   const knowledgeFields = {
@@ -224,9 +224,15 @@ function AddSong(props) {
     })
   }
 
+  function disableForQuick() {
+    return (quick === 9) ? true :
+      (quick === 10) ? true :
+        (quick === 11) ? true : false;
+  }
+
   if (showAddForm) {
     return (
-      <Modal handleOutsideClick={handleCancel} contentHeight={"50rem"} flex={allSongs ? false : true}>
+      <Modal handleOutsideClick={quick ? null : handleCancel} contentHeight={"50rem"} flex={allSongs ? false : true}>
         {
           loading ?
             <Loading /> :
@@ -237,6 +243,7 @@ function AddSong(props) {
                   <label htmlFor="song-title">Title:</label>
                   <TitleInput onChange={handleTitleChangeAndDuplicates} value={title} id="song-title" type="text" name="song-title" autoComplete="off"></TitleInput>
                   {errorMessage && (<ErrorMessage>{`*${errorMessage}`}</ErrorMessage>)}
+                  {songTitleArrow ? songTitleArrow : null}
                 </InputGrouping>
                 <InputGrouping width={"70%"}>
                   <label htmlFor="key" >Key:</label>
@@ -248,6 +255,7 @@ function AddSong(props) {
                       )
                     })}
                   </select>
+                  {keyArrow ? keyArrow : null}
                 </InputGrouping>
                 <KnowledgeField disabled={disableForm}>
                   <legend>How well do you know this tune?</legend>
@@ -293,8 +301,8 @@ function AddSong(props) {
                   </SetsField>
                 }
                 <InputGrouping width={"80%"}>
-                  <AddButton onClick={handleCancel} >Cancel</AddButton>
-                  <AddButton disabled={disableForm} onClick={handleAdd}>Add Song</AddButton>
+                  <AddButton onClick={handleCancel} disable={disableForQuick()}>Cancel</AddButton>
+                  <AddButton disabled={disableForm} onClick={handleAdd} disable={disableForQuick()}>Add Song</AddButton>
                 </InputGrouping>
               </AddSongStyled>
             )
