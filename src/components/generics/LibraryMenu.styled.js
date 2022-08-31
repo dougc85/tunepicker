@@ -84,7 +84,7 @@ function LibraryMenu(props) {
   const libMenuRef = useRef(null);
 
   function handleClick() {
-    if (quick === 8) {
+    if (quick === 8 || quick === 13) {
       return;
     }
     setShowMenu((old) => !old);

@@ -1,5 +1,6 @@
 import React, { useRef } from 'react';
 import styled from 'styled-components';
+import { colors } from '../../partials/variables.styled';
 
 const QuickArrowStyled = styled.div`
   height: ${({ height }) => height + 'px'};
@@ -75,7 +76,6 @@ const QuickArrowStyled = styled.div`
 
     ${({ textObject }) => {
     if (textObject && textObject.width) {
-      console.log(textObject.width, 'txtobj');
       return `
         max-width: ${textObject.width}px;
         width: ${textObject.width}px;
@@ -100,12 +100,29 @@ const QuickArrowStyled = styled.div`
 
     pointer-events: auto;
   }
+
+  ${({ color }) => {
+    if (color) {
+
+      return `
+        span:nth-child(1) {
+          color: ${colors.knowColor};
+        }
+        span:nth-child(2) {
+          color: ${colors.medColor};
+        }
+        span:nth-child(3) {
+          color: ${colors.newColor};
+        }
+      `
+    }
+  }}
   }
 `
 
 function QuickArrow(props) {
 
-  const { rotation, height, top, left, right, bottom, textObject, devBorder, center } = props;
+  const { rotation, height, top, left, right, bottom, textObject, devBorder, center, color } = props;
 
   return (
     <QuickArrowStyled
@@ -118,6 +135,7 @@ function QuickArrow(props) {
       devBorder={devBorder}
       textObject={textObject}
       center={center}
+      color={color}
     >
 
       <svg viewBox="0 0 24 24" >

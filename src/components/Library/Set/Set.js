@@ -32,7 +32,8 @@ function Set(props) {
     songTitleArrow,
     keyArrow,
     knowledgeArrow,
-    addButtonArrow } = props;
+    addButtonArrow,
+    tuneArrow, } = props;
 
   const { setNames, songNames, songs: allSongs, pickerSet: pickerSetId } = userDoc;
 
@@ -227,6 +228,14 @@ function Set(props) {
             </SongHeader>
             <ul>
               {songsArray.map((songObj) => {
+                if (quick === 13) {
+                  return (
+                    <>
+                      <SongEntry song={songObj} sortByDateAdded={false} key={songObj.id} disable={true} />
+                      {tuneArrow}
+                    </>
+                  )
+                }
                 return (
                   <SongEntry song={songObj} sortByDateAdded={false} key={songObj.id} />
                 )

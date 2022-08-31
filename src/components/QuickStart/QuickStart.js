@@ -353,23 +353,32 @@ function QuickStart() {
 
   if (step === 13) {
 
+    function handleClick(e) {
+      preventRefresh(e);
+      quickForward();
+    }
+
     const textObject = {
       text: (
         <>
-          Now, click here to add the song to this set and to your library
+          Great! We have our first song. Songs are color-coded to be <span>green</span> if
+          you know the song well, <span>yellow</span> if you know the song medium
+          well, or <span>orange</span> if you've only recently learned the tune.
+          <button onClick={handleClick}>got it</button>
         </>
       ),
-      top: '-70',
-      left: '-115',
+      top: '90',
+      left: '-175',
+      width: '300',
     }
 
     const arrow = (
-      <QuickArrow rotation="-90" top="-60" center height="80" textObject={textObject} />
+      <QuickArrow rotation="90" top="20" center height="0" textObject={textObject} color="true" />
     )
 
     nextStep = (
       <Set
-        addButtonArrow={arrow}
+        tuneArrow={arrow}
         quickForward={quickForward}
         quick={step}
         quickStartId={createdSetId}

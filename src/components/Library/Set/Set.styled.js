@@ -19,6 +19,9 @@ export const SetStyled = styled.div`
     font-size: 2rem;
     margin-right: auto;
     }
+  >ul {
+    position: relative;
+  }
   
 `
 

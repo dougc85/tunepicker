@@ -5,7 +5,8 @@ import capitalize from '../../../helperFunctions/capitalize';
 
 function SongEntry(props) {
 
-  const { knowledge, title, id } = props.song;
+  const { song, disable } = props;
+  const { knowledge, title, id } = song;
   const navigate = useNavigate();
   const params = useParams();
 
@@ -15,6 +16,9 @@ function SongEntry(props) {
         'hsl(26, 100%, 67%)';
 
   function handleClick() {
+    if (disable) {
+      return;
+    }
     if (params.setId) {
       navigate(`/library/sets/${params.setId}/${id}`);
     }
