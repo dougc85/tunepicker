@@ -197,6 +197,28 @@ function QuickStart() {
     )
   }
 
+  if (step === 8) {
+
+    const textObject = {
+      text: "Add a song",
+      top: '130',
+      left: '5',
+    }
+
+    const arrow = (
+      <QuickArrow rotation="90" top="0" center textObject={textObject} />
+    )
+
+    nextStep = (
+      <Set
+        addSongArrow={arrow}
+        quickForward={quickForward}
+        quick={step}
+        quickStartId={createdSetId}
+      />
+    )
+  }
+
   return (
     <QuickFrame
       step={step}

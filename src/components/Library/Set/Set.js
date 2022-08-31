@@ -23,7 +23,7 @@ import AddFromLibrary from './AddFromLibrary/AddFromLibrary';
 function Set(props) {
 
   const { user, userDoc, loading, handleNetworkError } = useContext(SubContext);
-  const { quickStartId, menuArrow, quickForward, quick } = props;
+  const { quickStartId, menuArrow, quickForward, quick, addSongArrow } = props;
 
   const { setNames, songNames, songs: allSongs, pickerSet: pickerSetId } = userDoc;
 
@@ -188,6 +188,7 @@ function Set(props) {
                 items={libraryMenuItems}
                 quickForward={quickForward}
                 quick={quick}
+                addSongArrow={addSongArrow}
               >
                 {menuArrow ? menuArrow : null}
               </LibraryMenu>

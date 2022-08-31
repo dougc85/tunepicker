@@ -78,21 +78,31 @@ const MenuWrapper = styled.div`
 
 function LibraryMenu(props) {
 
-  const { items, color, allSongs, children, quickForward, quick } = props;
+  const { items, color, allSongs, children, quickForward, quick, addSongArrow } = props;
   const [showMenu, setShowMenu] = useState(false);
   const [repositionMenu, setRepositionMenu] = useState(false);
   const libMenuRef = useRef(null);
 
   function handleClick() {
+    if (quick === 8) {
+      return;
+    }
     setShowMenu((old) => !old);
     if ((libMenuRef.current.getBoundingClientRect().x + 50) > window.innerWidth) {
       setRepositionMenu('-15.8rem');
     } else if ((libMenuRef.current.getBoundingClientRect().x + 200) > window.innerWidth) {
       setRepositionMenu('-14rem');
     }
-    if (quickForward) {
+    if (quick === 7) {
       quickForward();
     }
+  }
+
+  function handleScreenClick() {
+    if (quick === 8) {
+      return;
+    }
+    setShowMenu(false)
   }
 
   return (
@@ -105,17 +115,38 @@ function LibraryMenu(props) {
       {children}
       {showMenu && (
         <>
-          <Screen onClick={() => { setShowMenu(false) }} />
+          <Screen onClick={handleScreenClick} />
           <MenuWrapper>
             <ul>
-              {items.map(item => (
-                <li key={item.text} onClick={() => {
-                  setShowMenu(false);
-                  item.func();
-                }}>
-                  {item.text}
-                </li>
-              ))}
+              {items.map(item => {
+                if (quick === 8) {
+                  if (item.text === 'Add New Song') {
+                    return (
+                      <li key={item.text} onClick={() => {
+                        setShowMenu(false);
+                        item.func();
+                        quickForward();
+                      }}>
+                        {item.text}
+                        {addSongArrow}
+                      </li>
+                    )
+                  } else {
+                    return (
+                      <li>{item.text}</li>
+                    )
+                  }
+                } else {
+                  return (
+                    <li key={item.text} onClick={() => {
+                      setShowMenu(false);
+                      item.func();
+                    }}>
+                      {item.text}
+                    </li>
+                  )
+                }
+              })}
             </ul>
           </MenuWrapper>
 
