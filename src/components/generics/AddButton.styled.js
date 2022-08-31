@@ -8,6 +8,7 @@ const AddButton = styled.button`
   color: ${props => props.disable ? 'grey' : 'black'};
   border-radius: 5px;
   display: block;
+  position: relative;
 
   :active {
     background-color: black;

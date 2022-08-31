@@ -173,7 +173,7 @@ function QuickStart() {
     } : (createdSetName.length < 15) ? {
       text,
       top: '80',
-      left: '-100',
+      left: '-95',
     } :
       {
         text,
@@ -269,11 +269,12 @@ function QuickStart() {
         <>
           Set the key here.  If you leave it set to 'random', tunePicker will
           encourage you to play the song in randomly selected keys.
-          <button onclick={handleClick}>click here</button>
+          <button onClick={handleClick}>got it</button>
         </>
       ),
       top: '130',
-      left: '-40',
+      left: '-65',
+      width: '220',
     }
 
     const arrow = (
@@ -287,6 +288,102 @@ function QuickStart() {
         quick={step}
         quickStartId={createdSetId}
       />
+    )
+  }
+
+  if (step === 11) {
+
+    function handleClick(e) {
+      preventRefresh(e);
+      quickForward();
+    }
+
+    const textObject = {
+      text: (
+        <>
+          Set how well you know this tune. The newer the tune is, the more frequently tunePicker
+          will recommend you play it, so you get more practice.
+          <button onClick={handleClick}>then click here</button>
+        </>
+      ),
+      top: '-160',
+      left: '-146',
+      width: '300',
+    }
+
+    const arrow = (
+      <QuickArrow rotation="-90" top="75" height="50" center textObject={textObject} />
+    )
+
+    nextStep = (
+      <Set
+        knowledgeArrow={arrow}
+        quickForward={quickForward}
+        quick={step}
+        quickStartId={createdSetId}
+      />
+    )
+  }
+
+  if (step === 12) {
+
+    const textObject = {
+      text: (
+        <>
+          Now, click here to add the song to this set and to your library
+        </>
+      ),
+      top: '-70',
+      left: '-115',
+    }
+
+    const arrow = (
+      <QuickArrow rotation="-90" top="-60" center height="80" textObject={textObject} />
+    )
+
+    nextStep = (
+      <Set
+        addButtonArrow={arrow}
+        quickForward={quickForward}
+        quick={step}
+        quickStartId={createdSetId}
+      />
+    )
+  }
+
+  if (step === 13) {
+
+    const textObject = {
+      text: (
+        <>
+          Now, click here to add the song to this set and to your library
+        </>
+      ),
+      top: '-70',
+      left: '-115',
+    }
+
+    const arrow = (
+      <QuickArrow rotation="-90" top="-60" center height="80" textObject={textObject} />
+    )
+
+    nextStep = (
+      <Set
+        addButtonArrow={arrow}
+        quickForward={quickForward}
+        quick={step}
+        quickStartId={createdSetId}
+      />
+    )
+
+    return (
+      <QuickFrame
+        step={step}
+        quickForward={quickForward}
+        navAccess={false}
+      >
+        {nextStep}
+      </QuickFrame>
     )
   }
 

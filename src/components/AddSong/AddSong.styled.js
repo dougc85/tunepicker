@@ -51,7 +51,7 @@ export const TitleInput = styled.input`
 
 export const ErrorMessage = styled.p`
   position: absolute;
-  top: 2.8rem;
+  top: 2.6rem;
   left: 8.2rem;
   font-size: 1.1rem;
   color: red;

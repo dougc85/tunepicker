@@ -65,11 +65,21 @@ const QuickArrowStyled = styled.div`
     ${({ textObject }) => {
     if (textObject) {
       return `
-          top: ${textObject.top ? textObject.top + 'px' : 'auto'};
-          bottom: ${textObject.bottom ? textObject.bottom + 'px' : 'auto'};
-          left: ${textObject.left ? textObject.left + 'px' : 'auto'};
-          right: ${textObject.right ? textObject.right + 'px' : 'auto'};
-        `
+            top: ${textObject.top ? textObject.top + 'px' : 'auto'};
+            bottom: ${textObject.bottom ? textObject.bottom + 'px' : 'auto'};
+            left: ${textObject.left ? textObject.left + 'px' : 'auto'};
+            right: ${textObject.right ? textObject.right + 'px' : 'auto'};
+          `
+    }
+  }}
+
+    ${({ textObject }) => {
+    if (textObject && textObject.width) {
+      console.log(textObject.width, 'txtobj');
+      return `
+        max-width: ${textObject.width}px;
+        width: ${textObject.width}px;
+      `
     }
   }}
 
@@ -79,11 +89,13 @@ const QuickArrowStyled = styled.div`
     background-color: inherit;
     padding: 1rem;
     color: white;
+    display: block;
+    margin: 0 auto;
     margin-top: 1rem;
 
     :active {
       background-color: white;
-      color: inherit;
+      color: #312727;
     }
 
     pointer-events: auto;

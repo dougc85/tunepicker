@@ -19,7 +19,7 @@ import capitalize from '../../helperFunctions/capitalize';
 
 function AddSong(props) {
 
-  const { set, songNames, user, setShowAddSong, allSongs, setNames, quick, songTitleArrow, keyArrow } = props;
+  const { set, songNames, user, setShowAddSong, allSongs, setNames, quick, songTitleArrow, keyArrow, knowledgeArrow, addButtonArrow, quickForward } = props;
 
   const keys = ['C', 'D\u266D', 'D', 'E\u266D', 'E', 'F', 'F\u266F', 'G', 'A\u266D', 'A', 'B\u266D', 'B'];
   const knowledgeFields = {
@@ -172,6 +172,9 @@ function AddSong(props) {
 
     setLoading(false);
     setShowAddSong(false);
+    if (quickForward) {
+      quickForward();
+    }
   }
 
   function handleTitleChangeAndDuplicates(e) {
@@ -232,7 +235,7 @@ function AddSong(props) {
 
   if (showAddForm) {
     return (
-      <Modal handleOutsideClick={quick ? null : handleCancel} contentHeight={"50rem"} flex={allSongs ? false : true}>
+      <Modal handleOutsideClick={quick ? null : handleCancel} contentHeight={"50rem"} flex={allSongs ? false : true} allowOverflow={knowledgeArrow ? true : false}>
         {
           loading ?
             <Loading /> :
@@ -258,6 +261,7 @@ function AddSong(props) {
                   {keyArrow ? keyArrow : null}
                 </InputGrouping>
                 <KnowledgeField disabled={disableForm}>
+                  {knowledgeArrow ? knowledgeArrow : null}
                   <legend>How well do you know this tune?</legend>
                   <div>
                     <input id="knowNew" value="new" type="radio" name="knowledge" onChange={onRadioChange} checked={isChecked('new')} />
@@ -301,8 +305,11 @@ function AddSong(props) {
                   </SetsField>
                 }
                 <InputGrouping width={"80%"}>
-                  <AddButton onClick={handleCancel} disable={disableForQuick()}>Cancel</AddButton>
-                  <AddButton disabled={disableForm} onClick={handleAdd} disable={disableForQuick()}>Add Song</AddButton>
+                  <AddButton onClick={handleCancel} disable={(quick === 12) ? true : disableForQuick()}>Cancel</AddButton>
+                  <AddButton disabled={disableForm} onClick={handleAdd} disable={disableForQuick()}>
+                    Add Song
+                    {addButtonArrow ? addButtonArrow : null}
+                  </AddButton>
                 </InputGrouping>
               </AddSongStyled>
             )
