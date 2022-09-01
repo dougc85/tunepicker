@@ -13,6 +13,7 @@ function QuickStart() {
   const [step, setStep] = useState(1);
   const [createdSetName, rememberSetName] = useState(undefined);
   const [createdSetId, rememberSetId] = useState(undefined);
+  const [createdSongName, rememberCreatedSongName] = useState(undefined);
 
   let nextStep;
 
@@ -347,6 +348,7 @@ function QuickStart() {
         quickForward={quickForward}
         quick={step}
         quickStartId={createdSetId}
+        rememberCreatedSongName={rememberCreatedSongName}
       />
     )
   }
@@ -421,6 +423,116 @@ function QuickStart() {
         quickForward={quickForward}
         quick={step}
         quickStartId={createdSetId}
+      />
+    )
+  }
+
+  if (step === 15) {
+    const textObject = {
+      text: "Click here to add multiple songs at once",
+      top: '130',
+      left: '-43',
+    }
+
+    const arrow = (
+      <QuickArrow rotation="90" top="0" center textObject={textObject} />
+    )
+
+    nextStep = (
+      <Set
+        addMultipleArrow={arrow}
+        quickForward={quickForward}
+        quick={step}
+        quickStartId={createdSetId}
+      />
+    )
+  }
+
+  if (step === 16) {
+
+    function handleClick(e) {
+      preventRefresh(e);
+      quickForward();
+    }
+
+    const textObject = {
+      text: (
+        <>
+          Type three songs, each one on a different line
+          <button onClick={handleClick}>Then click here</button>
+        </>
+      ),
+      top: '10',
+      left: '-168',
+      width: "330",
+    }
+
+    const arrow = (
+      <QuickArrow rotation="90" top="-40" height="40" center textObject={textObject} />
+    )
+
+    nextStep = (
+      <Set
+        songsEntryArrow={arrow}
+        quickForward={quickForward}
+        quick={step}
+        quickStartId={createdSetId}
+      />
+    )
+  }
+
+  if (step === 17) {
+
+    const textObject = {
+      text: (
+        <>
+          Now click here to add these songs
+        </>
+      ),
+      top: '-85',
+      left: '-78',
+    }
+
+    const arrow = (
+      <QuickArrow rotation="-90" top="-76" height="90" center textObject={textObject} />
+    )
+
+    nextStep = (
+      <Set
+        addMultipleButtonArrow={arrow}
+        quickForward={quickForward}
+        quick={step}
+        quickStartId={createdSetId}
+      />
+    )
+  }
+
+  if (step === 18) {
+
+    const textObject = {
+      text: (
+        <>
+          Okay, now we've added three songs at once.  Notice how they're all <span>green</span>.  Since we added them in bulk,
+          they all default to 'I know the song well' and 'play in random keys'. Let's say we don't know this song well
+          and want to change it. Click to edit it.
+        </>
+      ),
+      top: '140',
+      left: '-95',
+      width: '300',
+    }
+
+    const arrow = (
+      <QuickArrow rotation="90" top="5" center height="160" textObject={textObject} color="true" />
+    )
+
+    nextStep = (
+      <Set
+        secondTuneArrow={arrow}
+        quickForward={quickForward}
+        quick={step}
+        quickStartId={createdSetId}
+        createdSongName={createdSongName}
       />
     )
   }

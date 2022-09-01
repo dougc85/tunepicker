@@ -63,6 +63,7 @@ const QuickArrowStyled = styled.div`
     font-size: 1.6rem;
     border-radius: 5px;
     border: 3px solid red;
+    text-align: center;
     ${({ textObject }) => {
     if (textObject) {
       return `

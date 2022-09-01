@@ -33,7 +33,14 @@ function Set(props) {
     keyArrow,
     knowledgeArrow,
     addButtonArrow,
-    tuneArrow, } = props;
+    rememberCreatedSongName,
+    tuneArrow,
+    addMultipleArrow,
+    songsEntryArrow,
+    addMultipleButtonArrow,
+    createdSongName,
+    secondTuneArrow,
+  } = props;
 
   const { setNames, songNames, songs: allSongs, pickerSet: pickerSetId } = userDoc;
 
@@ -186,6 +193,36 @@ function Set(props) {
     })
   }
 
+  function displayTunes() {
+    let counter = 0;
+
+    return songsArray.map((songObj) => {
+      if (quick === 13 || quick === 14) {
+        return (
+          <>
+            <SongEntry song={songObj} sortByDateAdded={false} key={songObj.id} disable={true} tuneArrow={tuneArrow} />
+          </>
+        )
+      }
+      if (quick === 18) {
+        if (songObj.title !== createdSongName && counter === 0) {
+          counter = 1;
+          console.log(songObj.title, 'title');
+          return (
+            <SongEntry song={songObj} sortByDateAdded={false} key={songObj.id} disable={true} secondTuneArrow={secondTuneArrow} quickForward={quickForward} />
+          )
+        } else {
+          return (
+            <SongEntry song={songObj} sortByDateAdded={false} key={songObj.id} disable={true} />
+          )
+        }
+      }
+      return (
+        <SongEntry song={songObj} sortByDateAdded={false} key={songObj.id} />
+      )
+    });
+  }
+
   return (
     <>
       {renderSet && (
@@ -199,6 +236,7 @@ function Set(props) {
                 quickForward={quickForward}
                 quick={quick}
                 addSongArrow={addSongArrow}
+                addMultipleArrow={addMultipleArrow}
               >
                 {menuArrow ? menuArrow : null}
               </LibraryMenu>
@@ -227,18 +265,7 @@ function Set(props) {
 
             </SongHeader>
             <ul>
-              {songsArray.map((songObj) => {
-                if (quick === 13 || quick === 14) {
-                  return (
-                    <>
-                      <SongEntry song={songObj} sortByDateAdded={false} key={songObj.id} disable={true} tuneArrow={tuneArrow} />
-                    </>
-                  )
-                }
-                return (
-                  <SongEntry song={songObj} sortByDateAdded={false} key={songObj.id} />
-                )
-              })}
+              {displayTunes()}
             </ul>
           </SetStyled>
           {showAddSong &&
@@ -253,9 +280,23 @@ function Set(props) {
               quick={quick}
               quickForward={quickForward}
               addButtonArrow={addButtonArrow}
+              rememberCreatedSongName={rememberCreatedSongName}
             />
           }
-          {showAddMultiple && <AddMultiple set={set} setShowAddMultiple={setShowAddMultiple} songNames={songNames} user={user} allSongs={allSongs} calling="set" />}
+          {showAddMultiple &&
+            <AddMultiple
+              set={set}
+              setShowAddMultiple={setShowAddMultiple}
+              songNames={songNames}
+              user={user}
+              allSongs={allSongs}
+              calling="set"
+              quick={quick}
+              quickForward={quickForward}
+              songsEntryArrow={songsEntryArrow}
+              addMultipleButtonArrow={addMultipleButtonArrow}
+            />
+          }
           {showDeleteSet && <DeleteSet setShowDeleteSet={setShowDeleteSet} set={set} setNames={setNames} setLoadingForRedirect={setLoadingForRedirect} />}
           {showCannotDelete && <CannotDelete setShowCannotDelete={setShowCannotDelete} />}
           {showEditSetName && <EditSetName setShowEditSetName={setShowEditSetName} oldTitle={set.setName} setNames={setNames} setId={set.id} user={user} />}

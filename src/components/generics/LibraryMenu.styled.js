@@ -78,13 +78,13 @@ const MenuWrapper = styled.div`
 
 function LibraryMenu(props) {
 
-  const { items, color, allSongs, children, quickForward, quick, addSongArrow } = props;
+  const { items, color, allSongs, children, quickForward, quick, addSongArrow, addMultipleArrow } = props;
   const [showMenu, setShowMenu] = useState(false);
   const [repositionMenu, setRepositionMenu] = useState(false);
   const libMenuRef = useRef(null);
 
   function handleClick() {
-    if (quick === 8 || quick === 13) {
+    if (quick === 8 || quick === 13 || quick === 18) {
       return;
     }
     setShowMenu((old) => !old);
@@ -99,7 +99,7 @@ function LibraryMenu(props) {
   }
 
   function handleScreenClick() {
-    if (quick === 8) {
+    if (quick === 8 || quick === 15) {
       return;
     }
     setShowMenu(false)
@@ -119,8 +119,8 @@ function LibraryMenu(props) {
           <MenuWrapper>
             <ul>
               {items.map(item => {
-                if (quick === 8) {
-                  if (item.text === 'Add New Song') {
+                if (quick === 8 || quick === 15) {
+                  if (quick === 8 && item.text === 'Add New Song') {
                     return (
                       <li key={item.text} onClick={() => {
                         setShowMenu(false);
@@ -129,6 +129,17 @@ function LibraryMenu(props) {
                       }}>
                         {item.text}
                         {addSongArrow}
+                      </li>
+                    )
+                  } else if (quick === 15 && item.text === 'Add Multiple New Songs') {
+                    return (
+                      <li key={item.text} onClick={() => {
+                        setShowMenu(false);
+                        item.func();
+                        quickForward();
+                      }}>
+                        {item.text}
+                        {addMultipleArrow}
                       </li>
                     )
                   } else {

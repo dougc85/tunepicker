@@ -12,7 +12,7 @@ import capitalize from '../../helperFunctions/capitalize';
 
 function AddMultiple(props) {
 
-  const { set, setShowAddMultiple, songNames, user, allSongs, calling, setNames } = props;
+  const { set, setShowAddMultiple, songNames, user, allSongs, calling, setNames, quick, quickForward, songsEntryArrow, addMultipleButtonArrow } = props;
 
   const [songList, handleSongListChange, resetSongList] = useFormInput('');
 
@@ -221,6 +221,10 @@ function AddMultiple(props) {
       setShowMain(false);
       setTitleErrors(notAdded);
     }
+
+    if (quickForward) {
+      quickForward();
+    }
   }
 
   function handleCheckboxChange(e) {
@@ -279,14 +283,14 @@ function AddMultiple(props) {
 
   if (showMain) {
     return (
-      <Modal handleOutsideClick={handleCancel} >
+      <Modal handleOutsideClick={quick ? null : handleCancel} allowOverflow={songsEntryArrow ? true : false}>
         {
           loading ?
             <Loading /> :
             (<AddMultipleStyled allSongs={(calling === 'allSongs') ? true : false}>
               <legend>{configObj.heading}</legend>
               {configObj.instructions}
-              <textarea name="" id="" cols="27" rows="5" value={songList} onChange={handleSongListChange}></textarea>
+              <textarea name="" id="" cols="27" rows="5" value={songList} onChange={handleSongListChange} disabled={quick === 17 ? true : false}></textarea>
               {(calling === 'allSongs') &&
                 <SetsField>
                   <legend>Add Songs To Which Sets?</legend>
@@ -303,8 +307,12 @@ function AddMultiple(props) {
                 </SetsField>
               }
               <AddMultipleButtonsStyled allSongs={(calling === 'allSongs') ? true : false}>
-                <AddButton onClick={handleCancel}>Cancel</AddButton>
-                <AddButton onClick={handleAdd}>Add Songs</AddButton>
+                {songsEntryArrow ? songsEntryArrow : null}
+                <AddButton onClick={handleCancel} disable={(quick === 16 || quick === 17) ? true : false}>Cancel</AddButton>
+                <AddButton onClick={handleAdd} disable={(quick === 16) ? true : false}>
+                  Add Songs
+                  {addMultipleButtonArrow ? addMultipleButtonArrow : null}
+                </AddButton>
               </AddMultipleButtonsStyled>
             </AddMultipleStyled>)
         }

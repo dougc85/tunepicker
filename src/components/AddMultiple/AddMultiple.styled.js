@@ -62,6 +62,7 @@ export const AddMultipleStyled = styled.form`
 `
 
 export const AddMultipleButtonsStyled = styled.div`
+  position: relative;
   display: flex;
   justify-content: space-evenly;
   width: 80%;

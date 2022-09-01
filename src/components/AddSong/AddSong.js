@@ -19,7 +19,21 @@ import capitalize from '../../helperFunctions/capitalize';
 
 function AddSong(props) {
 
-  const { set, songNames, user, setShowAddSong, allSongs, setNames, quick, songTitleArrow, keyArrow, knowledgeArrow, addButtonArrow, quickForward } = props;
+  const {
+    set,
+    songNames,
+    user,
+    setShowAddSong,
+    allSongs,
+    setNames,
+    quick,
+    songTitleArrow,
+    keyArrow,
+    knowledgeArrow,
+    addButtonArrow,
+    quickForward,
+    rememberCreatedSongName
+  } = props;
 
   const keys = ['C', 'D\u266D', 'D', 'E\u266D', 'E', 'F', 'F\u266F', 'G', 'A\u266D', 'A', 'B\u266D', 'B'];
   const knowledgeFields = {
@@ -173,6 +187,7 @@ function AddSong(props) {
     setLoading(false);
     setShowAddSong(false);
     if (quickForward) {
+      rememberCreatedSongName(newTitle);
       quickForward();
     }
   }

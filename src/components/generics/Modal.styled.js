@@ -16,6 +16,7 @@ const Content = styled.div`
   position: fixed;
   width: 80%;
   height: ${props => (props.contentHeight ? props.contentHeight : "80vh")};
+  max-height: 580px;
   top: 50%;
   transform: translateY(-50%);
   left: 10%;

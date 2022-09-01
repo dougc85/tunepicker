@@ -5,7 +5,7 @@ import capitalize from '../../../helperFunctions/capitalize';
 
 function SongEntry(props) {
 
-  const { song, tuneArrow, disable } = props;
+  const { song, tuneArrow, secondTuneArrow, quickForward, disable } = props;
   const { knowledge, title, id } = song;
   const navigate = useNavigate();
   const params = useParams();
@@ -16,6 +16,10 @@ function SongEntry(props) {
         'hsl(26, 100%, 67%)';
 
   function handleClick() {
+    if (quickForward) {
+      quickForward();
+      return;
+    }
     if (disable) {
       return;
     }
@@ -31,6 +35,7 @@ function SongEntry(props) {
     <SongEntryStyled onClick={handleClick} style={{ backgroundColor: bgColor }}>
       <p>{capitalize(title)}</p>
       {tuneArrow ? tuneArrow : null}
+      {secondTuneArrow ? secondTuneArrow : null}
     </SongEntryStyled>
   )
 }
