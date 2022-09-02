@@ -36,12 +36,15 @@ function Song(props) {
   const context = useContext(SubContext);
   const { loading, userDoc, user, handleNetworkError } = context;
   const { setNames, songs: allSongs, songNames } = userDoc;
+  const { quickSongId } = props;
 
   const params = useParams();
   const navigate = useNavigate();
   const location = useLocation();
 
-  const song = (allSongs) ? allSongs[params.songId] : undefined;
+  const songId = quickSongId ? quickSongId : params.songId;
+
+  const song = (allSongs) ? allSongs[songId] : undefined;
 
   //Hide/Show Inputs for fields
   const [showTitleEdit, setShowTitleEdit] = useState(false);
@@ -130,7 +133,7 @@ function Song(props) {
 
   useEffect(() => {
     if (song) {
-      if (!song.sets.hasOwnProperty(params.setId) && location.pathname.slice(9, 17) !== 'allsongs') {
+      if (!song.sets.hasOwnProperty(params.setId) && location.pathname.slice(9, 17) !== 'allsongs' && location.pathname.slice(1, 5) !== 'help') {
         navigate(`/library/allsongs/${song.id}`);
       }
     }
@@ -343,7 +346,7 @@ function Song(props) {
 
   return (
     <>
-      <Path heading={capitalize(allSongs[params.songId].title)} pathType={'Song'} />
+      <Path heading={capitalize(allSongs[songId].title)} pathType={'Song'} />
       <SongStyled >
         <div>
           <div>
@@ -353,7 +356,7 @@ function Song(props) {
           <TitleEntryStyled>
             <input autoComplete="off" style={{ display: (showTitleEdit ? 'block' : 'none') }} id="songTitle-songPage" ref={titleInput} onChange={handleTitleChangeAndError} type="text" value={title}></input>
             {errorMessage && <TitleError>{errorMessage}</TitleError>}
-            <p style={{ display: (showTitleEdit ? 'none' : 'block') }}>{capitalize(allSongs[params.songId].title)}</p>
+            <p style={{ display: (showTitleEdit ? 'none' : 'block') }}>{capitalize(allSongs[songId].title)}</p>
           </TitleEntryStyled>
           <EditConfirm field="title" show={setShowTitleEdit} focusInput={focusInput} disableEdit={disableEdit} setDisableEdit={setDisableEdit} saveData={saveTitleData} />
         </div>

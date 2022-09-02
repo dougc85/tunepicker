@@ -7,7 +7,7 @@ export const Screen = styled.div`
   top: 0;
   left: 0;
   background-color: rgba(0, 0, 0, .6);
-  z-index: 201;
+  z-index: 999999;
 `;
 
 export const Content = styled.div`
@@ -20,7 +20,7 @@ export const Content = styled.div`
   font-size: 2rem;
   padding: 1.5rem;
   box-sizing: border-box;
-  z-index: 202;
+  z-index: 9999999;
   overflow: scroll;
 
   >div {

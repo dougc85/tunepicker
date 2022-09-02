@@ -10,6 +10,7 @@ const Screen = styled.div`
   left: 0;
   background-color: rgba(0, 0, 0, .6);
   z-index: 101;
+  ${({ raisedZ }) => { return raisedZ ? 'z-index: 105;' : null }}
 `;
 
 const Content = styled.div`
@@ -25,6 +26,7 @@ const Content = styled.div`
   padding: 1.5rem;
   box-sizing: border-box;
   z-index: 102;
+  ${({ raisedZ }) => { return raisedZ ? 'z-index: 106;' : null }}
   overflow: ${({ allowOverflow }) => (allowOverflow ? 'visible' : 'scroll')};
   display: flex;
   flex-direction: column;
@@ -34,7 +36,7 @@ const Content = styled.div`
 
 function Modal(props) {
 
-  const { handleOutsideClick, contentHeight, flex, allowOverflow } = props;
+  const { handleOutsideClick, contentHeight, flex, allowOverflow, raisedZ } = props;
 
   useEffect(() => {
     document.body.style.overflow = 'hidden';
@@ -51,11 +53,11 @@ function Modal(props) {
   return (
     <>
       {ReactDOM.createPortal(
-        <Screen onClick={handleOutsideClick} />,
+        <Screen onClick={handleOutsideClick} raisedZ={raisedZ} />,
         document.getElementById('screen-root')
       )}
       {ReactDOM.createPortal(
-        <Content contentHeight={contentHeight} flex={flex} allowOverflow={allowOverflow}>
+        <Content contentHeight={contentHeight} flex={flex} allowOverflow={allowOverflow} raisedZ={raisedZ}>
           {props.children}
         </Content>,
         document.getElementById('overlay-root')

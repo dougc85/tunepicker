@@ -9,10 +9,23 @@ import AddButton from '../generics/AddButton.styled';
 import { AddMultipleStyled, AddMultipleButtonsStyled, TitleErrorsStyled, SetsField, SetsCheckbox } from './AddMultiple.styled';
 import Loading from '../Loading/Loading';
 import capitalize from '../../helperFunctions/capitalize';
+import QuickStartError from './QuickStartError/QuickStartError';
 
 function AddMultiple(props) {
 
-  const { set, setShowAddMultiple, songNames, user, allSongs, calling, setNames, quick, quickForward, songsEntryArrow, addMultipleButtonArrow } = props;
+  const { set,
+    setShowAddMultiple,
+    songNames,
+    user,
+    allSongs,
+    calling,
+    setNames,
+    quick,
+    quickRewind,
+    quickForward,
+    songsEntryArrow,
+    addMultipleButtonArrow
+  } = props;
 
   const [songList, handleSongListChange, resetSongList] = useFormInput('');
 
@@ -21,6 +34,7 @@ function AddMultiple(props) {
   const [titleErrors, setTitleErrors] = useState([]);
   const [loading, setLoading] = useState(false);
   const [setArray, setSetArray] = useState([]);
+  const [showQuickStartError, setShowQuickStartError] = useState(false);
 
   const { handleNetworkError } = useContext(SubContext);
 
@@ -42,11 +56,7 @@ function AddMultiple(props) {
     setShowAddMultiple(false);
   }
 
-  async function handleAdd(e) {
-    e.preventDefault();
-
-    setLoading(true);
-
+  function createSongSet() {
     let allSongsArray = songList.split(/\r?\n/);
 
     allSongsArray = allSongsArray.map((songName) => {
@@ -65,9 +75,45 @@ function AddMultiple(props) {
       songSet.add(songTitle.toLowerCase());
     })
 
+    return songSet;
+  }
+
+  function handleQuickError() {
+    let songSet = createSongSet();
+
+    if (songSet.size !== 3) {
+      return true;
+    }
+
+    let quickError = false;
+
+    songSet.forEach((songName) => {
+      const songId = songNames[songName];
+      if (set.allSongs.hasOwnProperty(songId)) {
+        quickError = true;
+      }
+    })
+
+    return quickError;
+  }
+
+  async function handleAdd(e) {
+    e.preventDefault();
+
+    if (quick === 17) {
+      if (handleQuickError()) {
+        setShowQuickStartError(true);
+        return;
+      };
+    }
+
+    setLoading(true);
+
     const allNewSongs = [];
     const allOldSongs = [];
     const notAdded = [];
+
+    let songSet = createSongSet();
 
     songSet.forEach((songName) => {
       if (songName.length === 0) {
@@ -283,40 +329,44 @@ function AddMultiple(props) {
 
   if (showMain) {
     return (
-      <Modal handleOutsideClick={quick ? null : handleCancel} allowOverflow={songsEntryArrow ? true : false}>
-        {
-          loading ?
-            <Loading /> :
-            (<AddMultipleStyled allSongs={(calling === 'allSongs') ? true : false}>
-              <legend>{configObj.heading}</legend>
-              {configObj.instructions}
-              <textarea name="" id="" cols="27" rows="5" value={songList} onChange={handleSongListChange} disabled={quick === 17 ? true : false}></textarea>
-              {(calling === 'allSongs') &&
-                <SetsField>
-                  <legend>Add Songs To Which Sets?</legend>
-                  <ul>
-                    {setArray.map((set, idx) => {
-                      return (
-                        <SetsCheckbox key={`${set[2]}`}>
-                          <input id={`${set[2]}`} value={set[0]} checked={set[1]} onChange={handleCheckboxChange} type="checkbox"></input>
-                          <label htmlFor={`${set[2]}`} >{capitalize(set[0])}</label>
-                        </SetsCheckbox>
-                      )
-                    })}
-                  </ul>
-                </SetsField>
-              }
-              <AddMultipleButtonsStyled allSongs={(calling === 'allSongs') ? true : false}>
-                {songsEntryArrow ? songsEntryArrow : null}
-                <AddButton onClick={handleCancel} disable={(quick === 16 || quick === 17) ? true : false}>Cancel</AddButton>
-                <AddButton onClick={handleAdd} disable={(quick === 16) ? true : false}>
-                  Add Songs
-                  {addMultipleButtonArrow ? addMultipleButtonArrow : null}
-                </AddButton>
-              </AddMultipleButtonsStyled>
-            </AddMultipleStyled>)
-        }
-      </Modal>
+      <>
+        <Modal handleOutsideClick={quick ? null : handleCancel} allowOverflow={songsEntryArrow ? true : false}>
+          {
+            loading ?
+              <Loading /> :
+              (<AddMultipleStyled allSongs={(calling === 'allSongs') ? true : false}>
+                <legend>{configObj.heading}</legend>
+                {configObj.instructions}
+                <textarea name="" id="" cols="27" rows="5" value={songList} onChange={handleSongListChange} disabled={quick === 17 ? true : false}></textarea>
+                {(calling === 'allSongs') &&
+                  <SetsField>
+                    <legend>Add Songs To Which Sets?</legend>
+                    <ul>
+                      {setArray.map((set, idx) => {
+                        return (
+                          <SetsCheckbox key={`${set[2]}`}>
+                            <input id={`${set[2]}`} value={set[0]} checked={set[1]} onChange={handleCheckboxChange} type="checkbox"></input>
+                            <label htmlFor={`${set[2]}`} >{capitalize(set[0])}</label>
+                          </SetsCheckbox>
+                        )
+                      })}
+                    </ul>
+                  </SetsField>
+                }
+                <AddMultipleButtonsStyled allSongs={(calling === 'allSongs') ? true : false}>
+                  {songsEntryArrow ? songsEntryArrow : null}
+                  <AddButton onClick={handleCancel} disable={(quick === 16 || quick === 17) ? true : false}>Cancel</AddButton>
+                  <AddButton onClick={handleAdd} disable={(quick === 16) ? true : false}>
+                    Add Songs
+                    {addMultipleButtonArrow ? addMultipleButtonArrow : null}
+                  </AddButton>
+                </AddMultipleButtonsStyled>
+              </AddMultipleStyled>)
+          }
+
+        </Modal>
+        {showQuickStartError && <QuickStartError quickRewind={quickRewind} setShowQuickStartError={setShowQuickStartError} />}
+      </>
     )
   }
 

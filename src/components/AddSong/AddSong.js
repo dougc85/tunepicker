@@ -200,7 +200,7 @@ function AddSong(props) {
 
     if (songNames[titleLower]) {
 
-      if (allSongs) {
+      if (allSongs || quick) {
         setDisableForm(true);
         handleTitleChange(e);
         setErrorMessage('Song Already In Library');

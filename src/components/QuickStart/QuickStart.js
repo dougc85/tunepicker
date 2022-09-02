@@ -7,6 +7,7 @@ import { navItems } from '../../data/navItems';
 import Library from '../Library/Library';
 import Sets from '../Library/Sets/Sets';
 import Set from '../Library/Set/Set';
+import Song from '../Library/Song/Song';
 
 function QuickStart() {
 
@@ -14,8 +15,13 @@ function QuickStart() {
   const [createdSetName, rememberSetName] = useState(undefined);
   const [createdSetId, rememberSetId] = useState(undefined);
   const [createdSongName, rememberCreatedSongName] = useState(undefined);
+  const [secondSongId, rememberSecondSongId] = useState(undefined);
 
   let nextStep;
+
+  function quickRewind() {
+    setStep(old => old - 1);
+  }
 
   function quickForward() {
     setStep(old => old + 1);
@@ -303,7 +309,7 @@ function QuickStart() {
       text: (
         <>
           Set how well you know this tune. The newer the tune is, the more frequently tunePicker
-          will recommend you play it, so you get more practice.
+          will recommend you play it, so that you get more practice.
           <button onClick={handleClick}>then click here</button>
         </>
       ),
@@ -500,6 +506,7 @@ function QuickStart() {
     nextStep = (
       <Set
         addMultipleButtonArrow={arrow}
+        quickRewind={quickRewind}
         quickForward={quickForward}
         quick={step}
         quickStartId={createdSetId}
@@ -512,14 +519,14 @@ function QuickStart() {
     const textObject = {
       text: (
         <>
-          Okay, now we've added three songs at once.  Notice how they're all <span>green</span>.  Since we added them in bulk,
-          they all default to 'I know the song well' and 'play in random keys'. Let's say we don't know this song well
-          and want to change it. Click to edit it.
+          Notice how the songs we just added are all <span>green</span>.  When you add songs in bulk,
+          tunePicker defaults to assuming you know the songs well.
+          Let's say we don't know this particular song well. Click to edit it.
         </>
       ),
-      top: '140',
-      left: '-95',
-      width: '300',
+      top: '135',
+      left: '-82',
+      width: '280',
     }
 
     const arrow = (
@@ -533,7 +540,14 @@ function QuickStart() {
         quick={step}
         quickStartId={createdSetId}
         createdSongName={createdSongName}
+        rememberSecondSongId={rememberSecondSongId}
       />
+    )
+  }
+
+  if (step === 19) {
+    nextStep = (
+      <Song quickSongId={secondSongId} />
     )
   }
 

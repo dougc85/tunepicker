@@ -5,7 +5,7 @@ import capitalize from '../../../helperFunctions/capitalize';
 
 function SongEntry(props) {
 
-  const { song, tuneArrow, secondTuneArrow, quickForward, disable } = props;
+  const { song, tuneArrow, secondTuneArrow, quickForward, disable, rememberSecondSongId } = props;
   const { knowledge, title, id } = song;
   const navigate = useNavigate();
   const params = useParams();
@@ -17,6 +17,9 @@ function SongEntry(props) {
 
   function handleClick() {
     if (quickForward) {
+      if (rememberSecondSongId) {
+        rememberSecondSongId(id);
+      }
       quickForward();
       return;
     }
