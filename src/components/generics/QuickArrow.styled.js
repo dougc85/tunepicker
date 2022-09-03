@@ -61,6 +61,7 @@ const QuickArrowStyled = styled.div`
     color: white;
     padding: 20px;
     font-size: 1.6rem;
+    font-weight: normal;
     border-radius: 5px;
     border: 3px solid red;
     text-align: center;

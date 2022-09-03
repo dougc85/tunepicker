@@ -36,7 +36,7 @@ function Song(props) {
   const context = useContext(SubContext);
   const { loading, userDoc, user, handleNetworkError } = context;
   const { setNames, songs: allSongs, songNames } = userDoc;
-  const { quickSongId, knowledgeEditArrow, quickForward, quick } = props;
+  const { quickSongId, knowledgeEditArrow, quickForward, quick, confirmArrow, pathArrow } = props;
 
   const params = useParams();
   const navigate = useNavigate();
@@ -346,7 +346,7 @@ function Song(props) {
 
   return (
     <>
-      <Path heading={capitalize(allSongs[songId].title)} pathType={'Song'} disable={quickForward ? true : false} />
+      <Path heading={capitalize(allSongs[songId].title)} pathType={'Song'} disable={quickForward ? true : false} pathArrow={pathArrow} quickForward={quickForward} />
       <SongStyled >
         <div>
           <div>
@@ -415,12 +415,14 @@ function Song(props) {
             show={setShowKnowledgeEdit}
             focusInput={focusInput}
             field="knowledge"
-            disableEdit={disableEdit}
+            disableEdit={(quick === 21) ? true : disableEdit}
             setDisableEdit={setDisableEdit}
             saveData={saveKnowledgeData}
             knowledgeEditArrow={knowledgeEditArrow}
             quickForward={quickForward}
+            knowledge={knowledge}
           />
+          {confirmArrow ? confirmArrow : null}
         </div>
         <div>
           <div>

@@ -11,11 +11,11 @@ function EditConfirm(props) {
     setDisableEdit,
     saveData,
     knowledgeEditArrow,
-    quickForward
+    quickForward,
+    knowledge
   } = props;
-  const [showConfirm, setShowConfirm] = useState(false);
 
-  console.log(knowledgeEditArrow);
+  const [showConfirm, setShowConfirm] = useState(false);
 
   function handleEditClick() {
     show(true);
@@ -23,11 +23,19 @@ function EditConfirm(props) {
     setShowConfirm(true);
     setDisableEdit(true);
     if (quickForward) {
+
       quickForward();
     }
   }
 
   async function handleConfirmClick() {
+
+    if (quickForward) {
+      if (knowledge === 'know') {
+        return;
+      }
+    }
+
     const possibleError = await saveData();
     if (possibleError) {
       return;
@@ -36,7 +44,9 @@ function EditConfirm(props) {
     focusInput('');
     show(false);
     setDisableEdit(false);
-
+    if (quickForward) {
+      quickForward();
+    }
   }
 
   function empty() {
@@ -50,7 +60,10 @@ function EditConfirm(props) {
           edit
           {knowledgeEditArrow ? knowledgeEditArrow : null}
         </EditButton>}
-      {showConfirm && <ConfirmButton onTouchStart={empty} onClick={handleConfirmClick}>Confirm</ConfirmButton>}
+      {showConfirm &&
+        <ConfirmButton onTouchStart={empty} onClick={handleConfirmClick}>
+          Confirm
+        </ConfirmButton>}
     </EditConfirmStyled>
   )
 }

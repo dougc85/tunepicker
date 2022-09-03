@@ -5,10 +5,18 @@ export const PathStyled = styled.div`
   align-items: center;
   padding: 1rem;
   font-size: 1.7rem;
-  ${({ disable }) => {
-    if (disable) {
+  ${({ disable, allowSetButton }) => {
+    if (allowSetButton) {
       return `
-        pointer-events: none;
+        >button:not(:nth-child(5)) {
+          pointer-events: none;
+        }
+      `
+    } else if (disable) {
+      return `
+        >button {
+          pointer-events: none;
+        }
       `
     }
   }}
@@ -19,6 +27,7 @@ export const PathStyled = styled.div`
   }
 
   button {
+    position: relative;
     display: block;
     background-color: ${props => {
     return props.forPicker ? 'rgba(0, 0, 0, 0)' : 'white'

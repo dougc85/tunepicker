@@ -573,6 +573,109 @@ function QuickStart() {
     )
   }
 
+  if (step === 20) {
+
+    const textObject = {
+      text: (
+        <>
+          Now change how well you know this tune.  Set it, either, to 'Medium well' or 'Just learned', then
+          click 'confirm'.
+        </>
+      ),
+      top: '110',
+      left: '-98',
+      width: '280',
+    }
+
+    const arrow = (
+      <QuickArrow rotation="90" center top="40" height="130" textObject={textObject} />
+    )
+
+    nextStep = (
+      <Song
+        quickSongId={secondSongId}
+        confirmArrow={arrow}
+        quickForward={quickForward}
+        quick={step}
+      />
+    )
+  }
+
+  if (step === 21) {
+
+    const textObject = {
+      text: (
+        <>
+          Great! Now let's return to our set's page.  You can use this navigation bar here in the upper left
+          to move around your library.  We'll click the 'set' icon now to leave this song's page.
+        </>
+      ),
+      top: '50',
+      left: '-38',
+      width: '280',
+    }
+
+    const arrow = (
+      <QuickArrow rotation="75" top="10" left="-10" height="60" textObject={textObject} />
+    )
+
+    nextStep = (
+      <Song
+        quickSongId={secondSongId}
+        quickForward={quickForward}
+        quick={step}
+        pathArrow={arrow}
+      />
+    )
+  }
+
+  if (step === 22) {
+    const text = "";
+    const textObject = (createdSetName.length < 9) ? {
+      text,
+      top: '80',
+      left: '-25',
+    } : (createdSetName.length < 15) ? {
+      text,
+      top: '80',
+      left: '-95',
+    } :
+      {
+        text,
+        top: '95',
+        left: '-130',
+      };
+
+    const top = (createdSetName.length < 9) ? "10" : (createdSetName.length < 15) ? "10" : "5";
+    const bottom = (createdSetName.length < 9) ? "auto" : (createdSetName.length < 15) ? "0" : "0";
+    const left = (createdSetName.length < 9) ? "-13" : (createdSetName.length < 15) ? "-35" : "-70";
+    const right = (createdSetName.length < 9) ? "auto" : (createdSetName.length < 15) ? "0" : "0";
+
+    const rotation = (createdSetName.length < 9) ? "65" : (createdSetName.length < 15) ? "100" : "120";
+
+    const height = createdSetName.length < 15 ? "80" : "110";
+
+    const arrow = (
+      <QuickArrow rotation={rotation} height={height} top={top} bottom={bottom} left={left} right={right} textObject={textObject} />
+    )
+    nextStep = (
+      <Set
+        menuArrow={arrow}
+        quickForward={quickForward}
+        quick={step}
+        quickStartId={createdSetId}
+      />
+    )
+  }
+
+
+
+
+
+
+
+
+
   return (
     <QuickFrame
       step={step}
