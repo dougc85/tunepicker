@@ -6,6 +6,7 @@ export const EditConfirmStyled = styled.div`
 `
 
 export const EditButton = styled.button`
+  position: relative;
   background-color: inherit;
   border: none;
   border-bottom: 1px solid black;

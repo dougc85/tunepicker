@@ -546,8 +546,30 @@ function QuickStart() {
   }
 
   if (step === 19) {
+
+    const textObject = {
+      text: (
+        <>
+          Here on the song's page, you can change anything about it.  For practice, we'll change how well we know
+          the song. Click here.
+        </>
+      ),
+      top: '105',
+      left: '-190',
+      width: '280',
+    }
+
+    const arrow = (
+      <QuickArrow rotation="145" top="-25" left="-105" height="130" textObject={textObject} />
+    )
+
     nextStep = (
-      <Song quickSongId={secondSongId} />
+      <Song
+        quickSongId={secondSongId}
+        knowledgeEditArrow={arrow}
+        quickForward={quickForward}
+        quick={step}
+      />
     )
   }
 

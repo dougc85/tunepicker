@@ -36,7 +36,7 @@ function Song(props) {
   const context = useContext(SubContext);
   const { loading, userDoc, user, handleNetworkError } = context;
   const { setNames, songs: allSongs, songNames } = userDoc;
-  const { quickSongId } = props;
+  const { quickSongId, knowledgeEditArrow, quickForward, quick } = props;
 
   const params = useParams();
   const navigate = useNavigate();
@@ -346,7 +346,7 @@ function Song(props) {
 
   return (
     <>
-      <Path heading={capitalize(allSongs[songId].title)} pathType={'Song'} />
+      <Path heading={capitalize(allSongs[songId].title)} pathType={'Song'} disable={quickForward ? true : false} />
       <SongStyled >
         <div>
           <div>
@@ -358,7 +358,14 @@ function Song(props) {
             {errorMessage && <TitleError>{errorMessage}</TitleError>}
             <p style={{ display: (showTitleEdit ? 'none' : 'block') }}>{capitalize(allSongs[songId].title)}</p>
           </TitleEntryStyled>
-          <EditConfirm field="title" show={setShowTitleEdit} focusInput={focusInput} disableEdit={disableEdit} setDisableEdit={setDisableEdit} saveData={saveTitleData} />
+          <EditConfirm
+            field="title"
+            show={setShowTitleEdit}
+            focusInput={focusInput}
+            disableEdit={quickForward ? true : disableEdit}
+            setDisableEdit={setDisableEdit}
+            saveData={saveTitleData}
+          />
         </div>
         <div>
           <div>
@@ -376,7 +383,14 @@ function Song(props) {
             </select>
             <p style={{ display: (showKeyEdit ? 'none' : 'block') }}>{song.songKey}</p>
           </KeyEntryStyled>
-          <EditConfirm show={setShowKeyEdit} focusInput={focusInput} field="key" disableEdit={disableEdit} setDisableEdit={setDisableEdit} saveData={saveKeyData} />
+          <EditConfirm
+            show={setShowKeyEdit}
+            focusInput={focusInput}
+            field="key"
+            disableEdit={quickForward ? true : disableEdit}
+            setDisableEdit={setDisableEdit}
+            saveData={saveKeyData}
+          />
         </div>
         <div>
           <div>
@@ -397,7 +411,16 @@ function Song(props) {
               <div style={{ backgroundColor: bgColor }}></div>
             </div>
           </KnowledgeEntryStyled>
-          <EditConfirm show={setShowKnowledgeEdit} focusInput={focusInput} field="knowledge" disableEdit={disableEdit} setDisableEdit={setDisableEdit} saveData={saveKnowledgeData} />
+          <EditConfirm
+            show={setShowKnowledgeEdit}
+            focusInput={focusInput}
+            field="knowledge"
+            disableEdit={disableEdit}
+            setDisableEdit={setDisableEdit}
+            saveData={saveKnowledgeData}
+            knowledgeEditArrow={knowledgeEditArrow}
+            quickForward={quickForward}
+          />
         </div>
         <div>
           <div>
@@ -408,7 +431,14 @@ function Song(props) {
             <textarea style={{ display: (showNotesEdit ? 'block' : 'none') }} id="songNotes-songPage" ref={notesInput} value={notes} onChange={handleNotesChange} ></textarea>
             <p style={{ display: (showNotesEdit ? 'none' : 'block') }}>{song.notes || 'none'}</p>
           </NotesEntryStyled>
-          <EditConfirm show={setShowNotesEdit} focusInput={focusInput} field="notes" disableEdit={disableEdit} setDisableEdit={setDisableEdit} saveData={saveNotesData} />
+          <EditConfirm
+            show={setShowNotesEdit}
+            focusInput={focusInput}
+            field="notes"
+            disableEdit={quickForward ? true : disableEdit}
+            setDisableEdit={setDisableEdit}
+            saveData={saveNotesData}
+          />
         </div>
         <div>
           <div>
@@ -432,11 +462,23 @@ function Song(props) {
               ))}
             </ul>
           </SetsEntryStyled>
-          <EditConfirm show={setShowSetsEdit} focusInput={focusInput} field="sets" disableEdit={disableEdit} setDisableEdit={setDisableEdit} saveData={saveSetsData} />
+          <EditConfirm
+            show={setShowSetsEdit}
+            focusInput={focusInput}
+            field="sets"
+            disableEdit={quickForward ? true : disableEdit}
+            setDisableEdit={setDisableEdit}
+            saveData={saveSetsData}
+          />
         </div>
-        <button onClick={handleDeleteButton}>Delete Song</button>
+        <button onClick={handleDeleteButton} disabled={quickForward ? true : disableEdit}>Delete Song</button>
       </SongStyled>
-      {showDeleteSong && <DeleteSong song={song} knowledgeArrays={knowledgeArrays} setShowDeleteSong={setShowDeleteSong} />}
+      {showDeleteSong &&
+        <DeleteSong
+          song={song}
+          knowledgeArrays={knowledgeArrays}
+          setShowDeleteSong={setShowDeleteSong}
+        />}
     </>
   )
 }
