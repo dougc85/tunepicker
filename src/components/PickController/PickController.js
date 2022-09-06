@@ -53,11 +53,21 @@ const pickerInitialValues = {
   tune: '',
 }
 
-function PickController() {
+function PickController(quickStartProps) {
 
   const context = useContext(SubContext);
   const { user, loading, userDoc, handleNetworkError } = context;
   const allSongs = userDoc.songs;
+
+  const {
+    quick,
+    quickForward,
+    pickerTextbox,
+    pickerMenuArrow,
+    newGigArrow,
+    skipArrow,
+    nextArrow,
+  } = quickStartProps;
 
 
   const ORANGE = 'hsl(26, 100%, 67%)';
@@ -390,14 +400,23 @@ function PickController() {
   }
 
   function nextHandler() {
+    if (quick && !nextArrow) {
+      return;
+    }
     pickTune({
       action: 'NEW_TUNE',
       knowledge: currentList
     });
     pickKey();
+    if (quickForward) {
+      quickForward();
+    }
   }
 
   function skipHandler() {
+    if (quick && quick !== 30) {
+      return;
+    }
 
     pickTune({
       action: 'NEW_TUNE',
@@ -406,14 +425,24 @@ function PickController() {
       oldList: allSongs[tune].knowledge,
       tune: tune,
     });
+
+    if (quickForward) {
+      quickForward();
+    }
   }
 
 
   function raiseKnowledge() {
+    if (quick) {
+      return;
+    }
     changeKnowledge('raise');
   }
 
   function lowerKnowledge() {
+    if (quick) {
+      return;
+    }
     changeKnowledge('lower');
   }
 
@@ -557,6 +586,9 @@ function PickController() {
   }
 
   function handleNotesClick() {
+    if (quickForward) {
+      return;
+    }
     setShowNotes(true);
   }
 
@@ -566,28 +598,44 @@ function PickController() {
         <PickerInfo>
           <PickingFrom>
             <p>Picking from:</p>
-            <Path heading={capitalize(userDoc.setNames[userDoc.pickerSet])} pathType="Set" setId={userDoc.pickerSet} forPicker />
+            <Path heading={capitalize(userDoc.setNames[userDoc.pickerSet])} pathType="Set" setId={userDoc.pickerSet} forPicker disable={quickForward ? true : false} />
           </PickingFrom>
           <PickerMenu className="picker-info-menu">
             <p>Menu</p>
             <LibraryMenu
               items={libraryMenuItems}
               color="#3d3d3d"
-            />
+              quickForward={quickForward}
+              quick={quick}
+              newGigArrow={newGigArrow}
+            >
+              {pickerMenuArrow ? pickerMenuArrow : null}
+            </LibraryMenu>
           </PickerMenu>
         </PickerInfo>
         <TuneWrapper className="tune-wrapper" length={tuneLength}>
-          <p className="tune-name">{allSongs[tune] && capitalize(allSongs[tune].title)}</p>
+          <p className="tune-name">
+            {allSongs[tune] && capitalize(allSongs[tune].title)}
+          </p>
         </TuneWrapper>
         <KeyWrapper>
-          <p className="key">{displayedKey}</p>
+          <p className="key">
+            {displayedKey}
+          </p>
+          {pickerTextbox ? pickerTextbox : null}
         </KeyWrapper>
         <NextButton className="next-button" onClick={nextHandler} >
-          <button>NEXT</button>
+          <button>
+            NEXT
+            {nextArrow ? nextArrow : null}
+          </button>
         </NextButton>
 
         <SmallButtons className="small-buttons-wrapper">
-          <button className="skip-button small-btn" onClick={skipHandler}>SKIP</button>
+          <button className="skip-button small-btn" onClick={skipHandler}>
+            SKIP
+            {skipArrow ? skipArrow : null}
+          </button>
           <button className="raise-button small-btn" onClick={raiseKnowledge} >&uarr;</button>
           <button className="lower-button small-btn" onClick={lowerKnowledge}>&darr;</button>
         </SmallButtons>

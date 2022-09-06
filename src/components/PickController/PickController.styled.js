@@ -71,17 +71,22 @@ export const TuneWrapper = styled.div`
 `
 
 export const KeyWrapper = styled.div`
+  position: relative;
   height: 7rem;
-  font-size: 5rem;
-  text-align: center;
-  letter-spacing: -2px;
   display: flex;
   align-items: center;
   justify-content: center;
 
-  sup {
+  >p {
+    font-size: 5rem;
+    text-align: center;
+    letter-spacing: -2px;
+
+    sup {
     font-size: 4rem;
   }
+  }
+  
 `
 
 export const NextButton = styled.div`
@@ -91,6 +96,7 @@ export const NextButton = styled.div`
   align-items: center;
 
   button {
+    position: relative;
     margin: 0 auto;
     font-size: 4.5rem;
     border: 2px solid black;
@@ -112,6 +118,7 @@ export const SmallButtons = styled.div`
   width: 80%;
 
   >button {
+    position: relative;
     border: 2px solid #573704;
     padding: 1rem;
     font-size: 1.8rem;

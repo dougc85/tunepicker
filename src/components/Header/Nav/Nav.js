@@ -9,7 +9,7 @@ import { navItems } from '../../../data/navItems';
 
 function Nav(props) {
 
-  const { toggleNav, singleNavAllowed, quickForward, libraryArrow } = props;
+  const { toggleNav, singleNavAllowed, quickForward, libraryArrow, pickerArrow } = props;
 
   const { handleNetworkError } = useContext(SubContext);
 
@@ -36,6 +36,7 @@ function Nav(props) {
       <Screen onClick={quickForward ? null : toggleNav} />
       <NavStyled singleNavAllowed={singleNavAllowed}>
         {libraryArrow}
+        {pickerArrow}
         <ul>
           {navItems.map((navItem, idx) => {
             if (singleNavAllowed === (idx + 1)) {

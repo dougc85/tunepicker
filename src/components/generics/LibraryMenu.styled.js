@@ -78,28 +78,41 @@ const MenuWrapper = styled.div`
 
 function LibraryMenu(props) {
 
-  const { items, color, allSongs, children, quickForward, quick, addSongArrow, addMultipleArrow } = props;
+  const {
+    items,
+    color,
+    allSongs,
+    children,
+    quickForward,
+    quick,
+    addSongArrow,
+    addMultipleArrow,
+    setAsPickerArrow,
+    newGigArrow,
+  } = props;
   const [showMenu, setShowMenu] = useState(false);
   const [repositionMenu, setRepositionMenu] = useState(false);
   const libMenuRef = useRef(null);
 
+
   function handleClick() {
-    if (quick === 8 || quick === 13 || quick === 18) {
+
+    if (quick === 8 || quick === 13 || quick === 18 || quick === 26 || quick === 29 || quick === 30 || quick === 31) {
       return;
     }
     setShowMenu((old) => !old);
-    if ((libMenuRef.current.getBoundingClientRect().x + 50) > window.innerWidth) {
+    if ((libMenuRef.current.getBoundingClientRect().x + 50) > window.innerWidth || (quick > 25)) {
       setRepositionMenu('-15.8rem');
     } else if ((libMenuRef.current.getBoundingClientRect().x + 200) > window.innerWidth) {
       setRepositionMenu('-14rem');
     }
-    if (quick === 7 || quick === 14) {
+    if (quick === 7 || quick === 14 || quick === 22 || quick === 27 || quick === 42) {
       quickForward();
     }
   }
 
   function handleScreenClick() {
-    if (quick === 8 || quick === 15) {
+    if (quick === 8 || quick === 15 || quick === 23 || quick === 28) {
       return;
     }
     setShowMenu(false)
@@ -119,7 +132,7 @@ function LibraryMenu(props) {
           <MenuWrapper>
             <ul>
               {items.map(item => {
-                if (quick === 8 || quick === 15) {
+                if (quick === 8 || quick === 15 || quick === 23 || quick === 28 || quick === 43) {
                   if (quick === 8 && item.text === 'Add New Song') {
                     return (
                       <li key={item.text} onClick={() => {
@@ -140,6 +153,28 @@ function LibraryMenu(props) {
                       }}>
                         {item.text}
                         {addMultipleArrow}
+                      </li>
+                    )
+                  } else if (quick === 23 && item.text === 'Set As PickerSet') {
+                    return (
+                      <li key={item.text} onClick={() => {
+                        setShowMenu(false);
+                        item.func();
+                        quickForward();
+                      }}>
+                        {item.text}
+                        {setAsPickerArrow}
+                      </li>
+                    )
+                  } else if ((quick === 28 || quick === 43) && item.text === 'Start New Gig') {
+                    return (
+                      <li key={item.text} onClick={() => {
+                        setShowMenu(false);
+                        item.func();
+                        quickForward();
+                      }}>
+                        {item.text}
+                        {newGigArrow}
                       </li>
                     )
                   } else {

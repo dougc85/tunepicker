@@ -8,6 +8,7 @@ import Library from '../Library/Library';
 import Sets from '../Library/Sets/Sets';
 import Set from '../Library/Set/Set';
 import Song from '../Library/Song/Song';
+import PickController from '../PickController/PickController';
 
 function QuickStart() {
 
@@ -606,8 +607,11 @@ function QuickStart() {
     const textObject = {
       text: (
         <>
-          Great! Now let's return to our set's page.  You can use this navigation bar here in the upper left
-          to move around your library.  We'll click the 'set' icon now to leave this song's page.
+          Great job! We're done with this song, so let's go back to our set.
+          <span>
+            You can use this navigation bar
+            here in the upper left corner of the screen to move around your library.  Click the 'set' icon here.
+          </span>
         </>
       ),
       top: '50',
@@ -616,7 +620,7 @@ function QuickStart() {
     }
 
     const arrow = (
-      <QuickArrow rotation="75" top="10" left="-10" height="60" textObject={textObject} />
+      <QuickArrow rotation="75" top="10" left="-10" height="60" newline textObject={textObject} />
     )
 
     nextStep = (
@@ -630,7 +634,7 @@ function QuickStart() {
   }
 
   if (step === 22) {
-    const text = "";
+    const text = "Okay, we're back in our set. Now that we've added a few songs, we're ready to use it on a gig. Open up the set's menu one last time.";
     const textObject = (createdSetName.length < 9) ? {
       text,
       top: '80',
@@ -665,6 +669,586 @@ function QuickStart() {
         quick={step}
         quickStartId={createdSetId}
       />
+    )
+  }
+
+  if (step === 23) {
+    const textObject = {
+      text: (
+        <>
+          Click here to tell the tunePicker that this set we've just created is the set
+          we want to use on our next gig
+        </>
+      ),
+      top: '130',
+      left: '-28',
+      width: '150',
+    }
+
+    const arrow = (
+      <QuickArrow rotation="90" top="0" center textObject={textObject} />
+    )
+
+    nextStep = (
+      <Set
+        setAsPickerArrow={arrow}
+        quickForward={quickForward}
+        quick={step}
+        quickStartId={createdSetId}
+      />
+    )
+  }
+
+  if (step === 24) {
+
+    const textObject = {
+      text: (
+        <>
+          Now we'll open up the tunePicker itself.  Click on the main menu up here.
+        </>
+      ),
+      top: '95',
+      left: '-108',
+      width: '150',
+    }
+
+    const arrow = (
+      <QuickArrow rotation="135" height="120" right="0" top="0" textObject={textObject} />
+    )
+
+    return (
+      <QuickFrame
+        step={step}
+        navAccess={true}
+        quickForward={quickForward}
+        navMenuArrow={arrow}
+      >
+        <Set
+          setAsPickerArrow={arrow}
+          quickForward={quickForward}
+          quick={step}
+          quickStartId={createdSetId}
+        />
+      </QuickFrame>
+    )
+  }
+
+  if (step === 25) {
+
+    const textObject = {
+      text: "Navigate to the Picker",
+      left: '-80',
+    }
+    const arrow = (
+      <QuickArrow rotation="135" height="90" top="20" left="10" textObject={textObject} />
+    )
+
+    return (
+      <QuickFrame
+        step={step}
+        quickForward={quickForward}
+        navAccess={false}
+        singleNavAllowed={navCssPosition('Picker')}
+        pickerArrow={arrow}
+      >
+        <Set
+          setAsPickerArrow={arrow}
+          quickForward={quickForward}
+          quick={step}
+          quickStartId={createdSetId}
+        />
+      </QuickFrame>
+    )
+  }
+
+  if (step === 26) {
+
+    function handleClick(e) {
+      preventRefresh(e);
+      quickForward();
+    }
+
+    const textObject = {
+      text: (
+        <>
+          We've arrived at the tunePicker itself! The picker will give you the name of a tune to play (see above)
+          and a key to play it in (also see above).
+          <button onClick={handleClick}>Got it</button>
+        </>
+      ),
+      top: '70',
+      left: '-159',
+      width: '270',
+    }
+    const arrow = (
+      <QuickArrow rotation="135" height="0" center textObject={textObject} />
+    )
+
+    nextStep = (
+      <PickController
+        pickerTextbox={arrow}
+        quickForward={quickForward}
+        quick={step}
+      >
+      </PickController>
+    )
+  }
+
+  if (step === 27) {
+    const textObject = {
+      text: (
+        <>
+          Whenever you fire up the tunePicker, you'll want to tell it that you're starting a new gig; let's do that now.
+          Open up the picker menu up here.
+        </>
+      ),
+      top: '115',
+      left: '-128',
+    }
+    const arrow = (
+      <QuickArrow rotation="135" height="140" right="-10" top="-10" textObject={textObject} />
+    )
+
+    nextStep = (
+      <PickController
+        pickerMenuArrow={arrow}
+        quickForward={quickForward}
+        quick={step}
+      >
+      </PickController>
+    )
+  }
+
+  if (step === 28) {
+    const textObject = {
+      text: "Now, click here",
+      top: '85',
+      left: '-100',
+    }
+    const arrow = (
+      <QuickArrow rotation="115" height="100" top="5" left="30" textObject={textObject} />
+    )
+
+    nextStep = (
+      <PickController
+        newGigArrow={arrow}
+        quickForward={quickForward}
+        quick={step}
+      >
+      </PickController>
+    )
+  }
+
+  if (step === 29) {
+    function handleClick(e) {
+      preventRefresh(e);
+      quickForward();
+    }
+    const textObject = {
+      text: (
+        <>
+          Alright, we've started our gig. The tunePicker has recommended a tune and a key to play it in.
+          <button onClick={handleClick} >Nice!</button>
+        </>
+      ),
+      top: '70',
+      left: '-159',
+      width: '270',
+    }
+    const arrow = (
+      <QuickArrow rotation="115" height="0" center textObject={textObject} />
+    )
+
+    nextStep = (
+      <PickController
+        pickerTextbox={arrow}
+        quickForward={quickForward}
+        quick={step}
+      >
+      </PickController>
+    )
+  }
+
+  if (step === 30) {
+    const textObject = {
+      text: (
+        <>
+          Let's say we don't want to play this tune right now. We can press the 'SKIP' button
+          and the picker will pick a different tune and then try recommending this tune again later.
+          <span>
+            (There's even a small chance it'll pick it again immediately. If this happens, you'd
+            just click skip again.)
+          </span>
+        </>
+      ),
+      top: '-160',
+      left: '-61',
+      width: '320',
+    }
+    const arrow = (
+      <QuickArrow rotation="-75" height="120" top="-100" left="-10" newline textObject={textObject} />
+    )
+
+    nextStep = (
+      <PickController
+        skipArrow={arrow}
+        quickForward={quickForward}
+        quick={step}
+      >
+      </PickController>
+    )
+  }
+
+  if (step === 31) {
+    const textObject = {
+      text: (
+        <>
+          Alright, here's a tune that sounds good to play.  We play it, the audience applauds, etc, etc.  Then, click
+          'NEXT' to go to a new tune
+        </>
+      ),
+      top: '40',
+      left: '-138',
+      width: '290',
+    }
+    const arrow = (
+      <QuickArrow rotation="90" height="60" top="55" center textObject={textObject} />
+    )
+
+    nextStep = (
+      <PickController
+        nextArrow={arrow}
+        quickForward={quickForward}
+        quick={step}
+      >
+      </PickController>
+    )
+  }
+
+  if (step === 32) {
+    const textObject = {
+      text: (
+        <>
+          Here's another tune; we'll play this one, too, and then hit 'NEXT' again
+        </>
+      ),
+      top: '40',
+      left: '-138',
+      width: '290',
+    }
+    const arrow = (
+      <QuickArrow rotation="90" height="60" top="55" center textObject={textObject} />
+    )
+
+    nextStep = (
+      <PickController
+        nextArrow={arrow}
+        quickForward={quickForward}
+        quick={step}
+      >
+      </PickController>
+    )
+  }
+
+  if (step === 33) {
+    const textObject = {
+      text: (
+        <>
+          Let's play another and hit 'NEXT' again.
+        </>
+      ),
+      top: '40',
+      left: '-138',
+      width: '290',
+    }
+    const arrow = (
+      <QuickArrow rotation="90" height="60" top="55" center textObject={textObject} />
+    )
+
+    nextStep = (
+      <PickController
+        nextArrow={arrow}
+        quickForward={quickForward}
+        quick={step}
+      >
+      </PickController>
+    )
+  }
+
+  if (step === 34) {
+    const textObject = {
+      text: (
+        <>
+          And again...
+        </>
+      ),
+      top: '40',
+      left: '-138',
+      width: '290',
+    }
+    const arrow = (
+      <QuickArrow rotation="90" height="60" top="55" center textObject={textObject} />
+    )
+
+    nextStep = (
+      <PickController
+        nextArrow={arrow}
+        quickForward={quickForward}
+        quick={step}
+      >
+      </PickController>
+    )
+  }
+
+  if (step === 35) {
+    const textObject = {
+      text: (
+        <>
+          And once more...
+        </>
+      ),
+      top: '40',
+      left: '-138',
+      width: '290',
+    }
+    const arrow = (
+      <QuickArrow rotation="90" height="60" top="55" center textObject={textObject} />
+    )
+
+    nextStep = (
+      <PickController
+        nextArrow={arrow}
+        quickForward={quickForward}
+        quick={step}
+      >
+      </PickController>
+    )
+  }
+
+  if (step === 36) {
+    const textObject = {
+      text: (
+        <>
+          At this point, you may be noticing something strange. Click 'NEXT' again.
+        </>
+      ),
+      top: '40',
+      left: '-138',
+      width: '290',
+    }
+    const arrow = (
+      <QuickArrow rotation="90" height="60" top="55" center textObject={textObject} />
+    )
+
+    nextStep = (
+      <PickController
+        nextArrow={arrow}
+        quickForward={quickForward}
+        quick={step}
+      >
+      </PickController>
+    )
+  }
+
+  if (step === 37) {
+    const textObject = {
+      text: (
+        <>
+          Notice how the orange (just learned) and/or yellow (medium) tunes have dissapeared? Click 'NEXT' again.
+        </>
+      ),
+      top: '40',
+      left: '-138',
+      width: '290',
+    }
+    const arrow = (
+      <QuickArrow rotation="90" height="60" top="55" center textObject={textObject} />
+    )
+
+    nextStep = (
+      <PickController
+        nextArrow={arrow}
+        quickForward={quickForward}
+        quick={step}
+      >
+      </PickController>
+    )
+  }
+
+  if (step === 38) {
+    const textObject = {
+      text: (
+        <>
+          And some of the green ones (tunes I know well) are repeating themselves? Click 'NEXT' again.
+        </>
+      ),
+      top: '40',
+      left: '-138',
+      width: '290',
+    }
+    const arrow = (
+      <QuickArrow rotation="90" height="60" top="55" center textObject={textObject} />
+    )
+
+    nextStep = (
+      <PickController
+        nextArrow={arrow}
+        quickForward={quickForward}
+        quick={step}
+      >
+      </PickController>
+    )
+  }
+
+  if (step === 39) {
+    function handleClick(e) {
+      preventRefresh(e);
+      quickForward();
+    }
+    const textObject = {
+      text: (
+        <>
+          Well, the yellow and orange tunes aren't showing up because the picker assumes we're still at the same gig.
+          You've already played those songs! So, it won't show them again.
+          <button onClick={handleClick} >Nice!</button>
+        </>
+      ),
+      top: '70',
+      left: '-159',
+      width: '270',
+    }
+    const arrow = (
+      <QuickArrow rotation="115" height="0" center textObject={textObject} />
+    )
+
+    nextStep = (
+      <PickController
+        pickerTextbox={arrow}
+        quickForward={quickForward}
+        quick={step}
+      >
+      </PickController>
+    )
+  }
+
+  if (step === 40) {
+    function handleClick(e) {
+      preventRefresh(e);
+      quickForward();
+    }
+    const textObject = {
+      text: (
+        <>
+          As for the green songs, the tunePicker assumes you have a lot of songs you know well, and you might not finish
+          them all within one gig.  So, when you've picked your last green song, the tunePicker reloads
+          ALL the green songs and starts picking from them again.
+          <button onClick={handleClick} >I see!</button>
+        </>
+      ),
+      top: '60',
+      left: '-165',
+      width: '290',
+    }
+    const arrow = (
+      <QuickArrow rotation="115" height="0" center textObject={textObject} />
+    )
+
+    nextStep = (
+      <PickController
+        pickerTextbox={arrow}
+        quickForward={quickForward}
+        quick={step}
+      >
+      </PickController>
+    )
+  }
+
+  if (step === 41) {
+    function handleClick(e) {
+      preventRefresh(e);
+      quickForward();
+    }
+    const textObject = {
+      text: (
+        <>
+          Admittedly, this can create some strange behavior when you only have 4 songs in your set.  But, when you have, say,
+          100 songs, it will ensure that you always play through all your old songs from time to time. i.e., the tunePicker REMEMBERS
+          what green songs you've already played from gig to gig.
+          <button onClick={handleClick} >Incredible!</button>
+        </>
+      ),
+      top: '40',
+      left: '-171',
+      width: '300',
+    }
+    const arrow = (
+      <QuickArrow rotation="115" height="0" center textObject={textObject} />
+    )
+    nextStep = (
+      <PickController
+        pickerTextbox={arrow}
+        quickForward={quickForward}
+        quick={step}
+      >
+      </PickController>
+    )
+  }
+
+  if (step === 42) {
+    const textObject = {
+      text: (
+        <>
+          So, how do we get it to show the songs we learned more recently?
+          <span>
+            Well, click on the picker Menu again.
+          </span>
+        </>
+      ),
+      top: '115',
+      left: '-128',
+    }
+    const arrow = (
+      <QuickArrow rotation="135" height="140" right="-10" top="-10" textObject={textObject} />
+    )
+
+    nextStep = (
+      <PickController
+        pickerMenuArrow={arrow}
+        quickForward={quickForward}
+        quick={step}
+      >
+      </PickController>
+    )
+  }
+
+  if (step === 43) {
+    const textObject = {
+      text: (
+        <>
+          This is why we always tell the picker we've started a new gig. The picker then knows to reload the
+          songs you don't know as well, and it will frontload those songs so that you play them more than the
+          songs you already know well.
+          <span>
+            Click 'Start New Gig' now
+          </span>
+
+        </>
+      ),
+      top: '85',
+      left: '-150',
+      width: '220',
+    }
+    const arrow = (
+      <QuickArrow rotation="115" height="100" top="5" left="30" newline textObject={textObject} />
+    )
+
+    nextStep = (
+      <PickController
+        newGigArrow={arrow}
+        quickForward={quickForward}
+        quick={step}
+      >
+      </PickController>
     )
   }
 

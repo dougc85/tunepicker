@@ -103,7 +103,7 @@ const QuickArrowStyled = styled.div`
     pointer-events: auto;
   }
 
-  ${({ color }) => {
+  ${({ color, newline }) => {
     if (color) {
 
       return `
@@ -118,13 +118,21 @@ const QuickArrowStyled = styled.div`
         }
       `
     }
+    if (newline) {
+      return `
+        span {
+          display: block;
+          margin-top: 1rem;
+        }
+      `
+    }
   }}
   }
 `
 
 function QuickArrow(props) {
 
-  const { rotation, height, top, left, right, bottom, textObject, devBorder, center, color } = props;
+  const { rotation, height, top, left, right, bottom, textObject, devBorder, center, color, newline } = props;
 
   return (
     <QuickArrowStyled
@@ -138,6 +146,7 @@ function QuickArrow(props) {
       textObject={textObject}
       center={center}
       color={color}
+      newline={newline}
     >
 
       <svg viewBox="0 0 24 24" >
