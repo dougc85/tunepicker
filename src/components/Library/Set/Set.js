@@ -42,7 +42,11 @@ function Set(props) {
     createdSongName,
     secondTuneArrow,
     rememberSecondSongId,
-    setAsPickerArrow
+    setAsPickerArrow,
+    disableLibMenu,
+    libMenuForward,
+    disableLibMenuScreen,
+    navMenuArrow,
   } = props;
 
   const { setNames, songNames, songs: allSongs, pickerSet: pickerSetId } = userDoc;
@@ -200,12 +204,12 @@ function Set(props) {
     let counter = 0;
 
     return songsArray.map((songObj) => {
-      if (quick === 13 || quick === 14 || quick === 22) {
+      if (tuneArrow || menuArrow || navMenuArrow) {
         return (
           <SongEntry song={songObj} sortByDateAdded={false} key={songObj.id} disable={true} tuneArrow={tuneArrow} />
         )
       }
-      if (quick === 18) {
+      if (secondTuneArrow) {
         if (songObj.title !== createdSongName && counter === 0) {
           counter = 1;
           return (
@@ -246,6 +250,9 @@ function Set(props) {
                 addSongArrow={addSongArrow}
                 addMultipleArrow={addMultipleArrow}
                 setAsPickerArrow={setAsPickerArrow}
+                disableLibMenu={disableLibMenu}
+                libMenuForward={libMenuForward}
+                disableLibMenuScreen={disableLibMenuScreen}
               >
                 {menuArrow ? menuArrow : null}
               </LibraryMenu>

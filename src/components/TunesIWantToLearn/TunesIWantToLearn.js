@@ -1,6 +1,6 @@
 import React, { useState, useContext } from 'react';
 import SubContext from '../../context/sub-context';
-import { TunesIWantToLearnStyled, Header, TunesStyled } from "./TunesIWantToLearn.styled";
+import { TunesIWantToLearnStyled, Header, TunesStyled, RightIcon } from "./TunesIWantToLearn.styled";
 import LibraryMenu from '../generics/LibraryMenu.styled';
 import Loading from '../Loading/Loading';
 import AddMultiple from '../AddMultiple/AddMultiple';
@@ -10,10 +10,17 @@ import AddSongToWantToLearn from './AddSongToWantToLearn';
 import Path from '../Library/Path/Path';
 import capitalize from '../../helperFunctions/capitalize';
 
-function TunesIWantToLearn() {
+function TunesIWantToLearn(quickProps) {
 
   const { user, userDoc, loading, handleNetworkError } = useContext(SubContext);
   const { tunesIWantToLearn: tuneNames } = userDoc;
+
+  const {
+    quick,
+    quickSong,
+    deletedSongArrow,
+    disableLibMenu,
+  } = quickProps;
 
   const [showAddSong, setShowAddSong] = useState(false);
   const [showAddMultiple, setShowAddMultiple] = useState(false);
@@ -29,6 +36,9 @@ function TunesIWantToLearn() {
   }
 
   async function deleteTune(e) {
+    if (quick) {
+      return;
+    }
     setSongsLoading((oldObject) => {
       const newObject = { ...oldObject };
       newObject[e.target.dataset.name] = null;
@@ -71,22 +81,38 @@ function TunesIWantToLearn() {
           <h2>{"Tunes I Want To Learn"}</h2>
           <LibraryMenu
             items={libraryMenuItems}
+            disableLibMenu={disableLibMenu}
           />
         </Header>
         <TunesStyled>
           {Object.keys(tuneNames).sort().map((name) => {
+            if (name === quickSong) {
+              return (
+                <li key={name}>
+                  {deletedSongArrow ? deletedSongArrow : null}
+                  <span>{capitalize(name)}</span>
+                  <RightIcon>
+                    {songsLoading.hasOwnProperty(name) ?
+                      <Loading size={1} embedded spinnerOnly /> :
+                      <svg viewBox="0 0 24 24" >
+                        <path data-name={name} onClick={deleteTune} fill="currentColor" d="M19,4H15.5L14.5,3H9.5L8.5,4H5V6H19M6,19A2,2 0 0,0 8,21H16A2,2 0 0,0 18,19V7H6V19Z" />
+                      </svg>
+                    }
+                  </RightIcon>
+                </li>
+              )
+            }
             return (
               <li key={name}>
                 <span>{capitalize(name)}</span>
-                <div>
+                <RightIcon>
                   {songsLoading.hasOwnProperty(name) ?
                     <Loading size={1} embedded spinnerOnly /> :
                     <svg viewBox="0 0 24 24" >
                       <path data-name={name} onClick={deleteTune} fill="currentColor" d="M19,4H15.5L14.5,3H9.5L8.5,4H5V6H19M6,19A2,2 0 0,0 8,21H16A2,2 0 0,0 18,19V7H6V19Z" />
                     </svg>
                   }
-                </div>
-
+                </RightIcon>
               </li>
             )
           }

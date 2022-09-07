@@ -243,9 +243,7 @@ function AddSong(props) {
   }
 
   function disableForQuick() {
-    return (quick === 9) ? true :
-      (quick === 10) ? true :
-        (quick === 11) ? true : false;
+    return (quick && !addButtonArrow) ? true : false;
   }
 
   if (showAddForm) {
@@ -320,7 +318,7 @@ function AddSong(props) {
                   </SetsField>
                 }
                 <InputGrouping width={"80%"}>
-                  <AddButton onClick={handleCancel} disable={(quick === 12) ? true : disableForQuick()}>Cancel</AddButton>
+                  <AddButton onClick={handleCancel} disable={disableForQuick()}>Cancel</AddButton>
                   <AddButton disabled={disableForm} onClick={handleAdd} disable={disableForQuick()}>
                     Add Song
                     {addButtonArrow ? addButtonArrow : null}

@@ -4,7 +4,6 @@ import { MoveDownAndOutStyled } from "./MoveDownAndOut.styled";
 import Modal from '../../generics/Modal.styled';
 import AddButton from '../../generics/AddButton.styled';
 import {
-  updateDoc,
   doc,
   deleteField,
   arrayRemove,
@@ -17,7 +16,17 @@ function MoveDownAndOut(props) {
 
   const context = useContext(SubContext);
   const { user, userDoc, handleNetworkError } = context;
-  const { setShowMoveDownAndOut, songId, title, setTune, knowledgeArrays, setLocalLoading } = props;
+  const {
+    setShowMoveDownAndOut,
+    songId,
+    title,
+    setTune,
+    knowledgeArrays,
+    setLocalLoading,
+    moveOutArrow,
+    quickForward,
+  } = props;
+
   const song = userDoc.songs[songId];
 
   function hideMoveDownAndOut(e) {
@@ -57,6 +66,9 @@ function MoveDownAndOut(props) {
       await batch.commit();
 
       setLocalLoading(false);
+      if (quickForward) {
+        quickForward();
+      }
     }
     catch (error) {
       handleNetworkError(error.message);
@@ -66,13 +78,16 @@ function MoveDownAndOut(props) {
   }
 
   return (
-    <Modal handleOutsideClick={hideMoveDownAndOut} contentHeight={'31rem'}>
+    <Modal handleOutsideClick={quickForward ? null : hideMoveDownAndOut} contentHeight={'31rem'} allowOverflow={true} >
       <MoveDownAndOutStyled>
         <h3>Move Out Of Library</h3>
         <p>The song '{capitalize(title)}' is already set to indicate that you don't know it very well, the lowest setting. </p>
         <p>Would you like to erase this tune from your library (and from all sets in which it can be found) and add it instead to your list of 'Tunes to Learn'?</p>
         <div>
-          <AddButton onClick={handleMove} >Move Out and Erase From Library</AddButton>
+          <AddButton onClick={handleMove} >
+            Move Out and Erase From Library
+            {moveOutArrow ? moveOutArrow : null}
+          </AddButton>
           <AddButton onClick={hideMoveDownAndOut}>Cancel</AddButton>
         </div>
       </MoveDownAndOutStyled>

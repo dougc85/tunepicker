@@ -9,6 +9,7 @@ import Sets from '../Library/Sets/Sets';
 import Set from '../Library/Set/Set';
 import Song from '../Library/Song/Song';
 import PickController from '../PickController/PickController';
+import TunesIWantToLearn from '../TunesIWantToLearn/TunesIWantToLearn';
 
 function QuickStart() {
 
@@ -17,6 +18,7 @@ function QuickStart() {
   const [createdSetId, rememberSetId] = useState(undefined);
   const [createdSongName, rememberCreatedSongName] = useState(undefined);
   const [secondSongId, rememberSecondSongId] = useState(undefined);
+  const [deletedSongName, rememberDeletedSongName] = useState(undefined);
 
   let nextStep;
 
@@ -207,6 +209,7 @@ function QuickStart() {
         quickForward={quickForward}
         quick={step}
         quickStartId={createdSetId}
+        libMenuForward={true}
       />
     )
   }
@@ -229,6 +232,7 @@ function QuickStart() {
         quickForward={quickForward}
         quick={step}
         quickStartId={createdSetId}
+        disableLibMenuScreen={true}
       />
     )
   }
@@ -391,6 +395,7 @@ function QuickStart() {
         quickForward={quickForward}
         quick={step}
         quickStartId={createdSetId}
+        disableLibMenu={true}
       />
     )
   }
@@ -430,6 +435,7 @@ function QuickStart() {
         quickForward={quickForward}
         quick={step}
         quickStartId={createdSetId}
+        libMenuForward={true}
       />
     )
   }
@@ -451,6 +457,7 @@ function QuickStart() {
         quickForward={quickForward}
         quick={step}
         quickStartId={createdSetId}
+        disableLibMenuScreen={true}
       />
     )
   }
@@ -542,6 +549,7 @@ function QuickStart() {
         quickStartId={createdSetId}
         createdSongName={createdSongName}
         rememberSecondSongId={rememberSecondSongId}
+        disableLibMenu={true}
       />
     )
   }
@@ -668,6 +676,7 @@ function QuickStart() {
         quickForward={quickForward}
         quick={step}
         quickStartId={createdSetId}
+        libMenuForward={true}
       />
     )
   }
@@ -695,6 +704,7 @@ function QuickStart() {
         quickForward={quickForward}
         quick={step}
         quickStartId={createdSetId}
+        disableLibMenuScreen={true}
       />
     )
   }
@@ -724,10 +734,11 @@ function QuickStart() {
         navMenuArrow={arrow}
       >
         <Set
-          setAsPickerArrow={arrow}
           quickForward={quickForward}
           quick={step}
           quickStartId={createdSetId}
+          disableLibMenu={true}
+          navMenuArrow={arrow}
         />
       </QuickFrame>
     )
@@ -789,6 +800,7 @@ function QuickStart() {
         pickerTextbox={arrow}
         quickForward={quickForward}
         quick={step}
+        disableLibMenu={true}
       >
       </PickController>
     )
@@ -814,6 +826,7 @@ function QuickStart() {
         pickerMenuArrow={arrow}
         quickForward={quickForward}
         quick={step}
+        libMenuForward={true}
       >
       </PickController>
     )
@@ -834,6 +847,7 @@ function QuickStart() {
         newGigArrow={arrow}
         quickForward={quickForward}
         quick={step}
+        disableLibMenuScreen={true}
       >
       </PickController>
     )
@@ -864,6 +878,7 @@ function QuickStart() {
         pickerTextbox={arrow}
         quickForward={quickForward}
         quick={step}
+        disableLibMenu={true}
       >
       </PickController>
     )
@@ -894,6 +909,7 @@ function QuickStart() {
         skipArrow={arrow}
         quickForward={quickForward}
         quick={step}
+        disableLibMenu={true}
       >
       </PickController>
     )
@@ -920,6 +936,7 @@ function QuickStart() {
         nextArrow={arrow}
         quickForward={quickForward}
         quick={step}
+        disableLibMenu={true}
       >
       </PickController>
     )
@@ -945,6 +962,7 @@ function QuickStart() {
         nextArrow={arrow}
         quickForward={quickForward}
         quick={step}
+        disableLibMenu={true}
       >
       </PickController>
     )
@@ -970,6 +988,7 @@ function QuickStart() {
         nextArrow={arrow}
         quickForward={quickForward}
         quick={step}
+        disableLibMenu={true}
       >
       </PickController>
     )
@@ -995,6 +1014,7 @@ function QuickStart() {
         nextArrow={arrow}
         quickForward={quickForward}
         quick={step}
+        disableLibMenu={true}
       >
       </PickController>
     )
@@ -1020,6 +1040,7 @@ function QuickStart() {
         nextArrow={arrow}
         quickForward={quickForward}
         quick={step}
+        disableLibMenu={true}
       >
       </PickController>
     )
@@ -1045,6 +1066,7 @@ function QuickStart() {
         nextArrow={arrow}
         quickForward={quickForward}
         quick={step}
+        disableLibMenu={true}
       >
       </PickController>
     )
@@ -1070,6 +1092,7 @@ function QuickStart() {
         nextArrow={arrow}
         quickForward={quickForward}
         quick={step}
+        disableLibMenu={true}
       >
       </PickController>
     )
@@ -1095,6 +1118,7 @@ function QuickStart() {
         nextArrow={arrow}
         quickForward={quickForward}
         quick={step}
+        disableLibMenu={true}
       >
       </PickController>
     )
@@ -1126,6 +1150,7 @@ function QuickStart() {
         pickerTextbox={arrow}
         quickForward={quickForward}
         quick={step}
+        disableLibMenu={true}
       >
       </PickController>
     )
@@ -1158,6 +1183,7 @@ function QuickStart() {
         pickerTextbox={arrow}
         quickForward={quickForward}
         quick={step}
+        disableLibMenu={true}
       >
       </PickController>
     )
@@ -1189,6 +1215,7 @@ function QuickStart() {
         pickerTextbox={arrow}
         quickForward={quickForward}
         quick={step}
+        disableLibMenu={true}
       >
       </PickController>
     )
@@ -1216,6 +1243,7 @@ function QuickStart() {
         pickerMenuArrow={arrow}
         quickForward={quickForward}
         quick={step}
+        libMenuForward={true}
       >
       </PickController>
     )
@@ -1225,9 +1253,8 @@ function QuickStart() {
     const textObject = {
       text: (
         <>
-          This is why we always tell the picker we've started a new gig. The picker then knows to reload the
-          songs you don't know as well, and it will frontload those songs so that you play them more than the
-          songs you already know well.
+          This is why we always tell the picker when we're starting a new gig. The picker then knows to reload the
+          'just learned' and 'medium' songs.
           <span>
             Click 'Start New Gig' now
           </span>
@@ -1236,7 +1263,7 @@ function QuickStart() {
       ),
       top: '85',
       left: '-150',
-      width: '220',
+      width: '230',
     }
     const arrow = (
       <QuickArrow rotation="115" height="100" top="5" left="30" newline textObject={textObject} />
@@ -1247,12 +1274,302 @@ function QuickStart() {
         newGigArrow={arrow}
         quickForward={quickForward}
         quick={step}
+        disableLibMenuScreen={true}
       >
       </PickController>
     )
   }
 
+  if (step === 44) {
+    function handleClick(e) {
+      preventRefresh(e);
+      quickForward();
+    }
+    const textObject = {
+      text: (
+        <>
+          Voila! Now that we're starting a new gig, the tunePicker is once again suggesting we play
+          the orange (just learned) and yellow (know medium well) songs.
+          <button onClick={handleClick} >I see</button>
+        </>
+      ),
+      top: '40',
+      left: '-171',
+      width: '300',
+    }
+    const arrow = (
+      <QuickArrow rotation="115" height="0" center textObject={textObject} />
+    )
+    nextStep = (
+      <PickController
+        pickerTextbox={arrow}
+        quickForward={quickForward}
+        quick={step}
+        disableLibMenu={true}
+      >
+      </PickController>
+    )
+  }
 
+  if (step === 45) {
+    const textObject = {
+      text: (
+        <>
+          Finally, these arrows buttons allow you to change
+          the setting of how well you know the displayed tune. Try clicking the up arrow now
+          until the background turns green (indicating that you know the song really well).
+        </>
+      ),
+      top: '-190',
+      left: '-78',
+      width: '230',
+    }
+    const arrow = (
+      <QuickArrow rotation="-90" height="160" top="-145" center textObject={textObject} />
+    )
+
+    nextStep = (
+      <PickController
+        upArrow={arrow}
+        quickForward={quickForward}
+        quick={step}
+        disableLibMenu={true}
+      >
+      </PickController>
+    )
+  }
+
+  if (step === 46) {
+    const textObject = {
+      text: (
+        <>
+          Good, now let's imagine the tunePicker suggested this song that you used to know
+          but you've now totally forgotten it.  We don't want it in the set anymore,
+          but we also want to have a reminder somewhere that we should work on this tune.
+          <span>
+            Click the down arrow all the way to orange, and then click it one more time
+          </span>
+        </>
+      ),
+      top: '-245',
+      left: '-168',
+      width: '270',
+    }
+    const arrow = (
+      <QuickArrow rotation="-90" height="160" top="-145" center newline textObject={textObject} />
+    )
+
+    nextStep = (
+      <PickController
+        downArrow={arrow}
+        quickForward={quickForward}
+        quick={step}
+        rememberDeletedSongName={rememberDeletedSongName}
+      >
+      </PickController>
+    )
+  }
+
+  if (step === 47) {
+    const textObject = {
+      text: (
+        <>
+          Read the box above, and click the 'Move Out' button.
+
+          <span>
+            Then, we'll see where our
+            forgotten song goes after we've removed it from our library.
+          </span>
+        </>
+      ),
+      top: '90',
+      left: '-102',
+      width: 320
+    }
+    const arrow = (
+      <QuickArrow rotation="90" height="160" top="-10" center newline textObject={textObject} />
+    )
+
+    nextStep = (
+      <PickController
+        moveOutArrow={arrow}
+        quickForward={quickForward}
+        quick={step}
+      >
+      </PickController>
+    )
+  }
+
+  if (step === 48) {
+
+    const textObject = {
+      text: (
+        <>
+          Alright, the song's been deleted.  Now open up the menu up here again.
+        </>
+      ),
+      top: '95',
+      left: '-108',
+      width: '150',
+    }
+
+    const arrow = (
+      <QuickArrow rotation="135" height="120" right="0" top="0" textObject={textObject} />
+    )
+
+    return (
+      <QuickFrame
+        step={step}
+        navAccess={true}
+        quickForward={quickForward}
+        navMenuArrow={arrow}
+      >
+        <PickController
+          setAsPickerArrow={arrow}
+          quickForward={quickForward}
+          quick={step}
+          quickStartId={createdSetId}
+          disableLibMenu={true}
+        />
+      </QuickFrame>
+    )
+  }
+
+  if (step === 49) {
+
+    const textObject = {
+      text: "We'll visit this list, which collects songs we want to learn",
+      left: '-90',
+      top: '80',
+      width: '230',
+    }
+    const arrow = (
+      <QuickArrow rotation="135" height="90" top="105" left="-15" textObject={textObject} />
+    )
+
+    return (
+      <QuickFrame
+        step={step}
+        quickForward={quickForward}
+        navAccess={false}
+        singleNavAllowed={navCssPosition('Tunes To Learn')}
+        tunesToLearnArrow={arrow}
+      >
+        <PickController
+          setAsPickerArrow={arrow}
+          quickForward={quickForward}
+          quick={step}
+          quickStartId={createdSetId}
+          disableLibMenu={true}
+        />
+      </QuickFrame>
+    )
+  }
+
+  if (step === 50) {
+
+    function handleClick(e) {
+      preventRefresh(e);
+      quickForward();
+    }
+
+    const textObject = {
+      text: (
+        <>
+          And here it is, the song we just deleted.
+          <span>
+            This page is here for you to quickly jot down tunes you want to learn.
+            Except for what we just did (knocking a tune out of a set), it doesn't
+            interact with your library at all.  It's just a simple list.
+          </span>
+          <button onClick={handleClick}>
+            got it
+          </button>
+        </>
+      ),
+      top: '90',
+      left: '-118',
+      width: '290',
+    }
+    const arrow = (
+      <QuickArrow rotation="90" height="100" top="10" center newline textObject={textObject} />
+    )
+
+    nextStep = (
+      <TunesIWantToLearn
+        deletedSongArrow={arrow}
+        quick={step}
+        quickSong={deletedSongName}
+        disableLibMenu={true}
+      />
+    )
+  }
+
+  if (step === 51) {
+
+    function handleClick(e) {
+      preventRefresh(e);
+      quickForward();
+    }
+
+    const textObject = {
+      text: (
+        <>
+          You can add tunes here, singly or in multiples.  And you can delete songs by
+          clicking the trash icon.
+          <button onClick={handleClick}>
+            fascinating
+          </button>
+        </>
+      ),
+      top: '90',
+      left: '-148',
+      width: '250',
+    }
+    const arrow = (
+      <QuickArrow rotation="90" height="0" top="10" center newline textObject={textObject} />
+    )
+
+    nextStep = (
+      <TunesIWantToLearn
+        deletedSongArrow={arrow}
+        quick={step}
+        quickSong={deletedSongName}
+        disableLibMenu={true}
+      />
+    )
+  }
+  if (step === 51) {
+
+    const textObject = {
+      text: (
+        <>
+          And that's it! You've finished the Quick Start!
+          <span>
+            If you want greater detail about the app, you can visit the 'More Info' section in the help center.
+          </span>
+          <span>
+            Now, click on the 'x' in the top left corner to close out of the Quick Start.  Thanks for your time!
+          </span>
+        </>
+      ),
+      top: '90',
+      left: '-148',
+      width: '250',
+    }
+    const arrow = (
+      <QuickArrow rotation="90" height="0" top="10" center newline textObject={textObject} />
+    )
+
+    nextStep = (
+      <TunesIWantToLearn
+        deletedSongArrow={arrow}
+        quick={step}
+        quickSong={deletedSongName}
+        disableLibMenu={true}
+      />
+    )
+  }
 
 
 
@@ -1263,7 +1580,6 @@ function QuickStart() {
   return (
     <QuickFrame
       step={step}
-      quickForward={quickForward}
       navAccess={false}
     >
       {nextStep}

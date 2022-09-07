@@ -100,7 +100,7 @@ function AddMultiple(props) {
   async function handleAdd(e) {
     e.preventDefault();
 
-    if (quick === 17) {
+    if (addMultipleButtonArrow) {
       if (handleQuickError()) {
         setShowQuickStartError(true);
         return;
@@ -337,7 +337,7 @@ function AddMultiple(props) {
               (<AddMultipleStyled allSongs={(calling === 'allSongs') ? true : false}>
                 <legend>{configObj.heading}</legend>
                 {configObj.instructions}
-                <textarea name="" id="" cols="27" rows="5" value={songList} onChange={handleSongListChange} disabled={quick === 17 ? true : false}></textarea>
+                <textarea name="" id="" cols="27" rows="5" value={songList} onChange={handleSongListChange} disabled={addMultipleButtonArrow ? true : false}></textarea>
                 {(calling === 'allSongs') &&
                   <SetsField>
                     <legend>Add Songs To Which Sets?</legend>
@@ -355,8 +355,8 @@ function AddMultiple(props) {
                 }
                 <AddMultipleButtonsStyled allSongs={(calling === 'allSongs') ? true : false}>
                   {songsEntryArrow ? songsEntryArrow : null}
-                  <AddButton onClick={handleCancel} disable={(quick === 16 || quick === 17) ? true : false}>Cancel</AddButton>
-                  <AddButton onClick={handleAdd} disable={(quick === 16) ? true : false}>
+                  <AddButton onClick={handleCancel} disable={(quick) ? true : false}>Cancel</AddButton>
+                  <AddButton onClick={handleAdd} disable={(songsEntryArrow) ? true : false}>
                     Add Songs
                     {addMultipleButtonArrow ? addMultipleButtonArrow : null}
                   </AddButton>

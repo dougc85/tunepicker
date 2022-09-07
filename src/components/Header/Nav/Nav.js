@@ -9,7 +9,7 @@ import { navItems } from '../../../data/navItems';
 
 function Nav(props) {
 
-  const { toggleNav, singleNavAllowed, quickForward, libraryArrow, pickerArrow } = props;
+  const { toggleNav, singleNavAllowed, quickForward, libraryArrow, pickerArrow, tunesToLearnArrow } = props;
 
   const { handleNetworkError } = useContext(SubContext);
 
@@ -37,6 +37,7 @@ function Nav(props) {
       <NavStyled singleNavAllowed={singleNavAllowed}>
         {libraryArrow}
         {pickerArrow}
+        {tunesToLearnArrow}
         <ul>
           {navItems.map((navItem, idx) => {
             if (singleNavAllowed === (idx + 1)) {

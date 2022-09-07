@@ -18,12 +18,13 @@ function Help(props) {
           play tunes you just learned and tunes you learned a long time ago.
         </li>
         <li>
-          Click 'Quick Start' for a fast intro to the app.  'Docs' will give you more in depth instructions.
+          Click 'Quick Start' for a fast intro to the app.  'More Info' will take you to the docs and give you more
+          in depth instructions.
         </li>
       </ul>
 
       <Link to='/help/quickstart'>Quick Start</Link>
-      <Link to='/help/docs'>Docs</Link>
+      <Link to='/help/docs'>More Info</Link>
 
     </HelpStyled>
   )

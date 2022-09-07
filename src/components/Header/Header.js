@@ -8,7 +8,16 @@ import { HeaderStyled, SiteContent } from "./Header.styled";
 function Header(props) {
 
   const [showNav, setShowNav] = useState(false);
-  const { quick, quickForward, navAccess, navMenuArrow, libraryArrow, pickerArrow, singleNavAllowed } = props;
+  const {
+    quick,
+    quickForward,
+    navAccess,
+    navMenuArrow,
+    libraryArrow,
+    pickerArrow,
+    singleNavAllowed,
+    tunesToLearnArrow,
+  } = props;
 
   function toggleNav() {
     setShowNav((current) => !current);
@@ -22,14 +31,15 @@ function Header(props) {
           <Nav
             toggleNav={toggleNav}
             singleNavAllowed={singleNavAllowed}
-            quickForward={(quick === 2 || quick === 25) ? quickForward : undefined}
+            quickForward={(quickForward && !navMenuArrow) ? quickForward : undefined}
             libraryArrow={libraryArrow}
             pickerArrow={pickerArrow}
+            tunesToLearnArrow={tunesToLearnArrow}
           />}
         <MenuButton
           navAccess={navAccess}
           toggleNav={toggleNav}
-          quickForward={((quick === 1 || quick === 24) ? quickForward : undefined)}
+          quickForward={(navMenuArrow ? quickForward : undefined)}
           navMenuArrow={navMenuArrow} />
       </HeaderStyled>
       <SiteContent>

@@ -36,23 +36,24 @@ export const TunesStyled = styled.ul`
       background-color: #ffd3d3;
     }
 
-    >div {
-      height: 20px;
-      position: absolute;
-      right: 15px;
-      top: 50%;
-      transform: translateY(-50%);
-      display: flex;
-      align-items: center;
-    }
-
-    svg {
-      height: 20px;
-      color: rgba(0,0,0, .4);
-    }
-    span {
+    >span {
       display: inline-block;
       padding-right: 30px;
     }
   }
 `;
+
+export const RightIcon = styled.div`
+  height: 20px;
+  position: absolute;
+  right: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+
+  >svg {
+  height: 20px;
+  color: rgba(0,0,0, .4);
+}
+`

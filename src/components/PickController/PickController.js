@@ -67,6 +67,13 @@ function PickController(quickStartProps) {
     newGigArrow,
     skipArrow,
     nextArrow,
+    upArrow,
+    downArrow,
+    moveOutArrow,
+    disableLibMenu,
+    libMenuForward,
+    disableLibMenuScreen,
+    rememberDeletedSongName,
   } = quickStartProps;
 
 
@@ -414,7 +421,7 @@ function PickController(quickStartProps) {
   }
 
   function skipHandler() {
-    if (quick && quick !== 30) {
+    if (quick && !skipArrow) {
       return;
     }
 
@@ -433,14 +440,28 @@ function PickController(quickStartProps) {
 
 
   function raiseKnowledge() {
-    if (quick) {
+    if (upArrow) {
+      if (allSongs[tune].knowledge === 'med') {
+        quickForward();
+      }
+      changeKnowledge('raise');
+      return;
+    } else if (quick) {
       return;
     }
     changeKnowledge('raise');
   }
 
   function lowerKnowledge() {
-    if (quick) {
+
+    if (downArrow) {
+      if (allSongs[tune].knowledge === 'new') {
+        rememberDeletedSongName(allSongs[tune].title);
+        quickForward();
+      }
+      changeKnowledge('lower');
+      return;
+    } else if (quick) {
       return;
     }
     changeKnowledge('lower');
@@ -608,6 +629,9 @@ function PickController(quickStartProps) {
               quickForward={quickForward}
               quick={quick}
               newGigArrow={newGigArrow}
+              disableLibMenu={disableLibMenu}
+              libMenuForward={libMenuForward}
+              disableLibMenuScreen={disableLibMenuScreen}
             >
               {pickerMenuArrow ? pickerMenuArrow : null}
             </LibraryMenu>
@@ -636,8 +660,14 @@ function PickController(quickStartProps) {
             SKIP
             {skipArrow ? skipArrow : null}
           </button>
-          <button className="raise-button small-btn" onClick={raiseKnowledge} >&uarr;</button>
-          <button className="lower-button small-btn" onClick={lowerKnowledge}>&darr;</button>
+          <button className="raise-button small-btn" onClick={raiseKnowledge} >
+            &uarr;
+            {upArrow ? upArrow : null}
+          </button>
+          <button className="lower-button small-btn" onClick={lowerKnowledge}>
+            &darr;
+            {downArrow ? downArrow : null}
+          </button>
         </SmallButtons>
         <NotesButton onClick={handleNotesClick} className="notes-button">notes</NotesButton>
         {showMoveDownAndOut &&
@@ -648,6 +678,8 @@ function PickController(quickStartProps) {
             setTune={setTune}
             knowledgeArrays={knowledgeArrays}
             setLocalLoading={setLocalLoading}
+            moveOutArrow={moveOutArrow}
+            quickForward={quickForward}
           />}
         {showEditTitle &&
           <EditTitle

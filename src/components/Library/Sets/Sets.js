@@ -18,10 +18,10 @@ function Sets(props) {
   const [showAddSet, setShowAddSet] = useState(false);
 
   function handleAddButton() {
-    if (quick === 6) {
+    if (setArrow) {
       return;
     }
-    if (quick === 4) {
+    if (addArrow) {
       quickForward();
     }
     setShowAddSet(true);
@@ -69,7 +69,7 @@ function Sets(props) {
             )
           } else {
             return (
-              <SetStyled onClick={() => { handleClick(setId) }} key={setId} disable={(quick === 4 || quick === 6) ? true : false}>
+              <SetStyled onClick={() => { handleClick(setId) }} key={setId} disable={(addArrow || setArrow) ? true : false}>
                 {capitalize(setNames[setId])}
               </SetStyled>
             )

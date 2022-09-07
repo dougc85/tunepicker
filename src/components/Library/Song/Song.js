@@ -415,7 +415,7 @@ function Song(props) {
             show={setShowKnowledgeEdit}
             focusInput={focusInput}
             field="knowledge"
-            disableEdit={(quick === 21) ? true : disableEdit}
+            disableEdit={(pathArrow) ? true : disableEdit}
             setDisableEdit={setDisableEdit}
             saveData={saveKnowledgeData}
             knowledgeEditArrow={knowledgeEditArrow}

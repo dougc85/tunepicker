@@ -5,7 +5,17 @@ import Header from '../../Header/Header';
 
 function QuickFrame(props) {
 
-  const { children, step, navAccess, navMenuArrow, libraryArrow, pickerArrow, quickForward, singleNavAllowed } = props;
+  const {
+    children,
+    step,
+    navAccess,
+    navMenuArrow,
+    libraryArrow,
+    pickerArrow,
+    tunesToLearnArrow,
+    quickForward,
+    singleNavAllowed
+  } = props;
 
   return (
     <MetaStyles>
@@ -17,6 +27,7 @@ function QuickFrame(props) {
         singleNavAllowed={singleNavAllowed}
         libraryArrow={libraryArrow}
         pickerArrow={pickerArrow}
+        tunesToLearnArrow={tunesToLearnArrow}
       >
         <QuickFrameStyled>
           <Link to="/help">
