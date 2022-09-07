@@ -99,6 +99,7 @@ function QuickStart() {
     )
   }
 
+  //Library
   if (step === 3) {
     const textObject = {
       text: "Most of the time, we'll be using the 'Sets' folder, so let's go there",
@@ -117,6 +118,7 @@ function QuickStart() {
     )
   }
 
+  //Sets
   if (step === 4) {
     const textObject = {
       text: "Let's make a new set of songs to use on our next gig",
@@ -124,7 +126,7 @@ function QuickStart() {
       left: '-60',
     }
     const arrow = (
-      <QuickArrow rotation="125" height="150" top="0" left="-100" textObject={textObject} />
+      <QuickArrow rotation="125" height="150" top="0" left="-100" lowerZ textObject={textObject} />
     )
     nextStep = (
       <Sets
@@ -138,8 +140,9 @@ function QuickStart() {
   if (step === 5) {
     const textObject = {
       text: "I use the app to play through jazz tunes, so I have a set called 'Jazz Standards'. Title your set something useful to you and click 'Add'.",
-      top: '-160',
-      left: '-60',
+      top: '-120',
+      left: '-110',
+      width: '280',
     }
     const arrow = (
       <QuickArrow rotation="-90" height="100" top="-90" left="0" center textObject={textObject} />
@@ -161,7 +164,7 @@ function QuickStart() {
       left: '-60',
     }
     const arrow = (
-      <QuickArrow rotation="90" height="100" bottom="-70" left="0" center textObject={textObject} />
+      <QuickArrow rotation="90" height="100" bottom="-70" left="0" center lowerZ textObject={textObject} />
     )
     nextStep = (
       <Sets
@@ -174,6 +177,7 @@ function QuickStart() {
     )
   }
 
+  //Set
   if (step === 7) {
     const text = "We need to add some songs, so let's open up this set's menu";
     const textObject = (createdSetName.length < 9) ? {
@@ -214,6 +218,7 @@ function QuickStart() {
     )
   }
 
+  //Add Song
   if (step === 8) {
 
     const textObject = {
@@ -318,13 +323,13 @@ function QuickStart() {
           <button onClick={handleClick}>then click here</button>
         </>
       ),
-      top: '-160',
+      top: '30',
       left: '-146',
       width: '300',
     }
 
     const arrow = (
-      <QuickArrow rotation="-90" top="75" height="50" center textObject={textObject} />
+      <QuickArrow rotation="90" top="45" height="50" center textObject={textObject} />
     )
 
     nextStep = (
@@ -380,7 +385,7 @@ function QuickStart() {
           <button onClick={handleClick}>got it</button>
         </>
       ),
-      top: '90',
+      top: '60',
       left: '-175',
       width: '300',
     }
@@ -400,6 +405,7 @@ function QuickStart() {
     )
   }
 
+  //Add Multiple Songs
   if (step === 14) {
     const text = "Now that we've learned how to add one song, let's learn how to add several at once. Start by reopening this set's menu.";
     const textObject = (createdSetName.length < 9) ? {
@@ -482,7 +488,7 @@ function QuickStart() {
     }
 
     const arrow = (
-      <QuickArrow rotation="90" top="-40" height="40" center textObject={textObject} />
+      <QuickArrow rotation="90" top="-70" height="40" center textObject={textObject} />
     )
 
     nextStep = (
@@ -554,6 +560,7 @@ function QuickStart() {
     )
   }
 
+  //Edit Song
   if (step === 19) {
 
     const textObject = {
@@ -628,7 +635,7 @@ function QuickStart() {
     }
 
     const arrow = (
-      <QuickArrow rotation="75" top="10" left="-10" height="60" newline textObject={textObject} />
+      <QuickArrow rotation="75" top="10" left="-10" height="60" newline lowerZ textObject={textObject} />
     )
 
     nextStep = (
@@ -641,6 +648,7 @@ function QuickStart() {
     )
   }
 
+  //Back in Set
   if (step === 22) {
     const text = "Okay, we're back in our set. Now that we've added a few songs, we're ready to use it on a gig. Open up the set's menu one last time.";
     const textObject = (createdSetName.length < 9) ? {
@@ -691,7 +699,7 @@ function QuickStart() {
       ),
       top: '130',
       left: '-28',
-      width: '150',
+      width: '240',
     }
 
     const arrow = (
@@ -772,6 +780,7 @@ function QuickStart() {
     )
   }
 
+  //Picker
   if (step === 26) {
 
     function handleClick(e) {
@@ -814,11 +823,11 @@ function QuickStart() {
           Open up the picker menu up here.
         </>
       ),
-      top: '115',
-      left: '-128',
+      top: '75',
+      left: '-158',
     }
     const arrow = (
-      <QuickArrow rotation="135" height="140" right="-10" top="-10" textObject={textObject} />
+      <QuickArrow rotation="135" height="90" left="-65" top="-4" lowerZ textObject={textObject} />
     )
 
     nextStep = (
@@ -884,6 +893,7 @@ function QuickStart() {
     )
   }
 
+  //Skip
   if (step === 30) {
     const textObject = {
       text: (
@@ -915,11 +925,12 @@ function QuickStart() {
     )
   }
 
+  //Next Button in Picker
   if (step === 31) {
     const textObject = {
       text: (
         <>
-          Alright, here's a tune that sounds good to play.  We play it, the audience applauds, etc, etc.  Then, click
+          Alright, here's a tune we're in the mood to play.  We play it, the audience applauds, etc, etc.  Then, we click
           'NEXT' to go to a new tune
         </>
       ),
@@ -1072,6 +1083,7 @@ function QuickStart() {
     )
   }
 
+  //Explain Picker Functionality
   if (step === 37) {
     const textObject = {
       text: (
@@ -1311,6 +1323,7 @@ function QuickStart() {
     )
   }
 
+  //Up/Down Arrow Buttons
   if (step === 45) {
     const textObject = {
       text: (
@@ -1374,7 +1387,7 @@ function QuickStart() {
     const textObject = {
       text: (
         <>
-          Read the box above, and click the 'Move Out' button.
+          Read the box above, and click the 'Move Out and Erase From Library' button.
 
           <span>
             Then, we'll see where our
@@ -1382,12 +1395,12 @@ function QuickStart() {
           </span>
         </>
       ),
-      top: '90',
-      left: '-102',
+      top: '40',
+      left: '-152',
       width: 320
     }
     const arrow = (
-      <QuickArrow rotation="90" height="160" top="-10" center newline textObject={textObject} />
+      <QuickArrow rotation="90" height="60" top="12" center newline textObject={textObject} />
     )
 
     nextStep = (
@@ -1466,6 +1479,7 @@ function QuickStart() {
     )
   }
 
+  //Tunes to Learn
   if (step === 50) {
 
     function handleClick(e) {
@@ -1478,7 +1492,7 @@ function QuickStart() {
         <>
           And here it is, the song we just deleted.
           <span>
-            This page is here for you to quickly jot down tunes you want to learn.
+            This 'Tunes I Want To Learn' page is here for you to quickly jot down tunes you want to learn.
             Except for what we just did (knocking a tune out of a set), it doesn't
             interact with your library at all.  It's just a simple list.
           </span>
@@ -1522,7 +1536,7 @@ function QuickStart() {
           </button>
         </>
       ),
-      top: '90',
+      top: '0',
       left: '-148',
       width: '250',
     }
@@ -1539,7 +1553,7 @@ function QuickStart() {
       />
     )
   }
-  if (step === 51) {
+  if (step === 52) {
 
     const textObject = {
       text: (
@@ -1553,7 +1567,7 @@ function QuickStart() {
           </span>
         </>
       ),
-      top: '90',
+      top: '0',
       left: '-148',
       width: '250',
     }

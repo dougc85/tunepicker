@@ -35,6 +35,13 @@ const QuickArrowStyled = styled.div`
   }};
 
   z-index: 1000;
+  ${({ lowerZ }) => {
+    if (lowerZ) {
+      return `
+        z-index: 99;
+      `
+    }
+  }}
   pointer-events: none;
   ${({ center, height }) => {
     if (center) {
@@ -132,7 +139,20 @@ const QuickArrowStyled = styled.div`
 
 function QuickArrow(props) {
 
-  const { rotation, height, top, left, right, bottom, textObject, devBorder, center, color, newline } = props;
+  const {
+    rotation,
+    height,
+    top,
+    left,
+    right,
+    bottom,
+    textObject,
+    devBorder,
+    center,
+    color,
+    newline,
+    lowerZ
+  } = props;
 
   return (
     <QuickArrowStyled
@@ -147,6 +167,7 @@ function QuickArrow(props) {
       center={center}
       color={color}
       newline={newline}
+      lowerZ={lowerZ}
     >
 
       <svg viewBox="0 0 24 24" >

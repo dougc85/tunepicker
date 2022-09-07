@@ -274,7 +274,6 @@ function AddSong(props) {
                   {keyArrow ? keyArrow : null}
                 </InputGrouping>
                 <KnowledgeField disabled={disableForm}>
-                  {knowledgeArrow ? knowledgeArrow : null}
                   <legend>How well do you know this tune?</legend>
                   <div>
                     <input id="knowNew" value="new" type="radio" name="knowledge" onChange={onRadioChange} checked={isChecked('new')} />
@@ -296,6 +295,7 @@ function AddSong(props) {
                       Know
                       <span>Know inside and out; can play it if it gets called a month from now</span>
                     </label>
+                    {knowledgeArrow ? knowledgeArrow : null}
                   </div>
                 </KnowledgeField>
                 <NotesField>

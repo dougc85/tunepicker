@@ -81,7 +81,7 @@ function MoveDownAndOut(props) {
     <Modal handleOutsideClick={quickForward ? null : hideMoveDownAndOut} contentHeight={'31rem'} allowOverflow={true} >
       <MoveDownAndOutStyled>
         <h3>Move Out Of Library</h3>
-        <p>The song '{capitalize(title)}' is already set to indicate that you don't know it very well, the lowest setting. </p>
+        <p>The song '{capitalize(title)}' is already set to indicate that you don't know it very well (you can't go lower) </p>
         <p>Would you like to erase this tune from your library (and from all sets in which it can be found) and add it instead to your list of 'Tunes to Learn'?</p>
         <div>
           <AddButton onClick={handleMove} >

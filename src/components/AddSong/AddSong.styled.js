@@ -68,6 +68,7 @@ export const KnowledgeField = styled.fieldset`
   }
 
   & > div {
+    position: relative;
     display: flex;
     align-items: center;
     margin-top: .8rem;
