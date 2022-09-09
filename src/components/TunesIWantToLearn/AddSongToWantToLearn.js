@@ -7,6 +7,7 @@ import { db } from '../../firebaseConfig';
 import { AddSongToWantToLearnStyled, InputGrouping, TitleInput, ErrorMessage } from './AddSongToWantToLearn.styled';
 import AddButton from '../generics/AddButton.styled';
 import Loading from '../Loading/Loading';
+import { removeDoubleSpaces } from '../../helperFunctions/removeDoubleSpaces';
 
 function AddSongToWantToLearn(props) {
 
@@ -39,7 +40,7 @@ function AddSongToWantToLearn(props) {
   async function handleAdd(e) {
     e.preventDefault();
 
-    const newTitle = title.toLowerCase().trim();
+    const newTitle = removeDoubleSpaces(title.toLowerCase().trim());
 
     if (newTitle === '') {
       setErrorMessage('This field is required');

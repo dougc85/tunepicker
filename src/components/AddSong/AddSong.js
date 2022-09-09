@@ -16,6 +16,7 @@ import AddButton from '../generics/AddButton.styled';
 import AlreadyInLibrary from '../AlreadyInLibrary/AlreadyInLibrary';
 import Loading from '../Loading/Loading';
 import capitalize from '../../helperFunctions/capitalize';
+import { removeDoubleSpaces } from '../../helperFunctions/removeDoubleSpaces';
 
 function AddSong(props) {
 
@@ -80,7 +81,7 @@ function AddSong(props) {
       return;
     }
 
-    const newTitle = title.toLowerCase().trim();
+    const newTitle = removeDoubleSpaces(title.toLowerCase().trim());
 
     if (newTitle.charAt(newTitle.length - 1) === '.' || newTitle[0] === '.') {
       setDisableForm(true);
@@ -196,7 +197,7 @@ function AddSong(props) {
 
     setErrorMessage('');
 
-    const titleLower = e.target.value.toLowerCase();
+    const titleLower = removeDoubleSpaces(e.target.value.toLowerCase().trim());
 
     if (songNames[titleLower]) {
 

@@ -6,6 +6,7 @@ import SubContext from '../../../context/sub-context';
 import { db } from '../../../firebaseConfig';
 import { doc, updateDoc, deleteField } from 'firebase/firestore';
 import capitalize from '../../../helperFunctions/capitalize';
+import { removeDoubleSpaces } from '../../../helperFunctions/removeDoubleSpaces';
 import Loading from '../../Loading/Loading';
 
 function EditTitle(props) {
@@ -39,7 +40,7 @@ function EditTitle(props) {
 
     e.preventDefault();
 
-    const newTitle = titleVal.toLowerCase().trim();
+    const newTitle = removeDoubleSpaces(titleVal.toLowerCase().trim());
 
     if (title !== newTitle) {
 

@@ -25,6 +25,7 @@ import {
 } from './Song.styled';
 import LoadingContainer from './LoadingContainer/LoadingContainer';
 import capitalize from '../../../helperFunctions/capitalize';
+import { removeDoubleSpaces } from '../../../helperFunctions/removeDoubleSpaces';
 
 function Song(props) {
 
@@ -36,7 +37,7 @@ function Song(props) {
   const context = useContext(SubContext);
   const { loading, userDoc, user, handleNetworkError } = context;
   const { setNames, songs: allSongs, songNames } = userDoc;
-  const { quickSongId, knowledgeEditArrow, quickForward, quick, confirmArrow, pathArrow } = props;
+  const { quickSongId, knowledgeEditArrow, quickForward, confirmArrow, pathArrow } = props;
 
   const params = useParams();
   const navigate = useNavigate();
@@ -196,7 +197,7 @@ function Song(props) {
 
   async function saveTitleData() {
 
-    const newTitle = title.toLowerCase().trim();
+    const newTitle = removeDoubleSpaces(title.toLowerCase().trim());
 
     if (newTitle === '') {
       setErrorMessage('Title Field Required');

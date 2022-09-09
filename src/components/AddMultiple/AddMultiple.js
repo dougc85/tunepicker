@@ -10,6 +10,7 @@ import { AddMultipleStyled, AddMultipleButtonsStyled, TitleErrorsStyled, SetsFie
 import Loading from '../Loading/Loading';
 import capitalize from '../../helperFunctions/capitalize';
 import QuickStartError from './QuickStartError/QuickStartError';
+import { removeDoubleSpaces } from '../../helperFunctions/removeDoubleSpaces';
 
 function AddMultiple(props) {
 
@@ -72,7 +73,7 @@ function AddMultiple(props) {
 
     let songSet = new Set();
     allSongsArray.forEach((songTitle) => {
-      songSet.add(songTitle.toLowerCase());
+      songSet.add(removeDoubleSpaces(songTitle.toLowerCase()));
     })
 
     return songSet;

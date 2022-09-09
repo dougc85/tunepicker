@@ -205,7 +205,7 @@ function QuickStart() {
     const height = createdSetName.length < 15 ? "80" : "110";
 
     const arrow = (
-      <QuickArrow rotation={rotation} height={height} top={top} bottom={bottom} left={left} right={right} textObject={textObject} />
+      <QuickArrow rotation={rotation} height={height} top={top} bottom={bottom} left={left} right={right} textObject={textObject} lowerZ />
     )
     nextStep = (
       <Set
@@ -1541,7 +1541,7 @@ function QuickStart() {
       width: '250',
     }
     const arrow = (
-      <QuickArrow rotation="90" height="0" top="10" center newline textObject={textObject} />
+      <QuickArrow rotation="90" height="0" top="-200" center newline textObject={textObject} />
     )
 
     nextStep = (
@@ -1572,7 +1572,7 @@ function QuickStart() {
       width: '250',
     }
     const arrow = (
-      <QuickArrow rotation="90" height="0" top="10" center newline textObject={textObject} />
+      <QuickArrow rotation="90" height="0" top="-220" center newline textObject={textObject} />
     )
 
     nextStep = (
@@ -1584,12 +1584,6 @@ function QuickStart() {
       />
     )
   }
-
-
-
-
-
-
 
   return (
     <QuickFrame

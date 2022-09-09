@@ -10,6 +10,7 @@ import { AddSetStyled, InputGrouping, ErrorMessage } from './AddSet.styled';
 import AddButton from '../../../generics/AddButton.styled';
 import { TitleInput } from '../../../AddSong/AddSong.styled';
 import Loading from '../../../Loading/Loading';
+import { removeDoubleSpaces } from '../../../../helperFunctions/removeDoubleSpaces';
 
 function AddSet(props) {
 
@@ -39,7 +40,7 @@ function AddSet(props) {
   function handleTitleChangeAndDuplicates(e) {
     setShowError(false);
     setErrorMessage('');
-    if (Object.keys(setNames).some((setId) => setNames[setId].toLowerCase() === e.target.value.toLowerCase())) {
+    if (Object.keys(setNames).some((setId) => setNames[setId].toLowerCase() === removeDoubleSpaces(e.target.value.toLowerCase().trim()))) {
       setShowError(true);
       setErrorMessage('This set name already taken')
       setDisableForm(true);
@@ -56,7 +57,7 @@ function AddSet(props) {
       setShowError(true);
     } else {
       setLoading(true);
-      const titleLower = title.toLowerCase().trim();
+      const titleLower = removeDoubleSpaces(title.toLowerCase().trim());
       try {
         const newSet = {
           setName: titleLower,
@@ -86,8 +87,10 @@ function AddSet(props) {
       resetTitle();
       setLoading(false);
       setShowAddSet(false);
-      rememberSetName(titleLower);
-      quickForward();
+      if (quickForward) {
+        rememberSetName(titleLower);
+        quickForward();
+      }
     }
   }
 

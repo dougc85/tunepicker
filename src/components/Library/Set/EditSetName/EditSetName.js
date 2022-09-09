@@ -10,6 +10,7 @@ import {
 import { db } from '../../../../firebaseConfig';
 import capitalize from '../../../../helperFunctions/capitalize';
 import Loading from '../../../Loading/Loading';
+import { removeDoubleSpaces } from '../../../../helperFunctions/removeDoubleSpaces';
 
 function EditSetName(props) {
 
@@ -33,7 +34,7 @@ function EditSetName(props) {
 
   async function handleSubmit(e) {
     e.preventDefault();
-    const enteredSetName = title.toLowerCase().trim();
+    const enteredSetName = removeDoubleSpaces(title.toLowerCase().trim());
     const oldLowercase = oldTitle.toLowerCase();
 
     if (enteredSetName === '') {
