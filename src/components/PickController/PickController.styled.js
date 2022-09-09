@@ -17,11 +17,25 @@ export const PickControllerStyled = styled.div`
   }
 `
 
+export const EmptyControllerStyled = styled.div`
+  padding-top: 1rem;
+
+  >p {
+    font-size: 1.6rem;
+    padding: 3rem;
+  }
+`
+
 export const PickerInfo = styled.div`
   font-size: 1.5rem;
   display: flex;
   justify-content: space-between;
   align-items: start;
+
+  >button {
+    align-self: center;
+    margin-right: 1rem;
+  }
 `
 
 export const PickingFrom = styled.div`
@@ -39,6 +53,7 @@ export const PickerMenu = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
   margin-right: 1.5rem;
   font-size: 1.5rem;
   font-weight: bold;

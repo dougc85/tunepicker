@@ -3,7 +3,7 @@ import { useState, useEffect, useContext, useReducer, useRef } from "react";
 import SubContext from "../../context/sub-context";
 import {
   PickControllerStyled, PickerInfo, PickingFrom, PickerMenu, TuneWrapper,
-  SmallButtons, NextButton, NotesButton, KeyWrapper, Background
+  SmallButtons, NextButton, NotesButton, KeyWrapper, Background, EmptyControllerStyled
 } from './PickController.styled';
 import Loading from "../Loading/Loading";
 import { onSnapshot, doc, setDoc, writeBatch } from 'firebase/firestore';
@@ -14,8 +14,10 @@ import EditTitle from "./EditTitle/EditTitle";
 import EditKey from "./EditKey/EditKey";
 import Path from "../Library/Path/Path";
 import DeleteSong from "../Library/Song/DeleteSong/DeleteSong";
+import ChangeSet from "./ChangeSet/ChangeSet";
 import Notes from "./Notes/Notes";
 import capitalize from "../../helperFunctions/capitalize";
+import AddButton from "../generics/AddButton.styled";
 
 const pickerReducer = (state, action) => {
   if (action.type === 'SET_PICKERS') {
@@ -104,8 +106,10 @@ function PickController(quickStartProps) {
   const [showEditKey, setShowEditKey] = useState(false);
   const [showDeleteSong, setShowDeleteSong] = useState(false);
   const [showRemoveSong, setShowRemoveSong] = useState(false);
+  const [showChangeSet, setShowChangeSet] = useState(false);
   const [showNotes, setShowNotes] = useState(false);
   const [localLoading, setLocalLoading] = useState(false);
+  const [oldPickerSet, setOldPickerSet] = useState(undefined);
 
   const [state, dispatch] = useReducer(pickerReducer, pickerInitialValues);
   const { pickerSet, mutablePickerSet, tune } = state;
@@ -178,6 +182,9 @@ function PickController(quickStartProps) {
         const newPickerSet = { ...firebaseDoc.data(), id: userDoc.pickerSet };
         dispatch({ type: 'SET_PICKERS', payload: newPickerSet });
         pickKey();
+        if (!oldPickerSet) {
+          setOldPickerSet(userDoc.pickerSet);
+        }
       });
     } catch (error) {
       handleNetworkError(error.message);
@@ -248,7 +255,13 @@ function PickController(quickStartProps) {
         return;
       }
 
+      setShowNoSongs(false);
       if (tune) {
+        if (userDoc.pickerSet !== oldPickerSet) {
+          initialPick();
+          setOldPickerSet(userDoc.pickerSet);
+          return;
+        }
         pickTune({
           action: 'RESELECT',
         })
@@ -545,6 +558,10 @@ function PickController(quickStartProps) {
     setShowDeleteSong(true);
   }
 
+  function changeSet() {
+    setShowChangeSet(true);
+  }
+
   useEffect(() => {
     if (tune !== '') {
       pickList(choices);
@@ -567,6 +584,7 @@ function PickController(quickStartProps) {
     { text: "Remove Song From Set", func: removeSong },
     { text: "Delete Song From Library", func: deleteSong },
     { text: "Reset Picker", func: resetPicker },
+    { text: "Pick From A Different Set", func: changeSet },
   ]
 
   if (loading || localLoading || !mutablePickerSet) {
@@ -577,7 +595,29 @@ function PickController(quickStartProps) {
 
   if (showNoSongs) {
     return (
-      <div className="showNoSongs">You don't have any songs yet.  Add some! </div>
+      <>
+        <EmptyControllerStyled>
+          <PickerInfo>
+            <PickingFrom>
+              <p>Picking from:</p>
+              <Path heading={capitalize(userDoc.setNames[userDoc.pickerSet])} pathType="Set" setId={userDoc.pickerSet} forPicker disable={quickForward ? true : false} />
+            </PickingFrom>
+            <AddButton onClick={changeSet}>Change Set</AddButton>
+          </PickerInfo>
+          <p className="showNoSongs">
+            The set '{`${capitalize(userDoc.setNames[userDoc.pickerSet])}`}' doesn't have any songs yet.
+            Either change the set you want to pick tunes from, or add some songs to
+            '{`${capitalize(userDoc.setNames[userDoc.pickerSet])}`}' to get started!
+          </p>
+        </EmptyControllerStyled>
+        {showChangeSet &&
+          <ChangeSet
+            setShowChangeSet={setShowChangeSet}
+            currentSetId={userDoc.pickerSet}
+            initialPick={initialPick}
+          />
+        }
+      </>
     )
   }
 
@@ -720,6 +760,13 @@ function PickController(quickStartProps) {
             removeOnly
             dispatch={dispatch}
             setLocalLoading={setLocalLoading}
+          />
+        }
+        {showChangeSet &&
+          <ChangeSet
+            setShowChangeSet={setShowChangeSet}
+            currentSetId={userDoc.pickerSet}
+            initialPick={initialPick}
           />
         }
         {showNotes &&

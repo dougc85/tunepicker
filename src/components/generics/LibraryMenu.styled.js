@@ -4,7 +4,6 @@ import React, { useState, useRef } from 'react';
 const LibraryMenuStyled = styled.div`
 
   position: relative;
-  margin-left: 1rem;
 
   button {
     border: none;
