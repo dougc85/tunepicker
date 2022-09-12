@@ -23,3 +23,8 @@ export const fonts = {
   mainFont: "'Nunito', sans-serif",
 }
 
+export const maxWidths = {
+  background: "600px",
+  content: "500px",
+}
+

@@ -1,6 +1,6 @@
 import React, { useContext, useState, useEffect } from 'react';
 import SubContext from '../../context/sub-context';
-import { Checkbox, Separator } from './FrontPage.styled';
+import { FrontPageStyled, Checkbox, Separator } from './FrontPage.styled';
 import Loading from '../Loading/Loading';
 import { updateDoc, doc } from 'firebase/firestore';
 import { db } from '../../firebaseConfig';
@@ -66,7 +66,7 @@ function FrontPage(props) {
   const heading = `Welcome, ${email[0].toUpperCase().concat(email.slice(1, email.indexOf('@')))}!`;
 
   return (
-    <>
+    <FrontPageStyled>
       <Help heading={heading} />
       <Separator />
       <Checkbox>
@@ -76,7 +76,7 @@ function FrontPage(props) {
       </Checkbox>
 
 
-    </>
+    </FrontPageStyled>
   )
 }
 

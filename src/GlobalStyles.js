@@ -11,6 +11,9 @@ const GlobalStyles = createGlobalStyle`
   html {
     font-size: 62.5%;
     font-family: 'Nunito';
+    @media only screen and (min-width : 920px) {
+      background-color: #ecebeb;
+    }
   }
 
   input,
@@ -26,7 +29,15 @@ const GlobalStyles = createGlobalStyle`
     z-index: -1;
     backface-visibility: hidden;
     overflow-x: hidden;
+    overflow-y: scroll;
     height: 100vh;
+    background-color: white;
+
+    @media only screen and (min-width : 920px) {
+      max-width: 600px;
+      margin: 0 auto;
+      box-shadow: 1px 0 40px rgba(0,0,0, .4);
+    }
   }
 
   button {

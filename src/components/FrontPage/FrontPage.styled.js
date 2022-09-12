@@ -1,11 +1,22 @@
 import styled from 'styled-components';
 
+export const FrontPageStyled = styled.div`
+  display: flex;
+  flex-direction: column;
+`
 export const Checkbox = styled.div`
   
   display: flex;
   align-items: center;
   margin-left: 2rem;
+  margin-right: 2rem;
   padding-bottom: 2rem;
+
+  @media only screen and (min-width : 700px) {
+    max-width: 650px;
+    align-self: center;
+    }
+ 
 
   label {
     margin-left: 1rem;

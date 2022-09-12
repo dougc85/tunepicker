@@ -2,15 +2,25 @@ import styled from 'styled-components';
 
 export const Background = styled.div`
   background-color: ${props => props.background};
-  height: 100vh;
+  min-height: 100vh;
+
+  @media only screen and (orientation : landscape) {
+      min-height: calc(100vh + 65px);
+    }
 `
 
 export const PickControllerStyled = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  height: calc(${window.innerHeight}px - 95px);
+  min-height: calc(${window.innerHeight}px - 95px);
+  @media only screen and (orientation : landscape) {
+    min-height: 450px;
+    }
   padding-top: 1rem;
+  max-width: 500px;
+  margin: 0 auto;
+  margin-bottom: 2rem;
 
   button {
     touch-action: manipulation;
@@ -31,6 +41,7 @@ export const PickerInfo = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: start;
+  height: 100%;
 
   >button {
     align-self: center;
@@ -163,6 +174,7 @@ export const NotesButton = styled.button`
   border-bottom: 1px solid black;
   align-self: center;
   background-color: inherit;
-  margin-bottom: 2rem;
+  margin-bottom: 3rem;
+  margin-top: 2rem;
 `
 

@@ -8,6 +8,10 @@ export const WelcomeStyled = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-evenly;
+  margin: 0 auto;
+  @media only screen and (orientation: landscape) {
+    height: 500px;
+  }
 
 
   h1 {
@@ -18,6 +22,8 @@ export const WelcomeStyled = styled.div`
   > p {
     font-size: 1.7rem;
     font-family: ${fonts.secondaryFont};
+    max-width: 650px;
+    margin: 0 auto;
   }
 
   > div {
@@ -54,6 +60,6 @@ export const WelcomeButton = styled.button`
 
 export const WelcomeBackground = styled.div`
   height: 100vh;
-  overflow: hidden;
+  overflow-x: hidden;
   background-image: linear-gradient(to right, #cce9d8, #d5ecd8, #def0d9, #e8f3db, #f1f6dd, #f6f6de, #faf6df, #fef6e0, #fef4e0, #fef1e0, #fdefe1, #fcede1);
 `

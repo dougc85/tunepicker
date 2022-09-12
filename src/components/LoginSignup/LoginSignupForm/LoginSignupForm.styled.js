@@ -9,6 +9,7 @@ export const LoginSignupFormStyled = styled.form`
   padding-right: 4rem;
   display: flex;
   flex-direction: column;
+  align-items: center;
   justify-content: space-evenly;
   font-size: 3rem;
   text-align: left;
@@ -49,6 +50,8 @@ export const Inputs = styled.div`
   justify-content: space-between;
   margin-bottom: 1.5rem;
   position: relative;
+  width: 100%;
+  max-width: 500px;
 
   >p {
     position: absolute; 

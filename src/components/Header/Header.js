@@ -9,6 +9,7 @@ function Header(props) {
 
   const [showNav, setShowNav] = useState(false);
   const {
+    hideLibMenu,
     quick,
     quickForward,
     navAccess,
@@ -25,28 +26,30 @@ function Header(props) {
 
   return (
     <>
-      <HeaderStyled>
-        <h1>tunePicker</h1>
-        {showNav &&
-          <Nav
+      <HeaderStyled hideLibMenu={hideLibMenu}>
+        <div>
+          <h1>tunePicker</h1>
+          {showNav &&
+            <Nav
+              toggleNav={toggleNav}
+              singleNavAllowed={singleNavAllowed}
+              quickForward={(quickForward && !navMenuArrow) ? quickForward : undefined}
+              libraryArrow={libraryArrow}
+              pickerArrow={pickerArrow}
+              tunesToLearnArrow={tunesToLearnArrow}
+            />}
+          <MenuButton
+            navAccess={navAccess}
             toggleNav={toggleNav}
-            singleNavAllowed={singleNavAllowed}
-            quickForward={(quickForward && !navMenuArrow) ? quickForward : undefined}
-            libraryArrow={libraryArrow}
-            pickerArrow={pickerArrow}
-            tunesToLearnArrow={tunesToLearnArrow}
-          />}
-        <MenuButton
-          navAccess={navAccess}
-          toggleNav={toggleNav}
-          quickForward={(navMenuArrow ? quickForward : undefined)}
-          navMenuArrow={navMenuArrow} />
+            quickForward={(navMenuArrow ? quickForward : undefined)}
+            navMenuArrow={navMenuArrow} />
+        </div>
       </HeaderStyled>
-      <SiteContent>
-        {quick ? props.children : <Outlet />}
-      </SiteContent>
-
-
+      {!hideLibMenu &&
+        <SiteContent>
+          {quick ? props.children : <Outlet />}
+        </SiteContent>
+      }
     </>
   )
 }

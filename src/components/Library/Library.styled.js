@@ -14,6 +14,14 @@ const anchorStyles = `
   flex-grow: 1;
   position: relative;
   color: white;
+  max-height: 400px;
+
+  @media only screen and (orientation: landscape) {
+    width: 500px;
+    margin: 0 auto;
+    padding: 3rem;
+    margin-bottom: 2rem;
+  }
 
   &:link, &:visited {
     color: white;
@@ -25,6 +33,10 @@ export const LibraryStyled = styled.div`
   height: calc(${window.innerHeight}px - 95px);
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
+  @media only screen and (orientation: landscape) {
+    height: auto;
+  }
 
   ${({ disableAllSongs }) => {
     if (disableAllSongs) {

@@ -4,6 +4,8 @@ export const HelpStyled = styled.div`
   font-size: 1.4rem;
   padding: 2rem 2rem 0 2rem;
   text-align: start;
+  max-width: 700px;
+  margin: 0 auto;
 
   >h2 {
     font-weight: 700;

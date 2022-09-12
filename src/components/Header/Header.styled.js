@@ -5,9 +5,21 @@ export const HeaderStyled = styled.header`
 
   position: fixed;
   z-index: 100;
-  left: 0;
+  ${({ hideLibMenu }) => {
+    if (hideLibMenu) {
+      return `
+        z-index: 10000;
+      `
+    }
+  }}
+  left: 50%;
+  transform: translateX(-50%);
   top: 0;
   width: 100vw;
+  @media only screen and (min-width : 920px) {
+      max-width: 600px;
+      margin: 0 auto;
+    }
 
   h1 {
     font-family: ${fonts.appFont};
@@ -22,4 +34,5 @@ export const HeaderStyled = styled.header`
 
 export const SiteContent = styled.div`
   margin-top: 88px;
+  background-color: white;
 `

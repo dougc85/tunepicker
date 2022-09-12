@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import React, { useState, useRef } from 'react';
+import Header from '../Header/Header';
 
 const LibraryMenuStyled = styled.div`
 
@@ -27,6 +28,7 @@ const LibraryMenuStyled = styled.div`
       return `calc(${menuLength}*5rem)`;
     }
   }};
+
     background-color: white;
     position: absolute;
     left: ${props => {
@@ -63,7 +65,7 @@ const LibraryMenuStyled = styled.div`
 
 const Screen = styled.div`
   position: fixed;
-  height: 100vh;
+  min-height: 100vh;
   width: 100vw;
   top: 0;
   left: 0;
@@ -120,86 +122,90 @@ function LibraryMenu(props) {
   }
 
   return (
-    <LibraryMenuStyled menuLength={items.length} allSongs={allSongs} repositionMenu={repositionMenu} color={color ? color : null}>
-      <button ref={libMenuRef}>
-        <svg onClick={handleClick} viewBox="0 0 24 24">
-          <path fill="currentColor" d="M12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22A10,10 0 0,1 2,12A10,10 0 0,1 12,2M12,4A8,8 0 0,0 4,12A8,8 0 0,0 12,20A8,8 0 0,0 20,12A8,8 0 0,0 12,4M12,10.5A1.5,1.5 0 0,1 13.5,12A1.5,1.5 0 0,1 12,13.5A1.5,1.5 0 0,1 10.5,12A1.5,1.5 0 0,1 12,10.5M7.5,10.5A1.5,1.5 0 0,1 9,12A1.5,1.5 0 0,1 7.5,13.5A1.5,1.5 0 0,1 6,12A1.5,1.5 0 0,1 7.5,10.5M16.5,10.5A1.5,1.5 0 0,1 18,12A1.5,1.5 0 0,1 16.5,13.5A1.5,1.5 0 0,1 15,12A1.5,1.5 0 0,1 16.5,10.5Z" />
-        </svg>
-      </button>
-      {children}
-      {showMenu && (
-        <>
-          <Screen onClick={handleScreenClick} />
-          <MenuWrapper>
-            <ul>
-              {items.map(item => {
-                if (addSongArrow || addMultipleArrow || setAsPickerArrow || newGigArrow) {
-                  if (addSongArrow && item.text === 'Add New Song') {
-                    return (
-                      <li key={item.text} onClick={() => {
-                        setShowMenu(false);
-                        item.func();
-                        quickForward();
-                      }}>
-                        {item.text}
-                        {addSongArrow}
-                      </li>
-                    )
-                  } else if (addMultipleArrow && item.text === 'Add Multiple New Songs') {
-                    return (
-                      <li key={item.text} onClick={() => {
-                        setShowMenu(false);
-                        item.func();
-                        quickForward();
-                      }}>
-                        {item.text}
-                        {addMultipleArrow}
-                      </li>
-                    )
-                  } else if (setAsPickerArrow && item.text === 'Set As PickerSet') {
-                    return (
-                      <li key={item.text} onClick={() => {
-                        setShowMenu(false);
-                        item.func();
-                        quickForward();
-                      }}>
-                        {item.text}
-                        {setAsPickerArrow}
-                      </li>
-                    )
-                  } else if (newGigArrow && item.text === 'Start New Gig') {
-                    return (
-                      <li key={item.text} onClick={() => {
-                        setShowMenu(false);
-                        item.func();
-                        quickForward();
-                      }}>
-                        {item.text}
-                        {newGigArrow}
-                      </li>
-                    )
+    <>
+      <LibraryMenuStyled menuLength={items.length} allSongs={allSongs} repositionMenu={repositionMenu} color={color ? color : null}>
+
+        <button ref={libMenuRef}>
+          <svg onClick={handleClick} viewBox="0 0 24 24">
+            <path fill="currentColor" d="M12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22A10,10 0 0,1 2,12A10,10 0 0,1 12,2M12,4A8,8 0 0,0 4,12A8,8 0 0,0 12,20A8,8 0 0,0 20,12A8,8 0 0,0 12,4M12,10.5A1.5,1.5 0 0,1 13.5,12A1.5,1.5 0 0,1 12,13.5A1.5,1.5 0 0,1 10.5,12A1.5,1.5 0 0,1 12,10.5M7.5,10.5A1.5,1.5 0 0,1 9,12A1.5,1.5 0 0,1 7.5,13.5A1.5,1.5 0 0,1 6,12A1.5,1.5 0 0,1 7.5,10.5M16.5,10.5A1.5,1.5 0 0,1 18,12A1.5,1.5 0 0,1 16.5,13.5A1.5,1.5 0 0,1 15,12A1.5,1.5 0 0,1 16.5,10.5Z" />
+          </svg>
+        </button>
+        {children}
+        {showMenu && (
+          <>
+            <Header hideLibMenu={true} />
+            <Screen onClick={handleScreenClick} />
+            <MenuWrapper>
+              <ul>
+                {items.map(item => {
+                  if (addSongArrow || addMultipleArrow || setAsPickerArrow || newGigArrow) {
+                    if (addSongArrow && item.text === 'Add New Song') {
+                      return (
+                        <li key={item.text} onClick={() => {
+                          setShowMenu(false);
+                          item.func();
+                          quickForward();
+                        }}>
+                          {item.text}
+                          {addSongArrow}
+                        </li>
+                      )
+                    } else if (addMultipleArrow && item.text === 'Add Multiple New Songs') {
+                      return (
+                        <li key={item.text} onClick={() => {
+                          setShowMenu(false);
+                          item.func();
+                          quickForward();
+                        }}>
+                          {item.text}
+                          {addMultipleArrow}
+                        </li>
+                      )
+                    } else if (setAsPickerArrow && item.text === 'Set As PickerSet') {
+                      return (
+                        <li key={item.text} onClick={() => {
+                          setShowMenu(false);
+                          item.func();
+                          quickForward();
+                        }}>
+                          {item.text}
+                          {setAsPickerArrow}
+                        </li>
+                      )
+                    } else if (newGigArrow && item.text === 'Start New Gig') {
+                      return (
+                        <li key={item.text} onClick={() => {
+                          setShowMenu(false);
+                          item.func();
+                          quickForward();
+                        }}>
+                          {item.text}
+                          {newGigArrow}
+                        </li>
+                      )
+                    } else {
+                      return (
+                        <li key={item.text}>{item.text}</li>
+                      )
+                    }
                   } else {
                     return (
-                      <li key={item.text}>{item.text}</li>
+                      <li key={item.text} onClick={() => {
+                        setShowMenu(false);
+                        item.func();
+                      }}>
+                        {item.text}
+                      </li>
                     )
                   }
-                } else {
-                  return (
-                    <li key={item.text} onClick={() => {
-                      setShowMenu(false);
-                      item.func();
-                    }}>
-                      {item.text}
-                    </li>
-                  )
-                }
-              })}
-            </ul>
-          </MenuWrapper>
+                })}
+              </ul>
+            </MenuWrapper>
+          </>
+        )}
+      </LibraryMenuStyled>
+    </>
 
-        </>
-      )}
-    </LibraryMenuStyled>
   )
 }
 

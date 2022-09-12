@@ -1,20 +1,20 @@
 import styled from 'styled-components';
 
 export const NavStyled = styled.nav`
-  height: 280px;
+  height: 270px;
   background-color: white;
   position: absolute;
   bottom: 0;
   right: 0;
-  width: 230px;
+  width: 220px;
   transform: translateY(100%);
   box-shadow: -2px 10px 10px rgba(0,0,0,.2);
-  padding: 15px 0;
+  padding: 12px 0;
   z-index: 10;
 
   ul {
     list-style: none;
-    font-size: 20px;
+    font-size: 18px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -59,7 +59,7 @@ export const NavStyled = styled.nav`
       border-top: 1px solid rgb(190, 190, 190);
       width: 70%;
       position: absolute;
-      bottom: -10px;
+      bottom: -8px;
       left: 50%;
       transform: translateX(-50%);
     }
