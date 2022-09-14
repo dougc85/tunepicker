@@ -1541,7 +1541,7 @@ function QuickStart() {
       width: '250',
     }
     const arrow = (
-      <QuickArrow rotation="90" height="0" top="-200" center newline textObject={textObject} />
+      <QuickArrow rotation="90" height="0" top="-150" center newline textObject={textObject} />
     )
 
     nextStep = (
@@ -1572,7 +1572,7 @@ function QuickStart() {
       width: '250',
     }
     const arrow = (
-      <QuickArrow rotation="90" height="0" top="-220" center newline textObject={textObject} />
+      <QuickArrow rotation="90" height="0" top="-170" center newline textObject={textObject} />
     )
 
     nextStep = (
