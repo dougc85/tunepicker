@@ -78,7 +78,7 @@ function MoveDownAndOut(props) {
   }
 
   return (
-    <Modal handleOutsideClick={quickForward ? null : hideMoveDownAndOut} contentHeight={'31rem'} allowOverflow={true} >
+    <Modal handleOutsideClick={quickForward ? null : hideMoveDownAndOut} contentHeight={'36rem'} allowOverflow={true} >
       <MoveDownAndOutStyled>
         <h3>Move Out Of Library</h3>
         <p>The song '{capitalize(title)}' is already set to indicate that you don't know it very well (you can't go lower) </p>
