@@ -5,6 +5,7 @@ export const ChangeSetStyled = styled.form`
   margin: 0 auto;
   display: flex;
   flex-direction: column;
+  padding-bottom: 3rem;
 
   h3 {
     font-weight: bold;

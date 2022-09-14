@@ -9,6 +9,7 @@ const AddButton = styled.button`
   border-radius: 5px;
   display: block;
   position: relative;
+  cursor: pointer;
 
   :active {
     background-color: black;

@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import ReactDOM from 'react-dom';
-import React, { useEffect } from 'react';
+import React, { useEffect, useContext } from 'react';
+import BodyContext from "../../context/body-context";
 
 const Screen = styled.div`
   position: fixed;
@@ -11,6 +12,11 @@ const Screen = styled.div`
   background-color: rgba(0, 0, 0, .6);
   z-index: 101;
   ${({ raisedZ }) => { return raisedZ ? 'z-index: 105;' : null }}
+
+  @media only screen and (min-width: 920px) {
+    width: 200vw;
+    left: -50vw;
+  } 
 `;
 
 const Content = styled.div`
@@ -19,8 +25,8 @@ const Content = styled.div`
   height: ${props => (props.contentHeight ? props.contentHeight : "80vh")};
   max-height: 580px;
   top: 50%;
-  transform: translateY(-50%);
-  left: 10%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   background-color: white;
   font-size: 2rem;
   padding: 1.5rem;
@@ -32,21 +38,42 @@ const Content = styled.div`
   flex-direction: column;
   justify-content: center;
   display: ${props => props.flex ? 'flex' : 'block'};
+  max-width: 550px;
+
+  ${({ addSong }) => {
+    if (addSong) {
+      return `
+        @media only screen and (orientation: landscape) {
+            overflow-y: scroll;
+            height: 80%;
+            display: block;
+        }
+      `
+    }
+  }}
 `;
 
 function Modal(props) {
 
-  const { handleOutsideClick, contentHeight, flex, allowOverflow, raisedZ } = props;
+  const { handleOutsideClick, contentHeight, flex, allowOverflow, raisedZ, addSong } = props;
+  const { setModalBodyStyles } = useContext(BodyContext);
 
   useEffect(() => {
-    document.body.style.overflow = 'hidden';
-    document.body.style.position = 'fixed';
-    document.body.style.width = '100vw';
+    setModalBodyStyles(`
+      position: fixed;
+      width: 100vw;
+      overflow: hidden;
+
+      @media only screen and (min-width: 920px) {
+        left: 50%;
+        transform: translateX(-50%);
+        max-width: 600px;
+      }
+    `)
 
     return () => {
-      document.body.style.overflow = 'unset';
-      document.body.style.position = 'unset';
-      document.body.style.width = 'unset';
+      setModalBodyStyles(`
+      `)
     }
   }, []);
 
@@ -57,7 +84,7 @@ function Modal(props) {
         document.getElementById('screen-root')
       )}
       {ReactDOM.createPortal(
-        <Content contentHeight={contentHeight} flex={flex} allowOverflow={allowOverflow} raisedZ={raisedZ}>
+        <Content contentHeight={contentHeight} flex={flex} allowOverflow={allowOverflow} raisedZ={raisedZ} addSong={addSong}>
           {props.children}
         </Content>,
         document.getElementById('overlay-root')

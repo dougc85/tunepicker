@@ -45,6 +45,7 @@ export const NavStyled = styled.nav`
 
     li {
       position: relative;
+      cursor: pointer;
 
       a {
         :visited, :active, :link {

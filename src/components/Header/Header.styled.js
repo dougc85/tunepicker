@@ -29,6 +29,7 @@ export const HeaderStyled = styled.header`
     padding: 15px 0;
     background-color: #eee;
     box-shadow: 0 5px 15px rgba(70, 70, 70, 0.2);
+    user-select: none;
   }
 `
 

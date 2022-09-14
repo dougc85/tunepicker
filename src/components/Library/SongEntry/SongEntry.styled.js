@@ -6,6 +6,8 @@ export const SongEntryStyled = styled.li`
   padding: 1rem;
   border-bottom: .5px solid rgb(10, 10, 10);
   list-style: none;
+  user-select: none;
+  cursor: pointer;
 
   p {
     font-size: 2rem;

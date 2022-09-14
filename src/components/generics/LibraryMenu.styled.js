@@ -17,6 +17,7 @@ const LibraryMenuStyled = styled.div`
 
     >svg {
       height: 24px;
+      cursor: pointer;
     }
   }
 
@@ -49,6 +50,7 @@ const LibraryMenuStyled = styled.div`
 
     li {
       position: relative;
+      cursor: pointer;
     }
     
     li:not(:last-child)::after {

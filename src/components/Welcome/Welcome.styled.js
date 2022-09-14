@@ -17,6 +17,7 @@ export const WelcomeStyled = styled.div`
   h1 {
     font-family: ${fonts.appFont};
     font-size: 6rem;
+    user-select: none;
   }
 
   > p {
@@ -56,6 +57,7 @@ export const WelcomeButton = styled.button`
   margin: 0 auto;
   margin-bottom: ${({ id }) => id === 'login' ? '0' : '0'};
   width: 20rem;
+  cursor: pointer;
 `
 
 export const WelcomeBackground = styled.div`

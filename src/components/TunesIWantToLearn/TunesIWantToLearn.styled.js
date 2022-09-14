@@ -22,11 +22,15 @@ export const Header = styled.div`
 `
 
 export const TunesStyled = styled.ul`
+
+  list-style: none;
+
   li {
     padding: 1rem;
     font-size: 2rem;
     text-align: start;
     position: relative;
+    user-select: none;
 
     &:nth-child(2n-1) {
       background-color: #fee9e9;
@@ -55,5 +59,6 @@ export const RightIcon = styled.div`
   >svg {
   height: 20px;
   color: rgba(0,0,0, .4);
+  cursor: pointer;
 }
 `

@@ -249,7 +249,7 @@ function AddSong(props) {
 
   if (showAddForm) {
     return (
-      <Modal handleOutsideClick={quick ? null : handleCancel} contentHeight={"50rem"} flex={allSongs ? false : true} allowOverflow={knowledgeArrow ? true : false}>
+      <Modal addSong={true} handleOutsideClick={quick ? null : handleCancel} contentHeight={"50rem"} flex={allSongs ? false : true} allowOverflow={knowledgeArrow ? true : false}>
         {
           loading ?
             <Loading /> :

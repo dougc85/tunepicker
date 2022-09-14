@@ -33,6 +33,7 @@ export const PathStyled = styled.div`
     return props.forPicker ? 'rgba(0, 0, 0, 0)' : 'white'
   }};
     border: none;
+    cursor: pointer;
   }
 
   .Path-icon {

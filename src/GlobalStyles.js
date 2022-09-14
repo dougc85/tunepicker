@@ -38,6 +38,8 @@ const GlobalStyles = createGlobalStyle`
       margin: 0 auto;
       box-shadow: 1px 0 40px rgba(0,0,0, .4);
     }
+
+    ${({ modalBodyStyles }) => modalBodyStyles}
   }
 
   button {

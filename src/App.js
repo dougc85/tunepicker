@@ -1,4 +1,4 @@
-import { React, useState } from 'react';
+import { React, useState, useContext } from 'react';
 import PickController from './components/PickController/PickController';
 import { Routes, Route } from 'react-router-dom';
 import Header from './components/Header/Header';
@@ -17,15 +17,17 @@ import Settings from './components/Settings/Settings';
 import EmailAuth from './components/EmailAuth/EmailAuth';
 import Help from './components/Help/Help';
 import QuickStart from './components/QuickStart/QuickStart';
+import BodyContext from './context/body-context';
 
 
 function App() {
 
   const [showAlreadyInLibrary, setShowAlreadyInLibrary] = useState(false);
+  const { modalBodyStyles } = useContext(BodyContext);
 
   return (
     <div className="App">
-      <GlobalStyles />
+      <GlobalStyles modalBodyStyles={modalBodyStyles} />
       <Routes>
         <Route path="/email_auth" element={<EmailAuth />} />
         <Route path="/help/quickstart/*" element={<QuickStart />} />

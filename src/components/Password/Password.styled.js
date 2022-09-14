@@ -28,6 +28,7 @@ export const PasswordStyled = styled.div`
       display: block;
       width: 2rem;
       color: rgb(82, 82, 82);
+      cursor: pointer;
     }
   }
 `

@@ -8,6 +8,13 @@ export const AddSongStyled = styled.form`
   align-items: center;
   justify-content: space-between;
 
+  @media only screen and (orientation: landscape)
+  {
+    >div {
+      padding: 1rem;
+    }
+  }
+
   div {
     flex-shrink: 1;
   } 

@@ -33,6 +33,7 @@ export const LoginSignupFormStyled = styled.form`
     background-color: transparent;
     border: none;
     border-bottom: 1px solid black;
+    cursor: pointer;
 
     &:link,
     &:active,
@@ -95,6 +96,7 @@ export const SubmitContainer = styled.div`
     width: 16rem;
     border-radius: 3px;
     font-family: Arial;
+    cursor: pointer;
   }
 
   >div {
@@ -117,6 +119,7 @@ export const ForgotContainer = styled.div`
     font-family: Arial;
     margin-left: 2rem;
     transform: translateY(-2px);
+    cursor: pointer;
   }
 
   div {

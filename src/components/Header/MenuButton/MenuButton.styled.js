@@ -12,6 +12,7 @@ export const MenuButtonStyled = styled.button`
   justify-content: space-evenly;
   border: none;
   background-color: transparent;
+  cursor: pointer;
 
   span {
     border-top: 2px solid rgb(134, 134, 134);

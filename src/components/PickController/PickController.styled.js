@@ -69,6 +69,7 @@ export const PickerMenu = styled.div`
   font-size: 1.5rem;
   font-weight: bold;
   margin-top: -2px;
+  user-select: none;
 `
 
 export const TuneWrapper = styled.div`
@@ -155,6 +156,7 @@ export const SmallButtons = styled.div`
     color: black;
     background-color: #eee;
     height: 5rem;
+    cursor: pointer;
     
     &:first-child {
       padding: .8rem 1.5rem .8rem 1.5rem;
@@ -176,5 +178,6 @@ export const NotesButton = styled.button`
   background-color: inherit;
   margin-bottom: 3rem;
   margin-top: 2rem;
+  cursor: pointer;
 `
 

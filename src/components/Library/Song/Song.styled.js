@@ -38,6 +38,7 @@ export const SongStyled = styled.div`
     padding: 1rem;
     font-size: 2rem;
     margin: 0 auto;
+    cursor: pointer;
   }
 `
 

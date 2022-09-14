@@ -1,7 +1,7 @@
 import { React, useState, useContext } from 'react';
 import SubContext from '../../../context/sub-context';
 import { useNavigate } from 'react-router-dom';
-import { SetStyled, SetsHeader } from './Sets.styled';
+import { SetsStyled, SetStyled, SetsHeader } from './Sets.styled';
 import AddSet from './AddSet/AddSet';
 import Path from '../Path/Path';
 import Loading from '../../Loading/Loading';
@@ -12,7 +12,7 @@ function Sets(props) {
   const { userDoc, loading } = useContext(SubContext);
   const { setNames } = userDoc;
 
-  const { addArrow, titleArrow, setArrow, quickForward, quick, rememberSetName, createdSetName, rememberSetId } = props;
+  const { addArrow, titleArrow, setArrow, quickForward, rememberSetName, createdSetName, rememberSetId } = props;
 
   const navigate = useNavigate();
   const [showAddSet, setShowAddSet] = useState(false);
@@ -47,7 +47,7 @@ function Sets(props) {
           {addArrow ? addArrow : null}
         </button>
       </SetsHeader>
-      <ul>
+      <SetsStyled>
         {Object.keys(setNames).sort((id1, id2) => {
           if (setNames[id1] < setNames[id2]) {
             return -1;
@@ -76,7 +76,7 @@ function Sets(props) {
           }
         }
         )}
-      </ul>
+      </SetsStyled>
       {showAddSet &&
         <AddSet
           setShowAddSet={setShowAddSet}

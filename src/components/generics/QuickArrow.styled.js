@@ -101,6 +101,7 @@ const QuickArrowStyled = styled.div`
     display: block;
     margin: 0 auto;
     margin-top: 1rem;
+    cursor: pointer;
 
     :active {
       background-color: white;

@@ -3,12 +3,18 @@ import { libraryColor } from '../../../partials/variables.styled';
 
 const { light, lighter } = libraryColor;
 
+export const SetsStyled = styled.ul`
+  list-style-type: none;
+`
+
 export const SetStyled = styled.li`
 
   padding: 1rem;
   font-size: 2rem;
   text-align: start;
   position: relative;
+  user-select: none;
+  cursor: pointer;
 
   &:nth-child(2n-1) {
     background-color: ${light};
@@ -51,5 +57,6 @@ export const SetsHeader = styled.div`
     display: block;
     margin-right: 2rem;
     position: relative;
+    cursor: pointer;
   }
 `
