@@ -59,6 +59,12 @@ function Modal(props) {
   const { setModalBodyStyles } = useContext(BodyContext);
 
   useEffect(() => {
+
+    if (!setModalBodyStyles) {
+      return;
+    }
+
+
     setModalBodyStyles(`
       position: fixed;
       width: 100vw;
@@ -75,7 +81,7 @@ function Modal(props) {
       setModalBodyStyles(`
       `)
     }
-  }, []);
+  }, [setModalBodyStyles]);
 
   return (
     <>

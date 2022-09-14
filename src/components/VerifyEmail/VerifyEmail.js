@@ -65,7 +65,8 @@ function VerifyEmail() {
         <h2>Email Verification</h2>
         <p>A verification email has been sent to you. Open it, click the link inside, and then click 'continue'
           on the page it opens in your browser.
-          <span>If you don't see an email, <span>check your spam folder</span> and/or click the link below to send another one.  If you have any other problems, log out and then log back in.
+          <span>
+            <span>This may take up to 15 minutes.</span> If, after waiting, you don't see an email, <span>check your spam folder</span> and/or click the link below to send another one.  If you have any other problems, log out and then log back in.
           </span>
 
         </p>
