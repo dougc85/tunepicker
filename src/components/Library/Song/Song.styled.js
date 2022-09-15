@@ -125,12 +125,11 @@ export const NotesLabel = styled.label`
 export const NotesEntryStyled = styled(SongEntryStyled)`
   height: min-content;
   width: 90%;
-  position: static;
+  position: relative;
 
   textarea {
-    
     height: 7rem;
-    width: 25rem;
+    width: 80%;
     box-sizing: border-box;
     transform: translate(-6px, -6px);
     padding: 5px;
@@ -141,13 +140,16 @@ export const NotesEntryStyled = styled(SongEntryStyled)`
     white-space: pre-line;
     height: 7rem;
     overflow: scroll;
+    width: 80%;
+    padding-right: 1rem;
+    box-sizing: border-box;
 
     &::after {
       position: absolute;
-      top: 31px;
-      left: 30px;
+      top: -4px;
+      left: 8px;
       content: "";
-      width: 23rem;
+      width: 80%;
       height: 7rem;
       border: 1px solid rgb(218, 218, 218);
       box-sizing: border-box;
