@@ -240,24 +240,23 @@ function Song(props) {
 
     const batch = writeBatch(db);
 
+    saveSongData('knowledge', knowledge, batch);
+
     for (let set in song.sets) {
       const setDoc = doc(db, 'users', user.uid, 'sets', set);
-
-      try {
-        batch.update(setDoc, {
-          [knowledgeArrays[song.knowledge][0]]: arrayRemove(song.id),
-          [knowledgeArrays[song.knowledge][1]]: arrayRemove(song.id),
-          [knowledgeArrays[knowledge][0]]: arrayUnion(song.id),
-          [knowledgeArrays[knowledge][1]]: arrayUnion(song.id),
-        });
-      } catch (error) {
-        handleNetworkError(error.message);
-      }
-
-      saveSongData('knowledge', knowledge, batch);
-      await batch.commit();
-      setKnowledgeLoading(false);
+      batch.update(setDoc, {
+        [knowledgeArrays[song.knowledge][0]]: arrayRemove(song.id),
+        [knowledgeArrays[song.knowledge][1]]: arrayRemove(song.id),
+        [knowledgeArrays[knowledge][0]]: arrayUnion(song.id),
+        [knowledgeArrays[knowledge][1]]: arrayUnion(song.id),
+      });
     }
+    try {
+      await batch.commit();
+    } catch (error) {
+      handleNetworkError(error.message);
+    }
+    setKnowledgeLoading(false);
   }
 
   async function saveNotesData() {
