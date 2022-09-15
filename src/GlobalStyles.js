@@ -14,6 +14,7 @@ const GlobalStyles = createGlobalStyle`
     @media only screen and (min-width : 920px) {
       background-color: #ecebeb;
     }
+    overflow-x: hidden;
   }
 
   input,

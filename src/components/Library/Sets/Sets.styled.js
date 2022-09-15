@@ -39,6 +39,7 @@ export const SetsHeader = styled.div`
   margin-bottom: 1rem;
   display: flex;
   align-items: center;
+  box-sizing: border-box;
 
 
   h2 {

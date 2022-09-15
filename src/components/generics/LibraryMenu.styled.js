@@ -107,7 +107,7 @@ function LibraryMenu(props) {
     }
     setShowMenu((old) => !old);
     if ((libMenuRef.current.getBoundingClientRect().x + 50) > window.innerWidth || (quick > 25)) {
-      setRepositionMenu('-15.8rem');
+      setRepositionMenu('-18rem');
     } else if ((libMenuRef.current.getBoundingClientRect().x + 200) > window.innerWidth) {
       setRepositionMenu('-14rem');
     }

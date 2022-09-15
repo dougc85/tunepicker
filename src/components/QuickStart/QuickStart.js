@@ -698,8 +698,7 @@ function QuickStart() {
         </>
       ),
       top: '130',
-      left: '-28',
-      width: '240',
+      left: '-42',
     }
 
     const arrow = (

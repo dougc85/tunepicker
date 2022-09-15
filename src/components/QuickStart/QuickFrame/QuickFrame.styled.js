@@ -8,7 +8,7 @@ export const QuickFrameStyled = styled.div`
         position: fixed;
         top: 0px;
         left: 0px;
-        z-index: 1000;
+        z-index: 10001;
         font-size: 17px;
         background-color: rgb(0,0,0);
         box-shadow: 7px 9px 10px rgba(0,0,0,.4);
