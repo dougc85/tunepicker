@@ -34,6 +34,14 @@ const QuickArrowStyled = styled.div`
     }
   }};
 
+  ${({ translateY }) => {
+    if (translateY) {
+      return `
+        transform: translateY(${translateY});
+      `
+    }
+  }}
+
   z-index: 1000;
   ${({ lowerZ }) => {
     if (lowerZ) {
@@ -147,6 +155,7 @@ function QuickArrow(props) {
     left,
     right,
     bottom,
+    translateY,
     textObject,
     devBorder,
     center,
@@ -169,6 +178,7 @@ function QuickArrow(props) {
       color={color}
       newline={newline}
       lowerZ={lowerZ}
+      translateY={translateY}
     >
 
       <svg viewBox="0 0 24 24" >

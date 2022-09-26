@@ -107,7 +107,7 @@ function QuickStart() {
       left: '-20',
     }
     const arrow = (
-      <QuickArrow rotation="90" height="200" bottom="-90" center textObject={textObject} />
+      <QuickArrow rotation="90" height="200" translateY="50%" center textObject={textObject} />
     )
 
     nextStep = (
@@ -323,13 +323,13 @@ function QuickStart() {
           <button onClick={handleClick}>then click here</button>
         </>
       ),
-      top: '30',
-      left: '-146',
+      top: '40',
+      left: '-137',
       width: '300',
     }
 
     const arrow = (
-      <QuickArrow rotation="90" top="45" height="50" center textObject={textObject} />
+      <QuickArrow rotation="90" translateY="65%" height="70" center textObject={textObject} />
     )
 
     nextStep = (

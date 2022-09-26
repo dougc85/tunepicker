@@ -21,6 +21,9 @@ const GlobalStyles = createGlobalStyle`
   textarea {
     font-size: max(62.5%, 16px);
     font-family: 'Nunito';
+    border-width: 1px;
+    border-style: solid;
+    border-color: rgb(163, 163, 163);
   }
 
   body {
