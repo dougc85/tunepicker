@@ -14,9 +14,7 @@ export const PickControllerStyled = styled.div`
   flex-direction: column;
   justify-content: space-between;
   min-height: calc(${window.innerHeight}px - 95px);
-  @media only screen and (orientation : landscape) {
-    min-height: 450px;
-    }
+
   padding-top: 1rem;
   max-width: 500px;
   margin: 0 auto;
