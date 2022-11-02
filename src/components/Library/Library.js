@@ -23,7 +23,6 @@ function Library(props) {
 
       <Link to={'/library/allsongs'}>All Songs</Link>
     </LibraryStyled>
-    // <Loading />
   )
 }
 

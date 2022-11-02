@@ -27,6 +27,10 @@ const anchorStyles = `
     color: white;
     text-decoration: none;
   }
+
+  @media only screen and (min-width : 920px) {
+    width: 80%;
+  }
 `
 
 export const LibraryStyled = styled.div`

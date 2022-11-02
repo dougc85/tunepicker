@@ -25,6 +25,11 @@ export const PickControllerStyled = styled.div`
   button {
     touch-action: manipulation;
   }
+
+  @media only screen and (min-width : 920px) {
+      max-width: 480px;
+      margin: 0 auto;
+    }
 `
 
 export const EmptyControllerStyled = styled.div`

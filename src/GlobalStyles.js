@@ -38,7 +38,7 @@ const GlobalStyles = createGlobalStyle`
     background-color: white;
 
     @media only screen and (min-width : 920px) {
-      max-width: 600px;
+      max-width: 500px;
       margin: 0 auto;
       box-shadow: 1px 0 40px rgba(0,0,0, .4);
     }

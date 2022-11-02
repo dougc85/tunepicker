@@ -52,7 +52,11 @@ export const Inputs = styled.div`
   margin-bottom: 1.5rem;
   position: relative;
   width: 100%;
-  max-width: 500px;
+  max-width: 400px;
+
+  @media only screen and (min-width : 920px) {
+      width: 50%;
+    }
 
   >p {
     position: absolute; 

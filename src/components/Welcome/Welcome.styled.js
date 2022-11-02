@@ -10,7 +10,7 @@ export const WelcomeStyled = styled.div`
   justify-content: space-evenly;
   margin: 0 auto;
   @media only screen and (orientation: landscape) {
-    height: 500px;
+    min-height: 500px;
   }
 
 

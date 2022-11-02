@@ -21,6 +21,7 @@ export const ContactForm = styled.form`
   display: flex;
   flex-direction: column;
 
+
   label {
     display: block;
     margin-left: 3px;
@@ -37,10 +38,11 @@ export const ContactForm = styled.form`
 export const FormElement = styled.div`
 
   input {
-    padding: 5px;
+    padding: 6px;
     font-size: 1.7rem;
     width: 100%;
     margin-bottom: 1rem;
+    box-sizing: border-box;
   }
 `
 
@@ -54,6 +56,8 @@ export const FormElementTextArea = styled.div`
     padding: 6px;
     font-size: 1.7rem;
     flex: 1;
+    width: 100%;
+    box-sizing: border-box;
   }
 `
 
