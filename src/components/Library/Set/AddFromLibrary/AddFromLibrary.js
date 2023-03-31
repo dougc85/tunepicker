@@ -62,19 +62,32 @@ function AddFromLibrary(props) {
 
         const setToAdd = {};
         const setInfo = {};
-        const forKnowledgeArrays = [];
+        const knowledgeArrays = {};
+
+        knowledgeArrays.new = [];
+        knowledgeArrays.med = [];
+        knowledgeArrays.know = [];
 
         combinedSongs.forEach((songId) => {
           if (!set.allSongs.hasOwnProperty(songId)) {
             setToAdd[`allSongs.${songId}`] = null;
-            forKnowledgeArrays.push(songId);
+            knowledgeArrays[userDoc.songs[songId].knowledge].push(songId);
             setInfo[`songs.${songId}.sets.${set.id}`] = null;
+
+            console.log(userDoc.songs[songId], 'songInfo');
           }
         })
 
-        setToAdd[`fullKnow`] = arrayUnion(...forKnowledgeArrays);
-        setToAdd['currentKnow'] = arrayUnion(...forKnowledgeArrays);
+        setToAdd[`fullKnow`] = arrayUnion(...knowledgeArrays.know);
+        setToAdd['currentKnow'] = arrayUnion(...knowledgeArrays.know);
 
+        setToAdd[`fullMedium`] = arrayUnion(...knowledgeArrays.med);
+        setToAdd['currentMedium'] = arrayUnion(...knowledgeArrays.med);
+
+        setToAdd[`fullNew`] = arrayUnion(...knowledgeArrays.new);
+        setToAdd['currentNew'] = arrayUnion(...knowledgeArrays.new);
+
+        console.log(setToAdd, 'setToAdd');
         const setDocRef = doc(db, 'users', user.uid, 'sets', set.id);
         transaction.update(setDocRef, {
           ...setToAdd
