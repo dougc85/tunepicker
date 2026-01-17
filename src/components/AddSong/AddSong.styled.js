@@ -54,6 +54,10 @@ export const InputGrouping = styled.div`
 
 export const TitleInput = styled.input`
   width: 17rem;
+  &.locked-input {
+    pointer-events: none;
+    border: none;
+  }
 `;
 
 export const ErrorMessage = styled.p`

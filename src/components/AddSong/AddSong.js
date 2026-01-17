@@ -5,6 +5,7 @@ import {
   arrayUnion,
   doc,
   writeBatch,
+  deleteField,
 } from 'firebase/firestore';
 import {
   db
@@ -33,7 +34,9 @@ function AddSong(props) {
     knowledgeArrow,
     addButtonArrow,
     quickForward,
-    rememberCreatedSongName
+    rememberCreatedSongName,
+    calling,
+    moveSongName
   } = props;
 
   const keys = ['C', 'D\u266D', 'D', 'E\u266D', 'E', 'F', 'F\u266F', 'G', 'A\u266D', 'A', 'B\u266D', 'B'];
@@ -76,7 +79,7 @@ function AddSong(props) {
   async function handleAdd(e) {
     e.preventDefault();
 
-    if (title === '') {
+    if (title === '' && calling !== "moveTuneToLibrary") {
       setErrorMessage('Title Field Required');
       return;
     }
@@ -105,11 +108,17 @@ function AddSong(props) {
     try {
       const batch = writeBatch(db);
       const userDocRef = doc(db, 'users', user.uid);
+
+      // Create a variable that might be used as a reference to a set (musical) doc 
       let setDocRef;
+
+      // Create a variable that might be used as a reference to an array of set (musical) docs
       const setDocRefArray = [];
+
       let setIDs = [];
 
       setArray.forEach((set) => {
+        // If the set is checked in the form, add its ID to the setIDs array (only matters if adding from allSongs or tunesIWantToLearn)
         if (set[1]) {
           setIDs.push(set[2]);
         }
@@ -131,19 +140,23 @@ function AddSong(props) {
         setIDs.forEach((setID) => {
           setsObject[setID] = null;
         })
-        batch.update(userDocRef, {
 
-          [`songs.${songId}`]: {
-            title: newTitle,
-            notes,
-            songKey,
-            knowledge,
-            sets: setsObject,
-            createdAt: date,
-            id: songId,
-          },
-          [`songNames.${newTitle}`]: songId,
-        });
+        // Update userDoc with new song; song Title coming from this component's state
+        if (calling !== "moveTuneToLibrary") {
+          batch.update(userDocRef, {
+
+            [`songs.${songId}`]: {
+              title: newTitle,
+              notes,
+              songKey,
+              knowledge,
+              sets: setsObject,
+              createdAt: date,
+              id: songId,
+            },
+            [`songNames.${newTitle}`]: songId,
+          });
+        }
 
         setDocRefArray.forEach((setDocRef) => {
           batch.update(setDocRef, {
@@ -152,6 +165,31 @@ function AddSong(props) {
             [`allSongs.${songId}`]: null,
           })
         })
+
+        if (calling === "moveTuneToLibrary") {
+
+          // Update userDoc with new song; song Title coming props (moveSongName)
+          const tuneName = removeDoubleSpaces(moveSongName.toLowerCase().trim());
+
+          batch.update(userDocRef, {
+
+            [`songs.${songId}`]: {
+              title: tuneName,
+              notes,
+              songKey,
+              knowledge,
+              sets: setsObject,
+              createdAt: date,
+              id: songId,
+            },
+            [`songNames.${tuneName}`]: songId,
+          });
+
+          batch.update(userDocRef, {
+            [`tunesIWantToLearn.${moveSongName}`]: deleteField(),
+          })
+        }
+
       } else {
         batch.update(userDocRef, {
 
@@ -258,7 +296,12 @@ function AddSong(props) {
                 <legend>{`Add Song${allSongs ? ' To Library' : ` to '${capitalize(set.setName)}'`}`}</legend>
                 <InputGrouping width={"100%"}>
                   <label htmlFor="song-title">Title:</label>
-                  <TitleInput onChange={handleTitleChangeAndDuplicates} value={title} id="song-title" type="text" name="song-title" autoComplete="off"></TitleInput>
+                  {
+                    calling === "moveTuneToLibrary" ?
+                    <TitleInput readOnly tabindex="-1" className="locked-input" aria-hidden="true"value={capitalize(moveSongName)} id="song-title" type="text" name="song-title" autoComplete="off"></TitleInput> :
+                    <TitleInput onChange={handleTitleChangeAndDuplicates} value={title} id="song-title" type="text" name="song-title" autoComplete="off"></TitleInput>
+                  }
+                  
                   {errorMessage && (<ErrorMessage>{`*${errorMessage}`}</ErrorMessage>)}
                   {songTitleArrow ? songTitleArrow : null}
                 </InputGrouping>

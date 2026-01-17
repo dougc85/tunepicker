@@ -62,3 +62,19 @@ export const RightIcon = styled.div`
   cursor: pointer;
 }
 `
+
+export const SecondRightIcon = styled.div`
+  height: 20px;
+  position: absolute;
+  right: 50px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+
+  >svg {
+  height: 20px;
+  color: rgba(0,0,0, .4);
+  cursor: pointer;
+  } 
+`
