@@ -15,6 +15,12 @@ export const QuickFrameStyled = styled.div`
         color: white;
         padding: 5px;
         border-radius: 5px;
+
+        @media only screen and (min-width : 920px) {
+          position: absolute;
+          left: 0;
+          top: 0;
+        }
       }
 
       svg {
