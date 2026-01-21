@@ -73,8 +73,6 @@ function AddFromLibrary(props) {
             setToAdd[`allSongs.${songId}`] = null;
             knowledgeArrays[userDoc.songs[songId].knowledge].push(songId);
             setInfo[`songs.${songId}.sets.${set.id}`] = null;
-
-            console.log(userDoc.songs[songId], 'songInfo');
           }
         })
 
@@ -87,7 +85,6 @@ function AddFromLibrary(props) {
         setToAdd[`fullNew`] = arrayUnion(...knowledgeArrays.new);
         setToAdd['currentNew'] = arrayUnion(...knowledgeArrays.new);
 
-        console.log(setToAdd, 'setToAdd');
         const setDocRef = doc(db, 'users', user.uid, 'sets', set.id);
         transaction.update(setDocRef, {
           ...setToAdd
