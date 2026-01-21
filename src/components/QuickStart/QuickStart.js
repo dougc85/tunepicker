@@ -1529,7 +1529,8 @@ function QuickStart() {
       text: (
         <>
           You can add tunes here, singly or in multiples.  And you can delete songs by
-          clicking the trash icon.
+          clicking the trash icon. Last, you can send them back to your library by clicking the
+          checkmark icon.
           <button onClick={handleClick}>
             fascinating
           </button>
