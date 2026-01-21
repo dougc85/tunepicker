@@ -10,6 +10,7 @@ import AddSong from '../AddSong/AddSong';
 import AddSongToWantToLearn from './AddSongToWantToLearn';
 import Path from '../Library/Path/Path';
 import capitalize from '../../helperFunctions/capitalize';
+import { handleExport } from '../../helperFunctions/handleExport';
 
 function TunesIWantToLearn(quickProps) {
 
@@ -102,9 +103,14 @@ function TunesIWantToLearn(quickProps) {
     }
   }
 
+  function handleExportClick() {
+    handleExport(Object.keys(tuneNames).sort(), 'Tunes I Want To Learn');
+  }
+
   const libraryMenuItems = [
     { text: 'Add Song To List', func: handleAddButton },
     { text: 'Add Multiple Songs To List', func: handleAddMultipleButton },
+    { text: 'Export list as .txt file', func: handleExportClick },
   ]
 
   if (loading) {
