@@ -19,6 +19,7 @@ import useSongSort from '../../../hooks/useSongSort';
 import EditSetName from './EditSetName/EditSetName';
 import capitalize from '../../../helperFunctions/capitalize';
 import AddFromLibrary from './AddFromLibrary/AddFromLibrary';
+import { handleExport } from '../../../helperFunctions/handleExport';
 
 function Set(props) {
 
@@ -117,48 +118,13 @@ function Set(props) {
     setShowAddFromLibrary(true);
   }
 
-  async function handleExport() {
+  async function handleExportClick() {
 
     const songNames = songsArray.map((song) => {
       return song.title;
     });
 
-    // One tune per line
-    const contents = songNames.join("\n");
-
-    const blob = new Blob([contents], { type: "text/plain;charset=utf-8" });
-    const fileName = safeFilename(capitalize(set.setName)) + '_tunepicker.txt';
-
-    try {
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = fileName;
-    document.body.appendChild(a);
-    a.click();
-
-    a.remove();
-    setTimeout(() => URL.revokeObjectURL(url), 0);
-        return;
-  } catch {
-  }
-
-  if (navigator.canShare && navigator.share) {
-    const file = new File([blob], fileName, { type: blob.type });
-    try {
-      if (navigator.canShare({ files: [file] })) {
-        await navigator.share({ files: [file], title: `Tune list from set '${capitalize(set.setName)}'` });
-        return;
-      }
-    } catch {
-    }
-  }
-
-  // 3) Last resort: open the blob (lets user use Share/Save manually)
-  const url = URL.createObjectURL(blob);
-  window.open(url, "_blank", "noopener,noreferrer");
-  setTimeout(() => URL.revokeObjectURL(url), 60_000);
-
+    handleExport(songNames, set.setName);
   }
 
   useEffect(() => {
@@ -235,7 +201,7 @@ function Set(props) {
       { text: 'Add Songs From Your Library', func: addFromLibrary },
       { text: 'Edit Set Name', func: editSetName },
       { text: 'Delete Set', func: handleDeleteButton },
-      { text: 'Export Set as .txt file', func: handleExport },
+      { text: 'Export Set as .txt file', func: handleExportClick },
     ] :
     [
       { text: 'Set As PickerSet', func: setAsPicker },
@@ -244,7 +210,7 @@ function Set(props) {
       { text: 'Add Songs From Your Library', func: addFromLibrary },
       { text: 'Edit Set Name', func: editSetName },
       { text: 'Delete Set', func: handleDeleteButton },
-      { text: 'Export Set as .txt file', func: handleExport },
+      { text: 'Export Set as .txt file', func: handleExportClick },
     ]
 
   const setSongsObject = {};

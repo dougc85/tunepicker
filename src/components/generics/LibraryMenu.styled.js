@@ -24,7 +24,7 @@ const LibraryMenuStyled = styled.div`
   ul {
     height: ${({ menuLength, allSongs }) => {
     if (allSongs) {
-      return '7.7rem';
+      return '12.3rem';
     } else {
       return `calc(${menuLength}*5rem)`;
     }

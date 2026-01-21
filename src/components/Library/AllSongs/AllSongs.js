@@ -9,6 +9,7 @@ import SortBy from '../../generics/SortBy.styled';
 import LibraryMenu from '../../generics/LibraryMenu.styled';
 import AddSong from '../../AddSong/AddSong';
 import AddMultiple from '../../AddMultiple/AddMultiple';
+import { handleExport } from '../../../helperFunctions/handleExport';
 
 function AllSongs() {
 
@@ -44,9 +45,19 @@ function AllSongs() {
     setShowAddMultiple(true);
   }
 
+  function handleExportClick() {
+
+    const songNames = songsArray.map((song) => {
+      return song.title;
+    });
+    handleExport(songNames, 'All Songs');
+
+  };
+
   const libraryMenuItems = [
     { text: 'Add New Song', func: handleAddButton },
     { text: 'Add Multiple Songs', func: handleAddMultipleButton },
+    { text: 'Export all as .txt file', func: handleExportClick },
   ];
 
   return (
