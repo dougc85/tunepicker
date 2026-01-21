@@ -58,10 +58,10 @@ function Contact() {
 
     try {
       await send(
-        'service_ry9nw6o',
-        'template_rgtfd6p',
+        'service_omhk8kk',
+        'template_o1awhpb',
         toSend,
-        'pRo2AOTzC8blSvLC1',
+        '3FAvkeZqWKI-934wG',
       )
 
       resetEmail();
