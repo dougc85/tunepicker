@@ -70,7 +70,7 @@ function Contact() {
       setFinishedSend(true);
     }
     catch (error) {
-      handleNetworkError(error.message);
+      handleNetworkError(error.text);
     }
 
     setLoading(false);
